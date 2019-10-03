@@ -29,6 +29,42 @@ h2, h3 {
 
 
 /* Navbar */
+
+.icon-bar {
+	width: 3rem;
+	height: 0.55rem;
+	background-color: white;
+	display: block;
+	transition: all 0.2s;
+	margin-top: 4px;
+}
+
+.navbar-toggler .top-bar {
+	transform: translate(0.5rem) rotate(45deg);
+	transform-origin: 10% 10%;
+}
+
+.navbar-toggler .middle-bar {
+	opacity: 0;
+}
+
+.navbar-toggler .bottom-bar {
+	transform: translate(0.5rem) rotate(-45deg);
+	transform-origin: 10% 90%;
+}
+
+.navbar-toggler.collapsed .top-bar {
+	transform: rotate(0);
+}
+
+.navbar-toggler.collapsed .middle-bar {
+	opacity: 1;
+}
+
+.navbar-toggler.collapsed .bottom-bar {
+	transform: rotate(0);
+}
+
 .nav-link {
 	text-transform: uppercase;
 	font-weight: 900;
