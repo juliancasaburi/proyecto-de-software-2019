@@ -18,9 +18,19 @@ h2, h3 {
 	font-weight: 600;
 }
 
+.logo-oeb {
+	-webkit-transition: opacity 0.25s ease-in-out;
+}
+
+.logo-oeb:hover {
+	-webkit-transition: opacity 0.25s ease-in-out;
+	opacity: 0.5;
+}
+
 
 /* Navbar */
 .nav-link {
+	text-transform: uppercase;
 	font-weight: 900;
 	margin-left: 1rem;
 	margin-bottom: 1rem;
