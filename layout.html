@@ -1,153 +1,185 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
-    <title>Administración - Orquesta Escuela de Berisso</title>
-    <meta name="author" content="Grupo 2">
-    <meta name="description" content="Proyecto de Software 2019">
-    <meta name="keywords" content="Administracion, Orquesta Escuela de Berisso, Proyecto de Software, 2019, Grupo2">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración - Orquesta Escuela de Berisso</title>
 
-    <!-- Icons -->
-    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+  <meta name="author" content="Grupo 2">
+  <meta name="description" content="Proyecto de Software 2019">
+  <meta name="keywords" content="Administracion, Orquesta Escuela de Berisso, Proyecto de Software, 2019, Grupo2">
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
+  <!-- Icons -->
+  <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
 
-    <meta name="theme-color" content="#343a40">
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!--Import Roboto Font-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen">
+  <link type="text/css" rel="stylesheet" href="css/style.css" media="screen">
+
+  <meta name="theme-color" content="#343a40">
 </head>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="index.html">
-        <img src="img/cropped-Logo-Orquesta-Escuela-de-Berisso-PNG.png" class="img-navbar d-inline-block align-top logo-oeb" alt="Logo Orquesta Escuela de Berisso">
-    </a>
-    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="icon-bar top-bar"></span>
-        <span class="icon-bar middle-bar"></span>
-        <span class="icon-bar bottom-bar"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active text-center" href="index.html">Home<span class="sr-only">(activo)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-center" href="#">Otro<span class="sr-only">(link)</span></a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav flex-row justify-content-between ml-auto mt-5 mb-5">
-            <li class="dropdown order-1">
-                <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-light dropdown-toggle">Iniciar sesión <span class="caret"></span></button>
-                <ul class="dropdown-menu dropdown-menu-right mt-2">
-                    <li class="px-3 py-2">
-                        <form class="form">
-                            <div class="form-group text-center mt-2">
-                                <small><a href="login.html">Ir a página de login</a></small>
-                            </div>
-                            <div class="form-group">
-                                <input id="emailInput" placeholder="Email" class="form-control form-control-sm" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <input id="passwordInput" placeholder="Password" class="form-control form-control-sm" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
-                            </div>
-                            <div class="form-group text-center">
-                                <small><a href="#" data-toggle="modal" data-target="#modalPassword">Olvidaste tu contraseña?</a></small>
-                            </div>
-                        </form>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
-<!-- ./Navbar -->
 
 <!-- Body -->
 <body>
-<div class="container site-content">
-    <div class="pb-2 mt-4 mb-2 border-bottom">
-        <h1>Título</h1>
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus risus, elementum vitae laoreet ut, euismod a enim. Nullam eget tellus erat. Proin blandit ligula ut nisl blandit tempor. Vestibulum et lacinia diam. Cras commodo metus dui, suscipit interdum purus viverra ut. Suspendisse facilisis, massa et aliquam auctor, nunc dui porta diam, euismod volutpat est tortor quis felis. Quisque mollis erat sed erat ornare lacinia. Pellentesque tincidunt quam magna. Donec lobortis odio id suscipit vulputate. Curabitur tempor, velit ut mattis dapibus, risus purus ultrices sem, eget ornare nisl mauris eget tortor. Duis quis tortor erat.</p>
+  <header>
+    <nav class="white" role="navigation">
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo center">
+          <img src="img/logo-black.png" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+        </a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+
+        <ul id="nav-mobile" class="sidenav">
+          <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
+          <div class="section">
+            <li><a class="subheader">Sección 1</a></li>
+            <li><a href="index.html">Inicio</a></li>
+          </div>
+          <div class="divider"></div>
+          <div class="section">
+            <li><a class="subheader">Sección 2</a></li>
+            <li><a href="index.html">Inicio</a></li>
+          </div>
+          <div class="divider"></div>
+          <div class="section">
+            <li><a class="subheader">Sección 3</a></li>
+            <li><a href="index.html">Inicio</a></li>
+          </div>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="section">
+
+      </div>
     </div>
-    <div class="pb-2 mt-4 mb-2 border-bottom">
-        <h1>Título</h1>
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus risus, elementum vitae laoreet ut, euismod a enim. Nullam eget tellus erat. Proin blandit ligula ut nisl blandit tempor. Vestibulum et lacinia diam. Cras commodo metus dui, suscipit interdum purus viverra ut. Suspendisse facilisis, massa et aliquam auctor, nunc dui porta diam, euismod volutpat est tortor quis felis. Quisque mollis erat sed erat ornare lacinia. Pellentesque tincidunt quam magna. Donec lobortis odio id suscipit vulputate. Curabitur tempor, velit ut mattis dapibus, risus purus ultrices sem, eget ornare nisl mauris eget tortor. Duis quis tortor erat.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="page-footer orange darken-4">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12 center-align">
+          <a href="#" class="brand-logo">
+            <img src="img/logo-white.png" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+          </a>
+        </div>
+        <div class="col l6 s12 center-align">
+          <h5 class="footer-title white-text">Links</h5>
+          <ul>
+            <li><a class="white-text" href="index.html">Inicio</a></li>
+            <li><a class="white-text" href="index.html">Inicio</a></li>
+            <li><a class="white-text" href="index.html">Inicio</a></li>
+            <li><a class="white-text" href="index.html">Inicio</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="pb-2 mt-4 mb-2 border-bottom">
-        <h1>Título</h1>
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec metus risus, elementum vitae laoreet ut, euismod a enim. Nullam eget tellus erat. Proin blandit ligula ut nisl blandit tempor. Vestibulum et lacinia diam. Cras commodo metus dui, suscipit interdum purus viverra ut. Suspendisse facilisis, massa et aliquam auctor, nunc dui porta diam, euismod volutpat est tortor quis felis. Quisque mollis erat sed erat ornare lacinia. Pellentesque tincidunt quam magna. Donec lobortis odio id suscipit vulputate. Curabitur tempor, velit ut mattis dapibus, risus purus ultrices sem, eget ornare nisl mauris eget tortor. Duis quis tortor erat.</p>
+    <div class="footer-copyright white center">
+      <div class="container">
+        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo1.png" class="responsive-img" alt="Logo Programa provincial Orquestas Escuela">
+        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo2.png" class="responsive-img" alt="Logo Cultura Berisso">
+        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo3.png" class="responsive-img" alt="Logo Ciudad de Berisso">
+        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo4.png" class="responsive-img" alt="Logo Buenos Aires Provincia">
+        <br>
+      </div>
     </div>
-</div>
+    <div class="footer-copyright orange darken-3 center">
+      <div class="container">
+        Orquesta Escuela de Berisso - Diseñada por <a class="blue-text text-darken-4" href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2019/grupo2">GRUPO 2</a>
+      </div>
+    </div>
+  </footer>
+  <!-- ./Footer -->
+
+  <!-- Floating Login Button -->
+  <div class="fixed-action-btn">
+    <a class="btn black waves-effect waves-light" href="login.html">Ingresar
+      <i class="large material-icons">account_circle</i>
+    </a>
+    <!-- ./Floating Login Button -->
+  </div>
+
+  <!-- Preloader -->
+  <div class="preloader-background">
+
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-red">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-yellow">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-green">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./Preloader -->
+
+  <!-- Scripts -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+
+  <!-- Materialize -->
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  <!-- ./Materialize -->
+
+  <!-- ./Scripts -->
 </body>
 <!-- ./Body -->
-
-<!-- Footer -->
-<footer class="footer mt-auto py-5">
-    <div class="container">
-        <div class="row text-center text-xs-center text-sm-left text-md-left">
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <h4>Enlaces</h4>
-                <ul class="list-unstyled quick-links">
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 1</a></li>
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 2</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <h4>Enlaces</h4>
-                <ul class="list-unstyled quick-links">
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 1</a></li>
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 2</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <h4>Enlaces</h4>
-                <ul class="list-unstyled quick-links">
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 1</a></li>
-                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Enlace 2</a></li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-4 mt-2 mt-sm-5">
-                <ul class="list-unstyled list-inline social text-center">
-                    <li class="list-inline-item"><a href="#" aria-label="Ver nuestra cuenta de Facebook"><i class="fab fa-facebook-square" aria-hidden="true"></i></a></li>
-                    <li class="list-inline-item"><a href="#" aria-label="Ver nuestra cuenta de Twitter"><i class="fab fa-twitter-square" aria-hidden="true"></i></a></li>
-                    <li class="list-inline-item"><a href="#" aria-label="Ver nuestra cuenta de Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-                    <li class="list-inline-item"><a href="mailto:contacto@oeberisso.com.ar?Subject=Orquesta%20Escuela" aria-label="Enviar un email" target="_top"><i class="fas fa-envelope-square" aria-hidden="true"></i></a></li>
-                    <li class="list-inline-item"><a href="#" aria-label="Enviar un mensaje a través de Whatsapp"><i class="fab fa-whatsapp-square" aria-hidden="true"></i></a></li>
-                </ul>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 mt-2 mt-sm-2 text-center">
-                <a href="index.html">
-                    <img src="img/cropped-Logo-Orquesta-Escuela-de-Berisso-PNG.png" class="img-navbar d-inline-block align-top logo-oeb" alt="Logo Orquesta Escuela de Berisso">
-                </a>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 mt-2 mt-sm-5">
-                <p>
-                    <i class="fas fa-map-marked-alt fa-2x" aria-hidden="true" title="Nuestra ubicación"></i>
-                    <span class="sr-only">Nuestra ubicación</span> 50 y 120 - Facultad de Informática
-                </p>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- ./Footer -->
-
-<!-- Bootstrap -->
-<script src="js/jquery-3.4.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-
-<!-- FontAwesome -->
-<script src="js/fontawesome.min.js"></script>
-
 </html>
