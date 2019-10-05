@@ -72,7 +72,6 @@ nav .brand-logo {
     opacity: 0.5;
 }
 
-
 iframe {
     width: 100%;
     min-height: 40vh !important;
@@ -81,6 +80,11 @@ iframe {
 
 p {
     line-height: 2rem;
+}
+
+p.text-justify {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .sidenav-trigger {
