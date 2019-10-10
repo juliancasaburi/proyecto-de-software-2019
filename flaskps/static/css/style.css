@@ -1,0 +1,135 @@
+/* https://materializecss.com/footer.html#sticky-footer */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+/* https://materializecss.com/footer.html#sticky-footer */
+
+nav ul a,
+nav .brand-logo {
+    color: #444;
+}
+
+nav {
+    height: 128px;
+    line-height: 128px;
+}
+
+nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
+    height: 128px;
+    line-height: 128px;
+}
+
+nav .button-collapse i {
+    height: 128px;
+    line-height: 128px;
+}
+
+nav .brand-logo {
+    font-size: 1.6rem;
+}
+
+@media only screen and (min-width: 601px){
+    nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+        height: 128px;
+        line-height: 128px;
+    }
+}
+
+.parallax-title {
+    margin-top: 5rem !important;
+}
+
+.preloader-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.footer-title {
+    margin-top: 0;
+}
+
+.brand-logo {
+    -webkit-transition: opacity 0.25s ease-in-out;
+}
+
+.brand-logo:hover {
+    -webkit-transition: opacity 0.25s ease-in-out;
+    opacity: 0.5;
+}
+
+iframe {
+    width: 100%;
+    min-height: 40vh !important;
+    height: auto;
+}
+
+p {
+    line-height: 2rem;
+}
+
+p.text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.sidenav-trigger {
+    color: #2196F3;
+}
+
+.parallax-container {
+    min-height: 380px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+    width: 100%;
+}
+
+@media only screen and (max-width : 992px) {
+    .parallax-container .section {
+        position: absolute;
+        top: 40%;
+    }
+    #index-banner .section {
+        top: 10%;
+    }
+}
+
+@media only screen and (max-width : 600px) {
+    #index-banner .section {
+        top: 0;
+    }
+}
+
+.icon-block {
+    padding: 0 15px;
+}
+.icon-block .material-icons {
+    font-size: inherit;
+}
+
+footer.page-footer {
+    margin: 0;
+}
+
+.login {
+    display: inline-block;
+    padding: 32px 48px 0px 48px;
+    border: 1px solid #EEE;
+}
