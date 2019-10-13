@@ -1,37 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administrador - Orquesta Escuela de Berisso</title>
-
-  <meta name="author" content="Grupo 2">
-  <meta name="description" content="Proyecto de Software 2019">
-  <meta name="keywords" content="Administracion, Orquesta Escuela de Berisso, Proyecto de Software, 2019, Grupo2">
-
-  <!-- Icons -->
-  <link rel="icon" type="image/png" href="../static/img/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="../static/img/favicon-16x16.png" sizes="16x16" />
-
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <!--Import Roboto Font-->
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-
-  <!-- Stylesheets -->
-  <link type="text/css" rel="stylesheet" href="../static/css/materialize.css" media="screen">
-  <link type="text/css" rel="stylesheet" href="../static/css/style.css" media="screen">
-  <link type="text/css" rel="stylesheet" href="../static/css/all.min.css" media="screen">
-  <link type="text/css" rel="stylesheet" href="../static/css/materialize-social.css" media="screen">
-
-  <meta name="theme-color" content="#343a40">
-</head>
-
-<!-- Body -->
-<body>
-  <header>
+{% extends "layout.html" %}
+{% block title %}Grupo 2{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block header %}
     <!-- Dropdown Structure -->
     <ul id="dropdownAlumnos" class="dropdown-content">
       <li><a href="#">Ver Listado</a></li>
@@ -59,22 +31,22 @@
           <img src="../static/img/logo-black.png" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
         </a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="administrador.html">Panel</a></li>
-          <li><a href="index.html">Logout</a></li>
+          <li><a href="{{ url_for('index') }}">Inicio</a></li>
+          <li><a href="#">Panel</a></li>
+          <li><a href="#">Logout</a></li>
         </ul>
 
         <ul id="nav-mobile" class="sidenav">
           <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
           <div class="section">
             <li><a class="subheader light-blue white-text">General</a></li>
-            <li><a href="index.html">Inicio</a></li>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
             <li><a href="#">Logout</a></li>
           </div>
           <div class="divider"></div>
           <div class="section">
             <li><a class="subheader light-blue white-text">Administrador</a></li>
-            <li><a href="administrador.html">Panel</a></li>
+            <li><a href="#">Panel</a></li>
           </div>
           <div class="section container">
             <li><a class="subheader">Configuración del sitio</a></li>
@@ -99,9 +71,9 @@
         <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       </div>
     </nav>
-  </header>
+  {% endblock %}
 
-  <main>
+  {% block main %}
     <div class="container">
       <div class="section">
         <div class="row">
@@ -226,121 +198,4 @@
         </div>
       </div>
     </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="page-footer orange darken-4">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12 center-align">
-          <a href="index.html" class="brand-logo">
-            <img src="../static/img/logo-white.png" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
-          </a>
-        </div>
-        <div class="col l6 s12 center-align">
-          <h5 class="footer-title white-text">Links</h5>
-          <ul>
-            <li><a class="white-text" href="index.html">Inicio</a></li>
-            <li><a class="white-text" href="index.html">Inicio</a></li>
-            <li><a class="white-text" href="index.html">Inicio</a></li>
-            <li><a class="white-text" href="index.html">Inicio</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col l12 s12 center-align">
-          <h5 class="footer-title white-text">Visitanos En</h5>
-          <a class="waves-effect waves-light btn social-icon facebook" href="https://www.facebook.com/OrquestaEscuelaBerisso/"><i class="fab fa-facebook"></i></a>
-          <a class="waves-effect waves-light btn social-icon instagram" href="https://www.instagram.com/orquesta_escuela_berisso/"><i class="fab fa-instagram"></i></a>
-          <a class="waves-effect waves-light btn social-icon twitter" href="#"><i class="fab fa-twitter"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright white center">
-      <div class="container">
-        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo1.png" class="responsive-img" alt="Logo Programa provincial Orquestas Escuela">
-        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo2.png" class="responsive-img" alt="Logo Cultura Berisso">
-        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo3.png" class="responsive-img" alt="Logo Ciudad de Berisso">
-        <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo4.png" class="responsive-img" alt="Logo Buenos Aires Provincia">
-        <br>
-      </div>
-    </div>
-    <div class="footer-copyright orange darken-3 center">
-      <div class="container">
-        Orquesta Escuela de Berisso - Diseñada por <a class="blue-text text-darken-4" href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2019/grupo2">GRUPO 2</a>
-      </div>
-    </div>
-  </footer>
-  <!-- ./Footer -->
-
-  <!-- Preloader -->
-  <div class="preloader-background">
-
-    <div class="preloader-wrapper big active">
-      <div class="spinner-layer spinner-blue">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div>
-        <div class="gap-patch">
-          <div class="circle"></div>
-        </div>
-        <div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer spinner-red">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div>
-        <div class="gap-patch">
-          <div class="circle"></div>
-        </div>
-        <div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer spinner-yellow">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div>
-        <div class="gap-patch">
-          <div class="circle"></div>
-        </div>
-        <div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-
-      <div class="spinner-layer spinner-green">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div>
-        <div class="gap-patch">
-          <div class="circle"></div>
-        </div>
-        <div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./Preloader -->
-
-  <!-- Scripts -->
-  <script src="../static/js/jquery-3.4.1.min.js"></script>
-
-  <!-- Materialize -->
-  <script src="../static/js/materialize.js"></script>
-  <script src="../static/js/init.js"></script>
-  <!-- ./Materialize -->
-
-  <!-- FontAwesome -->
-  <script src="../static/js/fontawesome.min.js"></script>
-  <!-- ./FontAwesome -->
-
-  <!-- ./Scripts -->
-</body>
-<!-- ./Body -->
-</html>
+{% endblock %}
