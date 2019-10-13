@@ -26,5 +26,5 @@ def create():
     params['password'] = bcrypt.generate_password_hash(params['password']).decode('utf - 8')
 
     User.db = get_db()
-    User.create(request.form)
+    User.create(params)
     return redirect(url_for('user_index'))
