@@ -7,7 +7,7 @@
     <nav class="white" role="navigation">
         <div class="nav-wrapper container">
             <a href="{{ url_for('index') }}" class="brand-logo center">
-                <img src="../../static/img/logo-black.png" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+                <img src="../{{ url_for('static', filename='img/logo-black.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
             </a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="{{ url_for('index') }}">Inicio</a></li>
