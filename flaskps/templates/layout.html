@@ -35,12 +35,12 @@
         {% endblock %}
     </header>
     <main>
-        <div id="content">
+        <div id="content" class="center">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <ul class=flashes>
                         {% for message in messages %}
-                            <li>{{ message }}</li>
+                            <a class="btn-large red">{{ message }}</a>
                         {% endfor %}
                     </ul>
                 {% endif %}
