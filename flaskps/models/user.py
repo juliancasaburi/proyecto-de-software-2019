@@ -34,15 +34,3 @@ class User(object):
         cursor.execute(sql, (username, password))
 
         return cursor.fetchone()
-
-    @classmethod
-    def find_by_user(cls, username):
-        sql = """
-            SELECT * FROM usuarios AS u
-            WHERE u.username = %s
-        """
-
-        cursor = cls.db.cursor()
-        cursor.execute(sql, username)
-
-        return cursor.fetchone()
