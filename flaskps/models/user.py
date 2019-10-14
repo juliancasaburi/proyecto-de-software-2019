@@ -18,7 +18,7 @@ class User(object):
         """
 
         cursor = cls.db.cursor()
-        cursor.execute(sql, data)
+        cursor.execute(sql, list(data.values()))
         cls.db.commit()
 
         return True
@@ -32,5 +32,17 @@ class User(object):
 
         cursor = cls.db.cursor()
         cursor.execute(sql, (username, password))
+
+        return cursor.fetchone()
+
+    @classmethod
+    def find_by_user(cls, username):
+        sql = """
+            SELECT * FROM usuarios AS u
+            WHERE u.username = %s
+        """
+
+        cursor = cls.db.cursor()
+        cursor.execute(sql, username)
 
         return cursor.fetchone()
