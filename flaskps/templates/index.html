@@ -11,7 +11,7 @@
             </a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                {% if session %}
+                {% if is_authenticated(session) %}
                 <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
                 {% endif %}
             </ul>
@@ -21,7 +21,7 @@
                 <div class="section">
                     <li><a class="subheader light-blue white-text">Sección 1</a></li>
                     <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                    {% if session %}
+                    {% if is_authenticated(session) %}
                     <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
                     {% endif %}
                 </div>
