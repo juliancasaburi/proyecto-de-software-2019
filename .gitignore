@@ -108,3 +108,4 @@ venv.bak/
 
 
 db/db.sqlite
+flask_session

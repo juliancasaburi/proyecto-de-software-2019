@@ -32,6 +32,7 @@ def authenticate():
 
 def logout():
     [session.pop(key) for key in list(session.keys())]
+    session.clear()
     flash("La sesión se cerró correctamente.")
 
     return redirect(url_for('auth_login'))

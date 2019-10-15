@@ -115,7 +115,7 @@
 
     </div>
 
-    {% if not session %}
+    {% if not is_authenticated(session) %}
     <!-- Floating Login Button -->
     <div class="fixed-action-btn">
         <a class="btn black waves-effect waves-light" href="{{ url_for('auth_login') }}">Ingresar
