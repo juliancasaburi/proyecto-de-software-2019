@@ -28,3 +28,16 @@ def create():
     User.db = get_db()
     User.create(params)
     return redirect(url_for('user_index'))
+
+
+def dashboard():
+    if not authenticated(session):
+        abort(401)
+
+    User.db = get_db()
+    role = User.role(session.get('user'))
+
+    if 'administrador' in role.values():
+        return render_template('user/administrador.html')
+    else:
+        return redirect(url_for('index'))

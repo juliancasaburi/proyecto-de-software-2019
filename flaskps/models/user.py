@@ -46,3 +46,42 @@ class User(object):
         cursor.execute(sql, username)
 
         return cursor.fetchone()
+
+    @classmethod
+    def permissions(cls, username):
+        sql = """
+            SELECT p.nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id INNER JOIN rol_tiene_permiso as u_rol_perm ON rol.id = u_rol_perm.rol_id INNER JOIN permiso AS p ON p.id = u_rol_perm.permiso_id
+            WHERE u.username = %s
+        """
+
+        cursor = cls.db.cursor()
+        cursor.execute(sql, username)
+
+        return cursor.fetchall()
+
+    @classmethod
+    def has_permission(cls, username, permission_name):
+        sql = """
+            SELECT p.nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id INNER JOIN rol_tiene_permiso as u_rol_perm ON rol.id = u_rol_perm.rol_id INNER JOIN permiso AS p ON p.id = u_rol_perm.permiso_id
+            WHERE u.username = %s AND p.nombre = %s
+        """
+
+        cursor = cls.db.cursor()
+        cursor.execute(sql, (username, permission_name))
+
+        return cursor.fetchone()
+
+    @classmethod
+    def role(cls, username):
+        sql = """
+            SELECT rol.nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
+            WHERE u.username = %s
+        """
+
+        cursor = cls.db.cursor()
+        cursor.execute(sql, username)
+
+        return cursor.fetchone()
