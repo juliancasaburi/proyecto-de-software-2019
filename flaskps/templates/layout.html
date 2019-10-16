@@ -45,10 +45,9 @@
                     </ul>
                 {% endif %}
             {% endwith %}
-
-            {% block main %}
-            {% endblock %}
         </div>
+        {% block main %}
+        {% endblock %}
     </main>
     {% include 'partials/footer.html' %}
     <!-- Preloader -->
@@ -105,6 +104,16 @@
         </div>
     </div>
     <!-- ./Preloader -->
+
+    <!-- Floating Login Button -->
+    {% if not is_authenticated(session) %}
+        <div class="fixed-action-btn">
+            <a class="btn black waves-effect waves-light" href="{{ url_for('auth_login') }}">Ingresar
+                <i class="large material-icons">account_circle</i>
+            </a>
+        </div>
+    {% endif %}
+    <!-- ./Floating Login Button -->
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>

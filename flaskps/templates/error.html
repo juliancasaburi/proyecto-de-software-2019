@@ -1,18 +1,58 @@
-<!--
-  Deberíamos hacerlo bien esto, por ahora dejo el de la cátedra con el footer nuestro
--->
-
 {% extends "layout.html" %}
 {% block title %}Orquesta Escuela de Berisso{% endblock %}
 {% block head %}
-  {{ super() }}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}" />
+    {{ super() }}
+{% endblock %}
+
+{% block header %}
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+            <a href="{{ url_for('index') }}" class="brand-logo center">
+                <img src="{{ url_for('static', filename='img/logo-black.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+            </a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                {% if is_authenticated(session) %}
+                    <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
+                {% endif %}
+            </ul>
+
+            <ul id="nav-mobile" class="sidenav">
+                <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
+                <div class="section">
+                    <li><a class="subheader light-blue white-text">Sección 1</a></li>
+                    <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                    {% if is_authenticated(session) %}
+                        <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
+                    {% endif %}
+                </div>
+                <div class="divider"></div>
+                <div class="section">
+                    <li><a class="subheader light-blue white-text">Sección 2</a></li>
+                    <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                </div>
+                <div class="divider"></div>
+                <div class="section">
+                    <li><a class="subheader light-blue white-text">Sección 3</a></li>
+                    <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                </div>
+            </ul>
+            <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
 {% endblock %}
 
 {% block main %}
-  <h1>{{ error_name }}</h1>
-  <p class="zoom-area"><b>¡Error!</b> {{ error_description }} </p>
-  <div class="link-container">
-    <a href="{{ url_for('index') }}" class="more-link">Volver al inicio</a>
-  </div>
+    <style>
+        body {
+            background-color: #416475;
+        }
+    </style>
+    <div class="row center">
+        <h1 class="white-text">{{ error_name }}</h1>
+        <p class="white-text"><b>¡Error!</b> {{ error_description }} </p>
+        <div class="link-container ">
+            <a href="{{ url_for('index') }}" class="waves-effect waves-light btn-large grey darken-4"><i class="material-icons left">home</i>Ir al inicio</a>
+        </div>
+    </div>
 {% endblock %}
