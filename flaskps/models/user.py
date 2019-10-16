@@ -4,7 +4,10 @@ class User(object):
 
     @classmethod
     def all(cls):
-        sql = 'SELECT * FROM usuarios'
+        sql = """
+            SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, rol.nombre as rol_nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
+        """
         cursor = cls.db.cursor()
         cursor.execute(sql)
 

@@ -8,6 +8,7 @@ from flaskps.helpers import permission as helper_permission
 # Resources
 from flaskps.resources import auth
 from flaskps.resources import user
+from flaskps.resources import dashboard
 
 # Configuración inicial de la app
 app = Flask(__name__)
@@ -41,8 +42,11 @@ app.add_url_rule(
 # Dashboard
 app.add_url_rule("/dashboard", 'user_dashboard', user.dashboard)
 
+# Usuarios
+app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
+
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
-# Implementar lo mismo para el error 500 y 401
+# TODO: Implementar lo mismo para el error 500 y 401
 
