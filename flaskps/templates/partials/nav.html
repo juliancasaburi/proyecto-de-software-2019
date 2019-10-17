@@ -1,14 +1,14 @@
 {% block header %}
-    <nav class="white" role="navigation">
+    <nav class="black" role="navigation">
         <div class="nav-wrapper container">
             <a href="{{ url_for('index') }}" class="brand-logo center">
-                <img src="{{ url_for('static', filename='img/logo-black.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+                <img src="{{ url_for('static', filename='img/logo-white.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
             </a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a class="white-text waves-effect waves-light" href="{{ url_for('index') }}">Inicio</a></li>
                 {% if is_authenticated(session) %}
-                    <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
-                    <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
+                    <li><a class="white-text waves-effect waves-light" href="{{ url_for('user_dashboard') }}">Panel</a></li>
+                    <li><a class="white-text waves-effect waves-light" href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
                 {% endif %}
             </ul>
 
@@ -18,8 +18,8 @@
                     <li><a class="subheader light-blue white-text"><b>General</b></a></li>
                     <li><a href="{{ url_for('index') }}">Inicio</a></li>
                     {% if is_authenticated(session) %}
-                        <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
                         <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
+                        <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
                     {% endif %}
                     {% if has_role('administrador', session) %}
                         {% include 'partials/nav_admin.html' %}
