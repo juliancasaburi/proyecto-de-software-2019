@@ -2,6 +2,7 @@
 {% block title %}Listado de Usuarios - Orquesta Escuela de Berisso{% endblock %}
 {% block head %}
     {{ super() }}
+    <meta id="items-per-page" data-ammount="{{ items_per_page }}">
 {% endblock %}
 
 {% block main %}
@@ -35,6 +36,11 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                </div>
+
+                <div class="col-md-12 center text-center">
+                    <span class="left" id="total_reg"></span>
+                    <ul class="pagination pager" id="pager"></ul>
                 </div>
 
                 <div class="fixed-action-btn">
@@ -77,9 +83,25 @@
 {% endblock %}
 
 {% block scripts %}
+    <!-- Pagination -->
+    <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#tablaUsuarios').pageMe({
+                pagerSelector:'#pager',
+                activeColor: 'blue',
+                prevText:'Anterior',
+                nextText:'Siguiente',
+                showPrevNext:true,
+                hidePageNumbers:false,
+                perPage: $('#items-per-page').data("ammount")
+            });
         });
     </script>
     <script>

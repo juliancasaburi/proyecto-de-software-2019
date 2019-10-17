@@ -21,7 +21,8 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Funciones que se exportan al contexto de Jinja2
-app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated,
+app.jinja_env.globals.update(items_per_page=helper_site_settings.items_per_page(),
+                             is_authenticated=helper_auth.authenticated,
                              has_permission=helper_permission.has_permission,
                              has_role=helper_role.has_role,
                              contact_email=helper_site_settings.email(),

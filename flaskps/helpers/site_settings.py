@@ -20,3 +20,7 @@ def descripcion():
 
 def maintenance_mode():
     return os.getenv("MODO_MANTENIMIENTO")
+
+
+def items_per_page():
+    return os.getenv("ITEMS_POR_PAGINA")
