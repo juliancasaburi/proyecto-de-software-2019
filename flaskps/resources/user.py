@@ -3,7 +3,6 @@ from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
-import os
 
 app = Flask = Flask(__name__)
 bcrypt = Bcrypt(app)
