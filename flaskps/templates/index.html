@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Orquesta Escuela de Berisso{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -37,7 +37,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
+                        <p class="light">{{ descripcion }}</p>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
+                        <p class="light">{{ descripcion }}</p>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
+                        <p class="light">{{ descripcion }}</p>
                     </div>
                 </div>
             </div>
