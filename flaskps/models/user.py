@@ -8,9 +8,11 @@ class User(object):
             SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, rol.nombre as rol_nombre
             FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
         """
-        cursor = cls.db.cursor()
-        cursor.execute(sql)
-
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql)
+        finally:
+            cls.db.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -20,10 +22,12 @@ class User(object):
             VALUES (%s, %s, %s, %s, %s)
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, list(data.values()))
-        cls.db.commit()
-
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, list(data.values()))
+                cls.db.commit()
+        finally:
+            cls.db.cursor().close()
         return True
 
     @classmethod
@@ -33,8 +37,11 @@ class User(object):
             WHERE u.username = %s AND u.password = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, (username, password))
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (username, password))
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchone()
 
@@ -45,8 +52,11 @@ class User(object):
             WHERE u.username = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, username)
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, username)
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchone()
 
@@ -58,8 +68,11 @@ class User(object):
             WHERE u.username = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, username)
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, username)
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchall()
 
@@ -71,8 +84,11 @@ class User(object):
             WHERE u.username = %s AND p.nombre = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, (username, permission_name))
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (username, permission_name))
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchone()
 
@@ -84,8 +100,11 @@ class User(object):
             WHERE u.username = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, username)
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, username)
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchone()
 
@@ -97,7 +116,10 @@ class User(object):
             WHERE u.username = %s AND rol.nombre = %s
         """
 
-        cursor = cls.db.cursor()
-        cursor.execute(sql, (username, role_name))
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (username, role_name))
+        finally:
+            cls.db.cursor().close()
 
         return cursor.fetchone()
