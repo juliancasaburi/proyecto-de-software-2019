@@ -15,7 +15,7 @@
             <ul id="nav-mobile" class="sidenav">
                 <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
                 <div class="section">
-                    <li><a class="subheader light-blue white-text">General</a></li>
+                    <li><a class="subheader light-blue white-text"><b>General</b></a></li>
                     <li><a href="{{ url_for('index') }}">Inicio</a></li>
                     {% if is_authenticated(session) %}
                         <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
