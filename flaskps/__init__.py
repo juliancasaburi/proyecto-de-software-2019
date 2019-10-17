@@ -4,6 +4,7 @@ from flask_session import Session
 from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
+from flaskps.helpers import role as helper_role
 
 # Resources
 from flaskps.resources import auth
@@ -20,7 +21,8 @@ Session(app)
 
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated,
-                             has_permission=helper_permission.has_permission)
+                             has_permission=helper_permission.has_permission,
+                             has_role=helper_role.has_role)
 
 # Home
 @app.route("/")

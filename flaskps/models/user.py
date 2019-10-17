@@ -88,3 +88,16 @@ class User(object):
         cursor.execute(sql, username)
 
         return cursor.fetchone()
+
+    @classmethod
+    def has_role(cls, username, role_name):
+        sql = """
+            SELECT rol.nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
+            WHERE u.username = %s AND rol.nombre = %s
+        """
+
+        cursor = cls.db.cursor()
+        cursor.execute(sql, (username, role_name))
+
+        return cursor.fetchone()
