@@ -19,4 +19,4 @@ def descripcion():
 
 
 def maintenance_mode():
-    return os.getenv("SITIO_HABILITADO")
+    return os.getenv("MODO_MANTENIMIENTO")
