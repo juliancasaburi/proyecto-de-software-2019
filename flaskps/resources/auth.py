@@ -21,14 +21,16 @@ def authenticate():
     User.db = get_db()
     user = User.find_by_user(params['username'])
 
-    if user and bcrypt.check_password_hash(user['password'], params['password']):
+    if user and user['activo'] == 1 and bcrypt.check_password_hash(user['password'], params['password']):
         session['user'] = user['username']
         flash("La sesión se inició correctamente.")
 
         return redirect(url_for('user_dashboard'))
+    elif user and user['activo'] == 0:
+        flash("Su cuenta está bloqueada")
     else:
         flash("Usuario o clave incorrecto.")
-        return redirect(url_for('auth_login'))
+    return redirect(url_for('auth_login'))
 
 
 def logout():
