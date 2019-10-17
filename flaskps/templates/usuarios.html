@@ -16,11 +16,11 @@
 
             {% if users %}
                 <div class="col s12 center z-depth-2" style="overflow-x:auto;">
-                    <table class="black highlight">
+                    <table id="tablaUsuarios" class="black highlight">
                         <thead>
                         <tr class="orange">
                             {% for key in users[0] %}
-                                <th> {{ key }} </th>
+                                <th id=" {{ key }}"> {{ key }} </th>
                             {% endfor %}
                         </tr>
                         </thead>
@@ -29,15 +29,99 @@
                         {% for dict_item in users %}
                             <tr>
                                 {% for value in dict_item.values() %}
-                                    <td class="white-text"> {{ value }} </td>
+                                    <td class=" {{ value }} white-text"> {{ value }} </td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
+
+                <div class="fixed-action-btn">
+                    <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modal1" data-position="left" data-tooltip="Filtros">
+                        <i class="large material-icons">search</i>
+                    </a>
+                </div>
+
+                <!-- Modal Structure -->
+                <div id="modal1" class="modal bottom-sheet modal-fixed-footer">
+                    <div class="modal-content">
+                        <h3 class="header">Filtrar el listado de Usuarios</h3>
+                        <ul class="collection">
+                            <li class="collection-item">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input class="filterUsuario" id="filterUsuario" type="text">
+                                    <label for="filterUsuario">Filtrar por Usuario</label>
+                                </div>
+                            </li>
+                            <li class="collection-item">
+                                <p>
+                                    <label>
+                                        <input type="checkbox" checked="checked" />
+                                        <span>Listar usuarios bloqueados</span>
+                                    </label>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
+                    </div>
+                </div>
+
             {% endif %}
 
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $(".filterUsuario").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tablaUsuarios>tbody> tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $("input:checkbox").on("change", function(){
+                var a = $("input:checkbox:checked").val();
+                if ($(this).prop("checked")) {
+                    $(".0").parent().show();
+                }
+                else {
+                    $(".0").parent().hide();
+
+                }
+            });
+        });
+    </script>
+    <script>
+        $('.modal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                    //  alert("Ready");
+                    console.log(modal, trigger);
+                },
+                complete: function() { //alert('Closed');
+                } // Callback for Modal close
+            }
+        );
+    </script>
 {% endblock %}

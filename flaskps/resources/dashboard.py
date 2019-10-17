@@ -15,8 +15,6 @@ def user_list():
     for dict_item in users:
         dict_item['ID'] = dict_item['id']
         del dict_item['id']
-        dict_item['Email'] = dict_item['email']
-        del dict_item['email']
         dict_item['Activo'] = dict_item['activo']
         del dict_item['activo']
         dict_item['Nombre'] = dict_item['first_name']
@@ -28,9 +26,11 @@ def user_list():
         dict_item['Nombre de usuario'] = dict_item['username']
         del dict_item['username']
         del dict_item['password']
-        dict_item['Fecha de registro'] = dict_item['created_at']
+        dict_item['Email'] = dict_item['email']
+        del dict_item['email']
+        dict_item['Registrado'] = dict_item['created_at']
         del dict_item['created_at']
-        dict_item['Fecha de actualización'] = dict_item['updated_at']
+        dict_item['Actualizado'] = dict_item['updated_at']
         del dict_item['updated_at']
 
     return render_template('usuarios.html', users=users)
