@@ -1,3 +1,6 @@
+import pymysql
+from flask import flash
+
 class User(object):
 
     db = None
@@ -18,16 +21,39 @@ class User(object):
     @classmethod
     def create(cls, data):
         sql = """
-            INSERT INTO usuarios (email, username, password, first_name, last_name)
+            INSERT INTO usuarios (first_name, last_name, email, username, password)
             VALUES (%s, %s, %s, %s, %s)
         """
+
+        sql_user_id = """
+            SELECT u.id
+            FROM usuarios as u
+            WHERE username = %s
+        """
+
+        sql_user_rol = """
+            INSERT INTO usuario_tiene_rol (usuario_id, rol_id)
+            VALUES (%s, %s)
+        """
+
+        rol_id = data.get('rol_id')
+        del data['rol_id']
 
         try:
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, list(data.values()))
                 cls.db.commit()
+                cursor.execute(sql_user_id, data['username'])
+                user_id = cursor.fetchone()
+                cursor.execute(sql_user_rol, (user_id['id'], rol_id))
+                cls.db.commit()
+
+        except pymysql.err.IntegrityError:
+            flash("Ya existe un usuario con el mismo nombre")
+            return False
         finally:
             cls.db.cursor().close()
+        flash("Se ha agregado al usuario con éxito")
         return True
 
     @classmethod
@@ -123,3 +149,16 @@ class User(object):
             cls.db.cursor().close()
 
         return cursor.fetchone()
+
+    @classmethod
+    def get_all_roles(cls):
+        sql = """
+            SELECT *
+            FROM rol
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()

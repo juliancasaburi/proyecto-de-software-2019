@@ -22,12 +22,12 @@ def create():
     if not authenticated(session):
         abort(401)
 
-    params = request.form
+    params = request.form.to_dict()
     params['password'] = bcrypt.generate_password_hash(params['password']).decode('utf - 8')
 
     User.db = get_db()
     User.create(params)
-    return redirect(url_for('user_index'))
+    return redirect(url_for('user_dashboard'))
 
 
 def dashboard():
@@ -36,8 +36,9 @@ def dashboard():
 
     User.db = get_db()
     role = User.role(session.get('user'))
+    roles = User.get_all_roles()
 
     if 'administrador' in role.values():
-        return render_template('user/administrador.html')
+        return render_template('user/administrador.html', roles=roles)
     else:
         return redirect(url_for('index'))
