@@ -45,7 +45,7 @@
                 {% endif %}
             {% endwith %}
         </div>
-        {% if maintenance_mode == '1' %}
+        {% if maintenance_mode == '1' and (has_role('administrador', session) == False) %}
             {% include 'maintenancemode.html' %}
         {% else %}
             {% block main %}
