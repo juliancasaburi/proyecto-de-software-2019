@@ -24,6 +24,7 @@ def create():
 
     params = request.form.to_dict()
     params['password'] = bcrypt.generate_password_hash(params['password']).decode('utf - 8')
+    params['roles'] = request.form.getlist('rol_id')
 
     User.db = get_db()
     User.create(params)

@@ -8,8 +8,9 @@ class User(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, rol.nombre as rol_nombre
+            SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, GROUP_CONCAT(rol.nombre) as rol_nombre
             FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
+            GROUP BY u.id
         """
         try:
             with cls.db.cursor() as cursor:
@@ -36,17 +37,23 @@ class User(object):
             VALUES (%s, %s)
         """
 
-        rol_id = data.get('rol_id')
-        del data['rol_id']
+        roles = data.get('roles')
 
         try:
             with cls.db.cursor() as cursor:
-                cursor.execute(sql, list(data.values()))
+                cursor.execute(sql, (data.get('first_name'),
+                                     data.get('last_name'),
+                                     data.get('email'),
+                                     data.get('username'),
+                                     data.get('password')
+                                     )
+                               )
                 cls.db.commit()
                 cursor.execute(sql_user_id, data['username'])
                 user_id = cursor.fetchone()
-                cursor.execute(sql_user_rol, (user_id['id'], rol_id))
-                cls.db.commit()
+                for rol in roles:
+                    cursor.execute(sql_user_rol, (user_id['id'], rol))
+                    cls.db.commit()
 
         except pymysql.err.IntegrityError:
             flash("Ya existe un usuario con el mismo nombre")

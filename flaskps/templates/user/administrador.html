@@ -74,7 +74,7 @@
                                 <div class="row">
                                     <div class="col s6 input-field">
                                         <label for="nombre">Nombre</label>
-                                        <input id="nombre" name="first_name" class="validate" type="text" id="nombre" required>
+                                        <input id="nombre" name="first_name" class="validate" type="text" required>
                                     </div>
                                     <div class="col s6 input-field">
                                         <label for="apellido">Apellido</label>
@@ -93,8 +93,8 @@
                                         <input id="password" name="password" class="validate" type="password" required>
                                     </div>
                                     <div class="col s12">
-                                        <select name="rol_id">
-                                            <option value="" disabled selected>Selecciona un rol</option>
+                                        <select multiple name="rol_id">
+                                            <option value="" disabled selected>Selecciona uno o más roles</option>
                                             {% for rol in roles %}
                                                 <option value="{{rol.id}}">{{rol.nombre}}</option>
                                             {% endfor %}
