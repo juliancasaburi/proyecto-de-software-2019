@@ -23,13 +23,13 @@ def authenticate():
 
     if user and user['activo'] == 1 and bcrypt.check_password_hash(user['password'], params['password']):
         session['user'] = user['username']
-        flash("La sesión se inició correctamente.")
+        flash("La sesión se inició correctamente", "success")
 
         return redirect(url_for('user_dashboard'))
     elif user and user['activo'] == 0:
-        flash("Su cuenta está bloqueada")
+        flash("Su cuenta está bloqueada", "error")
     else:
-        flash("Usuario o clave incorrecto.")
+        flash("Usuario o clave incorrecto", "error")
     return redirect(url_for('auth_login'))
 
 
@@ -37,7 +37,7 @@ def logout():
     if authenticated(session):
         [session.pop(key) for key in list(session.keys())]
         session.clear()
-        flash("La sesión se cerró correctamente.")
+        flash("La sesión se cerró correctamente", "error")
 
         return redirect(url_for('auth_login'))
     else:
