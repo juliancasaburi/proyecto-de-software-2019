@@ -51,8 +51,7 @@ app.add_url_rule("/dashboard", 'user_dashboard', user.dashboard)
 
 # Usuarios
 app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
-
-app.add_url_rule("/crear-usuario", 'crear_usuario', user.create, methods=['POST'])
+app.add_url_rule("/usuario/crear", 'usuario_new', user.create, methods=['POST'])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
