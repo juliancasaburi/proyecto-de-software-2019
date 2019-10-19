@@ -35,7 +35,8 @@
                                 {% for key in users[0] %}
                                     <th id=" {{ key }}"> {{ key }} </th>
                                 {% endfor %}
-                                <th>Baja</th>
+                                <th class="nosort">Editar</th>
+                                <th class="nosort">Baja</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -44,12 +45,14 @@
                                     {% for value in dict_item.values() %}
                                         <td class="{{ value }}"> {{ value }} </td>
                                     {% endfor %}
+                                    <td><a id="{{ dict_item.ID }}" class="editButton btn blue-grey"><i class="fas fa-edit"></i></a></td>
                                     <td><a id="{{ dict_item.ID }}" class="deleteButton btn red"><i class="material-icons">cancel</i></a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
                             <tr class="orange">
+                                <th>Editar</th>
                                 {% for key in users[0] %}
                                     <th id="{{ key }}"> {{ key }} </th>
                                 {% endfor %}
@@ -129,7 +132,7 @@
                     "infoFiltered": "<br>(_MAX_ sin filtrar)"
                 },
                 "columnDefs": [
-                    { "orderable": false, "targets": 9 } // Disable sorting for column 9
+                    { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
