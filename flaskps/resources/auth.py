@@ -1,9 +1,8 @@
-from flask import Flask, redirect, render_template, request, url_for, abort, session, flash
+from flask import Flask, redirect, render_template, request, url_for, session, flash
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
-from flaskps.helpers import role as helper_role
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)

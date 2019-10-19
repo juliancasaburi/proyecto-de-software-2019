@@ -1,5 +1,5 @@
 import os
-from flask import redirect, render_template, request, url_for, session, abort
+from flask import render_template, session, abort
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
