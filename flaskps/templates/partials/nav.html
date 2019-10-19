@@ -15,6 +15,11 @@
             <ul id="nav-mobile" class="sidenav">
                 <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
                 <div class="section">
+                    {% if is_authenticated(session) %}
+                        <li><a class="waves-effect waves-light" href="{{ url_for('user_dashboard') }}"><i class="material-icons">person</i>{{ session['user'] }}</a></li>
+                    {% endif %}
+                </div>
+                <div class="section">
                     <a class="subheader light-blue white-text"><b>General</b></a>
                     <li><a href="{{ url_for('index') }}">Inicio</a></li>
                     {% if is_authenticated(session) %}
