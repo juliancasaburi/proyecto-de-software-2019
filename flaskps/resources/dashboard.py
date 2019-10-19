@@ -33,4 +33,14 @@ def user_list():
         dict_item['Actualizado'] = dict_item['updated_at']
         del dict_item['updated_at']
 
-    return render_template('usuarios.html', users=users)
+    return render_template('user/actions/usuarios.html', users=users)
+
+def user_new_form():
+    if not authenticated(session) or not permission.has_permission('usuario_new', session):
+        abort(401)
+
+    User.db = get_db()
+    roles = User.get_all_roles()
+
+    return render_template('user/actions/usuario_crear.html', roles=roles)
+

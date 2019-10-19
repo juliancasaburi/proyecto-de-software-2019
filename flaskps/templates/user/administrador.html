@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="card-action">
-                            <a href="#idModalAltaUsuario" class="modal-trigger" >Alta</a>
+                            <a href="#modalAltaUsuario" class="modal-trigger" >Alta</a>
                             <a href="#">Baja</a>
                             <a href="#">Modificación</a>
                         </div>
@@ -67,40 +67,40 @@
                     </div>
                 </div>
 
-                <div id="idModalAltaUsuario" class="modal">
-                    <form method="post" action="{{ url_for('usuario_new') }}">
+                <div id="modalAltaUsuario" class="modal">
+                    <form method="post" action="{{ url_for('user_new') }}">
                         <div class="modal-content">
                             <h5>Alta usuario</h5>
-                                <div class="row">
-                                    <div class="col s6 input-field">
-                                        <label for="nombre">Nombre</label>
-                                        <input id="nombre" name="first_name" class="validate" type="text" required>
-                                    </div>
-                                    <div class="col s6 input-field">
-                                        <label for="apellido">Apellido</label>
-                                        <input id="apellido" name="last_name" class="validate" type="text" required>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="email">Email</label>
-                                        <input id="email"  name="email" class="validate" type="email" required>
-                                    </div>
-                                    <div class="col s6 input-field">
-                                        <label for="username">Nombre de usuario</label>
-                                        <input id="username"  name="username" class="validate" type="text" required>
-                                    </div>
-                                    <div class="col s6 input-field">
-                                        <label for="password">Contraseña</label>
-                                        <input id="password" name="password" class="validate" type="password" required>
-                                    </div>
-                                    <div class="col s12">
-                                        <select multiple name="rol_id">
-                                            <option value="" disabled selected>Selecciona uno o más roles</option>
-                                            {% for rol in roles %}
-                                                <option value="{{rol.id}}">{{rol.nombre}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                            <div class="row">
+                                <div class="col s6 input-field">
+                                    <label for="nombre">Nombre</label>
+                                    <input id="nombre" name="first_name" class="validate" type="text" required>
                                 </div>
+                                <div class="col s6 input-field">
+                                    <label for="apellido">Apellido</label>
+                                    <input id="apellido" name="last_name" class="validate" type="text" required>
+                                </div>
+                                <div class="col s12 input-field">
+                                    <label for="email">Email</label>
+                                    <input id="email"  name="email" class="validate" type="email" required>
+                                </div>
+                                <div class="col s6 input-field">
+                                    <label for="username">Nombre de usuario</label>
+                                    <input id="username"  name="username" class="validate" type="text" required>
+                                </div>
+                                <div class="col s6 input-field">
+                                    <label for="password">Contraseña</label>
+                                    <input id="password" name="password" class="validate" type="password" required>
+                                </div>
+                                <div class="col s12">
+                                    <select name="rol_id">
+                                        <option value="" disabled selected>Selecciona un rol</option>
+                                        {% for rol in roles %}
+                                            <option value="{{rol.id}}">{{rol.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn blue">Guardar</button>
@@ -108,6 +108,7 @@
                         </div>
                     </form>
                 </div>
+
 
                 <div class="col s12">
                     <div class="card sticky-action" style="overflow: visible;">
@@ -156,50 +157,50 @@
                 </div>
 
                 <div class="col s12">
-                <div class="card sticky-action" style="overflow: visible;">
-                    <div class="center-align light-blue waves-effect waves-block waves-light">
-                        <i class="material-icons">library_music</i>
-                    </div>
-                    <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
-                        <p><a href="#">Ver listado</a></p>
-                    </div>
+                    <div class="card sticky-action" style="overflow: visible;">
+                        <div class="center-align light-blue waves-effect waves-block waves-light">
+                            <i class="material-icons">library_music</i>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
+                            <p><a href="#">Ver listado</a></p>
+                        </div>
 
-                    <div class="card-action">
-                        <a href="#">Alta</a>
-                        <a href="#">Baja</a>
-                        <a href="#">Modificación</a>
-                    </div>
+                        <div class="card-action">
+                            <a href="#">Alta</a>
+                            <a href="#">Baja</a>
+                            <a href="#">Modificación</a>
+                        </div>
 
-                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                        <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                            <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col s12">
-                <div class="card sticky-action" style="overflow: visible;">
-                    <div class="center-align light-blue waves-effect waves-block waves-light">
-                        <i class="material-icons">people</i>
-                    </div>
-                    <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">Orquestas<i class="material-icons right">more_vert</i></span>
-                        <p><a href="#">Ver listado</a></p>
-                    </div>
+                <div class="col s12">
+                    <div class="card sticky-action" style="overflow: visible;">
+                        <div class="center-align light-blue waves-effect waves-block waves-light">
+                            <i class="material-icons">people</i>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">Orquestas<i class="material-icons right">more_vert</i></span>
+                            <p><a href="#">Ver listado</a></p>
+                        </div>
 
-                    <div class="card-action">
-                        <a href="#">Alta</a>
-                        <a href="#">Baja</a>
-                        <a href="#">Modificación</a>
-                    </div>
+                        <div class="card-action">
+                            <a href="#">Alta</a>
+                            <a href="#">Baja</a>
+                            <a href="#">Modificación</a>
+                        </div>
 
-                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                        <span class="card-title grey-text text-darken-4">Orquestas<i class="material-icons right">close</i></span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                            <span class="card-title grey-text text-darken-4">Orquestas<i class="material-icons right">close</i></span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
