@@ -62,9 +62,26 @@
         <p>Modo Mantenimiento</p>
         <label>
             Deshabilitado
-            <input type="checkbox">
+            {% if maintenance_mode == '1' %}
+                <input id="switchMantenimientoNav" type="checkbox" checked="checked">
+            {% else %}
+                <input id="switchMantenimientoNav" type="checkbox">
+            {% endif %}
             <span class="lever"></span>
             Habilitado
         </label>
     </div></li>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#switchMantenimientoNav").on("change", function(){
+            $.ajax({
+                type: "POST",
+                url : '/mantenimiento'
+            });
+            if ( $("#switchMantenimiento").length ) {
+                $("#switchMantenimiento").prop("checked",$(this).prop("checked"));
+            }
+        });
+    });
+</script>

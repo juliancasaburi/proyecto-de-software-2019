@@ -27,6 +27,20 @@
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize-social.css') }}" media="screen">
 
         <meta name="theme-color" content="#343a40">
+
+        <!-- Scripts -->
+        <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+
+        <!-- Materialize -->
+        <script src="{{ url_for('static', filename='js/materialize.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/init.js') }}"></script>
+        <!-- ./Materialize -->
+
+        <!-- FontAwesome -->
+        <script src="{{ url_for('static', filename='js/fontawesome.min.js') }}"></script>
+        <!-- ./FontAwesome -->
+
+        <!-- ./Scripts -->
     {% endblock %}
 </head>
 <body>
@@ -119,19 +133,6 @@
     </div>
     <!-- ./Preloader -->
 
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-
-    <!-- Materialize -->
-    <script src="{{ url_for('static', filename='js/materialize.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/init.js') }}"></script>
-    <!-- ./Materialize -->
-
-    <!-- FontAwesome -->
-    <script src="{{ url_for('static', filename='js/fontawesome.min.js') }}"></script>
-    <!-- ./FontAwesome -->
-
-    <!-- ./Scripts -->
     {% block scripts %}
     {% endblock %}
 </body>

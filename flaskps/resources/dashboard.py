@@ -1,8 +1,11 @@
+import os
 from flask import redirect, render_template, request, url_for, session, abort
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
+from flask import jsonify, make_response
+from pyutil import filereplace
 
 
 def user_list():
@@ -37,6 +40,7 @@ def user_list():
 
     return render_template('user/actions/usuarios.html', users=users, roles=roles)
 
+
 def user_new_form():
     if not authenticated(session) or not permission.has_permission('usuario_new', session):
         abort(401)
@@ -45,4 +49,16 @@ def user_new_form():
     roles = User.get_all_roles()
 
     return render_template('user/actions/usuario_crear.html', roles=roles)
+
+
+def maintenance_mode():
+    modo_mantenimiento = os.getenv("MODO_MANTENIMIENTO")
+    if modo_mantenimiento == '0':
+        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '0'", "MODO_MANTENIMIENTO = '1'")
+        os.environ['MODO_MANTENIMIENTO'] = '1'
+    else:
+        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '1'", "MODO_MANTENIMIENTO = '0'")
+        os.environ['MODO_MANTENIMIENTO'] = '0'
+    data = {'success':True}
+    return make_response(jsonify(data), 200)
 
