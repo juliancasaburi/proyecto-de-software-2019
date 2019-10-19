@@ -3,6 +3,7 @@ from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
+from flaskps.helpers import role as helper_role
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -20,12 +21,14 @@ def authenticate():
 
     User.db = get_db()
     user = User.find_by_user(params['username'])
-
     if user and user['activo'] == 1 and bcrypt.check_password_hash(user['password'], params['password']):
-        session['user'] = user['username']
-        flash("La sesión se inició correctamente", "success")
-
-        return redirect(url_for('user_dashboard'))
+        app.config.from_pyfile('../config/config.cfg')
+        if app.config['MODO_MANTENIMIENTO'] == '1' and (not User.has_role(params['username'], 'administrador')):
+            flash("Sitio en mantenimiento", "error")
+        else:
+            session['user'] = user['username']
+            flash("La sesión se inició correctamente", "success")
+            return redirect(url_for('user_dashboard'))
     elif user and user['activo'] == 0:
         flash("Su cuenta está bloqueada", "error")
     else:
