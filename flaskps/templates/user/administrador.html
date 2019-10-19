@@ -67,48 +67,7 @@
                     </div>
                 </div>
 
-                <div id="modalAltaUsuario" class="modal">
-                    <form method="post" action="{{ url_for('user_new') }}">
-                        <div class="modal-content">
-                            <h5>Alta usuario</h5>
-                            <div class="row">
-                                <div class="col s6 input-field">
-                                    <label for="nombre">Nombre</label>
-                                    <input id="nombre" name="first_name" class="validate" type="text" required>
-                                </div>
-                                <div class="col s6 input-field">
-                                    <label for="apellido">Apellido</label>
-                                    <input id="apellido" name="last_name" class="validate" type="text" required>
-                                </div>
-                                <div class="col s12 input-field">
-                                    <label for="email">Email</label>
-                                    <input id="email"  name="email" class="validate" type="email" required>
-                                </div>
-                                <div class="col s6 input-field">
-                                    <label for="username">Nombre de usuario</label>
-                                    <input id="username"  name="username" class="validate" type="text" required>
-                                </div>
-                                <div class="col s6 input-field">
-                                    <label for="password">Contraseña</label>
-                                    <input id="password" name="password" class="validate" type="password" required>
-                                </div>
-                                <div class="col s12">
-                                    <select name="rol_id">
-                                        <option value="" disabled selected>Selecciona un rol</option>
-                                        {% for rol in roles %}
-                                            <option value="{{rol.id}}">{{rol.nombre}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn blue">Guardar</button>
-                            <button class="btn modal-close red">Cerrar</button>
-                        </div>
-                    </form>
-                </div>
-
+                {% include 'partials/modal_alta_usuario.html' %}
 
                 <div class="col s12">
                     <div class="card sticky-action" style="overflow: visible;">
@@ -209,11 +168,6 @@
     <script>
         $(document).ready(function(){
             $('.modal').modal();
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
             $('select').formSelect();
         });
     </script>

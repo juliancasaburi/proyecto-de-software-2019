@@ -23,8 +23,8 @@
                         <div class="table-header">
                             <span class="table-title">Usuarios</span>
                             <div class="actions">
-                                <a href="#add_user" class="modal-trigger waves-effect btn-flat nopadding"><i class="material-icons">person_add</i></a>
-                                <a class="tooltipped modal-trigger btn-flat nopadding" href="#modal1" data-position="top" data-tooltip="Filtros">
+                                <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta Usuario"><i class="material-icons">person_add</i></a>
+                                <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                     <i class="large material-icons">search</i>
                                 </a>
                             </div>
@@ -57,19 +57,21 @@
                     </div>
                 </div>
 
+                {% include 'partials/modal_alta_usuario.html' %}
+
                 <div class="col-md-12 center text-center">
                     <span class="left" id="total_reg"></span>
                     <ul class="pagination pager" id="pager"></ul>
                 </div>
 
                 <div class="fixed-action-btn">
-                    <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modal1" data-position="left" data-tooltip="Filtros">
+                    <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
                         <i class="large material-icons">search</i>
                     </a>
                 </div>
 
                 <!-- Modal Structure -->
-                <div id="modal1" class="modal bottom-sheet modal-fixed-footer">
+                <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                     <div class="modal-content">
                         <h3 class="header">Filtrar el listado de Usuarios</h3>
                         <ul class="collection">
@@ -167,7 +169,7 @@
         });
     </script>
     <script>
-        $('.modal').modal({
+        $('#modalFilters').modal({
                 dismissible: true, // Modal can be dismissed by clicking outside of the modal
                 opacity: .5, // Opacity of modal background
                 inDuration: 300, // Transition in duration
@@ -182,5 +184,11 @@
                 } // Callback for Modal close
             }
         );
+    </script>
+    <script> // Alta de Usuario
+    $(document).ready(function(){
+        $('#modalAltaUsuario').modal();
+        $('select').formSelect();
+    });
     </script>
 {% endblock %}

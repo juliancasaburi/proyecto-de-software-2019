@@ -12,6 +12,8 @@ def user_list():
     User.db = get_db()
     users = User.all()
 
+    roles = User.get_all_roles()
+
     for dict_item in users:
         dict_item['ID'] = dict_item['id']
         del dict_item['id']
@@ -33,7 +35,7 @@ def user_list():
         dict_item['Actualizado'] = dict_item['updated_at']
         del dict_item['updated_at']
 
-    return render_template('user/actions/usuarios.html', users=users)
+    return render_template('user/actions/usuarios.html', users=users, roles=roles)
 
 def user_new_form():
     if not authenticated(session) or not permission.has_permission('usuario_new', session):
