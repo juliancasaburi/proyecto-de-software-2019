@@ -113,6 +113,14 @@
     <script>
         $(document).ready(function() {
             $('#tablaUsuarios').DataTable( {
+                "language": {
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                },
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
                 responsive: true
