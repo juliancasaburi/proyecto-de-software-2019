@@ -76,6 +76,7 @@ app.add_url_rule("/mantenimiento", 'maintenance', dashboard.maintenance_mode, me
 app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
 app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
 app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
+app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)

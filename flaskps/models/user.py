@@ -64,6 +64,19 @@ class User(object):
         return True
 
     @classmethod
+    def delete(cls, uid):
+        sql = """
+            DELETE FROM usuarios
+            WHERE usuarios.id = %s
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, uid)
+                cls.db.commit()
+        finally:
+            cls.db.cursor().close()
+
+    @classmethod
     def find_by_user_and_pass(cls, username, password):
         sql = """
             SELECT * FROM usuarios AS u

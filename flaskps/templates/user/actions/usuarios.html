@@ -35,6 +35,7 @@
                                 {% for key in users[0] %}
                                     <th id=" {{ key }}"> {{ key }} </th>
                                 {% endfor %}
+                                <th>Baja</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -43,6 +44,7 @@
                                     {% for value in dict_item.values() %}
                                         <td class="{{ value }}"> {{ value }} </td>
                                     {% endfor %}
+                                    <td><a id="{{ dict_item.ID }}" class="deleteButton btn red"><i class="material-icons">cancel</i></a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -51,6 +53,7 @@
                                 {% for key in users[0] %}
                                     <th id="{{ key }}"> {{ key }} </th>
                                 {% endfor %}
+                                <th>Baja</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -125,6 +128,9 @@
                     "info":           "Mostrando resultados _START_ al _END_ de un total de _TOTAL_",
                     "infoFiltered": "<br>(_MAX_ sin filtrar)"
                 },
+                "columnDefs": [
+                    { "orderable": false, "targets": 9 } // Disable sorting for column 9
+                ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
                 responsive: true
@@ -191,5 +197,26 @@
         $('#modalAltaUsuario').modal();
         $('select').formSelect();
     });
+    </script>
+    <script>
+        // Delete a record
+        $('.deleteButton').on('click', function (e) {
+            var btn = $(this);
+            var btn_id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url : "{{ url_for('user_destroy') }}",
+                data : JSON.stringify( { "id" : btn_id } ),
+                dataType:'json',
+                contentType: 'application/json;charset=UTF-8',
+                success: function() {
+                    var table = $('#tablaUsuarios').DataTable();
+                    table.row($(btn).parents('tr')).remove().draw('full-hold');
+                },
+                error: function(jqXhr, textStatus, errorMessage){
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
     </script>
 {% endblock %}
