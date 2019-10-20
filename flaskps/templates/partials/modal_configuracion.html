@@ -1,0 +1,33 @@
+<div id="modalConfiguracion" class="modal">
+    <form method="post" action="{{ url_for('config_update') }}">
+        <div class="modal-content">
+            <h1>Configuración del sitio</h1>
+            <div class="row">
+                <h2 class="center light-blue-text">Información de contacto</h2>
+                <div class="col s6 input-field">
+                    <label for="tituloHome">Título del Home</label>
+                    <input id="tituloHome" name="titulo_home" class="validate" type="text" value="{{ titulo }}" placeholder="{{ titulo }}" required>
+                </div>
+                <div class="col s6 input-field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" class="validate" type="email" value="{{ email }}" placeholder="{{ email }}" required>
+                </div>
+                <div class="col s12 input-field">
+                    <textarea id="descripcion" name="descripcion" class="materialize-textarea"  placeholder="{{ descripcion }}">{{ descripcion }}</textarea>
+                    <label for="descripcion">Descripción</label>
+                </div>
+            </div>
+            <div class="row">
+                <h2 class="center light-blue-text">Otros</h2>
+                <div class="col s12 input-field">
+                    <label for="itemsPorPagina">Elementos por página (paginado)</label>
+                    <input id="itemsPorPagina" name="items_por_pagina" class="validate" type="number" step="1" value="{{ items_per_page }}" placeholder="{{ items_per_page }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue">Guardar</button>
+            <button class="btn modal-close red">Cerrar</button>
+        </div>
+    </form>
+</div>

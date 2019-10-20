@@ -1,11 +1,11 @@
 import os
-from flask import render_template, session, abort
+from flask import render_template, session, abort, request, redirect, url_for
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
-from pyutil import filereplace
+from pyutil import filereplace, fileoverwrite
 
 
 def user_list():
@@ -61,4 +61,19 @@ def maintenance_mode():
         os.environ['MODO_MANTENIMIENTO'] = '0'
     data = {'success':True}
     return make_response(jsonify(data), 200)
+
+
+def config_update():
+    if not authenticated(session) or not permission.has_permission('config_update', session):
+        abort(401)
+
+    params = request.form.to_dict()
+    newline = '\n'
+    text = (f"TITULO = '{params['titulo_home']}'{newline}"
+            f"DESCRIPCION = '{params['descripcion']}'{newline}"
+            f"EMAIL_CONTACTO = '{params['email']}'{newline}"
+            f"ITEMS_POR_PAGINA = '{params['items_por_pagina']}'{newline}"
+            )
+    fileoverwrite("flaskps/config/config.cfg", text)
+    return redirect(url_for('user_dashboard'))
 
