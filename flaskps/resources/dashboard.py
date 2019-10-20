@@ -1,5 +1,5 @@
 import os
-from flask import render_template, session, abort, request, redirect, url_for
+from flask import Flask, render_template, session, abort, request, redirect, url_for
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
@@ -7,6 +7,7 @@ from flaskps.helpers import permission
 from flask import jsonify, make_response
 from pyutil import filereplace, fileoverwrite
 
+app = Flask(__name__)
 
 def user_list():
     if not authenticated(session) or not permission.has_permission('usuario_index', session):
@@ -52,7 +53,8 @@ def user_new_form():
 
 
 def maintenance_mode():
-    modo_mantenimiento = os.getenv("MODO_MANTENIMIENTO")
+    app.config.from_pyfile('../config/config.cfg')
+    modo_mantenimiento = app.config['MODO_MANTENIMIENTO']
     if modo_mantenimiento == '0':
         filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '0'", "MODO_MANTENIMIENTO = '1'")
         os.environ['MODO_MANTENIMIENTO'] = '1'
@@ -68,10 +70,14 @@ def config_update():
         abort(401)
 
     params = request.form.to_dict()
+
+    app.config.from_pyfile('../config/config.cfg')
+
     newline = '\n'
     text = (f"TITULO = '{params['titulo_home']}'{newline}"
             f"DESCRIPCION = '{params['descripcion']}'{newline}"
             f"EMAIL_CONTACTO = '{params['email']}'{newline}"
+            f"MODO_MANTENIMIENTO = '{app.config['MODO_MANTENIMIENTO']}'{newline}"
             f"ITEMS_POR_PAGINA = '{params['items_por_pagina']}'{newline}"
             )
     fileoverwrite("flaskps/config/config.cfg", text)
