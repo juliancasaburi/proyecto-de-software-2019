@@ -16,7 +16,8 @@
                 <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
                 <div class="section">
                     {% if is_authenticated(session) %}
-                        <li><a class="waves-effect waves-light" href="{{ url_for('user_dashboard') }}"><i class="material-icons">person</i>{{ session['user'] }}</a></li>
+                        <p class="subheader light-blue white-text">Autenticado como: {{ session['user'] }}</p>
+                        <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}"><i class="material-icons">person</i>Administrar Cuenta</a></li>
                     {% endif %}
                 </div>
                 <div class="section">

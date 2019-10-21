@@ -182,3 +182,33 @@ class User(object):
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()
+
+    @classmethod
+    def update_email(cls, email, username):
+        sql = """
+            UPDATE usuarios as u
+            SET email = %s
+            WHERE u.username = %s
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (email, username))
+                cls.db.commit()
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()
+
+    @classmethod
+    def update_password(cls, password, username):
+        sql = """
+            UPDATE usuarios as u
+            SET password = %s
+            WHERE u.username = %s
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (password, username))
+                cls.db.commit()
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()

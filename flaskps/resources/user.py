@@ -44,7 +44,6 @@ def destroy():
     data = {'success': True}
     return make_response(jsonify(data), 200)
 
-
 def dashboard():
     if not authenticated(session):
         abort(401)
@@ -57,3 +56,39 @@ def dashboard():
         return render_template('user/administrador.html', roles=roles)
     else:
         return redirect(url_for('index'))
+
+
+def profile():
+    if not authenticated(session):
+        abort(401)
+
+    User.db = get_db()
+    user = User.find_by_user(session.get('user'))
+
+    return render_template('user/account.html', email=user['email'], password=user['password'])
+
+
+def email_update():
+    if not authenticated(session):
+        abort(401)
+
+    email = request.form.get('email')
+    User.db = get_db()
+    User.update_email(email, session.get('user'))
+
+    #TODO: Mensajes de error
+
+    return redirect(url_for('user_profile'))
+
+
+def password_update():
+    if not authenticated(session):
+        abort(401)
+
+    password = request.form.get('password')
+    User.db = get_db()
+    User.update_email(password, session.get('user'))
+
+    # TODO: Mensajes de error
+
+    return redirect(url_for('user_profile'))

@@ -65,6 +65,10 @@ app.add_url_rule(
     methods=['POST']
 )
 
+# Cuenta
+app.add_url_rule("/perfil", 'user_profile', user.profile)
+app.add_url_rule("/perfil/actualizar_email", 'user_email_update', user.email_update, methods=['POST'])
+app.add_url_rule("/perfil/actualizar_contraseña", 'user_password_update', user.password_update, methods=['POST'])
 
 # Dashboard
 app.add_url_rule("/dashboard", 'user_dashboard', user.dashboard)
