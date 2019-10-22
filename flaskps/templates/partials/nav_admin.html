@@ -3,7 +3,7 @@
     <li><a href="{{ url_for('user_list') }}">Ver Listado</a></li>
     <li><a href="{{ url_for('user_new_form') }}" class="modal-trigger">Alta</a></li>
     <li><a href="#">Baja</a></li>
-    <li><a href="#">Modificación</a></li>
+    <li><a href="{{ url_for('user_edit_form') }}">Modificación</a></li>
 </ul>
 <!-- dropdownAlumnos Structure -->
 <ul id="dropdownAlumnos" class="dropdown-content teal">

@@ -86,9 +86,11 @@ app.add_url_rule("/roles", 'roles', role.all_roles, methods=['GET'])
 app.add_url_rule("/usuario", 'user', user.user_data, methods=['POST'])
 app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
 app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
+app.add_url_rule("/usuario/editar", 'user_edit_form', dashboard.user_edit_form)
 app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
 app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
 app.add_url_rule("/usuario/actualizar", 'user_update', user.update, methods=['POST'])
+app.add_url_rule("/usuario/actualizarYRefrescar", 'user_update_and_refresh', user.update_and_refresh, methods=['POST'])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)

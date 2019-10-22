@@ -122,3 +122,22 @@ def update():
     User.db = get_db()
     User.update(params)
     return make_response(jsonify(params), 200)
+
+
+#refactorizar
+def update_and_refresh():
+    if not authenticated(session) and has_permission('usuario_index', session):
+        abort(401)
+
+    params = request.form.to_dict()
+    params['roles'] = request.form.getlist('rol_id')
+
+    if 'activo' in params:
+        params['activo'] = 1
+    else:
+        params['activo'] = 0
+
+    User.db = get_db()
+    User.update(params)
+    return redirect(url_for('user_edit_form'))
+
