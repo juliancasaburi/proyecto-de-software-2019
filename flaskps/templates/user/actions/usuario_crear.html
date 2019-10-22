@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Alta de Usuario - Orquesta Escuela de Berisso{% endblock %}
+{% block title %}Alta de Usuario - {{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -7,12 +7,10 @@
 {% block main %}
     <div class="container">
         <div class="section center">
-            <h1 class="indigo-text">Alta de Usuario</h1>
-            <div class="section"></div>
-
             <div class="row">
                 <form method="post" action="{{ url_for('user_new') }}">
                     <div class="modal-content">
+                        <h1>Alta de Usuario</h1>
                         <div class="row">
                             <div class="col s6 input-field">
                                 <label for="nombre">Nombre</label>

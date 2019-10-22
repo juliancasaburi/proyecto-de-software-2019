@@ -83,3 +83,10 @@ def config_update():
     fileoverwrite("flaskps/config/config.cfg", text)
     return redirect(url_for('user_dashboard'))
 
+
+def config_edit():
+    if not authenticated(session) or not permission.has_permission('config_update', session):
+        abort(401)
+
+    return render_template('/user/actions/configuracion_editar.html')
+

@@ -70,3 +70,40 @@ def dashboard():
         return render_template('user/administrador.html', roles=roles)
     else:
         return redirect(url_for('index'))
+
+
+def profile():
+    if not authenticated(session):
+        abort(401)
+
+    User.db = get_db()
+    user = User.find_by_user(session.get('user'))
+
+    return render_template('user/account.html', email=user['email'], password=user['password'])
+
+
+def email_update():
+    if not authenticated(session):
+        abort(401)
+
+    email = request.form.get('email')
+    User.db = get_db()
+    User.update_email(email, session.get('user'))
+
+    #TODO: Mensajes de error
+
+    return redirect(url_for('user_profile'))
+
+
+def password_update():
+    if not authenticated(session):
+        abort(401)
+
+    password = request.form.get('password')
+    bcrypt_password = bcrypt.generate_password_hash(password).decode('utf - 8')
+    User.db = get_db()
+    User.update_password(bcrypt_password, session.get('user'))
+
+    # TODO: Mensajes de error
+
+    return redirect(url_for('user_profile'))

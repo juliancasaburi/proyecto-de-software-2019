@@ -65,12 +65,17 @@ app.add_url_rule(
     methods=['POST']
 )
 
+# Cuenta
+app.add_url_rule("/perfil", 'user_profile', user.profile)
+app.add_url_rule("/perfil/actualizar_email", 'user_email_update', user.email_update, methods=['POST'])
+app.add_url_rule("/perfil/actualizar_contraseña", 'user_password_update', user.password_update, methods=['POST'])
 
 # Dashboard
 app.add_url_rule("/dashboard", 'user_dashboard', user.dashboard)
 
 # Configuracion del sitio
 app.add_url_rule("/mantenimiento", 'maintenance', dashboard.maintenance_mode, methods=['POST'])
+app.add_url_rule("/configuracion/editar", 'config_edit', dashboard.config_edit)
 app.add_url_rule("/configuracion/actualizar", 'config_update', dashboard.config_update, methods=['POST'])
 
 # Usuarios
@@ -83,5 +88,6 @@ app.add_url_rule("/usuario/actualizacion", 'user_update', user.update, methods=[
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
-# TODO: Implementar lo mismo para el error 500 y 401
+app.register_error_handler(500, handler.internal_server_error)
+# TODO: Implementar lo mismo para el error 401
 
