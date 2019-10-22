@@ -9,6 +9,7 @@ from flaskps.helpers import role as helper_role
 from flaskps.resources import auth
 from flaskps.resources import user
 from flaskps.resources import dashboard
+from flaskps.resources import role
 
 # Configuración inicial de la app
 app = Flask(__name__)
@@ -78,16 +79,19 @@ app.add_url_rule("/mantenimiento", 'maintenance', dashboard.maintenance_mode, me
 app.add_url_rule("/configuracion/editar", 'config_edit', dashboard.config_edit)
 app.add_url_rule("/configuracion/actualizar", 'config_update', dashboard.config_update, methods=['POST'])
 
+# Roles
+app.add_url_rule("/roles", 'roles', role.all_roles, methods=['GET'])
+
 # Usuarios
+app.add_url_rule("/usuario", 'user', user.user_data, methods=['POST'])
 app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
 app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
 app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
 app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
-app.add_url_rule("/usuario/actualizacion", 'user_update', user.update, methods=['POST'])
+app.add_url_rule("/usuario/actualizar", 'user_update', user.update, methods=['POST'])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
 app.register_error_handler(500, handler.internal_server_error)
-# TODO: Implementar lo mismo para el error 401
 

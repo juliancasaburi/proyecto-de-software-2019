@@ -77,9 +77,9 @@ class User(object):
             cls.db.cursor().close()
 
     @classmethod
-    def update(cls, data, user_id):
+    def update(cls, data):
 
-        sql_delete_user_rols = """
+        sql_delete_user_roles = """
             DELETE from usuario_tiene_rol
             WHERE usuario_id = %s
         """
@@ -89,32 +89,36 @@ class User(object):
             VALUES (%s, %s)
         """
 
-        roles = data.get('roles')
-
         try:
             with cls.db.cursor() as cursor:
 
                 query = """
                     UPDATE usuarios
-                    SET first_name = %s,
+                    SET activo = %s,
+                        first_name = %s,
                         last_name = %s,
                         email = %s,
                         username = %s
                     WHERE id = %s
                 """
 
-                cursor.execute(query, (data.get('first_name'), data.get('last_name'), data.get('email'), data.get('username'), user_id))
+                cursor.execute(query, (data.get('activo'), data.get('first_name'), data.get('last_name'),
+                                       data.get('email'), data.get('username'), data.get('id')
+                                       )
+                               )
                 cls.db.commit()
 
-                cursor.execute(sql_delete_user_rols, user_id)
+                cursor.execute(sql_delete_user_roles, data.get('id'))
                 cls.db.commit()
+
+                roles = data.get('roles')
 
                 for rol in roles:
-                    cursor.execute(sql_user_rol, (user_id, rol))
+                    cursor.execute(sql_user_rol, (data.get('id'), rol))
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
-            flash("Ya existe un usuario con el mismo nombre", "error")
+            flash("Error", "error")
             return False
         finally:
             cls.db.cursor().close()
@@ -242,7 +246,6 @@ class User(object):
                 cls.db.commit()
         finally:
             cls.db.cursor().close()
-        return cursor.fetchall()
 
     @classmethod
     def update_password(cls, password, username):
@@ -255,6 +258,19 @@ class User(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, (password, username))
                 cls.db.commit()
+        finally:
+            cls.db.cursor().close()
+
+    @classmethod
+    def user_roles(cls, username):
+        sql = """
+            SELECT rol.id as id, rol.nombre as nombre
+            FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
+            WHERE u.username = %s
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, username)
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()

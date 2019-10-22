@@ -1,0 +1,45 @@
+<div id="modalEditarUsuario" class="modal">
+    <form id="formEditarUsuario" method="post" action="{{ url_for('user_update') }}">
+        <div class="modal-content">
+            <h1>Editar usuario</h1>
+            <div class="row">
+                <div class="col s12 input-field">
+                    <p>
+                        <label>
+                            <input id="modal_editar_activo" name="activo" type="checkbox" class="filled-in" checked="checked" />
+                            <span>Activo</span>
+                        </label>
+                    </p>
+                </div>
+                <input id="modal_editar_id" name="id" type="number" hidden>
+                <div class="col s6 input-field">
+                    <label for="modal_editar_nombre">Nombre</label>
+                    <input id="modal_editar_nombre" name="first_name" class="validate active" type="text" required>
+                </div>
+                <div class="col s6 input-field">
+                    <label for="modal_editar_apellido">Apellido</label>
+                    <input id="modal_editar_apellido" name="last_name" class="validate active" type="text" required>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="modal_editar_email">Email</label>
+                    <input id="modal_editar_email" name="email" class="validate" type="email" required>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="modal_editar_username">Nombre de usuario</label>
+                    <input id="modal_editar_username" name="username" class="validate" type="text" required>
+                </div>
+                <div class="col s12">
+                    <select multiple id="select_roles" name="rol_id" class="validate" required>
+                        <option value="" disabled>Selecciona uno o más roles</option>
+                        {% for rol in roles %}
+                            <option value="{{rol.id}}">{{rol.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="editarUsuarioSubmit" class="btn blue">Guardar</button>
+        </div>
+    </form>
+</div>

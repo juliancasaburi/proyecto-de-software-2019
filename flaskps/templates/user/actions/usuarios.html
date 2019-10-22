@@ -33,7 +33,7 @@
                             <thead>
                             <tr class="orange">
                                 {% for key in users[0] %}
-                                    <th id=" {{ key }}"> {{ key }} </th>
+                                    <th> {{ key }} </th>
                                 {% endfor %}
                                 <th class="nosort">Editar</th>
                                 <th class="nosort">Baja</th>
@@ -54,7 +54,7 @@
                             <tr class="orange">
                                 <th>Editar</th>
                                 {% for key in users[0] %}
-                                    <th id="{{ key }}"> {{ key }} </th>
+                                    <th> {{ key }} </th>
                                 {% endfor %}
                                 <th>Baja</th>
                             </tr>
@@ -64,6 +64,7 @@
                 </div>
 
                 {% include 'partials/modal_alta_usuario.html' %}
+                {% include 'partials/modal_editar_usuario.html' %}
 
                 <div class="col-md-12 center text-center">
                     <span class="left" id="total_reg"></span>
@@ -198,6 +199,24 @@
     <script> // Alta de Usuario
     $(document).ready(function(){
         $('#modalAltaUsuario').modal();
+        $('#modalEditarUsuario').modal({
+                onCloseStart: function() { // Callback for Modal close
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('roles') }}",
+                        success: function (response) {
+                            for (var key in response){
+                                $("#select_roles option[value='" + response[key]['id'] + "']").prop("selected", false);
+                                $("#select_roles").formSelect();
+                            }
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                }
+            }
+        );
         $('select').formSelect();
     });
     </script>
@@ -206,6 +225,7 @@
         $('.deleteButton').on('click', function (e) {
             var btn = $(this);
             var btn_id = $(this).attr('id');
+            $('#modalAltaUsuario').modal('open');
             if (confirm("Eliminar usuario con ID:" + btn_id) == true) {
                 $.ajax({
                     type: "POST",
@@ -222,6 +242,61 @@
                     }
                 });
             }
+        });
+    </script>
+    <script>
+        // Edit a record
+        $('.editButton').on('click', function (e) {
+            var table = $('#tablaUsuarios').DataTable();
+            var row = table.row($(this).parents("tr"));
+            var data = row.data();
+            var uname = data[5];
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('user') }}",
+                data: JSON.stringify({"username": uname}),
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                success: function (response) {
+                    for (var key in response['roles']){
+                        $("#select_roles option[value='" + response['roles'][key]['id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_editar_id').val(response['id']);
+                    $('#modal_editar_activo').prop('checked', response['activo']);
+                    $('#modal_editar_nombre').attr("placeholder", response['first_name']);
+                    $('#modal_editar_nombre').attr("value", response['first_name']);
+                    $('#modal_editar_apellido').attr("placeholder", response['last_name']);
+                    $('#modal_editar_apellido').attr("value", response['last_name']);
+                    $('#modal_editar_email').attr("placeholder", response['email']);
+                    $('#modal_editar_email').attr("value", response['email']);
+                    $('#modal_editar_username').attr("placeholder", response['username']);
+                    $('#modal_editar_username').attr("value", response['username']);
+                    M.updateTextFields();
+                    $('#modalEditarUsuario').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var frm = $('#formEditarUsuario');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $('#modalEditarUsuario').modal('close');
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    error: function (data) {
+                        console.log('Error');
+                        console.log(data);
+                    },
+                });
+            });
         });
     </script>
 {% endblock %}

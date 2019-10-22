@@ -45,19 +45,6 @@ def destroy():
     return make_response(jsonify(data), 200)
 
 
-def update():
-    if not authenticated(session):
-        abort(401)
-
-    params = request.form.to_dict()
-    user_id = request.args.get('user_id')
-    params['roles'] = request.form.getlist('rol_id')
-
-    User.db = get_db()
-    User.update(params, user_id)
-    return redirect(url_for('user_dashboard'))
-
-
 def dashboard():
     if not authenticated(session):
         abort(401)
@@ -107,3 +94,31 @@ def password_update():
     # TODO: Mensajes de error
 
     return redirect(url_for('user_profile'))
+
+
+def user_data():
+    if not authenticated(session) and has_permission('usuario_index', session):
+        abort(401)
+    User.db = get_db()
+    username = request.json['username']
+    user = User.find_by_user(username)
+    user['roles'] = User.user_roles(username)
+    data = jsonify(user)
+    return make_response(data, 200)
+
+
+def update():
+    if not authenticated(session) and has_permission('usuario_index', session):
+        abort(401)
+
+    params = request.form.to_dict()
+    params['roles'] = request.form.getlist('rol_id')
+
+    if 'activo' in params:
+        params['activo'] = 1
+    else:
+        params['activo'] = 0
+
+    User.db = get_db()
+    User.update(params)
+    return make_response(jsonify(params), 200)
