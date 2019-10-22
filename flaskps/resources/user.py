@@ -45,6 +45,19 @@ def destroy():
     return make_response(jsonify(data), 200)
 
 
+def update():
+    if not authenticated(session):
+        abort(401)
+
+    params = request.form.to_dict()
+    user_id = request.args.get('user_id')
+    params['roles'] = request.form.getlist('rol_id')
+
+    User.db = get_db()
+    User.update(params, user_id)
+    return redirect(url_for('user_dashboard'))
+
+
 def dashboard():
     if not authenticated(session):
         abort(401)

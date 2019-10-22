@@ -77,6 +77,52 @@ class User(object):
             cls.db.cursor().close()
 
     @classmethod
+    def update(cls, data, user_id):
+
+        sql_delete_user_rols = """
+            DELETE from usuario_tiene_rol
+            WHERE usuario_id = %s
+        """
+
+        sql_user_rol = """
+            INSERT INTO usuario_tiene_rol (usuario_id, rol_id)
+            VALUES (%s, %s)
+        """
+
+        roles = data.get('roles')
+
+        try:
+            with cls.db.cursor() as cursor:
+
+                query = """
+                    UPDATE usuarios
+                    SET first_name = %s,
+                        last_name = %s,
+                        email = %s,
+                        username = %s
+                    WHERE id = %s
+                """
+
+                cursor.execute(query, (data.get('first_name'), data.get('last_name'), data.get('email'), data.get('username'), user_id))
+                cls.db.commit()
+
+                cursor.execute(sql_delete_user_rols, user_id)
+                cls.db.commit()
+
+                for rol in roles:
+                    cursor.execute(sql_user_rol, (user_id, rol))
+                    cls.db.commit()
+
+        except pymysql.err.IntegrityError:
+            flash("Ya existe un usuario con el mismo nombre", "error")
+            return False
+        finally:
+            cls.db.cursor().close()
+        flash("Se ha modificado el usuario con éxito", "success")
+        return True
+
+
+    @classmethod
     def find_by_user_and_pass(cls, username, password):
         sql = """
             SELECT * FROM usuarios AS u
