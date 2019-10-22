@@ -225,7 +225,6 @@
         $('.deleteButton').on('click', function (e) {
             var btn = $(this);
             var btn_id = $(this).attr('id');
-            $('#modalAltaUsuario').modal('open');
             if (confirm("Eliminar usuario con ID:" + btn_id) == true) {
                 $.ajax({
                     type: "POST",
