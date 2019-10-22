@@ -4,6 +4,7 @@ from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
+from flask_wtf.csrf import CSRFProtect
 
 # Resources
 from flaskps.resources import auth
@@ -16,6 +17,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 app.config.from_pyfile('config/config.cfg')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+csrf = CSRFProtect(app)
 
 # Server Side session
 app.config['SESSION_TYPE'] = 'filesystem'

@@ -9,6 +9,7 @@
         <div class="section center">
             <div class="row">
                 <form method="post" action="{{ url_for('config_update') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Configuración del sitio</h1>
                         <div class="row">

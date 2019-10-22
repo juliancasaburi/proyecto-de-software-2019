@@ -12,7 +12,8 @@
                     <div class="col s12">
                         <h4 class="center">Mi Cuenta</h4>
                         <div class="row">
-                            <form class="col s12" method="post" action="{{ url_for('user_email_update') }}" id="email_form">
+                            <form class="col s12" method="POST" action="{{ url_for('user_email_update') }}" id="email_form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <div class="row">
                                     <div class="input-field col s12 m12">
                                         <i class="material-icons prefix">mail</i>
@@ -25,6 +26,7 @@
                         </div><!--row-->
                         <div class="row">
                             <form class="col s12" method="post" action="{{ url_for('user_password_update') }}" id="password_form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <div class="row">
                                     <div class="input-field col s12 m12">
                                         <i class="material-icons prefix">vpn_key</i>
@@ -35,7 +37,7 @@
                                 <div class="row">
                                     <div class="input-field col s12 m12">
                                         <i class="material-icons prefix">vpn_key</i>
-                                        <input id="confirm_password" type="password" class="validate" required>
+                                        <input id="confirm_password" name="confirm_password" type="password" class="validate" required>
                                         <label for="confirm_password">Confirmar contraseña</label>
                                     </div>
                                 </div><!--row-->

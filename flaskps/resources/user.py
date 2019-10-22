@@ -4,6 +4,8 @@ from flask_bcrypt import Bcrypt
 from flaskps.models.user import User
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
+from flaskps.forms.form_email_update import EmailUpdateForm
+from flaskps.forms.form_password_update import PasswordUpdateForm
 
 app = Flask = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -73,9 +75,12 @@ def email_update():
     if not authenticated(session):
         abort(401)
 
-    email = request.form.get('email')
-    User.db = get_db()
-    User.update_email(email, session.get('user'))
+    form = EmailUpdateForm()
+
+    if form.validate_on_submit():
+        email = request.form.get('email')
+        User.db = get_db()
+        User.update_email(email, session.get('user'))
 
     #TODO: Mensajes de error
 
@@ -86,10 +91,12 @@ def password_update():
     if not authenticated(session):
         abort(401)
 
-    password = request.form.get('password')
-    bcrypt_password = bcrypt.generate_password_hash(password).decode('utf - 8')
-    User.db = get_db()
-    User.update_password(bcrypt_password, session.get('user'))
+    form = PasswordUpdateForm()
+    if form.validate_on_submit():
+        password = request.form.get('password')
+        bcrypt_password = bcrypt.generate_password_hash(password).decode('utf - 8')
+        User.db = get_db()
+        User.update_password(bcrypt_password, session.get('user'))
 
     # TODO: Mensajes de error
 
