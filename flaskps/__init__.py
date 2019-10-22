@@ -87,5 +87,6 @@ app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST']
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
-# TODO: Implementar lo mismo para el error 500 y 401
+app.register_error_handler(500, handler.internal_server_error)
+# TODO: Implementar lo mismo para el error 401
 
