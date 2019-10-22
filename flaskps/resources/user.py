@@ -86,8 +86,9 @@ def password_update():
         abort(401)
 
     password = request.form.get('password')
+    bcrypt_password = bcrypt.generate_password_hash(password).decode('utf - 8')
     User.db = get_db()
-    User.update_email(password, session.get('user'))
+    User.update_password(bcrypt_password, session.get('user'))
 
     # TODO: Mensajes de error
 
