@@ -24,7 +24,7 @@
                     <input id="password" name="password" class="validate" type="password" required>
                 </div>
                 <div class="col s12">
-                    <select multiple name="rol_id">
+                    <select multiple name="rol_id" required>
                         <option value="" disabled selected>Selecciona uno o más roles</option>
                         {% for rol in roles %}
                             <option value="{{rol.id}}">{{rol.nombre}}</option>
