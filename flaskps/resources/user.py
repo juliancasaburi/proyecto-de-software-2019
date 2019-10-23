@@ -47,6 +47,19 @@ def destroy():
     return make_response(jsonify(data), 200)
 
 
+#REFACTORIZAR
+def destroy_and_refresh():
+    if not authenticated(session) and has_permission('user_destroy', session):
+        abort(401)
+
+    params = request.form.to_dict();
+    uid = params['id']
+
+    User.db = get_db()
+    User.delete(uid)
+    return redirect(url_for('user_destroy_form'))
+
+
 def dashboard():
     if not authenticated(session):
         abort(401)

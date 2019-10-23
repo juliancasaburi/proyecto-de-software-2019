@@ -74,6 +74,7 @@ class User(object):
                 cursor.execute(sql, uid)
                 cls.db.commit()
         finally:
+            flash("Se ha eliminado el usuario con éxito", "success")
             cls.db.cursor().close()
 
     @classmethod

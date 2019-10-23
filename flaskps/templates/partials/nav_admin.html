@@ -2,7 +2,7 @@
 <ul id="dropdownUsuarios" class="dropdown-content teal">
     <li><a href="{{ url_for('user_list') }}">Ver Listado</a></li>
     <li><a href="{{ url_for('user_new_form') }}" class="modal-trigger">Alta</a></li>
-    <li><a href="#">Baja</a></li>
+    <li><a href="{{ url_for('user_destroy_form') }}">Baja</a></li>
     <li><a href="{{ url_for('user_edit_form') }}">Modificación</a></li>
 </ul>
 <!-- dropdownAlumnos Structure -->
