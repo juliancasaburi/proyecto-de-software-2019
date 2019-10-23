@@ -33,7 +33,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">{{ descripcion }}</p>
+                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">{{ descripcion }}</p>
+                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                         <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
                         <h5 class="center">OEB</h5>
 
-                        <p class="light">{{ descripcion }}</p>
+                        <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere enim nec nunc faucibus ornare. Aliquam erat volutpat. Nunc pulvinar.</p>
                     </div>
                 </div>
             </div>
@@ -60,17 +60,35 @@
 
     <div class="divider blue"></div>
 
+    <div class="carousel carousel-slider orange darken-4">
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel1.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel2.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel3.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel4.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel5.jpg') }}"></a>
+    </div>
+
+    <div class="divider blue"></div>
+
     <div class="container">
         <div class="section">
             <div class="row">
                 <div class="col s12 center">
-                    <h1 class="light-blue-text text-darken-2">Ubicación</h1>
-                    <p class="text-justify light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+                    <h1 class="light-blue-text text-darken-2">Sumate</h1>
+                    <p class="text-justify light">{{ descripcion }}</p>
                 </div>
             </div>
             <div class="col s12 center z-depth-4">
-                <iframe title="Nuestra ubicación en el mapa, calle 50 y 120 La Plata" aria-label="Nuestra ubicación en el mapa, calle 50 y 120 La Plata" src="https://www.openstreetmap.org/export/embed.html?bbox=-57.940210103988655%2C-34.90470526394675%2C-57.936669588088996%2C-34.902751913578335&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=19/-34.90373/-57.93844">Ver mapa más grande</a></small></div>
+                <iframe title="Escuela 25 de Berisso" aria-label="Escuela 25 de Berisso" src="https://www.openstreetmap.org/export/embed.html?bbox=-57.895344793796546%2C-34.92683778809732%2C-57.89180427789689%2C-34.924891561791604&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=19/-34.90373/-57.93844">Ver mapa más grande</a></small></div>
         </div>
-
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.carousel.carousel-slider').carousel({
+            fullWidth: true,
+            indicators: true
+        });
+    </script>
 {% endblock %}
