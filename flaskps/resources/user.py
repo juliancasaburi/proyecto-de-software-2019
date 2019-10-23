@@ -122,9 +122,12 @@ def user_data():
     User.db = get_db()
     username = request.json['username']
     user = User.find_by_user(username)
-    user['roles'] = User.user_roles(username)
-    data = jsonify(user)
-    return make_response(data, 200)
+    if user != None:
+        user['roles'] = User.user_roles(username)
+        data = jsonify(user)
+        return make_response(data, 200)
+    else:
+        return abort(404)
 
 
 def update():
