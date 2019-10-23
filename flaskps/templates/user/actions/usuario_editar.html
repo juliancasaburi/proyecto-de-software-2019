@@ -9,20 +9,23 @@
         <div class="section center">
             <div class="row">
                 <form method="post" action="{{ url_for('user_update_and_refresh') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Modificación de Usuario</h1>
-                        <h6>Recuerde que también puedes editar los usuarios desde el listado completo.</h6>
+                        <h6>Recordá que también podés editar los usuarios desde el <a href="{{ url_for ('user_list') }}">listado completo de usuarios</a>.</h6>
+                        <br>
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">account_circle</i>
                                 <input class="filterUsuario" id="filterUsuario" type="text">
-                                <label for="filterUsuario">Filtrar por nombre de usuario</label>
+                                <label for="filterUsuario">Ingrese el nombre de usuario</label>
+                                <small id="smallFilter">Si no existe no aparecerá en la pantalla</small>
                             </div>
                         </div>
 
                         <div id="userForm" class="row" hidden>
                             <input id="id" name="id" type="number" hidden>
-                            <div class="col s12 input-field">
+                            <div class="col s12 input-field left-align">
                                 <p>
                                     <label>
                                         <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" />
@@ -54,12 +57,15 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                            <divider></divider>
+                            <div class="modal-footer col s12">
+                                <button type="submit" class="btn blue">Guardar</button>
+                                <button class="btn modal-close red">Cerrar</button>
+                            </div>
                         </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn blue">Guardar</button>
-                        <button class="btn modal-close red">Cerrar</button>
-                    </div>
+
                 </form>
             </div>
         </div>
@@ -95,11 +101,13 @@
                         $('#email').attr('value', response['email']);
                         $('#email').attr('placeholder', response['email']);
                         M.updateTextFields();
-                        $('#userForm').removeAttr('hidden');
+                        $('#smallFilter').text("");
+                        $('#userForm').show(500)
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
                         console.log("Error: ", errorMessage);
-                        $('#userForm').attr('hidden',true);
+                        $('#smallFilter').text("Si no existe no aparecerá en la pantalla");
+                        $('#userForm').hide(500);
                     }
                 });
             });
