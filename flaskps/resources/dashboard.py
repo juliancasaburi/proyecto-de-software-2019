@@ -125,6 +125,9 @@ def user_new_form():
 
 
 def maintenance_mode():
+    if not authenticated(session) or not permission.has_permission('config_update', session):
+        abort(401)
+
     app.config.from_pyfile('../config/config.cfg')
     modo_mantenimiento = app.config['MODO_MANTENIMIENTO']
     if modo_mantenimiento == '0':
