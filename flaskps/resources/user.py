@@ -46,7 +46,8 @@ def create():
 
     msg = Message("Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
                   sender="grupo2unlppds2019@gmail.com",
-                  recipients=[params['email']])
+                  recipients=[params['email']],
+                  charset='utf8')
 
     msg.html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
 

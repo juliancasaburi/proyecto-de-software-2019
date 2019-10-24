@@ -1,8 +1,15 @@
 <html>
+<style>
+    body {
+        background-color: #f2f3f4; /* Anti flash white */
+    }
+</style>
 <body>
-<p>Su cuenta se ha registrado correctamente, ya puedes loguearte con los siguientes datos: </p>
-<p>Nombre de usuario: {{ username }}</p>
-<p>Clave: {{ passwd }}</p>
-<p><span>Muchas gracias.</span></p>
+    <h1>Un Administrador ha creado una cuenta para usted</h1>
+    <p>Puede iniciar sesión ingresando sus datos en: <a href="https://grupo2.proyecto2019.linti.unlp.edu.ar/login">https://grupo2.proyecto2019.linti.unlp.edu.ar/login</a></p>
+    <p><b>Nombre de usuario:</b> {{ username }}</p>
+    <p><b>Contraseña:</b> {{ passwd }}</p>
+    <p>Muchas gracias</p>
+    <p><u>Administración - Orquesta Escuela de Berisso</u></p>
 </body>
 </html>
