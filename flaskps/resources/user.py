@@ -2,6 +2,8 @@ from flask import Flask, redirect, render_template, request, url_for, session, a
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.models.user import User
+from flaskps.models.role import Role
+
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.forms.form_email_update import EmailUpdateForm
@@ -88,7 +90,8 @@ def dashboard():
 
     User.db = get_db()
     role = User.role(session.get('user'))
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
 
     if 'administrador' in role.values():
         return render_template('user/administrador.html', roles=roles)

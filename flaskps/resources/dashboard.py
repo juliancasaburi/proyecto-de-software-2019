@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, session, abort, request, redirect, url_for
 from flaskps.db import get_db
 from flaskps.models.user import User
+from flaskps.models.role import Role
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
@@ -16,7 +17,8 @@ def user_list():
     User.db = get_db()
     users = User.all()
 
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
 
     for dict_item in users:
         dict_item['ID'] = dict_item['id']
@@ -50,7 +52,8 @@ def user_edit_form():
     User.db = get_db()
     users = User.all()
 
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
 
     for dict_item in users:
         dict_item['ID'] = dict_item['id']
@@ -84,7 +87,8 @@ def user_destroy_form():
     User.db = get_db()
     users = User.all()
 
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
 
     for dict_item in users:
         dict_item['ID'] = dict_item['id']
@@ -114,8 +118,8 @@ def user_new_form():
     if not authenticated(session) or not permission.has_permission('usuario_new', session):
         abort(401)
 
-    User.db = get_db()
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
 
     return render_template('user/actions/usuario_crear.html', roles=roles)
 

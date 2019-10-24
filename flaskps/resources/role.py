@@ -1,10 +1,9 @@
 from flask import jsonify, make_response
 from flaskps.db import get_db
-from flaskps.models.user import User
-
+from flaskps.models.role import Role
 
 def all_roles():
-    User.db = get_db()
-    roles = User.get_all_roles()
+    Role.db = get_db()
+    roles = Role.all()
     data = jsonify(roles)
     return make_response(data, 200)

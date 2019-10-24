@@ -222,19 +222,6 @@ class User(object):
         return cursor.fetchone()
 
     @classmethod
-    def get_all_roles(cls):
-        sql = """
-            SELECT *
-            FROM rol
-        """
-        try:
-            with cls.db.cursor() as cursor:
-                cursor.execute(sql)
-        finally:
-            cls.db.cursor().close()
-        return cursor.fetchall()
-
-    @classmethod
     def update_email(cls, email, username):
         sql = """
             UPDATE usuarios as u
