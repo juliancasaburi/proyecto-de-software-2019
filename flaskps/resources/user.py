@@ -52,7 +52,7 @@ def create():
 
     mail.send(msg)
 
-    return redirect(url_for('user_dashboard'))
+    return redirect(url_for('user_new_form'))
 
 
 def destroy():
