@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #416475;
+        }
+    </style>
+    <div class="row center">
+        <h1 class="white-text">{{ error_name }}</h1>
+        <p class="white-text"><b>¡Error!</b> {{ error_description }} </p>
+        <div class="link-container ">
+            <a href="{{ url_for('index') }}" class="waves-effect waves-light btn-large grey darken-4"><i class="material-icons left">home</i>Ir al inicio</a>
+        </div>
+    </div>
+{% endblock %}

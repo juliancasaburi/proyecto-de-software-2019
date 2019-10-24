@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block title %}Iniciar Sesión - {{ titulo }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section center">
+            <h1 class="indigo-text">Inicio de sesión</h1>
+            <p>Podrás acceder a un panel con herramientas según tu rol para gestionar el funcionamiento de la OEB</p>
+            <div class="section"></div>
+
+            <div class="container">
+                <div class="login z-depth-1 grey lighten-4 row">
+
+                    <form class="col s12" action="{{ url_for('auth_authenticate') }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class='row'>
+                            <div class='col s12'>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input type='text' name='username' id='username' required/>
+                                <label for='username'>Ingresa tu usuario</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input type='password' name='password' id='password' required/>
+                                <label for='password'>Ingresa tu contraseña</label>
+                            </div>
+                            <label style='float: right;'>
+                                <a class='pink-text' href='passwordreset.html'><b>¿Olvidaste tu contraseña?</b></a>
+                            </label>
+                        </div>
+
+                        <br />
+                        <div class='row'>
+                            <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

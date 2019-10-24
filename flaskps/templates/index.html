@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <div id="index-banner" class="parallax-container valign-wrapper">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <br><br>
+                <h2 class="center parallax-title light-blue-text text-darken-2">Orquesta Escuela de Berisso</h2>
+                <div class="row center">
+                    <h3 class="col s12 white-text">Orquesta Escuela de Berisso</h3>
+                </div>
+                <br><br>
+
+            </div>
+        </div>
+        <div class="parallax"><img src="{{ url_for('static', filename='img/violin.jpg') }}" alt="Imagen de fondo"></div>
+    </div>
+
+
+    <div class="container">
+        <div class="section">
+            <!--   Icon Section   -->
+            <div class="row">
+                <div class="col s12 center">
+                    <h1 class="light-blue-text text-darken-2"><u>Acerca de la organización</u></h1>
+                </div>
+                <div class="col s12 m6">
+                    <div class="icon-block">
+                        <h2 class="center blue-text"><i class="material-icons">library_music</i></h2>
+                        <h5 class="center"><u>Inicios</u></h5>
+
+                        <p class="light">La Orquesta Escuela de Berisso comenzó a funcionar en septiembre del 2005 en el barrio de El Carmen de la localidad de Berisso bajo la dirección del Mtro. Juan Carlos Herrero, orientada especialmente a la atención de chicos en situación de vulnerabilidad socio-cultural.</p>
+                    </div>
+                </div>
+
+                <div class="col s12 m6">
+                    <div class="icon-block">
+                        <h2 class="center blue-text"><i class="material-icons">person</i></h2>
+                        <h5 class="center"><u>Alumnos</u></h5>
+
+                        <p class="light">Desde sus 20 alumnos iniciales fue creciendo hasta atender actualmente una matrícula de aproximadamente 530 chicos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider blue"></div>
+
+    <div class="carousel carousel-slider orange darken-4">
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel1.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel2.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel3.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel4.jpg') }}"></a>
+        <a class="carousel-item center"><img class="img-responsive" src="{{ url_for('static', filename='img/carousel5.jpg') }}"></a>
+    </div>
+
+    <div class="divider blue"></div>
+
+    <div class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12 center">
+                    <h1 class="light-blue-text text-darken-2"><u>Sumate</u></h1>
+                    <p class="text-justify light">{{ descripcion }}</p>
+                </div>
+            </div>
+            <div class="col s12 center z-depth-4">
+                <iframe title="Escuela 25 de Berisso" aria-label="Escuela 25 de Berisso" src="https://www.openstreetmap.org/export/embed.html?bbox=-57.895344793796546%2C-34.92683778809732%2C-57.89180427789689%2C-34.924891561791604&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=19/-34.90373/-57.93844">Ver mapa más grande</a></small></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.carousel.carousel-slider').carousel({
+            fullWidth: true,
+            indicators: true
+        });
+    </script>
+{% endblock %}

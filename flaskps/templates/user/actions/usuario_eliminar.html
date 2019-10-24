@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+{% block title %}Eliminación de Usuario - {{ titulo }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section center">
+            <div class="row">
+                <form method="post" action="{{ url_for('user_destroy_and_refresh') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="modal-content">
+                        <h1>Eliminación de Usuario</h1>
+                        <h6>Recordá que también podés eliminar usuarios desde el <a href="{{ url_for ('user_list') }}">listado completo de usuarios</a>.</h6>
+                        <br>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterUsuario" id="filterUsuario" type="text">
+                                <label for="filterUsuario">Ingrese el nombre de usuario</label>
+                                <small id="smallFilter">Si no existe no aparecerá en la pantalla</small>
+                            </div>
+                        </div>
+
+                        <div id="userForm" class="row" hidden>
+                            <input id="id" name="id" type="number" hidden>
+                            <div class="col s12 input-field left-align">
+                                <p>
+                                    <label>
+                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" disabled/>
+                                        <span>Activo</span>
+                                    </label>
+                                </p>
+                            </div>
+                            <div class="col s12 m6 input-field">
+                                <label for="nombre">Nombre</label>
+                                <input id="nombre" name="first_name" class="validate active" type="text" disabled>
+                            </div>
+                            <div class="col s12 m6 input-field">
+                                <label for="apellido">Apellido</label>
+                                <input id="apellido" name="last_name" class="validate active" type="text" disabled>
+                            </div>
+                            <div class="col s6 input-field">
+                                <label for="username">Nombre de usuario</label>
+                                <input id="username"  name="username" class="validate" type="text" disabled>
+                            </div>
+                            <div class="col s6 input-field">
+                                <label for="email">Email</label>
+                                <input id="email"  name="email" class="validate" type="email" disabled>
+                            </div>
+                            <div class="col s12">
+                                <select multiple id="select_roles" name="rol_id" class="validate">
+                                    <option value="" disabled>Ver los roles</option>
+                                    {% for rol in roles %}
+                                        <option value="{{rol.id}}" disabled>{{rol.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <divider></divider>
+                            <div class="modal-footer col s12">
+                                <button type="submit" class="btn blue">Eliminar</button>
+                                <button type="button" id="cancel" class="btn red">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $("#filterUsuario").on("keyup", function() {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('user') }}",
+                    data: JSON.stringify({"username": $(this).val()}),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function (response) {
+                        // actualizo el select_roles
+                        arr = [];
+                        for (var key in response['roles']) {
+                            arr[key] = response['roles'][key]['id'];
+                        };
+                        $("#select_roles").val(arr);
+                        // actualizo los campos
+                        $('#id').val(response['id']);
+                        $('#activo').prop('checked', response['activo']);
+                        $('#username').attr('value', response['username']);
+                        $('#username').attr('placeholder', response['username']);
+                        $('#nombre').attr('value', response['first_name']);
+                        $('#nombre').attr('placeholder', response['first_name']);
+                        $('#apellido').attr('value', response['last_name']);
+                        $('#apellido').attr('placeholder', response['last_name']);
+                        $('#email').attr('value', response['email']);
+                        $('#email').attr('placeholder', response['email']);
+                        M.updateTextFields();
+                        userFound();
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error: ", errorMessage);
+                        userCancel();
+                    }
+                });
+            });
+            $('select').formSelect();
+        });
+    </script>
+    <script>
+        function userFound() {
+            $('#smallFilter').text("");
+            $('#userForm').show(500)
+            M.toast({html: 'Usuario encontrado!', classes: 'green'});
+        }
+        function userCancel() {
+            $('#smallFilter').text("Si no existe no aparecerá en la pantalla");
+            $('#userForm').hide(500);
+        }
+    </script>
+    <script>
+        $('#cancel').click(function() {
+            userCancel();
+        })
+    </script>
+{% endblock %}

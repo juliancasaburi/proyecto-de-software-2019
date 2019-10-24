@@ -85,7 +85,6 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -108,3 +107,4 @@ venv.bak/
 
 
 db/db.sqlite
+flask_session

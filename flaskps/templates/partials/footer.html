@@ -1,0 +1,54 @@
+<!-- Footer -->
+<footer class="page-footer orange darken-4">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12 center-align">
+                <a href="{{ url_for('index') }}" class="brand-logo">
+                    <img src="{{ url_for('static', filename='img/logo-white.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
+                </a>
+            </div>
+            <div class="col l6 s12 center-align">
+                <h5 class="footer-title white-text">Links</h5>
+                <ul>
+                    <li><a class="white-text" href="{{ url_for('index') }}">Inicio</a></li>
+                    {% if is_authenticated(session) %}
+                        <li><a class="white-text" href="{{ url_for('user_dashboard') }}">Panel</a></li>
+                        <li><a class="white-text" href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
+                    {% else %}
+                        <li><a class="white-text" href="{{ url_for('auth_login') }}">Iniciar sesión</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l12 s12 center-align">
+                <h5 class="footer-title white-text">Visitanos En</h5>
+                <a class="waves-effect waves-light btn social-icon reddit" href="http://www.oeberisso.com.ar/"><i class="fas fa-globe"></i></a>
+                <a class="waves-effect waves-light btn social-icon facebook" href="https://www.facebook.com/OrquestaEscuelaBerisso/"><i class="fab fa-facebook"></i></a>
+                <a class="waves-effect waves-light btn social-icon instagram" href="https://www.instagram.com/orquesta_escuela_berisso/"><i class="fab fa-instagram"></i></a>
+                <a class="waves-effect waves-light btn social-icon twitter" href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l12 s12 center-align">
+                <h5 class="footer-title white-text">Contactanos</h5>
+                <a class="waves-effect waves-light btn social-icon github" href="mailto:{{ contact_email }}?Subject=Contacto" target="_top"><i class="large material-icons">email</i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright white center">
+        <div class="container">
+            <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo1.png" class="responsive-img" alt="Logo Programa provincial Orquestas Escuela">
+            <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo2.png" class="responsive-img" alt="Logo Cultura Berisso">
+            <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo3.png" class="responsive-img" alt="Logo Ciudad de Berisso">
+            <img src="http://www.oeberisso.com.ar/wp-content/themes/oe/img/logo4.png" class="responsive-img" alt="Logo Buenos Aires Provincia">
+            <br>
+        </div>
+    </div>
+    <div class="footer-copyright orange darken-3 center">
+        <div class="container">
+            Orquesta Escuela de Berisso - Diseñada por <a class="blue-text text-darken-4" href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2019/grupo2">GRUPO 2</a>
+        </div>
+    </div>
+</footer>
+<!-- ./Footer -->
