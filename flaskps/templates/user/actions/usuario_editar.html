@@ -60,7 +60,7 @@
                             <divider></divider>
                             <div class="modal-footer col s12">
                                 <button type="submit" class="btn blue">Guardar</button>
-                                <button class="btn modal-close red">Cerrar</button>
+                                <button type="button" id="cancel" class="btn red">Cancelar</button>
                             </div>
                         </div>
 
@@ -101,17 +101,30 @@
                         $('#email').attr('value', response['email']);
                         $('#email').attr('placeholder', response['email']);
                         M.updateTextFields();
-                        $('#smallFilter').text("");
-                        $('#userForm').show(500)
+                        userFound();
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
                         console.log("Error: ", errorMessage);
-                        $('#smallFilter').text("Si no existe no aparecerá en la pantalla");
-                        $('#userForm').hide(500);
+                        userCancel();
                     }
                 });
             });
             $('select').formSelect();
         });
+    </script>
+    <script>
+        function userFound() {
+            $('#smallFilter').text("");
+            $('#userForm').show(500)
+        }
+        function userCancel() {
+            $('#smallFilter').text("Si no existe no aparecerá en la pantalla");
+            $('#userForm').hide(500);
+        }
+    </script>
+    <script>
+        $('#cancel').click(function() {
+            userCancel();
+        })
     </script>
 {% endblock %}
