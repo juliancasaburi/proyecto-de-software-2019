@@ -88,15 +88,10 @@ def dashboard():
     if not authenticated(session):
         abort(401)
 
-    User.db = get_db()
-    role = User.role(session.get('user'))
     Role.db = get_db()
     roles = Role.all()
 
-    if 'administrador' in role.values():
-        return render_template('user/administrador.html', roles=roles)
-    else:
-        return redirect(url_for('index'))
+    return render_template('user/dashboard.html', roles=roles)
 
 
 def profile():
