@@ -77,11 +77,24 @@
         $("#switchMantenimientoNav").on("change", function(){
             $.ajax({
                 type: "POST",
-                url : '/mantenimiento'
+                url : '/mantenimiento',
+                success: function (response) {
+                    var checked;
+                    if(response['modo_mantenimiento'] == '1')
+                    {
+                        M.toast({html: 'Mantenimiento activado!', classes: 'orange darken-4'});
+                        checked = true;
+                    }
+                    else
+                    {
+                        M.toast({html: 'Mantenimiento desactivado!', classes: 'grey'});
+                        checked = false;
+                    }
+                    if ( $("#switchMantenimiento").length ) {
+                        $("#switchMantenimiento").prop("checked",checked);
+                    }
+                },
             });
-            if ( $("#switchMantenimiento").length ) {
-                $("#switchMantenimiento").prop("checked",$(this).prop("checked"));
-            }
         });
     });
 </script>

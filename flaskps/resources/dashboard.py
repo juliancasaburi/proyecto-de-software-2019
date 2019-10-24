@@ -129,7 +129,8 @@ def maintenance_mode():
     else:
         filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '1'", "MODO_MANTENIMIENTO = '0'")
         os.environ['MODO_MANTENIMIENTO'] = '0'
-    data = {'success':True}
+
+    data = {'modo_mantenimiento': os.environ['MODO_MANTENIMIENTO']}
     return make_response(jsonify(data), 200)
 
 

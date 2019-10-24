@@ -116,6 +116,7 @@
         function userFound() {
             $('#smallFilter').text("");
             $('#userForm').show(500)
+            M.toast({html: 'Usuario encontrado!', classes: 'green'});
         }
         function userCancel() {
             $('#smallFilter').text("Si no existe no aparecerá en la pantalla");

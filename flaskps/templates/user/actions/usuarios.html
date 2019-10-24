@@ -235,6 +235,8 @@
                     success: function () {
                         var table = $('#tablaUsuarios').DataTable();
                         table.row($(btn).parents('tr')).remove().draw('full-hold');
+                        var toastText = "El usuario con ID: " + btn_id + " fue eliminado";
+                        M.toast({html: toastText, classes: 'green'});
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
                         console.log("Error: ", errorMessage);
