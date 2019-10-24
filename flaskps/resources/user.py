@@ -48,7 +48,7 @@ def create():
                   sender="grupo2unlppds2019@gmail.com",
                   recipients=[params['email']])
 
-    msg.body = "User: {} \nPassword: {}\n".format(params['username'], plain_pw)
+    msg.html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
 
     mail.send(msg)
 
