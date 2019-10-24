@@ -6,9 +6,20 @@ from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.forms.form_email_update import EmailUpdateForm
 from flaskps.forms.form_password_update import PasswordUpdateForm
+from flaskps.config import Config
+from flask_mail import Mail, Message
 
 app = Flask = Flask(__name__)
 bcrypt = Bcrypt(app)
+
+# Mail Config
+app.config['MAIL_SERVER'] = Config.MAIL_SERVER
+app.config['MAIL_PORT'] = Config.MAIL_PORT
+app.config['MAIL_USERNAME'] = Config.MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = Config.MAIL_PASSWORD
+app.config['MAIL_USE_TLS'] = Config.MAIL_USE_TLS
+app.config['MAIL_USE_SSL'] = Config.MAIL_USE_SSL
+mail = Mail(app)
 
 
 def index():
@@ -26,11 +37,21 @@ def create():
         abort(401)
 
     params = request.form.to_dict()
-    params['password'] = bcrypt.generate_password_hash(params['password']).decode('utf - 8')
+    plain_pw = params['password']
+    params['password'] = bcrypt.generate_password_hash(plain_pw).decode('utf - 8')
     params['roles'] = request.form.getlist('rol_id')
 
     User.db = get_db()
     User.create(params)
+
+    msg = Message("Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
+                  sender="grupo2unlppds2019@gmail.com",
+                  recipients=[params['email']])
+
+    msg.body = "User: {} \nPassword: {}\n".format(params['username'], plain_pw)
+
+    mail.send(msg)
+
     return redirect(url_for('user_dashboard'))
 
 
