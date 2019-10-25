@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Panel Administrador - {{ titulo }}{% endblock %}
+{% block title %}Panel Administrador - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -33,7 +33,7 @@
                                     <p>Modo Mantenimiento</p>
                                     <label>
                                         Deshabilitado
-                                        {% if maintenance_mode == '1' %}
+                                        {% if siteconfig['modo_mantenimiento'] == 1 %}
                                             <input id="switchMantenimiento" type="checkbox" checked="checked">
                                         {% else %}
                                             <input id="switchMantenimiento" type="checkbox">
@@ -346,7 +346,7 @@
                     url : '/mantenimiento',
                     success: function (response) {
                         var checked;
-                        if(response['modo_mantenimiento'] == '1')
+                        if(response['modo_mantenimiento'] == 1)
                         {
                             M.toast({html: 'Mantenimiento activado!', classes: 'orange darken-4'});
                             checked = true;

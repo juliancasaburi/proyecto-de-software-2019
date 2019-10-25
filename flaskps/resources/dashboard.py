@@ -6,7 +6,8 @@ from flaskps.models.role import Role
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
-from pyutil import filereplace, fileoverwrite
+from flaskps.helpers import siteconfig as helper_siteconfig
+from flaskps.helpers.siteconfig import SiteConfig
 
 app = Flask(__name__)
 
@@ -128,16 +129,19 @@ def maintenance_mode():
     if not authenticated(session) or not permission.has_permission('config_update', session):
         abort(401)
 
-    app.config.from_pyfile('../config/config.cfg')
-    modo_mantenimiento = app.config['MODO_MANTENIMIENTO']
-    if modo_mantenimiento == '0':
-        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '0'", "MODO_MANTENIMIENTO = '1'")
-        os.environ['MODO_MANTENIMIENTO'] = '1'
-    else:
-        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '1'", "MODO_MANTENIMIENTO = '0'")
-        os.environ['MODO_MANTENIMIENTO'] = '0'
+    SiteConfig.db = get_db()
+    config = helper_siteconfig.get_config()
+    modo_mantenimiento = config['modo_mantenimiento']
 
-    data = {'modo_mantenimiento': os.environ['MODO_MANTENIMIENTO']}
+    if modo_mantenimiento == 0:
+        helper_siteconfig.update_maintenance(1)
+    else:
+        helper_siteconfig.update_maintenance(0)
+
+    config = helper_siteconfig.get_config()
+    modo_mantenimiento = config['modo_mantenimiento']
+
+    data = {'modo_mantenimiento': modo_mantenimiento}
     return make_response(jsonify(data), 200)
 
 
@@ -147,16 +151,10 @@ def config_update():
 
     params = request.form.to_dict()
 
-    app.config.from_pyfile('../config/config.cfg')
+    SiteConfig.db = get_db()
 
-    newline = '\n'
-    text = (f"TITULO = '{params['titulo_home']}'{newline}"
-            f"DESCRIPCION = '{params['descripcion']}'{newline}"
-            f"EMAIL_CONTACTO = '{params['email']}'{newline}"
-            f"MODO_MANTENIMIENTO = '{app.config['MODO_MANTENIMIENTO']}'{newline}"
-            f"ITEMS_POR_PAGINA = '{params['items_por_pagina']}'{newline}"
-            )
-    fileoverwrite("flaskps/config/config.cfg", text)
+    helper_siteconfig.update_config(params)
+
     return redirect(url_for('user_dashboard'))
 
 

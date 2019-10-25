@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Alta de Usuario - {{ titulo }}{% endblock %}
+{% block title %}Alta de Usuario - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -16,14 +16,14 @@
                             <h2 class="center light-blue-text">Información de contacto</h2>
                             <div class="col s6 input-field">
                                 <label for="tituloHome">Título del Home</label>
-                                <input id="tituloHome" name="titulo_home" class="validate" type="text" value="{{ titulo }}" placeholder="{{ titulo }}" required>
+                                <input id="tituloHome" name="titulo_home" class="validate" type="text" value="{{ siteconfig['titulo'] }}" placeholder="{{ siteconfig['titulo'] }}" required>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="email">Email</label>
-                                <input id="email" name="email" class="validate" type="email" value="{{ email }}" placeholder="{{ email }}" required>
+                                <input id="email" name="email" class="validate" type="email" value="{{ siteconfig['email_contacto'] }}" placeholder="{{ siteconfig['email_contacto'] }}" required>
                             </div>
                             <div class="col s12 input-field">
-                                <textarea id="descripcion" name="descripcion" class="materialize-textarea"  placeholder="{{ descripcion }}">{{ descripcion }}</textarea>
+                                <textarea id="descripcion" name="descripcion" class="materialize-textarea"  placeholder="{{ siteconfig['descripcion'] }}">{{ siteconfig['descripcion'] }}</textarea>
                                 <label for="descripcion">Descripción</label>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                             <h2 class="center light-blue-text">Otros</h2>
                             <div class="col s12 input-field">
                                 <label for="itemsPorPagina">Elementos por página (paginado)</label>
-                                <input id="itemsPorPagina" name="items_por_pagina" class="validate" type="number" step="1" value="{{ items_per_page }}" placeholder="{{ items_per_page }}" required>
+                                <input id="itemsPorPagina" name="items_por_pagina" class="validate" type="number" step="1" value="{{ siteconfig['items_por_pagina'] }}" placeholder="{{ siteconfig['items_por_pagina'] }}" required>
                             </div>
                         </div>
                     </div>

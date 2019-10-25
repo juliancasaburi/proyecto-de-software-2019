@@ -4,6 +4,7 @@ from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
+from flaskps.helpers import siteconfig as helper_siteconfig
 from flask_wtf.csrf import CSRFProtect
 
 # Resources
@@ -15,7 +16,6 @@ from flaskps.resources import role
 # Configuración inicial de la app
 app = Flask(__name__)
 app.config.from_object(Config)
-app.config.from_pyfile('config/config.cfg')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 csrf = CSRFProtect(app)
 
@@ -30,27 +30,11 @@ app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated,
 
 @app.context_processor
 def utility_processor():
-    app.config.from_pyfile('config/config.cfg')
-    def maintenance_mode():
-        return app.config['MODO_MANTENIMIENTO']
+    def siteconfig():
+        return helper_siteconfig.get_config()
 
-    def email():
-        return app.config['EMAIL_CONTACTO']
+    return dict(siteconfig=siteconfig())
 
-    def titulo():
-        return app.config['TITULO']
-
-    def descripcion():
-        return app.config['DESCRIPCION']
-
-    def items_per_page():
-        return app.config['ITEMS_POR_PAGINA']
-
-    return dict(maintenance_mode=maintenance_mode(),
-                email=email(),
-                titulo=titulo(),
-                descripcion=descripcion(),
-                items_per_page=items_per_page())
 
 # Home
 @app.route("/")

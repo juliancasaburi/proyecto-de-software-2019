@@ -62,7 +62,7 @@
         <p>Modo Mantenimiento</p>
         <label>
             Deshabilitado
-            {% if maintenance_mode == '1' %}
+            {% if siteconfig['modo_mantenimiento'] == 1 %}
                 <input id="switchMantenimientoNav" type="checkbox" checked="checked">
             {% else %}
                 <input id="switchMantenimientoNav" type="checkbox">
@@ -80,7 +80,7 @@
                 url : '/mantenimiento',
                 success: function (response) {
                     var checked;
-                    if(response['modo_mantenimiento'] == '1')
+                    if(response['modo_mantenimiento'] == 1)
                     {
                         M.toast({html: 'Mantenimiento activado!', classes: 'orange darken-4'});
                         checked = true;
