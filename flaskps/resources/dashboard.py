@@ -131,10 +131,10 @@ def maintenance_mode():
     app.config.from_pyfile('../config/config.cfg')
     modo_mantenimiento = app.config['MODO_MANTENIMIENTO']
     if modo_mantenimiento == '0':
-        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '0'", "MODO_MANTENIMIENTO = '1'")
+        filereplace("../config/config.cfg", f"MODO_MANTENIMIENTO = '0'", "MODO_MANTENIMIENTO = '1'")
         os.environ['MODO_MANTENIMIENTO'] = '1'
     else:
-        filereplace("flaskps/config/config.cfg", f"MODO_MANTENIMIENTO = '1'", "MODO_MANTENIMIENTO = '0'")
+        filereplace("../config/config.cfg", f"MODO_MANTENIMIENTO = '1'", "MODO_MANTENIMIENTO = '0'")
         os.environ['MODO_MANTENIMIENTO'] = '0'
 
     data = {'modo_mantenimiento': os.environ['MODO_MANTENIMIENTO']}
@@ -156,7 +156,7 @@ def config_update():
             f"MODO_MANTENIMIENTO = '{app.config['MODO_MANTENIMIENTO']}'{newline}"
             f"ITEMS_POR_PAGINA = '{params['items_por_pagina']}'{newline}"
             )
-    fileoverwrite("flaskps/config/config.cfg", text)
+    fileoverwrite("../config/config.cfg", text)
     return redirect(url_for('user_dashboard'))
 
 
