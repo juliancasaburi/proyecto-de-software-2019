@@ -69,7 +69,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        {% if maintenance_mode == '1' and ((has_role('administrador', session) == False) and (request.endpoint != "auth_login")) %}
+        {% if siteconfig['modo_mantenimiento'] == 1 and ((has_role('administrador', session) == False) and (request.endpoint != "auth_login")) %}
             {% include 'maintenancemode.html' %}
         {% else %}
             {% block main %}
