@@ -65,6 +65,7 @@
 
                 {% include 'partials/modal_alta_usuario.html' %}
                 {% include 'partials/modal_editar_usuario.html' %}
+                {% include 'partials/modal_confirmar_baja_usuario.html' %}
 
                 <div class="col-md-12 center text-center">
                     <span class="left" id="total_reg"></span>
@@ -225,7 +226,13 @@
         $('.deleteButton').on('click', function (e) {
             var btn = $(this);
             var btn_id = $(this).attr('id');
-            if (confirm("Eliminar usuario con ID:" + btn_id) == true) {
+            $('#modalConfirmarBajaUsuario').modal({
+                onOpenStart: function() {
+                    $('#confirmarTexto').text("¿Estás seguro de que quieres eliminar al usuario con ID " + btn_id + "?");
+                }
+            });
+            $('#modalConfirmarBajaUsuario').modal('open');
+            $('#confirmarEliminar').click(function() {
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('user_destroy') }}",
@@ -242,7 +249,10 @@
                         console.log("Error: ", errorMessage);
                     }
                 });
-            }
+            });
+            $('#confirmarCancelar').click(function() {
+                $('#modalConfirmarBajaUsuario').modal('close');
+            });
         });
     </script>
     <script>

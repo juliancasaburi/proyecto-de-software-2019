@@ -182,3 +182,12 @@ footer.page-footer {
 strong {
     font-weight: bold;
 }
+
+.confirmCancelBtn {
+    background: darkgray;
+    color: white;
+}
+.confirmDeleteBtn {
+    background: red;
+    color: white;
+}
