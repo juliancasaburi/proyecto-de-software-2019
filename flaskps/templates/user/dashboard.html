@@ -14,7 +14,8 @@
             </div>
             {% if has_role('administrador', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Administrador</h1>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Administrador</span></h6>
+                    <br>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <a href="#modalConfiguracion" class="modal-trigger">
@@ -30,7 +31,7 @@
                                 <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
                                 <!-- Switch -->
                                 <div class="switch center">
-                                    <p>Modo Mantenimiento</p>
+                                    <p>Modo mantenimiento</p>
                                     <label>
                                         Deshabilitado
                                         {% if siteconfig['modo_mantenimiento'] == 1 %}
@@ -175,7 +176,8 @@
             {% endif %}
             {% if has_role('docente', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Docente</h1>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Docente</span></h6>
+                    <br>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <div class="center-align light-blue waves-effect waves-block waves-light">
@@ -235,7 +237,8 @@
             {% endif %}
             {% if has_role('preceptor', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Preceptor</h1>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Preceptor</span></h6>
+                    <br>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <div class="center-align light-blue waves-effect waves-block waves-light">
@@ -348,12 +351,12 @@
                         var checked;
                         if(response['modo_mantenimiento'] == 1)
                         {
-                            M.toast({html: 'Mantenimiento activado!', classes: 'orange darken-4'});
+                            M.toast({html: 'El sitio ahora se encuentra en mantenimiemto', classes: 'orange darken-4'});
                             checked = true;
                         }
                         else
                         {
-                            M.toast({html: 'Mantenimiento desactivado!', classes: 'grey darken-2'});
+                            M.toast({html: 'El sitio ya no se encuentra en mantenimiento', classes: 'grey darken-2'});
                             checked = false;
                         }
                         $("#switchMantenimiento").prop("checked",checked);

@@ -19,12 +19,12 @@
 
             {% if users %}
                 <div class="row">
-                    <div class="card material-table">
+                    <div class="container material-table z-depth-3" style="width:100%">
                         <div class="table-header">
                             <span class="table-title">Usuarios</span>
                             <div class="actions">
-                                <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta Usuario"><i class="material-icons">person_add</i></a>
-                                <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                                <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta de usuario"><i class="material-icons">person_add</i></a>
+                                <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtrar">
                                     <i class="large material-icons">search</i>
                                 </a>
                             </div>
@@ -129,7 +129,7 @@
                         "next":       "Siguiente",
                         "previous":   "Anterior"
                     },
-                    "info":           "Mostrando resultados _START_ al _END_ de un total de _TOTAL_",
+                    "info": "<span>Mostrando resultados del <strong>_START_</strong> al <strong>_END_</strong> de un total de <strong>_TOTAL_</strong></span>",
                     "infoFiltered": "<br>(_MAX_ sin filtrar)"
                 },
                 "columnDefs": [

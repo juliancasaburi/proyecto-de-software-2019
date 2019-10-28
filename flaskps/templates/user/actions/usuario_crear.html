@@ -12,6 +12,8 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Alta de Usuario</h1>
+                        <h6>Recordá que también podés crear nuevos usuarios desde el <a href="{{ url_for ('user_list') }}">listado completo de usuarios</a>.</h6>
+                        <br>
                         <div class="row">
                             <div class="col s12 m6 input-field">
                                 <label for="nombre">Nombre</label>

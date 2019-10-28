@@ -101,7 +101,7 @@ def profile():
     User.db = get_db()
     user = User.find_by_user(session.get('user'))
 
-    return render_template('user/account.html', email=user['email'], password=user['password'])
+    return render_template('user/account.html', username=user['username'], email=user['email'], password=user['password'])
 
 
 def email_update():

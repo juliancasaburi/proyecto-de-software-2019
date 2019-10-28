@@ -6,7 +6,7 @@ from importlib import import_module
 def get_config():
     try:
         # Entorno por defecto si no se especifica otro, production
-        mode = getenv('FLASK_ENV', 'production')
+        mode = getenv('FLASK_ENV', 'development')
         module = __name__ + "." + mode
         config = import_module(module)
         config.ENV = mode

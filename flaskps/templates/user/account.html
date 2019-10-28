@@ -9,11 +9,14 @@
         <div class="section">
             <div class="card-panel z-depth-5">
                 <div class="row">
-                    <div class="col s12">
-                        <h4 class="center">Mi Cuenta</h4>
+                    <h4 class="center">Mi Cuenta</h4>
+                    <div class="divider"></div>
+                    <div class="col s6" style="padding: 5%">
                         <div class="row">
+                            <h5 class="col s12">Modificar email y contraseña</h5>
                             <form class="col s12" method="POST" action="{{ url_for('user_email_update') }}" id="email_form">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <input type="hidden" id="userAux" value="{{ username }}"/>
                                 <div class="row">
                                     <div class="input-field col s12 m12">
                                         <i class="material-icons prefix">mail</i>
@@ -45,6 +48,27 @@
                             </form>
                         </div><!--row-->
                     </div><!--col-->
+                    <div class="col s6" style="padding: 5%">
+                        <h5 class="center">Mis datos</h5>
+                        <table class="responsive-table">
+                            <tr>
+                                <th>Nombre de usuario</th>
+                                <td id="username"></td>
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td id="nombre"></td>
+                            </tr>
+                            <tr>
+                                <th>Apellido</th>
+                                <td id="apellido"></td>
+                            </tr>
+                            <tr>
+                                <th>Mis roles</th>
+                                <td id="roles"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div><!--row-->
             </div><!--card-->
         </div><!--section-->
@@ -65,5 +89,34 @@
 
         password.onchange = validatePassword;
         confirm_password.onkeyup = validatePassword;
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('user') }}",
+                data: JSON.stringify({"username": $('#userAux').val()}),
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                success: function (response) {
+                    //$('#activo').prop('checked', response['activo']);
+                    $('#username').text(response['username']);
+                    $('#nombre').text(response['first_name']);
+                    $('#apellido').text(response['last_name']);
+                    str = "";
+                    first = true;
+                    for (var i in response['roles']) {
+                        if (!first) str += ', ';
+                        str += response['roles'][i]['nombre'];
+                        first = false;
+                    }
+                    $('#roles').text(str);
+                    M.updateTextFields();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        })
     </script>
 {% endblock %}
