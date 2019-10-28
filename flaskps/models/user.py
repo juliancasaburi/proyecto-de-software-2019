@@ -119,7 +119,7 @@ class User(object):
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
-            flash("Error", "error")
+            flash("Ha ocurrido un error en la actualización del usuario", "error")
             return False
         finally:
             cls.db.cursor().close()

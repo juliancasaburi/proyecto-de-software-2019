@@ -46,7 +46,7 @@ def logout():
     if authenticated(session):
         [session.pop(key) for key in list(session.keys())]
         session.clear()
-        flash("La sesión se cerró correctamente", "error")
+        flash("La sesión se cerró correctamente", "success")
 
         return redirect(url_for('auth_login'))
     else:

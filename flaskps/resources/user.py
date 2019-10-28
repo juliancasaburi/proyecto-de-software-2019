@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, url_for, session, abort, json, make_response, jsonify
+from flask import Flask, redirect, render_template, request, url_for, session, abort, json, make_response, jsonify, \
+    flash
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.models.user import User
@@ -147,6 +148,7 @@ def user_data():
         data = jsonify(user)
         return make_response(data, 200)
     else:
+        flash('El usuario ' + username + 'no existe.', 'error')
         return abort(404)
 
 
