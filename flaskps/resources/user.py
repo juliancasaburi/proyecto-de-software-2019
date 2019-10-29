@@ -83,7 +83,7 @@ def create():
 
 
 def destroy():
-    if not authenticated(session) and has_permission('user_destroy', session):
+    if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
 
     params = json.loads(request.data)
@@ -97,7 +97,7 @@ def destroy():
 
 #REFACTORIZAR
 def destroy_and_refresh():
-    if not authenticated(session) and has_permission('user_destroy', session):
+    if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
 
     params = request.form.to_dict();
@@ -176,7 +176,7 @@ def user_data():
 
 
 def update():
-    if not authenticated(session) and has_permission('usuario_index', session):
+    if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
     params = request.form.to_dict()
@@ -195,7 +195,7 @@ def update():
 
 #refactorizar
 def update_and_refresh():
-    if not authenticated(session) and has_permission('usuario_index', session):
+    if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
     params = request.form.to_dict()
