@@ -122,10 +122,14 @@ def profile():
     if not authenticated(session):
         abort(401)
 
-    User.db = get_db()
-    user = User.find_by_user(session.get('user'))
+    username = session.get('user')
 
-    return render_template('user/account.html', username=user['username'], email=user['email'], password=user['password'])
+    User.db = get_db()
+    user = User.find_by_user(username)
+
+    roles = User.user_roles(username)
+
+    return render_template('user/account.html', username=user['username'], email=user['email'], password=user['password'], first_name=user['first_name'], last_name=user['last_name'], roles=roles)
 
 
 def email_update():
