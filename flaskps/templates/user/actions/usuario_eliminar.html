@@ -28,29 +28,29 @@
                             <div class="col s12 input-field left-align">
                                 <p>
                                     <label>
-                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" required>
+                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" disabled>
                                         <span>Activo</span>
                                     </label>
                                 </p>
                             </div>
                             <div class="col s12 m6 input-field">
                                 <label for="nombre">Nombre</label>
-                                <input id="nombre" name="first_name" class="validate active" type="text" required>
+                                <input id="nombre" name="first_name" class="validate active" type="text" disabled>
                             </div>
                             <div class="col s12 m6 input-field">
                                 <label for="apellido">Apellido</label>
-                                <input id="apellido" name="last_name" class="validate active" type="text" required>
+                                <input id="apellido" name="last_name" class="validate active" type="text" disabled>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="username">Nombre de usuario</label>
-                                <input id="username"  name="username" class="validate" type="text" required>
+                                <input id="username"  name="username" class="validate" type="text" disabled>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="email">Email</label>
-                                <input id="email"  name="email" class="validate" type="email" required>
+                                <input id="email"  name="email" class="validate" type="email" disabled>
                             </div>
                             <div class="col s12">
-                                <select multiple id="select_roles" name="rol_id" class="validate" required>
+                                <select multiple id="select_roles" name="rol_id" class="validate" disabled>
                                     <option value="" disabled>Roles</option>
                                     {% for rol in roles %}
                                         <option value="{{rol.id}}">{{rol.nombre}}</option>
@@ -59,8 +59,8 @@
                             </div>
                             <divider></divider>
                             <div class="modal-footer col s12">
-                                <button type="submit" class="btn blue">Eliminar</button>
                                 <button type="button" id="cancel" class="btn red">Cancelar</button>
+                                <button type="submit" class="btn blue">Eliminar</button>
                             </div>
                         </div>
                     </div>
