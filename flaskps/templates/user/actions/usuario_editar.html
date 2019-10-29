@@ -12,7 +12,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Modificación de Usuario</h1>
-                        <h6>Recordá que también podés editar los usuarios desde el <a href="{{ url_for ('user_list') }}">listado completo de usuarios</a>.</h6>
+                        <h6>Recordá que también podés editar los usuarios desde el <a href="{{ url_for ('user_table') }}">listado completo de usuarios</a>.</h6>
                         <br>
                         <div class="row">
                             <div class="input-field col s12">
@@ -28,7 +28,7 @@
                             <div class="col s12 input-field left-align">
                                 <p>
                                     <label>
-                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" />
+                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" required>
                                         <span>Activo</span>
                                     </label>
                                 </p>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col s12">
                                 <select multiple id="select_roles" name="rol_id" class="validate" required>
-                                    <option value="" disabled>Selecciona uno o más roles</option>
+                                    <option value="" disabled>Roles</option>
                                     {% for rol in roles %}
                                         <option value="{{rol.id}}">{{rol.nombre}}</option>
                                     {% endfor %}
@@ -77,11 +77,11 @@
         $(document).ready(function(){
             $("#filterUsuario").on("keyup", function() {
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "{{ url_for('user') }}",
-                    data: JSON.stringify({"username": $(this).val()}),
-                    dataType: 'json',
-                    contentType: 'application/json;charset=UTF-8',
+                    data: {
+                        username: $(this).val()
+                    },
                     success: function (response) {
                         // actualizo el select_roles
                         arr = [];
@@ -116,7 +116,7 @@
         function userFound() {
             $('#smallFilter').text("");
             $('#userForm').show(500)
-            M.toast({html: 'Usuario encontrado!', classes: 'green'});
+            M.toast({html: '¡Usuario encontrado!', classes: 'green'});
         }
         function userCancel() {
             $('#smallFilter').text("Si no existe no aparecerá en la pantalla");

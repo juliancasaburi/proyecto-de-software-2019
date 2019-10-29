@@ -178,3 +178,16 @@ footer.page-footer {
        max-width: 100%;
     }
 }
+
+strong {
+    font-weight: bold;
+}
+
+.confirmCancelBtn {
+    background: darkgray;
+    color: white;
+}
+.confirmDeleteBtn {
+    background: red;
+    color: white;
+}

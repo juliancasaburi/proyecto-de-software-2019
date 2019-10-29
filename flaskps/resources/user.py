@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, url_for, session, abort, json, make_response, jsonify
+from flask import Flask, redirect, render_template, request, url_for, session, abort, json, make_response, jsonify, \
+    flash
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 from flaskps.models.user import User
@@ -24,14 +25,37 @@ app.config['MAIL_USE_SSL'] = Config.MAIL_USE_SSL
 mail = Mail(app)
 
 
-def index():
-    if not authenticated(session):
+def get_users():
+    if not authenticated(session) or not has_permission('usuario_index', session):
         abort(401)
 
     User.db = get_db()
     users = User.all()
 
-    return render_template('user/administrador.html', users=users)
+    for dict_item in users:
+        dict_item['ID'] = dict_item['id']
+        del dict_item['id']
+        dict_item['Activo'] = dict_item['activo']
+        del dict_item['activo']
+        dict_item['Nombre'] = dict_item['first_name']
+        del dict_item['first_name']
+        dict_item['Apellido'] = dict_item['last_name']
+        del dict_item['last_name']
+        dict_item['Rol'] = dict_item['rol_nombre']
+        del dict_item['rol_nombre']
+        dict_item['Nombre de usuario'] = dict_item['username']
+        del dict_item['username']
+        del dict_item['password']
+        dict_item['Email'] = dict_item['email']
+        del dict_item['email']
+        dict_item['Registrado'] = dict_item['created_at']
+        del dict_item['created_at']
+        dict_item['Actualizado'] = dict_item['updated_at']
+        del dict_item['updated_at']
+
+    users = jsonify(users)
+
+    return make_response(users, 200)
 
 
 def create():
@@ -59,7 +83,7 @@ def create():
 
 
 def destroy():
-    if not authenticated(session) and has_permission('user_destroy', session):
+    if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
 
     params = json.loads(request.data)
@@ -73,7 +97,7 @@ def destroy():
 
 #REFACTORIZAR
 def destroy_and_refresh():
-    if not authenticated(session) and has_permission('user_destroy', session):
+    if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
 
     params = request.form.to_dict();
@@ -98,10 +122,14 @@ def profile():
     if not authenticated(session):
         abort(401)
 
-    User.db = get_db()
-    user = User.find_by_user(session.get('user'))
+    username = session.get('user')
 
-    return render_template('user/account.html', email=user['email'], password=user['password'])
+    User.db = get_db()
+    user = User.find_by_user(username)
+
+    roles = User.user_roles(username)
+
+    return render_template('user/account.html', username=user['username'], email=user['email'], password=user['password'], first_name=user['first_name'], last_name=user['last_name'], roles=roles)
 
 
 def email_update():
@@ -139,19 +167,37 @@ def password_update():
 def user_data():
     if not authenticated(session) and has_permission('usuario_index', session):
         abort(401)
-    User.db = get_db()
-    username = request.json['username']
-    user = User.find_by_user(username)
-    if user != None:
-        user['roles'] = User.user_roles(username)
-        data = jsonify(user)
-        return make_response(data, 200)
+
+    if request.args.get('id'):
+        User.db = get_db()
+        uid = request.args.get('id')
+        user = User.find_by_id(uid)
+        if user != None:
+            user['roles'] = User.user_roles(user['username'])
+            data = jsonify(user)
+            return make_response(data, 200)
+        else:
+            flash('El usuario con ID:' + uid + 'no existe.', 'error')
+            return abort(404)
+
+    elif request.args.get('username'):
+        User.db = get_db()
+        username = request.args.get('username')
+        user = User.find_by_user(username)
+        if user != None:
+            user['roles'] = User.user_roles(user['username'])
+            data = jsonify(user)
+            return make_response(data, 200)
+        else:
+            flash('El usuario ' + username + 'no existe.', 'error')
+            return abort(404)
+
     else:
-        return abort(404)
+        abort(400)
 
 
 def update():
-    if not authenticated(session) and has_permission('usuario_index', session):
+    if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
     params = request.form.to_dict()
@@ -164,12 +210,13 @@ def update():
 
     User.db = get_db()
     User.update(params)
+
     return make_response(jsonify(params), 200)
 
 
 #refactorizar
 def update_and_refresh():
-    if not authenticated(session) and has_permission('usuario_index', session):
+    if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
     params = request.form.to_dict()

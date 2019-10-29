@@ -14,61 +14,73 @@
             </div>
             {% if has_role('administrador', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Administrador</h1>
-                    <div class="col s12">
-                        <div class="card sticky-action" style="overflow: visible;">
-                            <a href="#modalConfiguracion" class="modal-trigger">
-                                <div class="center-align light-blue waves-effect waves-block waves-light">
-                                    <i class="fas fa-cogs fa-3x black-text"></i>
-                                </div>
-                            </a>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Configuración del sitio<i class="material-icons right">more_vert</i></span>
-                            </div>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Administrador</span></h6>
+                    <br>
 
-                            <div class="card-action">
-                                <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
-                                <!-- Switch -->
-                                <div class="switch center">
-                                    <p>Modo Mantenimiento</p>
-                                    <label>
-                                        Deshabilitado
-                                        {% if siteconfig['modo_mantenimiento'] == 1 %}
-                                            <input id="switchMantenimiento" type="checkbox" checked="checked">
-                                        {% else %}
-                                            <input id="switchMantenimiento" type="checkbox">
-                                        {% endif %}
-                                        <span class="lever"></span>
-                                        Habilitado
-                                    </label>
+                    {% if has_permission('config_update', session) %}
+                        <div class="col s12">
+                            <div class="card sticky-action" style="overflow: visible;">
+                                    <a {% if has_permission('config_update', session) %} href="#modalConfiguracion" class="modal-trigger" {% endif %}>
+                                        <div class="center-align light-blue waves-effect waves-block waves-light">
+                                            <i class="fas fa-cogs fa-3x black-text"></i>
+                                        </div>
+                                    </a>
+                                <div class="card-content">
+                                    <span class="card-title activator grey-text text-darken-4">Configuración del sitio<i class="material-icons right">more_vert</i></span>
                                 </div>
-                            </div>
 
-                            <div class="card-reveal" style="display: none; transform: translateY(0%)">
-                                <span class="card-title grey-text text-darken-4">Configuración del sitio<i class="material-icons right">close</i></span>
-                                <p>Podrás configurar distintos parámetros del sitio, entre ellos: el título, la descripción, el mail de contacto y la cantidad de elementos por página (en tablas y listas). Además podrá deshabilitar el sitio en caso de mantenimiento, de esta manera nadie podrá acceder, excepto los usuarios administradores.</p>
+                                <div class="card-action">
+                                    <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
+                                    <!-- Switch -->
+                                    <div class="switch center">
+                                        <p>Modo mantenimiento</p>
+                                        <label>
+                                            Deshabilitado
+                                            {% if siteconfig['modo_mantenimiento'] == 1 %}
+                                                <input id="switchMantenimiento" type="checkbox" checked="checked">
+                                            {% else %}
+                                                <input id="switchMantenimiento" type="checkbox">
+                                            {% endif %}
+                                            <span class="lever"></span>
+                                            Habilitado
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="card-reveal" style="display: none; transform: translateY(0%)">
+                                    <span class="card-title grey-text text-darken-4">Configuración del sitio<i class="material-icons right">close</i></span>
+                                    <p>Podrás configurar distintos parámetros del sitio, entre ellos: el título, la descripción, el mail de contacto y la cantidad de elementos por página (en tablas y listas). Además podrá deshabilitar el sitio en caso de mantenimiento, de esta manera nadie podrá acceder, excepto los usuarios administradores.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                     {% include 'partials/modal_configuracion.html' %}
 
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
-                            <a href="{{ url_for('user_list') }}">
+                            <a {% if has_permission('usuario_index', session) %} href="{{ url_for('user_table') }}" {% endif %}>
                                 <div class="center-align light-blue waves-effect waves-block waves-light">
                                     <i class="fas fa-user fa-3x black-text"></i>
                                 </div>
                             </a>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">Usuarios<i class="material-icons right">more_vert</i></span>
-                                <p><a href="{{ url_for('user_list') }}">Ver listado</a></p>
+                                {% if has_permission('usuario_index', session) %}
+                                    <p><a href="{{ url_for('user_table') }}">Ver listado</a></p>
+                                {% endif %}
                             </div>
 
                             <div class="card-action">
-                                <a href="{{ url_for('user_new_form') }}" class="modal-trigger" >Alta</a>
-                                <a href="{{ url_for('user_destroy_form') }}">Baja</a>
-                                <a href="{{ url_for('user_edit_form') }}">Modificación</a>
+                                {% if has_permission('usuario_new', session) %}
+                                    <a href="{{ url_for('user_new_form') }}" class="modal-trigger" >Alta</a>
+                                {% endif %}
+                                {% if has_permission('usuario_destroy', session) %}
+                                    <a href="{{ url_for('user_destroy_form') }}">Baja</a>
+                                {% endif %}
+                                {% if has_permission('usuario_update', session) %}
+                                    <a href="{{ url_for('user_edit_form') }}">Modificación</a>
+                                {% endif %}
                             </div>
 
                             <div class="card-reveal" style="display: none; transform: translateY(0%);">
@@ -80,6 +92,10 @@
 
                     {% include 'partials/modal_alta_usuario.html' %}
 
+                </div>
+                <div class="row">
+                    <div class="divider"></div>
+                    <h6 class="center-align red-text">Proximamente</h6>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <div class="center-align light-blue waves-effect waves-block waves-light">
@@ -175,7 +191,8 @@
             {% endif %}
             {% if has_role('docente', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Docente</h1>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Docente</span></h6>
+                    <br>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <div class="center-align light-blue waves-effect waves-block waves-light">
@@ -235,7 +252,8 @@
             {% endif %}
             {% if has_role('preceptor', session) %}
                 <div class="row">
-                    <h1 class="light-blue-text">Acciones de Preceptor</h1>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Preceptor</span></h6>
+                    <br>
                     <div class="col s12">
                         <div class="card sticky-action" style="overflow: visible;">
                             <div class="center-align light-blue waves-effect waves-block waves-light">
@@ -348,12 +366,12 @@
                         var checked;
                         if(response['modo_mantenimiento'] == 1)
                         {
-                            M.toast({html: 'Mantenimiento activado!', classes: 'orange darken-4'});
+                            M.toast({html: 'El sitio ahora se encuentra en mantenimiento', classes: 'orange darken-4'});
                             checked = true;
                         }
                         else
                         {
-                            M.toast({html: 'Mantenimiento desactivado!', classes: 'grey darken-2'});
+                            M.toast({html: 'El sitio ya no se encuentra en mantenimiento', classes: 'grey darken-2'});
                             checked = false;
                         }
                         $("#switchMantenimiento").prop("checked",checked);

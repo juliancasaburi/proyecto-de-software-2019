@@ -12,7 +12,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Eliminación de Usuario</h1>
-                        <h6>Recordá que también podés eliminar usuarios desde el <a href="{{ url_for ('user_list') }}">listado completo de usuarios</a>.</h6>
+                        <h6>Recordá que también podés eliminar usuarios desde el <a href="{{ url_for ('user_table') }}">listado completo de usuarios</a>.</h6>
                         <br>
                         <div class="row">
                             <div class="input-field col s12">
@@ -28,32 +28,32 @@
                             <div class="col s12 input-field left-align">
                                 <p>
                                     <label>
-                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" disabled/>
+                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" required>
                                         <span>Activo</span>
                                     </label>
                                 </p>
                             </div>
                             <div class="col s12 m6 input-field">
                                 <label for="nombre">Nombre</label>
-                                <input id="nombre" name="first_name" class="validate active" type="text" disabled>
+                                <input id="nombre" name="first_name" class="validate active" type="text" required>
                             </div>
                             <div class="col s12 m6 input-field">
                                 <label for="apellido">Apellido</label>
-                                <input id="apellido" name="last_name" class="validate active" type="text" disabled>
+                                <input id="apellido" name="last_name" class="validate active" type="text" required>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="username">Nombre de usuario</label>
-                                <input id="username"  name="username" class="validate" type="text" disabled>
+                                <input id="username"  name="username" class="validate" type="text" required>
                             </div>
                             <div class="col s6 input-field">
                                 <label for="email">Email</label>
-                                <input id="email"  name="email" class="validate" type="email" disabled>
+                                <input id="email"  name="email" class="validate" type="email" required>
                             </div>
                             <div class="col s12">
-                                <select multiple id="select_roles" name="rol_id" class="validate">
-                                    <option value="" disabled>Ver los roles</option>
+                                <select multiple id="select_roles" name="rol_id" class="validate" required>
+                                    <option value="" disabled>Roles</option>
                                     {% for rol in roles %}
-                                        <option value="{{rol.id}}" disabled>{{rol.nombre}}</option>
+                                        <option value="{{rol.id}}">{{rol.nombre}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -75,11 +75,11 @@
         $(document).ready(function(){
             $("#filterUsuario").on("keyup", function() {
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "{{ url_for('user') }}",
-                    data: JSON.stringify({"username": $(this).val()}),
-                    dataType: 'json',
-                    contentType: 'application/json;charset=UTF-8',
+                    data: {
+                        username: $(this).val()
+                    },
                     success: function (response) {
                         // actualizo el select_roles
                         arr = [];

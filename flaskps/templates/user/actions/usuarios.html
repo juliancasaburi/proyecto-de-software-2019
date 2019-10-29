@@ -17,94 +17,93 @@
                 </div>
             </div>
 
-            {% if users %}
-                <div class="row">
-                    <div class="card material-table">
-                        <div class="table-header">
-                            <span class="table-title">Usuarios</span>
-                            <div class="actions">
-                                <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta Usuario"><i class="material-icons">person_add</i></a>
-                                <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
-                                    <i class="large material-icons">search</i>
-                                </a>
-                            </div>
+            <div class="row">
+                <div class="card material-table">
+                    <div class="table-header">
+                        <span class="table-title">Usuarios</span>
+                        <div class="actions">
+                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta Usuario"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                                <i class="large material-icons">search</i>
+                            </a>
                         </div>
-                        <table id="tablaUsuarios" class="highlight nowrap" style="width:100%">
-                            <thead>
-                            <tr class="orange">
-                                {% for key in users[0] %}
-                                    <th> {{ key }} </th>
-                                {% endfor %}
-                                <th class="nosort">Editar</th>
-                                <th class="nosort">Baja</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for dict_item in users %}
-                                <tr>
-                                    {% for value in dict_item.values() %}
-                                        <td class="{{ value }}"> {{ value }} </td>
-                                    {% endfor %}
-                                    <td><a id="{{ dict_item.ID }}" class="editButton btn blue-grey"><i class="fas fa-edit"></i></a></td>
-                                    <td><a id="{{ dict_item.ID }}" class="deleteButton btn red"><i class="material-icons">cancel</i></a></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                            <tfoot>
-                            <tr class="orange">
-                                <th>Editar</th>
-                                {% for key in users[0] %}
-                                    <th> {{ key }} </th>
-                                {% endfor %}
-                                <th>Baja</th>
-                            </tr>
-                            </tfoot>
-                        </table>
                     </div>
+                    <table id="tablaUsuarios" class="highlight nowrap" style="width:100%">
+                        <thead>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Activo</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rol</th>
+                            <th>Nombre de usuario</th>
+                            <th>Email</th>
+                            <th>Registrado</th>
+                            <th>Actualizado</th>
+                            <th class="nosort">Editar</th>
+                            <th class="nosort">Baja</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Activo</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rol</th>
+                            <th>Nombre de usuario</th>
+                            <th>Email</th>
+                            <th>Registrado</th>
+                            <th>Actualizado</th>
+                            <th class="nosort">Editar</th>
+                            <th class="nosort">Baja</th>
+                        </tr>
+                        </tfoot>
+                    </table>
                 </div>
+            </div>
 
-                {% include 'partials/modal_alta_usuario.html' %}
-                {% include 'partials/modal_editar_usuario.html' %}
+            {% include 'partials/modal_alta_usuario.html' %}
+            {% include 'partials/modal_editar_usuario.html' %}
 
-                <div class="col-md-12 center text-center">
-                    <span class="left" id="total_reg"></span>
-                    <ul class="pagination pager" id="pager"></ul>
+            <div class="col-md-12 center text-center">
+                <span class="left" id="total_reg"></span>
+                <ul class="pagination pager" id="pager"></ul>
+            </div>
+
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
+                    <i class="large material-icons">search</i>
+                </a>
+            </div>
+
+            <!-- Modal Structure -->
+            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+                <div class="modal-content">
+                    <h3 class="header">Filtrar el listado de Usuarios</h3>
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterUsuario" id="filterUsuario" type="text">
+                                <label for="filterUsuario">Filtrar por Usuario</label>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <p>
+                                <label>
+                                    <input id="filterActive" type="checkbox" checked="checked"/>
+                                    <span>Listar usuarios bloqueados</span>
+                                </label>
+                            </p>
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="fixed-action-btn">
-                    <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
-                        <i class="large material-icons">search</i>
-                    </a>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
                 </div>
+            </div>
 
-                <!-- Modal Structure -->
-                <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
-                    <div class="modal-content">
-                        <h3 class="header">Filtrar el listado de Usuarios</h3>
-                        <ul class="collection">
-                            <li class="collection-item">
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input class="filterUsuario" id="filterUsuario" type="text">
-                                    <label for="filterUsuario">Filtrar por Usuario</label>
-                                </div>
-                            </li>
-                            <li class="collection-item">
-                                <p>
-                                    <label>
-                                        <input id="filterActive" type="checkbox" checked="checked"/>
-                                        <span>Listar usuarios bloqueados</span>
-                                    </label>
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
-                    </div>
-                </div>
-
-            {% endif %}
 
         </div>
     </div>
@@ -122,6 +121,33 @@
     <script>
         $(document).ready(function() {
             $('#tablaUsuarios').DataTable( {
+                "ajax": {
+                    "url": "{{ url_for('user_all') }}",
+                    "dataType": "json",
+                    "dataSrc": "",
+                    "contentType":"application/json"
+                },
+                "columns": [
+                    {"data": "ID"},
+                    {"data": "Activo"},
+                    {"data": "Nombre"},
+                    {"data": "Apellido"},
+                    {"data": "Rol"},
+                    {"data": "Nombre de usuario"},
+                    {"data": "Email"},
+                    {"data": "Registrado"},
+                    {"data": "Actualizado"},
+                    {
+                        data: null,
+                        className: "center",
+                        defaultContent: '<a class="editButton btn blue-grey"><i class="fas fa-edit"></i></a>'
+                    },
+                    {
+                        data: null,
+                        className: "center",
+                        defaultContent: '<a class="deleteButton btn red"><i class="material-icons">cancel</i></a>'
+                    }
+                ],
                 "language": {
                     "paginate": {
                         "first":      "Primera",
@@ -129,8 +155,8 @@
                         "next":       "Siguiente",
                         "previous":   "Anterior"
                     },
-                    "info":           "Mostrando resultados _START_ al _END_ de un total de _TOTAL_",
-                    "infoFiltered": "<br>(_MAX_ sin filtrar)"
+                    "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
+                    "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)"
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -139,6 +165,10 @@
                 pageLength: $('#items-per-page').data("ammount"),
                 "scrollX": true
             } );
+            setInterval( function () {
+                var table = $('#tablaUsuarios').DataTable();
+                table.ajax.reload( null, false ); // user paging is not reset on reload
+            }, 5000 );
         } );
     </script>
     <script>
@@ -222,20 +252,21 @@
     </script>
     <script>
         // Delete a record
-        $('.deleteButton').on('click', function (e) {
-            var btn = $(this);
-            var btn_id = $(this).attr('id');
-            if (confirm("Eliminar usuario con ID:" + btn_id) == true) {
+        $('#tablaUsuarios').on('click', 'a.deleteButton', function (e) {
+            var table = $('#tablaUsuarios').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var uid = rowData.ID;
+            var username = rowData['Nombre de usuario'];
+            if (confirm('¿Estás seguro de eliminar al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('user_destroy') }}",
-                    data: JSON.stringify({"id": btn_id}),
+                    data: JSON.stringify({"id": uid}),
                     dataType: 'json',
                     contentType: 'application/json;charset=UTF-8',
                     success: function () {
-                        var table = $('#tablaUsuarios').DataTable();
-                        table.row($(btn).parents('tr')).remove().draw('full-hold');
-                        var toastText = "El usuario con ID: " + btn_id + " fue eliminado";
+                        table.ajax.reload( null, false );
+                        var toastText = 'El usuario "' + username + '" (ID: ' + uid + ') fue eliminado';
                         M.toast({html: toastText, classes: 'green'});
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
@@ -247,17 +278,16 @@
     </script>
     <script>
         // Edit a record
-        $('.editButton').on('click', function (e) {
+        $('#tablaUsuarios').on('click', 'a.editButton', function (e) {
             var table = $('#tablaUsuarios').DataTable();
-            var row = table.row($(this).parents("tr"));
-            var data = row.data();
-            var uname = data[5];
+            var rowData = table.row($(this).parents("tr")).data();
+            var uid = rowData.ID;
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "{{ url_for('user') }}",
-                data: JSON.stringify({"username": uname}),
-                dataType: 'json',
-                contentType: 'application/json;charset=UTF-8',
+                data: {
+                    id: uid
+                },
                 success: function (response) {
                     for (var key in response['roles']){
                         $("#select_roles option[value='" + response['roles'][key]['id'] + "']").prop("selected", true);
@@ -292,6 +322,12 @@
                     type: frm.attr('method'),
                     url: frm.attr('action'),
                     data: frm.serialize(),
+                    success: function (response) {
+                        var table = $('#tablaUsuarios').DataTable();
+                        table.ajax.reload( null, false );
+                        var toastText = "El usuario fue editado";
+                        M.toast({html: toastText, classes: 'green'});
+                    },
                     error: function (data) {
                         console.log('Error');
                         console.log(data);

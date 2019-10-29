@@ -26,7 +26,9 @@ Session(app)
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated,
                              has_permission=helper_permission.has_permission,
-                             has_role=helper_role.has_role)
+                             has_role=helper_role.has_role,
+                             roles=helper_role.roles
+                             )
 
 @app.context_processor
 def utility_processor():
@@ -69,8 +71,9 @@ app.add_url_rule("/configuracion/actualizar", 'config_update', dashboard.config_
 app.add_url_rule("/roles", 'roles', role.all_roles, methods=['GET'])
 
 # Usuarios
-app.add_url_rule("/usuario", 'user', user.user_data, methods=['POST'])
-app.add_url_rule("/usuarios", 'user_list', dashboard.user_list)
+app.add_url_rule("/usuario", 'user', user.user_data)
+app.add_url_rule("/tablausuarios", 'user_table', dashboard.user_table)
+app.add_url_rule("/usuarios", 'user_all', user.get_users)
 app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
 app.add_url_rule("/usuario/editar", 'user_edit_form', dashboard.user_edit_form)
 app.add_url_rule("/usuario/baja", 'user_destroy_form', dashboard.user_destroy_form)
