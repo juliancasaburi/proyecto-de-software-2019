@@ -25,14 +25,37 @@ app.config['MAIL_USE_SSL'] = Config.MAIL_USE_SSL
 mail = Mail(app)
 
 
-def index():
-    if not authenticated(session):
+def get_users():
+    if not authenticated(session) or not has_permission('usuario_index', session):
         abort(401)
 
     User.db = get_db()
     users = User.all()
 
-    return render_template('user/administrador.html', users=users)
+    for dict_item in users:
+        dict_item['ID'] = dict_item['id']
+        del dict_item['id']
+        dict_item['Activo'] = dict_item['activo']
+        del dict_item['activo']
+        dict_item['Nombre'] = dict_item['first_name']
+        del dict_item['first_name']
+        dict_item['Apellido'] = dict_item['last_name']
+        del dict_item['last_name']
+        dict_item['Rol'] = dict_item['rol_nombre']
+        del dict_item['rol_nombre']
+        dict_item['Nombre de usuario'] = dict_item['username']
+        del dict_item['username']
+        del dict_item['password']
+        dict_item['Email'] = dict_item['email']
+        del dict_item['email']
+        dict_item['Registrado'] = dict_item['created_at']
+        del dict_item['created_at']
+        dict_item['Actualizado'] = dict_item['updated_at']
+        del dict_item['updated_at']
+
+    users = jsonify(users)
+
+    return make_response(users, 200)
 
 
 def create():
@@ -141,14 +164,14 @@ def user_data():
     if not authenticated(session) and has_permission('usuario_index', session):
         abort(401)
     User.db = get_db()
-    username = request.json['username']
-    user = User.find_by_user(username)
+    uid = request.json['id']
+    user = User.find_by_id(uid)
     if user != None:
-        user['roles'] = User.user_roles(username)
+        user['roles'] = User.user_roles(user['username'])
         data = jsonify(user)
         return make_response(data, 200)
     else:
-        flash('El usuario ' + username + 'no existe.', 'error')
+        flash('El usuario con ID:' + uid + 'no existe.', 'error')
         return abort(404)
 
 
@@ -166,6 +189,7 @@ def update():
 
     User.db = get_db()
     User.update(params)
+
     return make_response(jsonify(params), 200)
 
 

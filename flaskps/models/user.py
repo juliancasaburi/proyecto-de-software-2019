@@ -119,11 +119,9 @@ class User(object):
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
-            flash("Ha ocurrido un error en la actualización del usuario", "error")
             return False
         finally:
             cls.db.cursor().close()
-        flash("Se ha modificado el usuario con éxito", "success")
         return True
 
 
@@ -152,6 +150,21 @@ class User(object):
         try:
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, username)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT * FROM usuarios AS u
+            WHERE u.id = %s
+        """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
         finally:
             cls.db.cursor().close()
 
