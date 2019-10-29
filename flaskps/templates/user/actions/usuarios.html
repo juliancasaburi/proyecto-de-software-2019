@@ -256,7 +256,8 @@
             var table = $('#tablaUsuarios').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
             var uid = rowData.ID;
-            if (confirm("Eliminar usuario con ID:" + 2) == true) {
+            var username = rowData['Nombre de usuario'];
+            if (confirm('¿Estás seguro de eliminar al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('user_destroy') }}",
@@ -265,7 +266,7 @@
                     contentType: 'application/json;charset=UTF-8',
                     success: function () {
                         table.ajax.reload( null, false );
-                        var toastText = "El usuario con ID: " + uid + " fue eliminado";
+                        var toastText = 'El usuario "' + username + '" (ID: ' + uid + ') fue eliminado';
                         M.toast({html: toastText, classes: 'green'});
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
