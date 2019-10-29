@@ -27,7 +27,6 @@ Session(app)
 app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated,
                              has_permission=helper_permission.has_permission,
                              has_role=helper_role.has_role,
-                             roles=helper_role.roles
                              )
 
 @app.context_processor
