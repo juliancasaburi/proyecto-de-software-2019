@@ -28,7 +28,7 @@
                             <div class="col s12 input-field left-align">
                                 <p>
                                     <label>
-                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" />
+                                        <input id="activo" name="activo" type="checkbox" class="filled-in" checked="checked" required>
                                         <span>Activo</span>
                                     </label>
                                 </p>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col s12">
                                 <select multiple id="select_roles" name="rol_id" class="validate" required>
-                                    <option value="" disabled>Selecciona uno o más roles</option>
+                                    <option value="" disabled>Roles</option>
                                     {% for rol in roles %}
                                         <option value="{{rol.id}}">{{rol.nombre}}</option>
                                     {% endfor %}
@@ -77,11 +77,11 @@
         $(document).ready(function(){
             $("#filterUsuario").on("keyup", function() {
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "{{ url_for('user') }}",
-                    data: JSON.stringify({"username": $(this).val()}),
-                    dataType: 'json',
-                    contentType: 'application/json;charset=UTF-8',
+                    data: {
+                        username: $(this).val()
+                    },
                     success: function (response) {
                         // actualizo el select_roles
                         arr = [];

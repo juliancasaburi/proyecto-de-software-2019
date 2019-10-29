@@ -167,16 +167,30 @@ def password_update():
 def user_data():
     if not authenticated(session) and has_permission('usuario_index', session):
         abort(401)
-    User.db = get_db()
-    uid = request.json['id']
-    user = User.find_by_id(uid)
-    if user != None:
-        user['roles'] = User.user_roles(user['username'])
-        data = jsonify(user)
-        return make_response(data, 200)
+
+    if request.method == 'POST':
+
+        User.db = get_db()
+        uid = request.json['id']
+        user = User.find_by_id(uid)
+        if user != None:
+            user['roles'] = User.user_roles(user['username'])
+            data = jsonify(user)
+            return make_response(data, 200)
+        else:
+            flash('El usuario con ID:' + uid + 'no existe.', 'error')
+            return abort(404)
     else:
-        flash('El usuario con ID:' + uid + 'no existe.', 'error')
-        return abort(404)
+        User.db = get_db()
+        username = request.args.get('username')
+        user = User.find_by_user(username)
+        if user != None:
+            user['roles'] = User.user_roles(user['username'])
+            data = jsonify(user)
+            return make_response(data, 200)
+        else:
+            flash('El usuario ' + username + 'no existe.', 'error')
+            return abort(404)
 
 
 def update():
