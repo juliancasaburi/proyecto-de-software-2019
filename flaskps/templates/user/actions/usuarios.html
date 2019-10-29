@@ -283,11 +283,11 @@
             var rowData = table.row($(this).parents("tr")).data();
             var uid = rowData.ID;
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "{{ url_for('user') }}",
-                data: JSON.stringify({"id": uid}),
-                dataType: 'json',
-                contentType: 'application/json;charset=UTF-8',
+                data: {
+                    id: uid
+                },
                 success: function (response) {
                     for (var key in response['roles']){
                         $("#select_roles option[value='" + response['roles'][key]['id'] + "']").prop("selected", true);

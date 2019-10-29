@@ -168,10 +168,9 @@ def user_data():
     if not authenticated(session) and has_permission('usuario_index', session):
         abort(401)
 
-    if request.method == 'POST':
-
+    if request.args.get('id'):
         User.db = get_db()
-        uid = request.json['id']
+        uid = request.args.get('id')
         user = User.find_by_id(uid)
         if user != None:
             user['roles'] = User.user_roles(user['username'])
@@ -180,7 +179,8 @@ def user_data():
         else:
             flash('El usuario con ID:' + uid + 'no existe.', 'error')
             return abort(404)
-    else:
+
+    elif request.args.get('username'):
         User.db = get_db()
         username = request.args.get('username')
         user = User.find_by_user(username)
@@ -191,6 +191,9 @@ def user_data():
         else:
             flash('El usuario ' + username + 'no existe.', 'error')
             return abort(404)
+
+    else:
+        abort(400)
 
 
 def update():
