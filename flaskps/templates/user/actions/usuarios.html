@@ -325,7 +325,7 @@
                     success: function (response) {
                         var table = $('#tablaUsuarios').DataTable();
                         table.ajax.reload( null, false );
-                        var toastText = "El usuario fue editado";
+                        var toastText = "El usuario fue editado con éxito";
                         M.toast({html: toastText, classes: 'green'});
                     },
                     error: function (data) {

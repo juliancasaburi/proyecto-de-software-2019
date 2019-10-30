@@ -8,7 +8,7 @@ class User(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, GROUP_CONCAT(rol.nombre) as rol_nombre
+            SELECT u.id, email, username, password, activo, created_at, updated_at, first_name, last_name, GROUP_CONCAT(rol.nombre ORDER BY rol.nombre SEPARATOR ', ') as rol_nombre
             FROM usuarios AS u INNER JOIN usuario_tiene_rol as u_rol ON u.id = u_rol.usuario_id INNER JOIN rol ON rol.id = u_rol.rol_id
             GROUP BY u.id
         """
