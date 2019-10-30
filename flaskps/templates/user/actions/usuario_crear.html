@@ -8,7 +8,7 @@
     <div class="container">
         <div class="section center">
             <div class="row">
-                <form method="post" action="{{ url_for('user_new') }}">
+                <form id="altaUsuario" method="post" action="{{ url_for('user_new') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <h1>Alta de Usuario</h1>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn blue">Guardar</button>
-                        <button class="btn modal-close red">Cerrar</button>
+                        <button id="cancelarAltaUsuario" class="btn red">Reiniciar</button>
                     </div>
                 </form>
             </div>
@@ -79,5 +79,12 @@
 
         password.onchange = validatePassword;
         confirm_password.onkeyup = validatePassword;
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#cancelarAltaUsuario").click(function(){
+                $('#altaUsuario').trigger("reset");
+            });
+        });
     </script>
 {% endblock %}

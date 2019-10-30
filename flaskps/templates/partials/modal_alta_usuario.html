@@ -1,5 +1,5 @@
 <div id="modalAltaUsuario" class="modal">
-    <form method="post" action="{{ url_for('user_new') }}">
+    <form id="altaUsuario" method="post" action="{{ url_for('user_new') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <h1>Alta usuario</h1>
@@ -40,6 +40,14 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn blue">Guardar</button>
+            <button id="cancelarAltaUsuario" class="btn red">Reiniciar</button>
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $("#cancelarAltaUsuario").click(function(){
+            $('#altaUsuario').trigger("reset");
+        });
+    });
+</script>
