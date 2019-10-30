@@ -89,6 +89,9 @@ def create():
     form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in
                            roles]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
+    op_response = dict()
+    responsecode = 201
+
     if form.validate_on_submit():
         params = request.form.to_dict()
         plain_pw = params['password']
@@ -96,22 +99,34 @@ def create():
         params['roles'] = request.form.getlist('rol_id')
 
         User.db = get_db()
-        User.create(params)
+        created = User.create(params)
 
-        html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
+        if created:
+            html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
 
-        send_async(params['email'],
-                   "Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
-                   html)
+            send_async(params['email'],
+                       "Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
+                       html)
+
+            op_response['msg'] = "Se ha agregado al usuario con éxito"
+            op_response['type'] = "success"
+        else:
+            op_response['msg'] = "El nombre de usuario está en uso. Intenta con otro"
+            op_response['type'] = "error"
+            abort(make_response(jsonify(op_response), 409))
 
     else:
         if len(form.errors) >= 2:
-            flash("Complete todos los datos del nuevo usuario", "error")
+            op_response['msg'] = "Complete todos los datos del nuevo usuario"
+            op_response['type'] = "error"
         else:
             error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
-            flash(error_msg, "error")
+            op_response['msg'] = error_msg
+            op_response['type'] = "error"
 
-    return redirect(url_for('user_new_form'))
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
 
 
 def destroy():

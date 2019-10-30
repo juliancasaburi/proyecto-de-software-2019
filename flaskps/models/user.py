@@ -56,11 +56,9 @@ class User(object):
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
-            flash("Ya existe un usuario con el mismo nombre", "error")
             return False
         finally:
             cls.db.cursor().close()
-        flash("Se ha agregado al usuario con éxito", "success")
         return True
 
     @classmethod
