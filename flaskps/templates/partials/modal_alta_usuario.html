@@ -63,6 +63,7 @@
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (response) {
+                    $('#altaUsuario').trigger("reset");
                     var toastText = response['msg'];
                     var toastClass = response['type'];
                     M.toast({html: toastText, classes: toastClass});
