@@ -69,13 +69,15 @@ app.add_url_rule("/configuracion/actualizar", 'config_update', dashboard.config_
 # Roles
 app.add_url_rule("/roles", 'roles', role.all_roles, methods=['GET'])
 
+# Forms
+app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
+app.add_url_rule("/usuario/editar", 'user_edit_form', dashboard.user_edit_form)
+app.add_url_rule("/usuario/baja", 'user_destroy_form', dashboard.user_destroy_form)
+
 # Usuarios
 app.add_url_rule("/usuario", 'user', user.user_data)
 app.add_url_rule("/tablausuarios", 'user_table', dashboard.user_table)
 app.add_url_rule("/usuarios", 'user_all', user.get_users)
-app.add_url_rule("/usuario/crear", 'user_new_form', dashboard.user_new_form)
-app.add_url_rule("/usuario/editar", 'user_edit_form', dashboard.user_edit_form)
-app.add_url_rule("/usuario/baja", 'user_destroy_form', dashboard.user_destroy_form)
 app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
 app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
 app.add_url_rule("/usuario/bajaYRefrescar", 'user_destroy_and_refresh', user.destroy_and_refresh, methods=['POST'])
