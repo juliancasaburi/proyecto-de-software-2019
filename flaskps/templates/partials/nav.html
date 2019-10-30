@@ -13,7 +13,7 @@
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
-                <li><div class="blue section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
+                <li><div class="orange darken-3 section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
                 <div class="section">
                     {% if is_authenticated(session) %}
                         <p class="subheader light-blue white-text">Autenticado como: {{ session['user'] }}</p>
@@ -26,6 +26,8 @@
                     {% if is_authenticated(session) %}
                         <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
                         <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth_login') }}">Iniciar sesión</a></li>
                     {% endif %}
 
                     <!-- dropdownUsuarios Structure -->
@@ -115,8 +117,8 @@
                             <!-- Dropdown Trigger -->
                             <li><a class="dropdown-trigger" href="#" data-target="dropdownInstrumentos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                         </div>
-                        </div>
                     {% endif %}
+                </div>
             </ul>
             <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
         </div>
