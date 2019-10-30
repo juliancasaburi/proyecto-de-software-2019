@@ -11,27 +11,27 @@ main {
 /* https://materializecss.com/footer.html#sticky-footer */
 
 h1 {
-  font-size: 2.5rem !important;
+    font-size: 2.5rem !important;
 }
 
 h2 {
-  font-size: 2.25rem !important;
+    font-size: 2.25rem !important;
 }
 
 h3 {
-  font-size: 2rem !important;
+    font-size: 2rem !important;
 }
 
 h4 {
-  font-size: 1.75rem !important;
+    font-size: 1.75rem !important;
 }
 
 h5 {
-  font-size: 1.5rem !important;
+    font-size: 1.5rem !important;
 }
 
 h6 {
-  font-size: 1.25rem !important;
+    font-size: 1.25rem !important;
 }
 
 nav ul a,
@@ -108,8 +108,8 @@ p {
 }
 
 p.text-justify {
-  text-align: justify;
-  text-justify: inter-word;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .sidenav-trigger {
@@ -175,7 +175,7 @@ footer.page-footer {
 
 @media (max-width: 768px) {
     .carousel .img-responsive {
-       max-width: 100%;
+        max-width: 100%;
     }
 }
 
@@ -190,4 +190,14 @@ strong {
 .confirmDeleteBtn {
     background: red;
     color: white;
+}
+
+.login-page {
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .login-page {
+        width: 75%;
+    }
 }
