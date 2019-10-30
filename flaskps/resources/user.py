@@ -2,6 +2,8 @@ from flask import Flask, redirect, render_template, request, url_for, session, a
     flash
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
+
+from flaskps.forms.form_user_create import UserCreateForm
 from flaskps.models.user import User
 from flaskps.models.role import Role
 
@@ -62,22 +64,35 @@ def create():
     if not authenticated(session):
         abort(401)
 
-    params = request.form.to_dict()
-    plain_pw = params['password']
-    params['password'] = bcrypt.generate_password_hash(plain_pw).decode('utf - 8')
-    params['roles'] = request.form.getlist('rol_id')
+    Role.db = get_db()
+    roles = Role.all()
+    form = UserCreateForm()
+    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in roles] #lo de las choices no sé si funciona, pero el required funciona perfecto
 
-    User.db = get_db()
-    User.create(params)
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+        plain_pw = params['password']
+        params['password'] = bcrypt.generate_password_hash(plain_pw).decode('utf - 8')
+        params['roles'] = request.form.getlist('rol_id')
 
-    msg = Message("Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
-                  sender="grupo2unlppds2019@gmail.com",
-                  recipients=[params['email']],
-                  charset='utf8')
+        User.db = get_db()
+        User.create(params)
 
-    msg.html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
+        msg = Message("Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
+                      sender="grupo2unlppds2019@gmail.com",
+                      recipients=[params['email']],
+                      charset='utf8')
 
-    mail.send(msg)
+        msg.html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
+
+        mail.send(msg)
+
+    else:
+        if len(form.errors) >= 2:
+            flash("Complete todos los datos del nuevo usuario", "error")
+        else:
+            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+            flash(error_msg, "error")
 
     return redirect(url_for('user_new_form'))
 
