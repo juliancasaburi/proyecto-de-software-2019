@@ -1,5 +1,6 @@
+import threading
 from flask import Flask, redirect, render_template, request, url_for, session, abort, json, make_response, jsonify, \
-    flash
+    flash, copy_current_request_context
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 
@@ -60,6 +61,24 @@ def get_users():
     return make_response(users, 200)
 
 
+def create_message(recipient, subject, html):
+    if not recipient:
+        raise ValueError('Target email not defined.')
+
+    return Message(subject, [recipient], html=html, sender=app.config['MAIL_USERNAME'], charset='utf8')
+
+
+def send_async(recipient, subject, html):
+    message = create_message(recipient, subject, html)
+
+    @copy_current_request_context
+    def send_message(message):
+        mail.send(message)
+
+    sender = threading.Thread(name='mail_sender', target=send_message, args=(message,))
+    sender.start()
+
+
 def create():
     if not authenticated(session):
         abort(401)
@@ -67,7 +86,8 @@ def create():
     Role.db = get_db()
     roles = Role.all()
     form = UserCreateForm()
-    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in roles] #lo de las choices no sé si funciona, pero el required funciona perfecto
+    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in
+                           roles]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -78,14 +98,11 @@ def create():
         User.db = get_db()
         User.create(params)
 
-        msg = Message("Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
-                      sender="grupo2unlppds2019@gmail.com",
-                      recipients=[params['email']],
-                      charset='utf8')
+        html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
 
-        msg.html = render_template("helpers/mail_alta_usuario.html", username=params['username'], passwd=plain_pw)
-
-        mail.send(msg)
+        send_async(params['email'],
+                   "Cuenta Registrada | Grupo2 - Orquesta Escuela de Berisso",
+                   html)
 
     else:
         if len(form.errors) >= 2:
@@ -110,7 +127,7 @@ def destroy():
     return make_response(jsonify(data), 200)
 
 
-#REFACTORIZAR
+# REFACTORIZAR
 def destroy_and_refresh():
     if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
@@ -144,7 +161,9 @@ def profile():
 
     roles = User.user_roles(username)
 
-    return render_template('user/account.html', username=user['username'], email=user['email'], password=user['password'], first_name=user['first_name'], last_name=user['last_name'], roles=roles)
+    return render_template('user/account.html', username=user['username'], email=user['email'],
+                           password=user['password'], first_name=user['first_name'], last_name=user['last_name'],
+                           roles=roles)
 
 
 def email_update():
@@ -159,11 +178,10 @@ def email_update():
         User.update_email(email, session.get('user'))
         flash("El email se ha modificado con éxito", "success")
 
-    #TODO: Mensajes de error
+    # TODO: Mensajes de error
     else:
         error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
         flash(error_msg, "error")
-
 
     return redirect(url_for('user_profile'))
 
@@ -238,7 +256,7 @@ def update():
     return make_response(jsonify(params), 200)
 
 
-#refactorizar
+# refactorizar
 def update_and_refresh():
     if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
@@ -254,4 +272,3 @@ def update_and_refresh():
     User.db = get_db()
     User.update(params)
     return redirect(url_for('user_edit_form'))
-
