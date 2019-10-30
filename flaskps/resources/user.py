@@ -142,8 +142,13 @@ def email_update():
         email = request.form.get('email')
         User.db = get_db()
         User.update_email(email, session.get('user'))
+        flash("El email se ha modificado con éxito", "success")
 
     #TODO: Mensajes de error
+    else:
+        error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+        flash(error_msg, "error")
+
 
     return redirect(url_for('user_profile'))
 
@@ -158,8 +163,12 @@ def password_update():
         bcrypt_password = bcrypt.generate_password_hash(password).decode('utf - 8')
         User.db = get_db()
         User.update_password(bcrypt_password, session.get('user'))
+        flash("La contraseña se ha modificado con éxito", "success")
 
     # TODO: Mensajes de error
+    else:
+        error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+        flash(error_msg, "error")
 
     return redirect(url_for('user_profile'))
 

@@ -54,7 +54,7 @@ def authenticate():
         if len(form.errors) == 2:
             flash("Complete los campos para poder loguearse", "error")
         else:
-            error_msg = ''.join(form.errors[list(form.errors)[0]]).strip("'[]")
+            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
             flash(error_msg, "error")
 
 
