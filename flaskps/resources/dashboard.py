@@ -1,5 +1,4 @@
-import os
-from flask import Flask, render_template, session, abort, request, redirect, url_for, jsonify
+from flask import Flask, render_template, session, abort, request, redirect, url_for
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.models.role import Role
@@ -8,6 +7,7 @@ from flaskps.helpers import permission
 from flask import jsonify, make_response
 from flaskps.helpers import siteconfig as helper_siteconfig
 from flaskps.helpers.siteconfig import SiteConfig
+import pytz
 
 app = Flask(__name__)
 
@@ -48,9 +48,13 @@ def user_edit_form():
         del dict_item['password']
         dict_item['Email'] = dict_item['email']
         del dict_item['email']
-        dict_item['Registrado'] = dict_item['created_at']
+        old_timezone = pytz.timezone("Universal")
+        new_timezone = pytz.timezone("America/Argentina/Buenos_Aires")
+        registrado_gmt_menos_3 = old_timezone.localize(dict_item['created_at']).astimezone(new_timezone)
+        dict_item['Registrado'] = registrado_gmt_menos_3
         del dict_item['created_at']
-        dict_item['Actualizado'] = dict_item['updated_at']
+        actualizado_gmt_menos_3 = old_timezone.localize(dict_item['updated_at']).astimezone(new_timezone)
+        dict_item['Actualizado'] = actualizado_gmt_menos_3
         del dict_item['updated_at']
 
     return render_template('user/actions/usuario_editar.html', users=users, roles=roles)
