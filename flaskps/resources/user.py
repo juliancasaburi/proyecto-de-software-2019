@@ -310,12 +310,12 @@ def update():
                            "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
                            html)
 
-            else:
-                # Mail si no cambió el mail
-                html = render_template("helpers/mail_update_usuario.html", params=params, roles=roles_names)
-                send_async(params['email'],
-                           "Cuenta Modificada | Grupo2 - Orquesta Escuela de Berisso",
-                           html)
+
+            # Mail por defecto de que hubo un update
+            html = render_template("helpers/mail_update_usuario.html", params=params, roles=roles_names)
+            send_async(params['email'],
+                       "Cuenta Modificada | Grupo2 - Orquesta Escuela de Berisso",
+                       html)
 
             op_response['msg'] = "Se ha modificado al usuario con éxito"
             op_response['type'] = "success"
