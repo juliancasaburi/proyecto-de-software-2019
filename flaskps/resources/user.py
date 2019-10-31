@@ -138,22 +138,104 @@ def destroy():
     uid = params['id']
 
     User.db = get_db()
-    User.delete(uid)
-    data = {'success': True}
-    return make_response(jsonify(data), 200)
+    success = User.delete(uid)
+
+    op_response = dict()
+    responsecode = 204
+
+    if success:
+        op_response['msg'] = "Se ha eliminado al usuario exitosamente"
+        op_response['type'] = "success"
+    else:
+        op_response['msg'] = "El usuario a eliminar no existe"
+        op_response['type'] = "error"
+        responsecode = 404
+
+    return make_response(jsonify(op_response), responsecode)
 
 
-# REFACTORIZAR
-def destroy_and_refresh():
-    if not authenticated(session) and has_permission('usuario_destroy', session):
+def update():
+    if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
-    params = request.form.to_dict()
-    uid = params['id']
+    Role.db = get_db()
+    roles = Role.all()
+    form = UserUpdateForm()
+    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in
+                           roles]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
-    User.db = get_db()
-    User.delete(uid)
-    return redirect(url_for('user_destroy_form'))
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+        params['roles'] = request.form.getlist('rol_id')
+
+        if 'activo' in params:
+            params['activo'] = 1
+        else:
+            params['activo'] = 0
+
+        User.db = get_db()
+
+        uid = params['id']
+        old_email = User.find_by_id(uid)['email']
+
+        updated = User.update(params)
+
+        # armo el string de roles para el mail
+        roles_dict = User.user_roles(params['username'])
+        roles_names = ""
+        first = True
+        for rol in roles_dict:
+            if first:
+                first = False
+            else:
+                roles_names += ', '
+            roles_names += rol['nombre']
+
+        if updated:
+            new_email = User.find_by_id(uid)['email']
+
+            if old_email != new_email:
+                # Mail al email viejo
+                html = render_template("helpers/mail_oldmail_change.html", nombre=params['first_name'])
+                send_async(old_email,
+                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
+                           html)
+
+                # Mail al email nuevo
+                html = render_template("helpers/mail_newmail_change.html", nombre=params['first_name'])
+                send_async(new_email,
+                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
+                           html)
+
+
+            # Mail por defecto de que hubo un update
+            html = render_template("helpers/mail_update_usuario.html", params=params, roles=roles_names)
+            send_async(params['email'],
+                       "Cuenta Modificada | Grupo2 - Orquesta Escuela de Berisso",
+                       html)
+
+            op_response['msg'] = "Se ha modificado al usuario con éxito"
+            op_response['type'] = "success"
+        else:
+            op_response['msg'] = "El nombre de usuario está en uso, intente con otro"
+            op_response['type'] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response['msg'] = "Complete todos los datos del usuario a modificar"
+            op_response['type'] = "error"
+        else:
+            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+            op_response['msg'] = error_msg
+            op_response['type'] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
 
 
 def dashboard():
@@ -252,91 +334,6 @@ def user_data():
 
     else:
         abort(400)
-
-
-def update():
-    if not authenticated(session) and has_permission('usuario_update', session):
-        abort(401)
-
-    Role.db = get_db()
-    roles = Role.all()
-    form = UserUpdateForm()
-    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in
-                           roles]  # lo de las choices no sé si funciona, pero el required funciona perfecto
-
-    op_response = dict()
-    responsecode = 201
-
-    if form.validate_on_submit():
-        params = request.form.to_dict()
-        params['roles'] = request.form.getlist('rol_id')
-
-        if 'activo' in params:
-            params['activo'] = 1
-        else:
-            params['activo'] = 0
-
-        User.db = get_db()
-
-        uid = params['id']
-        old_email = User.find_by_id(uid)['email']
-
-        updated = User.update(params)
-
-        # armo el string de roles para el mail
-        roles_dict = User.user_roles(params['username'])
-        roles_names = ""
-        first = True
-        for rol in roles_dict:
-            if first:
-                first = False
-            else:
-                roles_names += ', '
-            roles_names += rol['nombre']
-
-        if updated:
-            new_email = User.find_by_id(uid)['email']
-
-            if old_email != new_email:
-                # Mail al email viejo
-                html = render_template("helpers/mail_oldmail_change.html", nombre=params['first_name'])
-                send_async(old_email,
-                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
-                           html)
-
-                # Mail al email nuevo
-                html = render_template("helpers/mail_newmail_change.html", nombre=params['first_name'])
-                send_async(new_email,
-                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
-                           html)
-
-
-            # Mail por defecto de que hubo un update
-            html = render_template("helpers/mail_update_usuario.html", params=params, roles=roles_names)
-            send_async(params['email'],
-                       "Cuenta Modificada | Grupo2 - Orquesta Escuela de Berisso",
-                       html)
-
-            op_response['msg'] = "Se ha modificado al usuario con éxito"
-            op_response['type'] = "success"
-        else:
-            op_response['msg'] = "El nombre de usuario está en uso, intente con otro"
-            op_response['type'] = "error"
-            abort(make_response(jsonify(op_response), 409))
-
-    else:
-        if len(form.errors) >= 2:
-            op_response['msg'] = "Complete todos los datos del usuario a modificar"
-            op_response['type'] = "error"
-        else:
-            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
-            op_response['msg'] = error_msg
-            op_response['type'] = "error"
-
-        abort(make_response(jsonify(op_response), 500))
-
-    return make_response(jsonify(op_response), responsecode)
-
 
 # refactorizar
 def update_and_refresh():

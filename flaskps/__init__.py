@@ -80,7 +80,6 @@ app.add_url_rule("/tablausuarios", 'user_table', dashboard.user_table)
 app.add_url_rule("/usuarios", 'user_all', user.get_users)
 app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
 app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
-app.add_url_rule("/usuario/bajaYRefrescar", 'user_destroy_and_refresh', user.destroy_and_refresh, methods=['POST'])
 app.add_url_rule("/usuario/actualizar", 'user_update', user.update, methods=['POST'])
 
 # Handlers

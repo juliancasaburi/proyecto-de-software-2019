@@ -71,9 +71,11 @@ class User(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, uid)
                 cls.db.commit()
+        except pymysql.err.IntegrityError:
+            return False
         finally:
-            flash("Se ha eliminado el usuario con éxito", "success")
             cls.db.cursor().close()
+        return True
 
     @classmethod
     def update(cls, data):
@@ -121,7 +123,6 @@ class User(object):
         finally:
             cls.db.cursor().close()
         return True
-
 
     @classmethod
     def find_by_user_and_pass(cls, username, password):
