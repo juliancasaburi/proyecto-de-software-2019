@@ -141,7 +141,7 @@ def destroy():
     success = User.delete(uid)
 
     op_response = dict()
-    responsecode = 204
+    responsecode = 200
 
     if success:
         op_response['msg'] = "Se ha eliminado al usuario exitosamente"
