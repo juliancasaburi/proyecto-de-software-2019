@@ -18,9 +18,9 @@ bcrypt = Bcrypt(app)
 
 def login():
     if not authenticated(session):
-        return render_template('auth/login.html')
+        return render_template("auth/login.html")
     else:
-        return redirect(url_for('index'))
+        return redirect(url_for("index"))
 
 
 def authenticate():
@@ -30,21 +30,27 @@ def authenticate():
     if form.validate_on_submit():
         params = request.form
         User.db = get_db()
-        user = User.find_by_user(params['username'])
+        user = User.find_by_user(params["username"])
 
-        if user and user['activo'] == 1 and bcrypt.check_password_hash(user['password'], params['password']):
+        if (
+            user
+            and user["activo"] == 1
+            and bcrypt.check_password_hash(user["password"], params["password"])
+        ):
             SiteConfig.db = get_db()
             config = helper_siteconfig.get_config()
-            modo_mantenimiento = config['modo_mantenimiento']
+            modo_mantenimiento = config["modo_mantenimiento"]
 
-            if modo_mantenimiento == '1' and (not User.has_role(params['username'], 'administrador')):
+            if modo_mantenimiento == "1" and (
+                not User.has_role(params["username"], "administrador")
+            ):
                 flash("Sitio en mantenimiento", "error")
             else:
-                session['user'] = user['username']
+                session["user"] = user["username"]
                 flash("La sesión se inició correctamente", "success")
-                return redirect(url_for('user_dashboard'))
+                return redirect(url_for("user_dashboard"))
 
-        elif user and user['activo'] == 0:
+        elif user and user["activo"] == 0:
             flash("Su cuenta está bloqueada", "error")
         else:
             flash("Usuario o clave incorrecto", "error")
@@ -54,11 +60,10 @@ def authenticate():
         if len(form.errors) == 2:
             flash("Complete los campos para poder loguearse", "error")
         else:
-            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
             flash(error_msg, "error")
 
-
-    return redirect(url_for('auth_login'))
+    return redirect(url_for("auth_login"))
 
 
 def logout():
@@ -67,6 +72,6 @@ def logout():
         session.clear()
         flash("La sesión se cerró correctamente", "success")
 
-        return redirect(url_for('auth_login'))
+        return redirect(url_for("auth_login"))
     else:
-        return redirect(url_for('index'))
+        return redirect(url_for("index"))

@@ -1,5 +1,6 @@
 from flaskps.db import get_db
 
+
 class SiteConfig(object):
 
     db = None
@@ -28,12 +29,15 @@ class SiteConfig(object):
         """
         try:
             with cls.db.cursor() as cursor:
-                cursor.execute(sql, (data['titulo_home'],
-                                     data['descripcion'],
-                                     data['email'],
-                                     data['items_por_pagina']
-                                     )
-                               )
+                cursor.execute(
+                    sql,
+                    (
+                        data["titulo_home"],
+                        data["descripcion"],
+                        data["email"],
+                        data["items_por_pagina"],
+                    ),
+                )
                 cls.db.commit()
         finally:
             cls.db.cursor().close()
@@ -65,4 +69,3 @@ def update_config(data):
 def update_maintenance(maintenance):
     SiteConfig.db = get_db()
     SiteConfig.update_maintenancee(maintenance)
-

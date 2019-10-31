@@ -4,7 +4,7 @@ from flaskps.models.user import User
 
 def has_role(role_name, session):
     User.db = get_db()
-    username = session.get('user')
+    username = session.get("user")
     perm = User.has_role(username, role_name)
     if perm:
         return True
@@ -14,7 +14,6 @@ def has_role(role_name, session):
 
 def roles(session):
     User.db = get_db()
-    username = session.get('user')
+    username = session.get("user")
     uroles = User.role(username)
     return uroles
-

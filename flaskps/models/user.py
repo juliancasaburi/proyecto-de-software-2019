@@ -1,6 +1,7 @@
 import pymysql
 from flask import flash
 
+
 class User(object):
 
     db = None
@@ -37,22 +38,25 @@ class User(object):
             VALUES (%s, %s)
         """
 
-        roles = data.get('roles')
+        roles = data.get("roles")
 
         try:
             with cls.db.cursor() as cursor:
-                cursor.execute(sql, (data.get('first_name'),
-                                     data.get('last_name'),
-                                     data.get('email'),
-                                     data.get('username'),
-                                     data.get('password')
-                                     )
-                               )
+                cursor.execute(
+                    sql,
+                    (
+                        data.get("first_name"),
+                        data.get("last_name"),
+                        data.get("email"),
+                        data.get("username"),
+                        data.get("password"),
+                    ),
+                )
                 cls.db.commit()
-                cursor.execute(sql_user_id, data['username'])
+                cursor.execute(sql_user_id, data["username"])
                 user_id = cursor.fetchone()
                 for rol in roles:
-                    cursor.execute(sql_user_rol, (user_id['id'], rol))
+                    cursor.execute(sql_user_rol, (user_id["id"], rol))
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
@@ -103,19 +107,26 @@ class User(object):
                     WHERE id = %s
                 """
 
-                cursor.execute(query, (data.get('activo'), data.get('first_name'), data.get('last_name'),
-                                       data.get('email'), data.get('username'), data.get('id')
-                                       )
-                               )
+                cursor.execute(
+                    query,
+                    (
+                        data.get("activo"),
+                        data.get("first_name"),
+                        data.get("last_name"),
+                        data.get("email"),
+                        data.get("username"),
+                        data.get("id"),
+                    ),
+                )
                 cls.db.commit()
 
-                cursor.execute(sql_delete_user_roles, data.get('id'))
+                cursor.execute(sql_delete_user_roles, data.get("id"))
                 cls.db.commit()
 
-                roles = data.get('roles')
+                roles = data.get("roles")
 
                 for rol in roles:
-                    cursor.execute(sql_user_rol, (data.get('id'), rol))
+                    cursor.execute(sql_user_rol, (data.get("id"), rol))
                     cls.db.commit()
 
         except pymysql.err.IntegrityError:
