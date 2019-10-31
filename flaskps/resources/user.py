@@ -148,7 +148,7 @@ def destroy_and_refresh():
     if not authenticated(session) and has_permission('usuario_destroy', session):
         abort(401)
 
-    params = request.form.to_dict();
+    params = request.form.to_dict()
     uid = params['id']
 
     User.db = get_db()
