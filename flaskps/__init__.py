@@ -82,7 +82,6 @@ app.add_url_rule("/usuario/crear", 'user_new', user.create, methods=['POST'])
 app.add_url_rule("/usuario/baja", 'user_destroy', user.destroy, methods=['POST'])
 app.add_url_rule("/usuario/bajaYRefrescar", 'user_destroy_and_refresh', user.destroy_and_refresh, methods=['POST'])
 app.add_url_rule("/usuario/actualizar", 'user_update', user.update, methods=['POST'])
-app.add_url_rule("/usuario/actualizarYRefrescar", 'user_update_and_refresh', user.update_and_refresh, methods=['POST'])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
