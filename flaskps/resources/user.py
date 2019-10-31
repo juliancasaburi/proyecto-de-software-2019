@@ -5,6 +5,7 @@ from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 
 from flaskps.forms.form_user_create import UserCreateForm
+from flaskps.forms.form_user_update import UserUpdateForm
 from flaskps.models.user import User
 from flaskps.models.role import Role
 
@@ -111,7 +112,7 @@ def create():
             op_response['msg'] = "Se ha agregado al usuario con éxito"
             op_response['type'] = "success"
         else:
-            op_response['msg'] = "El nombre de usuario está en uso. Intenta con otro"
+            op_response['msg'] = "El nombre de usuario está en uso, intente con otro"
             op_response['type'] = "error"
             abort(make_response(jsonify(op_response), 409))
 
@@ -257,18 +258,84 @@ def update():
     if not authenticated(session) and has_permission('usuario_update', session):
         abort(401)
 
-    params = request.form.to_dict()
-    params['roles'] = request.form.getlist('rol_id')
+    Role.db = get_db()
+    roles = Role.all()
+    form = UserUpdateForm()
+    form.rol_id.choices = [(rol['id'], rol['nombre']) for rol in
+                           roles]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
-    if 'activo' in params:
-        params['activo'] = 1
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+        params['roles'] = request.form.getlist('rol_id')
+
+        if 'activo' in params:
+            params['activo'] = 1
+        else:
+            params['activo'] = 0
+
+        User.db = get_db()
+
+        uid = params['id']
+        old_email = User.find_by_id(uid)['email']
+
+        updated = User.update(params)
+
+        # armo el string de roles para el mail
+        roles_dict = User.user_roles(params['username'])
+        roles_names = ""
+        first = True
+        for rol in roles_dict:
+            if first:
+                first = False
+            else:
+                roles_names += ', '
+            roles_names += rol['nombre']
+
+        if updated:
+            new_email = User.find_by_id(uid)['email']
+
+            if old_email != new_email:
+                # Mail al email viejo
+                html = render_template("helpers/mail_oldmail_change.html", nombre=params['first_name'])
+                send_async(old_email,
+                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
+                           html)
+
+                # Mail al email nuevo
+                html = render_template("helpers/mail_newmail_change.html", nombre=params['first_name'])
+                send_async(new_email,
+                           "Email Modificado | Grupo2 - Orquesta Escuela de Berisso",
+                           html)
+
+            else:
+                # Mail si no cambió el mail
+                html = render_template("helpers/mail_update_usuario.html", params=params, roles=roles_names)
+                send_async(params['email'],
+                           "Cuenta Modificada | Grupo2 - Orquesta Escuela de Berisso",
+                           html)
+
+            op_response['msg'] = "Se ha modificado al usuario con éxito"
+            op_response['type'] = "success"
+        else:
+            op_response['msg'] = "El nombre de usuario está en uso, intente con otro"
+            op_response['type'] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
     else:
-        params['activo'] = 0
+        if len(form.errors) >= 2:
+            op_response['msg'] = "Complete todos los datos del usuario a modificar"
+            op_response['type'] = "error"
+        else:
+            error_msg = ''.join(list(form.errors.values())[0]).strip("'[]")
+            op_response['msg'] = error_msg
+            op_response['type'] = "error"
 
-    User.db = get_db()
-    User.update(params)
+        abort(make_response(jsonify(op_response), 500))
 
-    return make_response(jsonify(params), 200)
+    return make_response(jsonify(op_response), responsecode)
 
 
 # refactorizar
