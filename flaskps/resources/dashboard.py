@@ -1,4 +1,3 @@
-import os
 from flask import (
     Flask,
     render_template,
@@ -7,7 +6,6 @@ from flask import (
     request,
     redirect,
     url_for,
-    jsonify,
 )
 from flaskps.db import get_db
 from flaskps.models.user import User

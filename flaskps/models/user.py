@@ -1,5 +1,4 @@
 import pymysql
-from flask import flash
 
 
 class User(object):

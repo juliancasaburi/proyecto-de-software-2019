@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectMultipleField, BooleanField
-from wtforms.validators import InputRequired, DataRequired, Email, EqualTo
+from wtforms import StringField, SelectMultipleField
+from wtforms.validators import InputRequired, DataRequired, Email
 
 
 class UserUpdateForm(FlaskForm):
