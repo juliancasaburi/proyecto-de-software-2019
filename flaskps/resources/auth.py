@@ -41,7 +41,7 @@ def authenticate():
             config = helper_siteconfig.get_config()
             modo_mantenimiento = config["modo_mantenimiento"]
 
-            if modo_mantenimiento == "1" and (
+            if modo_mantenimiento == 1 and (
                 not User.has_role(params["username"], "administrador")
             ):
                 flash("Sitio en mantenimiento", "error")

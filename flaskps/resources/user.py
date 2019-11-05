@@ -99,7 +99,7 @@ def send_async(recipient, subject, html):
 
 
 def create():
-    if not authenticated(session):
+    if not authenticated(session) and has_permission("usuario_new", session):
         abort(401)
 
     Role.db = get_db()
