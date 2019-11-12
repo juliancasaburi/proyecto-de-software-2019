@@ -29,7 +29,7 @@ from flaskps.resources.email_threading import send_async
 
 
 def get_users():
-    if not authenticated(session) or not has_permission("usuario_index", session):
+    if not has_permission("usuario_index", session):
         abort(401)
 
     User.db = get_db()

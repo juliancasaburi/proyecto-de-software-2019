@@ -9,7 +9,6 @@ from flask import (
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.models.role import Role
-from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
 from flaskps.models import siteconfig
@@ -17,9 +16,7 @@ from flaskps.models.siteconfig import SiteConfig
 
 
 def user_table():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_index", session):
         abort(401)
 
     Role.db = get_db()
@@ -29,9 +26,7 @@ def user_table():
 
 
 def user_edit_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_index", session):
         abort(401)
 
     User.db = get_db()
@@ -65,9 +60,7 @@ def user_edit_form():
 
 
 def user_destroy_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_index", session):
         abort(401)
 
     User.db = get_db()
@@ -103,9 +96,7 @@ def user_destroy_form():
 
 
 def user_new_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_new", session
-    ):
+    if not permission.has_permission("usuario_new", session):
         abort(401)
 
     Role.db = get_db()
@@ -115,9 +106,7 @@ def user_new_form():
 
 
 def maintenance_mode():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+    if not permission.has_permission("config_update", session):
         abort(401)
 
     SiteConfig.db = get_db()
@@ -137,9 +126,7 @@ def maintenance_mode():
 
 
 def config_update():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+    if not permission.has_permission("config_update", session):
         abort(401)
 
     params = request.form.to_dict()
@@ -152,9 +139,7 @@ def config_update():
 
 
 def config_edit():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+    if not permission.has_permission("config_update", session):
         abort(401)
 
     return render_template("/user/actions/configuracion_editar.html")
