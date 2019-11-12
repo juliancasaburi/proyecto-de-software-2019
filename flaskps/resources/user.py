@@ -1,4 +1,3 @@
-import threading
 from flask import (
     current_app as app,
     redirect,
@@ -11,21 +10,22 @@ from flask import (
     make_response,
     jsonify,
     flash,
-    copy_current_request_context,
 )
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
 
-from flaskps.forms.form_user_create import UserCreateForm
-from flaskps.forms.form_user_update import UserUpdateForm
 from flaskps.models.user import User
 from flaskps.models.role import Role
 
-from flaskps.helpers.auth import authenticated
-from flaskps.helpers.permission import has_permission
+from flaskps.forms.form_user_create import UserCreateForm
+from flaskps.forms.form_user_update import UserUpdateForm
 from flaskps.forms.form_email_update import EmailUpdateForm
 from flaskps.forms.form_password_update import PasswordUpdateForm
-from flask_mail import Mail, Message
+
+from flaskps.helpers.auth import authenticated
+from flaskps.helpers.permission import has_permission
+
+from flaskps.resources.email_threading import send_async
 
 
 def get_users():
@@ -59,31 +59,6 @@ def get_users():
     users = jsonify(users)
 
     return make_response(users, 200)
-
-
-def create_message(recipient, subject, html):
-    if not recipient:
-        raise ValueError("Target email not defined.")
-
-    return Message(
-        subject,
-        [recipient],
-        html=html,
-        sender=app.config["MAIL_USERNAME"],
-        charset="utf8",
-    )
-
-
-def send_async(recipient, subject, html):
-    message = create_message(recipient, subject, html)
-
-    @copy_current_request_context
-    def send_message(message):
-        mail = Mail(app)
-        mail.send(message)
-
-    sender = threading.Thread(name="mail_sender", target=send_message, args=(message,))
-    sender.start()
 
 
 def create():
