@@ -1,4 +1,13 @@
-from flask import Flask, redirect, render_template, request, url_for, session, flash
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    session,
+    flash,
+    current_app as app,
+)
 
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
@@ -6,11 +15,8 @@ from flask_bcrypt import Bcrypt
 from flaskps.forms.form_login import LoginForm
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
-from flaskps.helpers import siteconfig as helper_siteconfig
-from flaskps.helpers.siteconfig import SiteConfig
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
+from flaskps.models import siteconfig
+from flaskps.models.siteconfig import SiteConfig
 
 
 def login():
@@ -29,13 +35,15 @@ def authenticate():
         User.db = get_db()
         user = User.find_by_user(params["username"])
 
+        bcrypt = Bcrypt(app)
+
         if (
             user
             and user["activo"] == 1
             and bcrypt.check_password_hash(user["password"], params["password"])
         ):
             SiteConfig.db = get_db()
-            config = helper_siteconfig.get_config()
+            config = siteconfig.get_config()
             modo_mantenimiento = config["modo_mantenimiento"]
 
             if modo_mantenimiento == 1 and (

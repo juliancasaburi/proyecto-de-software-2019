@@ -1,6 +1,6 @@
 import threading
 from flask import (
-    Flask,
+    current_app as app,
     redirect,
     render_template,
     request,
@@ -25,20 +25,7 @@ from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.forms.form_email_update import EmailUpdateForm
 from flaskps.forms.form_password_update import PasswordUpdateForm
-from flaskps.config import Config
 from flask_mail import Mail, Message
-
-app = Flask = Flask(__name__)
-bcrypt = Bcrypt(app)
-
-# Mail Config
-app.config["MAIL_SERVER"] = Config.MAIL_SERVER
-app.config["MAIL_PORT"] = Config.MAIL_PORT
-app.config["MAIL_USERNAME"] = Config.MAIL_USERNAME
-app.config["MAIL_PASSWORD"] = Config.MAIL_PASSWORD
-app.config["MAIL_USE_TLS"] = Config.MAIL_USE_TLS
-app.config["MAIL_USE_SSL"] = Config.MAIL_USE_SSL
-mail = Mail(app)
 
 
 def get_users():
@@ -92,6 +79,7 @@ def send_async(recipient, subject, html):
 
     @copy_current_request_context
     def send_message(message):
+        mail = Mail(app)
         mail.send(message)
 
     sender = threading.Thread(name="mail_sender", target=send_message, args=(message,))
@@ -114,8 +102,11 @@ def create():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
+
+        bcrypt = Bcrypt(app)
         plain_pw = params["password"]
         params["password"] = bcrypt.generate_password_hash(plain_pw).decode("utf - 8")
+
         params["roles"] = request.form.getlist("rol_id")
 
         User.db = get_db()
@@ -334,6 +325,7 @@ def password_update():
     form = PasswordUpdateForm()
     if form.validate_on_submit():
         password = request.form.get("password")
+        bcrypt = Bcrypt(app)
         bcrypt_password = bcrypt.generate_password_hash(password).decode("utf - 8")
         User.db = get_db()
         User.update_password(bcrypt_password, session.get("user"))

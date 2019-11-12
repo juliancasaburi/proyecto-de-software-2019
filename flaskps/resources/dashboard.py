@@ -13,10 +13,8 @@ from flaskps.models.role import Role
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
-from flaskps.helpers import siteconfig as helper_siteconfig
-from flaskps.helpers.siteconfig import SiteConfig
-
-app = Flask(__name__)
+from flaskps.models import siteconfig
+from flaskps.models.siteconfig import SiteConfig
 
 
 def user_table():
@@ -124,15 +122,15 @@ def maintenance_mode():
         abort(401)
 
     SiteConfig.db = get_db()
-    config = helper_siteconfig.get_config()
+    config = siteconfig.get_config()
     modo_mantenimiento = config["modo_mantenimiento"]
 
     if modo_mantenimiento == 0:
-        helper_siteconfig.update_maintenance(1)
+        siteconfig.update_maintenance(1)
     else:
-        helper_siteconfig.update_maintenance(0)
+        siteconfig.update_maintenance(0)
 
-    config = helper_siteconfig.get_config()
+    config = siteconfig.get_config()
     modo_mantenimiento = config["modo_mantenimiento"]
 
     data = {"modo_mantenimiento": modo_mantenimiento}
@@ -149,7 +147,7 @@ def config_update():
 
     SiteConfig.db = get_db()
 
-    helper_siteconfig.update_config(params)
+    siteconfig.update_config(params)
 
     return redirect(url_for("user_dashboard"))
 
