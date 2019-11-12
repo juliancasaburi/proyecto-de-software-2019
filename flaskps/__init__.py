@@ -19,6 +19,14 @@ app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 csrf = CSRFProtect(app)
 
+# Mail Config
+app.config["MAIL_SERVER"] = Config.MAIL_SERVER
+app.config["MAIL_PORT"] = Config.MAIL_PORT
+app.config["MAIL_USERNAME"] = Config.MAIL_USERNAME
+app.config["MAIL_PASSWORD"] = Config.MAIL_PASSWORD
+app.config["MAIL_USE_TLS"] = Config.MAIL_USE_TLS
+app.config["MAIL_USE_SSL"] = Config.MAIL_USE_SSL
+
 # Server Side session
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)

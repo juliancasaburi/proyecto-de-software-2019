@@ -16,8 +16,6 @@ from flask import jsonify, make_response
 from flaskps.models import siteconfig
 from flaskps.models.siteconfig import SiteConfig
 
-app = Flask(__name__)
-
 
 def user_table():
     if not authenticated(session) or not permission.has_permission(

@@ -1,4 +1,13 @@
-from flask import Flask, redirect, render_template, request, url_for, session, flash
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    session,
+    flash,
+    current_app as app,
+)
 
 from flaskps.db import get_db
 from flask_bcrypt import Bcrypt
@@ -8,9 +17,6 @@ from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
 from flaskps.models import siteconfig
 from flaskps.models.siteconfig import SiteConfig
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 
 def login():
@@ -28,6 +34,8 @@ def authenticate():
         params = request.form
         User.db = get_db()
         user = User.find_by_user(params["username"])
+
+        bcrypt = Bcrypt(app)
 
         if (
             user
