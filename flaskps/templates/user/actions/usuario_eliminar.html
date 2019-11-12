@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Eliminación de Usuario - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Eliminar de Usuario - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -11,7 +11,7 @@
                 <form id="eliminarUsuario" method="post" action="{{ url_for('user_destroy') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
-                        <h1>Eliminación de Usuario</h1>
+                        <h1>Eliminar un Usuario</h1>
                         <h6>Recordá que también podés eliminar usuarios desde el <a href="{{ url_for ('user_table') }}">listado completo de usuarios</a>.</h6>
                         <br>
                         <div class="row">
