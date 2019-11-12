@@ -66,8 +66,10 @@ nav .brand-logo {
 }
 
 .parallax-title {
-    font-size: 4rem !important;
+    font-size: 6rem !important;
     margin-top: 5rem !important;
+    font-weight: 900;
+    text-shadow: 0.05em 0.05em 0.2em rgba(10,10,10,0.9);
 }
 
 .preloader-background {
