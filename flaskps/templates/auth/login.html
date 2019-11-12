@@ -5,14 +5,19 @@
 {% endblock %}
 
 {% block main %}
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='img/login-bg.jpeg') }}");
+        }
+    </style>
     <div class="container">
         <div class="section center">
-            <h1 class="indigo-text">Inicio de sesión</h1>
-            <p>Podrás acceder a un panel con herramientas según tu rol para gestionar el funcionamiento de la OEB</p>
+            <h1 class="parallax-title white-text">Inicio de sesión</h1>
+            <p class="white-text"><b>Podrás acceder a un panel con herramientas para gestionar el funcionamiento de la OEB</b></p>
             <div class="section"></div>
 
             <div class="login-page row center">
-                <div class="col s12 z-depth-6 card-panel">
+                <div class="col s12 z-depth-5 card-panel">
                     <form class="login-form" action="{{ url_for('auth_authenticate') }}" method="post">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <div class="row">
@@ -33,7 +38,7 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <button type='submit' name='btn_login' class='btn btn-large waves-effect waves-light col s12 z-depth-2'>Aceptar</button>
+                                <button type='submit' name='btn_login' class='btn btn-large waves-effect waves-button-input col s12 z-depth-2'>Aceptar</button>
                             </div>
                         </div>
                         <div class="row">
