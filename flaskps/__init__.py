@@ -4,7 +4,7 @@ from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
-from flaskps.helpers import siteconfig as helper_siteconfig
+from flaskps.models import siteconfig
 from flask_wtf.csrf import CSRFProtect
 
 # Resources
@@ -33,10 +33,10 @@ app.jinja_env.globals.update(
 
 @app.context_processor
 def utility_processor():
-    def siteconfig():
-        return helper_siteconfig.get_config()
+    def siteconf():
+        return siteconfig.get_config()
 
-    return dict(siteconfig=siteconfig())
+    return dict(siteconfig=siteconf())
 
 
 # Home

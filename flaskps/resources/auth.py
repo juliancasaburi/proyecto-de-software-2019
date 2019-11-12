@@ -6,8 +6,8 @@ from flask_bcrypt import Bcrypt
 from flaskps.forms.form_login import LoginForm
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
-from flaskps.helpers import siteconfig as helper_siteconfig
-from flaskps.helpers.siteconfig import SiteConfig
+from flaskps.models import siteconfig
+from flaskps.models.siteconfig import SiteConfig
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -35,7 +35,7 @@ def authenticate():
             and bcrypt.check_password_hash(user["password"], params["password"])
         ):
             SiteConfig.db = get_db()
-            config = helper_siteconfig.get_config()
+            config = siteconfig.get_config()
             modo_mantenimiento = config["modo_mantenimiento"]
 
             if modo_mantenimiento == 1 and (
