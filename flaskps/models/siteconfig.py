@@ -23,9 +23,9 @@ class SiteConfig(object):
         sql = """
             UPDATE config
             SET titulo = %s,
-            descripcion = %s,
-            email_contacto = %s,
-            items_por_pagina = %s
+                descripcion = %s,
+                email_contacto = %s,
+                items_por_pagina = %s
         """
         try:
             with cls.db.cursor() as cursor:
