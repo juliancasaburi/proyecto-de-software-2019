@@ -36,35 +36,35 @@
                             <li><a href="{{ url_for('user_table') }}">Ver Listado</a></li>
                         {% endif %}
                         {% if has_permission('usuario_new', session) %}
-                            <li><a href="{{ url_for('user_new_form') }}" class="modal-trigger">Alta</a></li>
+                            <li><a href="{{ url_for('user_new_form') }}" class="modal-trigger">Crear</a></li>
                         {% endif %}
                         {% if has_permission('usuario_destroy', session) %}
-                            <li><a href="{{ url_for('user_destroy_form') }}">Baja</a></li>
+                            <li><a href="{{ url_for('user_destroy_form') }}">Eliminar</a></li>
                         {% endif %}
                         {% if has_permission('usuario_update', session) %}
-                            <li><a href="{{ url_for('user_edit_form') }}">Modificación</a></li>
+                            <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
                         {% endif %}
                     </ul>
                     <!-- dropdownAlumnos Structure -->
                     <ul id="dropdownAlumnos" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
+                        <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
                     </ul>
                     <!-- dropdownDocentesPreceptores Structure -->
                     <ul id="dropdownDocentesPreceptores" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
+                        <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
                     </ul>
                     <!-- dropdownInstrumentos Structure -->
                     <ul id="dropdownInstrumentos" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
+                        <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
                     </ul>
 
                     {% if is_authenticated(session) %}
