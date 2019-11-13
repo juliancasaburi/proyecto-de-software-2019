@@ -114,10 +114,10 @@
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
     <script>
-    $(document).ready(function(){
-        $('.fixed-action-btn').floatingActionButton();
-        $('.tooltipped').tooltip();
-    });
+        $(document).ready(function(){
+            $('.fixed-action-btn').floatingActionButton();
+            $('.tooltipped').tooltip();
+        });
     </script>
     <script>
         $(document).ready(function() {
@@ -227,29 +227,29 @@
             }
         );
     </script>
-    <script> // Alta de Usuario
-    $(document).ready(function(){
-        $('#modalAltaUsuario').modal();
-        $('#modalEditarUsuario').modal({
-                onCloseStart: function() { // Callback for Modal close
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url_for('roles') }}",
-                        success: function (response) {
-                            for (var key in response){
-                                $("#select_roles option[value='" + response[key]['id'] + "']").prop("selected", false);
-                                $("#select_roles").formSelect();
+    <script>
+        $(document).ready(function(){
+            $('#modalAltaUsuario').modal();
+            $('#modalEditarUsuario').modal({
+                    onCloseStart: function() { // Callback for Modal close
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ url_for('roles') }}",
+                            success: function (response) {
+                                for (var key in response){
+                                    $("#select_roles option[value='" + response[key]['id'] + "']").prop("selected", false);
+                                    $("#select_roles").formSelect();
+                                }
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) {
+                                console.log("Error: ", errorMessage);
                             }
-                        },
-                        error: function (jqXhr, textStatus, errorMessage) {
-                            console.log("Error: ", errorMessage);
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        );
-        $('select').formSelect();
-    });
+            );
+            $('select').formSelect();
+        });
     </script>
     <script>
         // Delete a record

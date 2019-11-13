@@ -15,22 +15,22 @@
                 <div class="col s12 input-field">
                     <select id="select_genero">
                         <option value="" disabled selected>Selecciona un género</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
+                        {% for genero in generos %}
+                            <option value="{{genero.id}}">{{genero.nombre}}</option>
+                        {% endfor %}
                     </select>
                     <label for="select_genero">Género</label>
                 </div>
                 <div class="col s12 input-field">
-                    <label for="email">Fecha de nacimiento</label>
+                    <label for="fecha_nacimiento">Fecha de nacimiento</label>
                     <input id="fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
                     <select id="select_localidad">
                         <option value="" disabled selected>Selecciona una Localidad</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
+                        {% for localidad in localidades %}
+                            <option value="{{localidad.id}}">{{localidad.nombre}}</option>
+                        {% endfor %}
                     </select>
                     <label for="select_localidad">Localidad</label>
                 </div>
@@ -41,9 +41,9 @@
                 <div class="col s12 m6 input-field">
                     <select id="select_tipo">
                         <option value="" disabled selected>Selecciona un tipo</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
+                        {% for tipo in tipodoc %}
+                            <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                        {% endfor %}
                     </select>
                     <label for="select_tipo">Tipo de Documento</label>
                 </div>

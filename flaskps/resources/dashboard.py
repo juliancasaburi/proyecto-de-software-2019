@@ -5,10 +5,13 @@ from flask import (
     request,
 )
 from flaskps.db import get_db
-from flaskps.models.role import Role
 from flaskps.helpers import permission
 from flask import jsonify, make_response
+import requests
+
+from flaskps.models.role import Role
 from flaskps.models import siteconfig
+from flaskps.models.genero import Genero
 from flaskps.models.siteconfig import SiteConfig
 
 
@@ -95,4 +98,13 @@ def docente_table():
     if not permission.has_permission("docente_index", session):
         abort(401)
 
-    return render_template("user/actions/docentes.html")
+    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
+    loc = loc.json()
+
+    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
+    tipo_doc = tipo_doc.json()
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    return render_template("user/actions/docentes.html", localidades=loc, tipodoc=tipo_doc, generos=generos)

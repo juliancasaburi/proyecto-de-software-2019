@@ -5543,6 +5543,7 @@ button.btn-floating {
 }
 
 .dropdown-content {
+  max-height: 250px;
   background-color: #fff;
   margin: 0;
   display: none;
