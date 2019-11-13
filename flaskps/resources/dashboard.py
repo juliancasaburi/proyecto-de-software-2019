@@ -7,7 +7,6 @@ from flask import (
     url_for,
 )
 from flaskps.db import get_db
-from flaskps.models.user import User
 from flaskps.models.role import Role
 from flaskps.helpers import permission
 from flask import jsonify, make_response
