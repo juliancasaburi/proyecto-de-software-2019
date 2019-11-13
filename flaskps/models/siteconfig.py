@@ -1,4 +1,5 @@
 from flaskps.db import get_db
+from pymysql.err import IntegrityError
 
 
 class SiteConfig(object):
@@ -32,18 +33,21 @@ class SiteConfig(object):
                 cursor.execute(
                     sql,
                     (
-                        data["titulo_home"],
+                        data["titulo"],
                         data["descripcion"],
                         data["email"],
                         data["items_por_pagina"],
                     ),
                 )
                 cls.db.commit()
+        except IntegrityError:
+            return False
         finally:
             cls.db.cursor().close()
+        return True
 
     @classmethod
-    def update_maintenancee(cls, maintenance):
+    def update_maintenance(cls, maintenance):
         sql = """
             UPDATE config
             SET modo_mantenimiento = %s
@@ -63,9 +67,9 @@ def get_config():
 
 def update_config(data):
     SiteConfig.db = get_db()
-    SiteConfig.update_config(data)
+    return SiteConfig.update_config(data)
 
 
 def update_maintenance(maintenance):
     SiteConfig.db = get_db()
-    SiteConfig.update_maintenancee(maintenance)
+    SiteConfig.update_maintenance(maintenance)

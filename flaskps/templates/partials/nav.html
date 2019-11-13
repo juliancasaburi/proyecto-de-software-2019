@@ -36,35 +36,43 @@
                             <li><a href="{{ url_for('user_table') }}">Ver Listado</a></li>
                         {% endif %}
                         {% if has_permission('usuario_new', session) %}
-                            <li><a href="{{ url_for('user_new_form') }}" class="modal-trigger">Alta</a></li>
+                            <li><a href="{{ url_for('user_new_form') }}">Crear</a></li>
                         {% endif %}
                         {% if has_permission('usuario_destroy', session) %}
-                            <li><a href="{{ url_for('user_destroy_form') }}">Baja</a></li>
+                            <li><a href="{{ url_for('user_destroy_form') }}">Eliminar</a></li>
                         {% endif %}
                         {% if has_permission('usuario_update', session) %}
-                            <li><a href="{{ url_for('user_edit_form') }}">Modificación</a></li>
+                            <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
+                        {% endif %}
+                    </ul>
+                    <!-- dropdownDocentes Structure -->
+                    <ul id="dropdownDocentes" class="dropdown-content teal">
+                        {% if has_permission('docente_index', session) %}
+                            <li><a href="{{ url_for('docente_table') }}">Ver Listado</a></li>
+                        {% endif %}
+                        {% if has_permission('docente_new', session) %}
+                            <li><a href="{{ url_for('docente_table') }}">Crear</a></li>
+                        {% endif %}
+                        {% if has_permission('docente_destroy', session) %}
+                            <li><a href="{{ url_for('docente_table') }}">Eliminar</a></li>
+                        {% endif %}
+                        {% if has_permission('docente_update', session) %}
+                            <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
                         {% endif %}
                     </ul>
                     <!-- dropdownAlumnos Structure -->
                     <ul id="dropdownAlumnos" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
-                    </ul>
-                    <!-- dropdownDocentesPreceptores Structure -->
-                    <ul id="dropdownDocentesPreceptores" class="dropdown-content teal">
-                        <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
+                        <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
                     </ul>
                     <!-- dropdownInstrumentos Structure -->
                     <ul id="dropdownInstrumentos" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
-                        <li><a href="#">Alta</a></li>
-                        <li><a href="#">Baja</a></li>
-                        <li><a href="#">Modificación</a></li>
+                        <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
                     </ul>
 
                     {% if is_authenticated(session) %}
@@ -74,7 +82,7 @@
                         {% if has_permission('config_update', session) %}
                             <div class="section">
                                 <li><a class="subheader">Configuración</a></li>
-                                <li><a href="{{ url_for('config_edit') }}">Configurar</a></li>
+                                <li><a class="modal-trigger" href="#modalConfiguracion">Configurar</a></li>
                                 <li><a class="subheader black red-text" href="#">Modo Mantenimiento</a></li>
                                 <li><div class="switch center">
                                     <p>Modo Mantenimiento</p>
@@ -99,17 +107,19 @@
                                 <li><a class="dropdown-trigger" href="#" data-target="dropdownUsuarios">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                             </div>
                         {% endif %}
+                        {% if has_permission('docente_index', session) or has_permission('docente_new', session) or has_permission('docente_destroy', session) or has_permission('docente_update', session) or has_permission('docente_show', session) %}
+                            <div class="divider"></div>
+                            <div class="section">
+                                <li><a class="subheader">Docentes</a></li>
+                                <!-- Dropdown Trigger -->
+                                <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                            </div>
+                        {% endif %}
                         <div class="divider"></div>
                         <div class="section">
                             <li><a class="subheader">Alumnos</a></li>
                             <!-- Dropdown Trigger -->
                             <li><a class="dropdown-trigger" href="#" data-target="dropdownAlumnos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="section">
-                            <li><a class="subheader">Docentes/Prec</a></li>
-                            <!-- Dropdown Trigger -->
-                            <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentesPreceptores">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                         </div>
                         <div class="divider"></div>
                         <div class="section">
@@ -123,30 +133,7 @@
             <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
         </div>
     </nav>
-    <script>
-        $(document).ready(function () {
-            $("#switchMantenimientoNav").on("change", function(){
-                $.ajax({
-                    type: "POST",
-                    url : '/mantenimiento',
-                    success: function (response) {
-                        var checked;
-                        if(response['modo_mantenimiento'] == 1)
-                        {
-                            M.toast({html: 'El sitio ahora se encuentra en mantenimiento', classes: 'orange darken-4'});
-                            checked = true;
-                        }
-                        else
-                        {
-                            M.toast({html: 'El sitio ya no se encuentra en mantenimiento', classes: 'grey darken-2'});
-                            checked = false;
-                        }
-                        if ( $("#switchMantenimiento").length ) {
-                            $("#switchMantenimiento").prop("checked",checked);
-                        }
-                    },
-                });
-            });
-        });
-    </script>
+
+    {% include 'partials/modal_configuracion.html' %}
+
 {% endblock %}

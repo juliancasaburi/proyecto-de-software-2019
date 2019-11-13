@@ -3,23 +3,20 @@ from flask import (
     session,
     abort,
     request,
-    redirect,
-    url_for,
 )
 from flaskps.db import get_db
-from flaskps.models.user import User
-from flaskps.models.role import Role
-from flaskps.helpers.auth import authenticated
 from flaskps.helpers import permission
 from flask import jsonify, make_response
+import requests
+
+from flaskps.models.role import Role
 from flaskps.models import siteconfig
+from flaskps.models.genero import Genero
 from flaskps.models.siteconfig import SiteConfig
 
 
 def user_table():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_index", session):
         abort(401)
 
     Role.db = get_db()
@@ -29,83 +26,27 @@ def user_table():
 
 
 def user_edit_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_update", session):
         abort(401)
-
-    User.db = get_db()
-    users = User.all()
 
     Role.db = get_db()
     roles = Role.all()
 
-    for dict_item in users:
-        dict_item["ID"] = dict_item["id"]
-        del dict_item["id"]
-        dict_item["Activo"] = dict_item["activo"]
-        del dict_item["activo"]
-        dict_item["Nombre"] = dict_item["first_name"]
-        del dict_item["first_name"]
-        dict_item["Apellido"] = dict_item["last_name"]
-        del dict_item["last_name"]
-        dict_item["Rol"] = dict_item["rol_nombre"]
-        del dict_item["rol_nombre"]
-        dict_item["Nombre de usuario"] = dict_item["username"]
-        del dict_item["username"]
-        del dict_item["password"]
-        dict_item["Email"] = dict_item["email"]
-        del dict_item["email"]
-        dict_item["Registrado"] = dict_item["created_at"]
-        del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"]
-        del dict_item["updated_at"]
-
-    return render_template("user/actions/usuario_editar.html", users=users, roles=roles)
+    return render_template("user/actions/usuario_editar.html", roles=roles)
 
 
 def user_destroy_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_index", session
-    ):
+    if not permission.has_permission("usuario_destroy", session):
         abort(401)
-
-    User.db = get_db()
-    users = User.all()
 
     Role.db = get_db()
     roles = Role.all()
 
-    for dict_item in users:
-        dict_item["ID"] = dict_item["id"]
-        del dict_item["id"]
-        dict_item["Activo"] = dict_item["activo"]
-        del dict_item["activo"]
-        dict_item["Nombre"] = dict_item["first_name"]
-        del dict_item["first_name"]
-        dict_item["Apellido"] = dict_item["last_name"]
-        del dict_item["last_name"]
-        dict_item["Rol"] = dict_item["rol_nombre"]
-        del dict_item["rol_nombre"]
-        dict_item["Nombre de usuario"] = dict_item["username"]
-        del dict_item["username"]
-        del dict_item["password"]
-        dict_item["Email"] = dict_item["email"]
-        del dict_item["email"]
-        dict_item["Registrado"] = dict_item["created_at"]
-        del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"]
-        del dict_item["updated_at"]
-
-    return render_template(
-        "user/actions/usuario_eliminar.html", users=users, roles=roles
-    )
+    return render_template("user/actions/usuario_eliminar.html", roles=roles)
 
 
 def user_new_form():
-    if not authenticated(session) or not permission.has_permission(
-        "usuario_new", session
-    ):
+    if not permission.has_permission("usuario_new", session):
         abort(401)
 
     Role.db = get_db()
@@ -115,9 +56,7 @@ def user_new_form():
 
 
 def maintenance_mode():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+    if not permission.has_permission("config_update", session):
         abort(401)
 
     SiteConfig.db = get_db()
@@ -137,24 +76,35 @@ def maintenance_mode():
 
 
 def config_update():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+    if not permission.has_permission("config_update", session):
         abort(401)
 
     params = request.form.to_dict()
 
     SiteConfig.db = get_db()
 
-    siteconfig.update_config(params)
+    data = {"msg": "Configuración actualizada exitosamente"}
 
-    return redirect(url_for("user_dashboard"))
+    success = siteconfig.update_config(params)
+
+    if success:
+        return make_response(jsonify(data), 200)
+    else:
+        data = {"msg": "Ha ocurrido un error al actualizar la configuración"}
+        return make_response(jsonify(data), 500)
 
 
-def config_edit():
-    if not authenticated(session) or not permission.has_permission(
-        "config_update", session
-    ):
+def docente_table():
+    if not permission.has_permission("docente_index", session):
         abort(401)
 
-    return render_template("/user/actions/configuracion_editar.html")
+    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
+    loc = loc.json()
+
+    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
+    tipo_doc = tipo_doc.json()
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    return render_template("user/actions/docentes.html", localidades=loc, tipodoc=tipo_doc, generos=generos)

@@ -22,7 +22,7 @@
                     <div class="table-header">
                         <span class="table-title">Usuarios</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Alta Usuario"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Crear Usuario"><i class="material-icons">person_add</i></a>
                             <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
@@ -41,7 +41,7 @@
                             <th>Registrado</th>
                             <th>Actualizado</th>
                             <th class="nosort">Editar</th>
-                            <th class="nosort">Baja</th>
+                            <th class="nosort">Bloquear</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -56,7 +56,7 @@
                             <th>Registrado</th>
                             <th>Actualizado</th>
                             <th class="nosort">Editar</th>
-                            <th class="nosort">Baja</th>
+                            <th class="nosort">Bloquear</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -113,10 +113,11 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script> // Search tooltip
-    $(document).ready(function(){
-        $('.tooltipped').tooltip();
-    });
+    <script>
+        $(document).ready(function(){
+            $('.fixed-action-btn').floatingActionButton();
+            $('.tooltipped').tooltip();
+        });
     </script>
     <script>
         $(document).ready(function() {
@@ -226,29 +227,29 @@
             }
         );
     </script>
-    <script> // Alta de Usuario
-    $(document).ready(function(){
-        $('#modalAltaUsuario').modal();
-        $('#modalEditarUsuario').modal({
-                onCloseStart: function() { // Callback for Modal close
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url_for('roles') }}",
-                        success: function (response) {
-                            for (var key in response){
-                                $("#select_roles option[value='" + response[key]['id'] + "']").prop("selected", false);
-                                $("#select_roles").formSelect();
+    <script>
+        $(document).ready(function(){
+            $('#modalAltaUsuario').modal();
+            $('#modalEditarUsuario').modal({
+                    onCloseStart: function() { // Callback for Modal close
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ url_for('roles') }}",
+                            success: function (response) {
+                                for (var key in response){
+                                    $("#select_roles option[value='" + response[key]['id'] + "']").prop("selected", false);
+                                    $("#select_roles").formSelect();
+                                }
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) {
+                                console.log("Error: ", errorMessage);
                             }
-                        },
-                        error: function (jqXhr, textStatus, errorMessage) {
-                            console.log("Error: ", errorMessage);
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        );
-        $('select').formSelect();
-    });
+            );
+            $('select').formSelect();
+        });
     </script>
     <script>
         // Delete a record
@@ -257,7 +258,7 @@
             var rowData = table.row($(this).parents("tr")).data();
             var uid = rowData.ID;
             var username = rowData['Nombre de usuario'];
-            if (confirm('¿Estás seguro de eliminar al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
+            if (confirm('¿Está seguro de bloquear al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('user_destroy') }}",

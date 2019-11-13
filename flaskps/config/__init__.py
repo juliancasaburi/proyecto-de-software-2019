@@ -7,7 +7,6 @@ def get_config():
     try:
         # Entorno por defecto si no se especifica otro, development
         mode = getenv("FLASK_ENV", "development")
-        print(mode)
         module = __name__ + "." + mode
         config = import_module(module)
         config.ENV = mode

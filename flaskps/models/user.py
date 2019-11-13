@@ -1,4 +1,4 @@
-import pymysql
+from pymysql.err import IntegrityError
 
 
 class User(object):
@@ -18,7 +18,7 @@ class User(object):
                     first_name, 
                     last_name, 
                     Group_concat(rol.nombre ORDER BY rol.nombre SEPARATOR ', ') AS rol_nombre 
-            FROM    usuarios AS u 
+            FROM    usuario AS u 
                     INNER JOIN usuario_tiene_rol AS u_rol 
                             ON u.id = u_rol.usuario_id 
                     INNER JOIN rol 
@@ -35,7 +35,7 @@ class User(object):
     @classmethod
     def create(cls, data):
         sql = """
-            INSERT INTO usuarios 
+            INSERT INTO usuario 
                         (first_name, 
                          last_name, 
                          email, 
@@ -50,7 +50,7 @@ class User(object):
 
         sql_user_id = """
             SELECT  u.id
-            FROM    usuarios as u
+            FROM    usuario as u
             WHERE   username = %s
         """
 
@@ -83,7 +83,7 @@ class User(object):
                     cursor.execute(sql_user_rol, (user_id["id"], rol))
                     cls.db.commit()
 
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
@@ -92,14 +92,15 @@ class User(object):
     @classmethod
     def delete(cls, uid):
         sql = """
-            DELETE FROM usuarios
-            WHERE   usuarios.id = %s
+            UPDATE  usuario 
+            SET     activo = FALSE
+            WHERE  id = %s 
         """
         try:
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, uid)
                 cls.db.commit()
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
@@ -125,7 +126,7 @@ class User(object):
             with cls.db.cursor() as cursor:
 
                 query = """
-                    UPDATE usuarios 
+                    UPDATE usuario 
                     SET    activo = %s, 
                            first_name = %s, 
                            last_name = %s, 
@@ -156,7 +157,7 @@ class User(object):
                     cursor.execute(sql_user_rol, (data.get("id"), rol))
                     cls.db.commit()
 
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
@@ -166,7 +167,7 @@ class User(object):
     def find_by_user_and_pass(cls, username, password):
         sql = """
             SELECT * 
-            FROM   usuarios
+            FROM   usuario
             WHERE  username = %s 
                    AND password = %s
         """
@@ -183,7 +184,7 @@ class User(object):
     def find_by_user(cls, username):
         sql = """
             SELECT * 
-            FROM   usuarios 
+            FROM   usuario 
             WHERE  username = %s
         """
 
@@ -199,7 +200,7 @@ class User(object):
     def find_by_id(cls, id):
         sql = """
             SELECT  *
-            FROM    usuarios
+            FROM    usuario
             WHERE   id = %s
         """
 
@@ -215,7 +216,7 @@ class User(object):
     def permissions(cls, username):
         sql = """
             SELECT p.nombre 
-            FROM   usuarios AS u 
+            FROM   usuario AS u 
                    inner join usuario_tiene_rol AS u_rol 
                            ON u.id = u_rol.usuario_id 
                    inner join rol 
@@ -239,7 +240,7 @@ class User(object):
     def has_permission(cls, username, permission_name):
         sql = """
             SELECT p.nombre 
-            FROM   usuarios AS u 
+            FROM   usuario AS u 
                    inner join usuario_tiene_rol AS u_rol 
                            ON u.id = u_rol.usuario_id 
                    inner join rol 
@@ -264,7 +265,7 @@ class User(object):
     def role(cls, username):
         sql = """
             SELECT rol.nombre 
-            FROM   usuarios AS u 
+            FROM   usuario AS u 
                    inner join usuario_tiene_rol AS u_rol 
                            ON u.id = u_rol.usuario_id 
                    inner join rol 
@@ -284,7 +285,7 @@ class User(object):
     def has_role(cls, username, role_name):
         sql = """
             SELECT rol.nombre 
-            FROM   usuarios AS u 
+            FROM   usuario AS u 
                    inner join usuario_tiene_rol AS u_rol 
                            ON u.id = u_rol.usuario_id 
                    inner join rol 
@@ -304,7 +305,7 @@ class User(object):
     @classmethod
     def update_email(cls, email, username):
         sql = """
-            UPDATE usuarios
+            UPDATE usuario
             SET    email = %s 
             WHERE  username = %s
         """
@@ -318,7 +319,7 @@ class User(object):
     @classmethod
     def update_password(cls, password, username):
         sql = """
-            UPDATE usuarios 
+            UPDATE usuario 
             SET    password = %s 
             WHERE  username = %s
         """
@@ -334,7 +335,7 @@ class User(object):
         sql = """
             SELECT rol.id     AS id, 
                    rol.nombre AS nombre 
-            FROM   usuarios AS u 
+            FROM   usuario AS u 
                    inner join usuario_tiene_rol AS u_rol 
                            ON u.id = u_rol.usuario_id 
                    inner join rol 
