@@ -12,11 +12,13 @@ from flaskps.resources import auth
 from flaskps.resources import user
 from flaskps.resources import dashboard
 from flaskps.resources import role
+from flaskps.resources import docente
 
 # Configuración inicial de la app
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["JSON_AS_ASCII"] = False
 csrf = CSRFProtect(app)
 
 # Mail Config
@@ -101,6 +103,11 @@ app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
 app.add_url_rule("/usuario/baja", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
+
+# Docentes
+app.add_url_rule("/tabladocentes", "docente_table", dashboard.docente_table)
+app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
+app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)

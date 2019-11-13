@@ -89,3 +89,10 @@ def config_update():
     else:
         data = {"msg": "Ha ocurrido un error al actualizar la configuración"}
         return make_response(jsonify(data), 500)
+
+
+def docente_table():
+    if not permission.has_permission("docente_index", session):
+        abort(401)
+
+    return render_template("user/actions/docentes.html")

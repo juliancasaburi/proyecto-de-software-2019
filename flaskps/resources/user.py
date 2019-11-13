@@ -62,7 +62,7 @@ def get_users():
 
 
 def create():
-    if not authenticated(session) and has_permission("usuario_new", session):
+    if not has_permission("usuario_new", session):
         abort(401)
 
     Role.db = get_db()
@@ -122,7 +122,7 @@ def create():
 
 
 def destroy():
-    if not authenticated(session) and has_permission("usuario_destroy", session):
+    if not has_permission("usuario_destroy", session):
         abort(401)
 
     params = json.loads(request.data)
@@ -146,7 +146,7 @@ def destroy():
 
 
 def update():
-    if not authenticated(session) and has_permission("usuario_update", session):
+    if not has_permission("usuario_update", session):
         abort(401)
 
     Role.db = get_db()
@@ -315,7 +315,7 @@ def password_update():
 
 
 def user_data():
-    if not authenticated(session) and has_permission("usuario_index", session):
+    if not has_permission("usuario_index", session):
         abort(401)
 
     if request.args.get("id"):
