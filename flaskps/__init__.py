@@ -79,7 +79,6 @@ app.add_url_rule("/dashboard", "user_dashboard", user.dashboard)
 app.add_url_rule(
     "/mantenimiento", "maintenance", dashboard.maintenance_mode, methods=["POST"]
 )
-app.add_url_rule("/configuracion/editar", "config_edit", dashboard.config_edit)
 app.add_url_rule(
     "/configuracion/actualizar",
     "config_update",

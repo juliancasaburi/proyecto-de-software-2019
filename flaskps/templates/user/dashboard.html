@@ -55,8 +55,6 @@
                         </div>
                     {% endif %}
 
-                    {% include 'partials/modal_configuracion.html' %}
-
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
                             <a {% if has_permission('usuario_index', session) %} href="{{ url_for('user_table') }}" {% endif %}>

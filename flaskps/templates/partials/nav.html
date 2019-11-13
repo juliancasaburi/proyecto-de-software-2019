@@ -74,7 +74,7 @@
                         {% if has_permission('config_update', session) %}
                             <div class="section">
                                 <li><a class="subheader">Configuración</a></li>
-                                <li><a href="{{ url_for('config_edit') }}">Configurar</a></li>
+                                <li><a class="modal-trigger" href="#modalConfiguracion">Configurar</a></li>
                                 <li><a class="subheader black red-text" href="#">Modo Mantenimiento</a></li>
                                 <li><div class="switch center">
                                     <p>Modo Mantenimiento</p>
@@ -123,4 +123,7 @@
             <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
         </div>
     </nav>
+
+    {% include 'partials/modal_configuracion.html' %}
+
 {% endblock %}

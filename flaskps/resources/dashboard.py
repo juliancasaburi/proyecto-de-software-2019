@@ -3,8 +3,6 @@ from flask import (
     session,
     abort,
     request,
-    redirect,
-    url_for,
 )
 from flaskps.db import get_db
 from flaskps.models.role import Role
@@ -82,13 +80,13 @@ def config_update():
 
     SiteConfig.db = get_db()
 
-    siteconfig.update_config(params)
+    data = {"msg": "Configuración actualizada exitosamente"}
 
-    return redirect(url_for("user_dashboard"))
+    success = siteconfig.update_config(params)
 
+    if success:
+        return make_response(jsonify(data), 200)
+    else:
+        data = {"msg": "Ha ocurrido un error al actualizar la configuración"}
+        return make_response(jsonify(data), 500)
 
-def config_edit():
-    if not permission.has_permission("config_update", session):
-        abort(401)
-
-    return render_template("/user/actions/configuracion_editar.html")

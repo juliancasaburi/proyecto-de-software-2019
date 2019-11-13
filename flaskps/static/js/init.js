@@ -6,6 +6,8 @@
     $('.sidenav').sidenav();
     $(".dropdown-trigger").dropdown();
 
+    $('#modalConfiguracion').modal();
+
     $("#switchMantenimientoNav").on("change", function(){
       $.ajax({
         type: "POST",

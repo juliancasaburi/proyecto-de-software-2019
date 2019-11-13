@@ -1,16 +1,16 @@
 <div id="modalConfiguracion" class="modal">
-    <form method="post" action="{{ url_for('config_update') }}">
+    <form id="formConfiguracion" method="post" action="{{ url_for('config_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <h1>Configuración del sitio</h1>
             <div class="row">
                 <h2 class="center light-blue-text">Información de contacto</h2>
                 <div class="col s12 m6 input-field">
-                    <label for="tituloHome">Título del Home</label>
-                    <input id="tituloHome" name="titulo_home" class="validate" type="text" value="{{ siteconfig['titulo'] }}" placeholder="{{ siteconfig['titulo'] }}" required>
+                    <label for="tituloHome">Título (luego del - )</label>
+                    <input id="tituloHome" name="titulo" class="validate" type="text" value="{{ siteconfig['titulo'] }}" placeholder="{{ siteconfig['titulo'] }}" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <label for="email">Email</label>
+                    <label for="emailContacto">Email</label>
                     <input id="emailContacto" name="email" class="validate" type="email" value="{{ siteconfig['email_contacto'] }}" placeholder="{{ siteconfig['email_contacto'] }}" required>
                 </div>
                 <div class="col s12 input-field">
@@ -27,7 +27,29 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn blue waves-effect waves-light">Guardar</button>
+            <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
         </div>
     </form>
 </div>
+
+<script>
+    $(document).ready(function(){
+        var frm = $('#formConfiguracion');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalConfiguracion').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    M.toast({html: response['msg'], classes: 'green'});
+                },
+                error: function (data) {
+                    M.toast({html: data['msg'], classes: 'error'});
+                },
+            });
+        });
+    });
+</script>
