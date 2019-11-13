@@ -47,7 +47,7 @@ class SiteConfig(object):
         return True
 
     @classmethod
-    def update_maintenancee(cls, maintenance):
+    def update_maintenance(cls, maintenance):
         sql = """
             UPDATE config
             SET modo_mantenimiento = %s
@@ -72,4 +72,4 @@ def update_config(data):
 
 def update_maintenance(maintenance):
     SiteConfig.db = get_db()
-    SiteConfig.update_maintenancee(maintenance)
+    SiteConfig.update_maintenance(maintenance)
