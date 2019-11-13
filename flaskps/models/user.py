@@ -1,4 +1,4 @@
-import pymysql
+from pymysql.err import IntegrityError
 
 
 class User(object):
@@ -83,7 +83,7 @@ class User(object):
                     cursor.execute(sql_user_rol, (user_id["id"], rol))
                     cls.db.commit()
 
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
@@ -100,7 +100,7 @@ class User(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(sql, uid)
                 cls.db.commit()
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
@@ -157,7 +157,7 @@ class User(object):
                     cursor.execute(sql_user_rol, (data.get("id"), rol))
                     cls.db.commit()
 
-        except pymysql.err.IntegrityError:
+        except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
