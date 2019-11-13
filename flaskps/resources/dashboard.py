@@ -26,7 +26,7 @@ def user_table():
 
 
 def user_edit_form():
-    if not permission.has_permission("usuario_index", session):
+    if not permission.has_permission("usuario_update", session):
         abort(401)
 
     Role.db = get_db()
@@ -36,7 +36,7 @@ def user_edit_form():
 
 
 def user_destroy_form():
-    if not permission.has_permission("usuario_index", session):
+    if not permission.has_permission("usuario_destroy", session):
         abort(401)
 
     Role.db = get_db()
