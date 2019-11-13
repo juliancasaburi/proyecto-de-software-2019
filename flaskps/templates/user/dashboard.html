@@ -14,14 +14,14 @@
             </div>
             {% if has_role('administrador', session) %}
                 <div class="row">
-                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Administrador</span></h6>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="teal-text">Administrador</span></h6>
                     <br>
 
                     {% if has_permission('config_update', session) %}
                         <div class="col s12">
                             <div class="card" style="overflow: visible;">
                                     <a {% if has_permission('config_update', session) %} href="#modalConfiguracion" class="modal-trigger" {% endif %}>
-                                        <div class="center-align light-blue waves-effect waves-block waves-light">
+                                        <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
                                             <i class="fas fa-cogs fa-3x black-text"></i>
                                         </div>
                                     </a>
@@ -58,7 +58,7 @@
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
                             <a {% if has_permission('usuario_index', session) %} href="{{ url_for('user_table') }}" {% endif %}>
-                                <div class="center-align light-blue waves-effect waves-block waves-light">
+                                <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
                                     <i class="fas fa-user fa-3x black-text"></i>
                                 </div>
                             </a>
@@ -189,7 +189,7 @@
             {% endif %}
             {% if has_role('docente', session) %}
                 <div class="row">
-                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Docente</span></h6>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="teal-text">Docente</span></h6>
                     <br>
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
@@ -250,7 +250,7 @@
             {% endif %}
             {% if has_role('preceptor', session) %}
                 <div class="row">
-                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="light-blue-text">Preceptor</span></h6>
+                    <h6 class="center-align">A continuación se detallan las distintas acciones que puede realizar como <span class="teal-text">Preceptor</span></h6>
                     <br>
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">

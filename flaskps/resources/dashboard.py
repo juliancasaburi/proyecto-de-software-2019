@@ -89,4 +89,3 @@ def config_update():
     else:
         data = {"msg": "Ha ocurrido un error al actualizar la configuración"}
         return make_response(jsonify(data), 500)
-
