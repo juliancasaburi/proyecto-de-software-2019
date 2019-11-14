@@ -60,9 +60,9 @@
                             <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
                         {% endif %}
                     </ul>
-                    <!-- dropdownAlumnos Structure -->
+                    <!-- dropdownEstudiantes Structure -->
                     <ul id="dropdownAlumnos" class="dropdown-content teal">
-                        <li><a href="#">Ver Listado</a></li>
+                        <li><a href="{{ url_for('estudiante_table') }}">Ver Listado</a></li>
                         <li><a href="#">Crear</a></li>
                         <li><a href="#">Eliminar</a></li>
                         <li><a href="#">Editar</a></li>
@@ -134,7 +134,7 @@
                         {% endif %}
                         <div class="divider"></div>
                         <div class="section">
-                            <li><a class="subheader">Alumnos</a></li>
+                            <li><a class="subheader">Estudiantes</a></li>
                             <!-- Dropdown Trigger -->
                             <li><a class="dropdown-trigger" href="#" data-target="dropdownAlumnos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                         </div>

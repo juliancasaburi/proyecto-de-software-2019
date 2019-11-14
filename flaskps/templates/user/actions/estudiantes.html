@@ -79,6 +79,33 @@
                     <i class="large material-icons">search</i>
                 </a>
             </div>
+
+            <!-- Modal Structure -->
+            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+                <div class="modal-content">
+                    <h3 class="header">Filtrar el listado de Estudiantes</h3>
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterEstudiante" id="filterNombreEstudiante" type="text">
+                                <label for="filterNombreEstudiante">Filtrar por nombre</label>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
+                                <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
+                </div>
+            </div>
+
         </div>
     </div>
 {% endblock %}
@@ -88,9 +115,9 @@
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
     <script>
-    $(document).ready(function(){
-        $('.tooltipped').tooltip();
-    });
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
     </script>
     <script>
         $(document).ready(function() {
@@ -144,5 +171,42 @@
         $('#modalAltaEstudiante').modal();
         $('select').formSelect();
     });
+    </script>
+    <script> // Filtros
+        $(document).ready(function(){
+            var table = $('#tablaEstudiantes').DataTable();
+            $("#filterNombreEstudiante").on("keyup", function() {
+                table
+                    .columns( 1 )
+                    .search( this.value )
+                    .draw();
+            });
+        });
+        $(document).ready(function(){
+            var table = $('#tablaEstudiantes').DataTable();
+            $("#filterDocumentoEstudiante").on("keyup", function() {
+                table
+                    .columns( 9 )
+                    .search( this.value )
+                    .draw();
+            });
+        });
+    </script>
+    <script>
+        $('#modalFilters').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                    //  alert("Ready");
+                    console.log(modal, trigger);
+                },
+                complete: function() { //alert('Closed');
+                } // Callback for Modal close
+            }
+        );
     </script>
 {% endblock %}
