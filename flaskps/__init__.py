@@ -4,7 +4,7 @@ from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
-from flaskps.models import siteconfig, estudiante
+from flaskps.models import siteconfig
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
@@ -35,6 +35,7 @@ from flaskps.resources import dashboard
 from flaskps.resources import role
 from flaskps.resources import docente
 from flaskps.resources import taller
+from flaskps.resources import estudiante
 
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(
