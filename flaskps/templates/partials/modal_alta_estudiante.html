@@ -1,0 +1,136 @@
+<div id="modalAltaEstudiante" class="modal">
+    <form id="altaEstudiante" method="post" action="{{ url_for('estudiante_new') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <h1>Crear Estudiante</h1>
+            <div class="row">
+                <div class="col s12 m6 input-field">
+                    <label for="apellido">Apellido</label>
+                    <input id="apellido" name="last_name" class="validate" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" name="first_name" class="validate" type="text" required>
+                </div>
+                <div class="col s12 input-field">
+                    <select id="select_genero" name="select_genero">
+                        <option value="" disabled selected>Selecciona un género</option>
+                        {% for genero in generos %}
+                            <option value="{{genero.id}}">{{genero.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_genero">Género</label>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="fecha_nacimiento">Fecha de nacimiento</label>
+                    <input id="fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_localidad" name="select_localidad">
+                        <option value="" disabled selected>Selecciona una localidad</option>
+                        {% for localidad in localidades %}
+                            <option value="{{localidad.id}}">{{localidad.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_localidad">Localidad</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="domicilio">Domicilio</label>
+                    <input id="domicilio" name="domicilio" class="validate" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_barrio" name="select_barrio">
+                        <option value="" disabled selected>Selecciona un barrio</option>
+                        {% for barrio in barrios %}
+                            <option value="{{barrio.id}}">{{barrio.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_barrio">Barrio</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_tipo" name="select_tipo">
+                        <option value="" disabled selected>Selecciona un tipo</option>
+                        {% for tipo in tipodoc %}
+                            <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_tipo">Tipo de Documento</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="documento_numero">Numero de Documento</label>
+                    <input id="documento_numero" name="documento_numero" class="validate" type="number" required>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="telefono_numero">Numero telefónico (opcional)</label>
+                    <input id="telefono_numero" name="telefono_numero" class="validate" type="text">
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_escuela" name="select_escuela">
+                        <option value="" disabled selected>Selecciona la escuela de donde proviene</option>
+                        {% for escuela in escuelas %}
+                            <option value="{{escuela.id}}">{{escuela.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_escuela">Escuela</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_nivel" name="select_nivel">
+                        <option value="" disabled selected>Selecciona el nivel actual</option>
+                        {% for nivel in niveles %}
+                            <option value="{{nivel.id}}">{{nivel.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_nivel">Nivel</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue">Guardar</button>
+            <button id="cancelarAltaEstudiante" class="btn red">Reiniciar</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            parse: true
+        })
+    })
+</script>
+<script>
+    $(document).ready(function() {
+        $("#cancelarAltaEstudiante").click(function(){
+            $('#altaEstudiante').trigger("reset");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#altaEstudiante');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalAltaEstudiante').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    $('#altaEstudiante').trigger("reset");
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    409: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    }
+                }
+            });
+        });
+    });
+</script>

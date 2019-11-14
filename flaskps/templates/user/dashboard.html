@@ -109,16 +109,18 @@
 
             </div>
             <div class="row">
-                <div class="divider"></div>
-                <h6 class="center-align red-text">Proximamente</h6>
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="fas fa-graduation-cap fa-3x"></i>
-                        </div>
+                        <a {% if has_permission('estudiante_index', session) %} href="{{ url_for('estudiante_table') }}" {% endif %}>
+                            <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                                <i class="fas fa-user-tie fa-3x black-text"></i>
+                            </div>
+                        </a>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Alumnos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
+                            <span class="card-title activator grey-text text-darken-4">Estudiantes<i class="material-icons right">more_vert</i></span>
+                            {% if has_permission('estudiante_index', session) %}
+                                <p><a href="{{ url_for('estudiante_table') }}">Ver y administrar</a></p>
+                            {% endif %}
                         </div>
 
                         <div class="card-action">
@@ -134,6 +136,8 @@
                     </div>
                 </div>
 
+                <div class="divider"></div>
+                <h6 class="center-align red-text">Proximamente</h6>
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
                         <div class="center-align light-blue waves-effect waves-block waves-light">

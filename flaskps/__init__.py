@@ -13,6 +13,7 @@ from flaskps.resources import user
 from flaskps.resources import dashboard
 from flaskps.resources import role
 from flaskps.resources import docente
+from flaskps.resources import estudiante
 
 # Configuración inicial de la app
 app = Flask(__name__)
@@ -113,3 +114,8 @@ app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POS
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
 app.register_error_handler(500, handler.internal_server_error)
+
+# Estudiantes
+app.add_url_rule("/tablaestudiantes", "estudiante_table", dashboard.estudiante_table)
+app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
+app.add_url_rule("/estudiantes/crear", "estudiante_new", estudiante.create, methods=["POST"])

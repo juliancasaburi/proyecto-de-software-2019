@@ -9,6 +9,9 @@ from flaskps.helpers import permission
 from flask import jsonify, make_response
 import requests
 
+from flaskps.models.barrio import Barrio
+from flaskps.models.escuela import Escuela
+from flaskps.models.nivel import Nivel
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 from flaskps.models.genero import Genero
@@ -108,3 +111,30 @@ def docente_table():
     generos = Genero.all()
 
     return render_template("user/actions/docentes.html", localidades=loc, tipodoc=tipo_doc, generos=generos)
+
+
+def estudiante_table():
+    if not permission.has_permission("estudiante_index", session):
+        abort(401)
+
+    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
+    loc = loc.json()
+
+    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
+    tipo_doc = tipo_doc.json()
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    Barrio.db = get_db()
+    barrios = Barrio.all()
+
+    Nivel.db = get_db()
+    niveles = Nivel.all()
+
+    #Responsables ???
+
+    Escuela.db = get_db()
+    escuelas = Escuela.all()
+
+    return render_template("user/actions/estudiantes.html", localidades=loc, tipodoc=tipo_doc, generos=generos, barrios=barrios, escuelas=escuelas, niveles=niveles)
