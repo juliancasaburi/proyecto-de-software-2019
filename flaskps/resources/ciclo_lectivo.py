@@ -25,6 +25,13 @@ def create():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
+        fecha_ini = params["fecha_inicio"]
+        fecha_fin = params["fecha_fin"]
+        if fecha_fin <= fecha_ini:
+            op_response["msg"] = "La fecha de finalización es menor o igual a la fecha de inicio"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 400))
+
         CicloLectivo.db = get_db()
         created = CicloLectivo.create(params)
 
