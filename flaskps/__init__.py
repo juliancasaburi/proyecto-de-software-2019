@@ -29,7 +29,7 @@ bcrypt = Bcrypt(app)
 mail = Mail(app)
 
 # Resources
-from flaskps.resources import auth
+from flaskps.resources import auth, ciclo_lectivo
 from flaskps.resources import user
 from flaskps.resources import dashboard
 from flaskps.resources import role
@@ -116,6 +116,9 @@ app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POS
 
 # Talleres
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
+
+# Ciclos lectivos
+app.add_url_rule("/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
