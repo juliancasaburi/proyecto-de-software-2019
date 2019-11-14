@@ -5,17 +5,17 @@ from flask import (
     url_for,
     session,
     flash,
-    current_app as app,
 )
 
 from flaskps.db import get_db
-from flask_bcrypt import Bcrypt
 
 from flaskps.forms.form_login import LoginForm
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
 from flaskps.models import siteconfig
 from flaskps.models.siteconfig import SiteConfig
+
+from flaskps import bcrypt
 
 
 def login():
@@ -33,8 +33,6 @@ def authenticate():
         params = request.form
         User.db = get_db()
         user = User.find_by_user(params["username"])
-
-        bcrypt = Bcrypt(app)
 
         if (
             user

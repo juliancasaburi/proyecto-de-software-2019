@@ -6,21 +6,14 @@ from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
 from flaskps.models import siteconfig
 from flask_wtf.csrf import CSRFProtect
-
-# Resources
-from flaskps.resources import auth
-from flaskps.resources import user
-from flaskps.resources import dashboard
-from flaskps.resources import role
-from flaskps.resources import docente
+from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
 # Configuración inicial de la app
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["JSON_AS_ASCII"] = False
-csrf = CSRFProtect(app)
-
 # Mail Config
 app.config["MAIL_SERVER"] = Config.MAIL_SERVER
 app.config["MAIL_PORT"] = Config.MAIL_PORT
@@ -28,10 +21,19 @@ app.config["MAIL_USERNAME"] = Config.MAIL_USERNAME
 app.config["MAIL_PASSWORD"] = Config.MAIL_PASSWORD
 app.config["MAIL_USE_TLS"] = Config.MAIL_USE_TLS
 app.config["MAIL_USE_SSL"] = Config.MAIL_USE_SSL
-
 # Server Side session
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+csrf = CSRFProtect(app)
+bcrypt = Bcrypt(app)
+mail = Mail(app)
+
+# Resources
+from flaskps.resources import auth
+from flaskps.resources import user
+from flaskps.resources import dashboard
+from flaskps.resources import role
+from flaskps.resources import docente
 
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(

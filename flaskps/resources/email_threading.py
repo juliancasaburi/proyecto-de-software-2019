@@ -1,6 +1,7 @@
 import threading
 from flask import copy_current_request_context, current_app as app
-from flask_mail import Mail, Message
+from flask_mail import Message
+from flaskps import mail
 
 
 def create_message(recipient, subject, html):
@@ -21,7 +22,6 @@ def send_async(recipient, subject, html):
 
     @copy_current_request_context
     def send_message(message):
-        mail = Mail(app)
         mail.send(message)
 
     sender = threading.Thread(name="mail_sender", target=send_message, args=(message,))
