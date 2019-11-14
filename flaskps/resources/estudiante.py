@@ -7,7 +7,7 @@ from flask import (
     abort,
     make_response,
     jsonify,
-    )
+)
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
@@ -44,8 +44,8 @@ def get_estudiantes():
         dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"]
         del dict_item["fecha_nac"]
         for loc in locs:
-            if int(loc['id']) == dict_item["localidad_id"]:
-                dict_item["Localidad"] = loc['nombre']
+            if int(loc["id"]) == dict_item["localidad_id"]:
+                dict_item["Localidad"] = loc["nombre"]
                 break
         del dict_item["localidad_id"]
         dict_item["Domicilio"] = dict_item["domicilio"]
@@ -57,8 +57,8 @@ def get_estudiantes():
         dict_item["Barrio"] = dict_item["b.nombre"]
         del dict_item["b.nombre"]
         for t_doc in tipo_doc:
-            if int(t_doc['id']) == dict_item["tipo_doc_id"]:
-                dict_item["Tipo de documento"] = t_doc['nombre']
+            if int(t_doc["id"]) == dict_item["tipo_doc_id"]:
+                dict_item["Tipo de documento"] = t_doc["nombre"]
                 break
         del dict_item["tipo_doc_id"]
         dict_item["Número de documento"] = dict_item["numero"]
@@ -100,22 +100,20 @@ def create():
     form.select_genero.choices = [
         (genero["id"], genero["nombre"]) for genero in generos
     ]
-    form.select_tipo.choices = [
-        (tipo["id"], tipo["nombre"]) for tipo in tipos_doc
-    ]
+    form.select_tipo.choices = [(tipo["id"], tipo["nombre"]) for tipo in tipos_doc]
     form.select_escuela.choices = [
         (escuela["id"], escuela["nombre"]) for escuela in escuelas
     ]
-    form.select_nivel.choices = [
-        (nivel["id"], nivel["nombre"]) for nivel in niveles
-    ]
+    form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
 
     op_response = dict()
     responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
-        params['fecha_nacimiento'] = datetime.strptime(params['fecha_nacimiento'], '%d/%m/%Y').date()
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
 
         Estudiante.db = get_db()
         created = Estudiante.create(params)

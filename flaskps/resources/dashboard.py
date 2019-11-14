@@ -137,9 +137,17 @@ def estudiante_table():
     Nivel.db = get_db()
     niveles = Nivel.all()
 
-    #Responsables ???
+    # Responsables ???
 
     Escuela.db = get_db()
     escuelas = Escuela.all()
 
-    return render_template("user/actions/estudiantes.html", localidades=loc, tipodoc=tipo_doc, generos=generos, barrios=barrios, escuelas=escuelas, niveles=niveles)
+    return render_template(
+        "user/actions/estudiantes.html",
+        localidades=loc,
+        tipodoc=tipo_doc,
+        generos=generos,
+        barrios=barrios,
+        escuelas=escuelas,
+        niveles=niveles,
+    )

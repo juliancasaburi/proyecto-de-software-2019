@@ -38,7 +38,6 @@ class Estudiante(object):
             cls.db.cursor().close()
         return cursor.fetchall()
 
-
     @classmethod
     def create(cls, data):
         sql = """
@@ -85,7 +84,7 @@ class Estudiante(object):
                         data.get("select_tipo"),
                         data.get("documento_numero"),
                         data.get("telefono_numero"),
-                        data.get("select_barrio")
+                        data.get("select_barrio"),
                     ),
                 )
                 cls.db.commit()
