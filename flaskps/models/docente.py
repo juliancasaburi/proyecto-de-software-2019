@@ -62,3 +62,19 @@ class Docente(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def genero(cls, did):
+        sql = """
+                SELECT  g.nombre
+                FROM    docente AS d
+                        INNER JOIN genero g
+                        ON d.genero_id = g.id
+                WHERE   d.id = %s
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, did)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()

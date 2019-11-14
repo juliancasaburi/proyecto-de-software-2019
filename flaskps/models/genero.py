@@ -14,3 +14,17 @@ class Genero(object):
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()
+
+    @classmethod
+    def find_by_id(cls, gid):
+        sql = """
+                SELECT  nombre
+                FROM    genero
+                WHERE   id = %s
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, gid)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()
