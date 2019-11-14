@@ -63,7 +63,10 @@ def get_estudiantes():
         del dict_item["tipo_doc_id"]
         dict_item["Número de documento"] = dict_item["numero"]
         del dict_item["numero"]
-        dict_item["Número telefónico"] = dict_item["tel"]
+        if dict_item["tel"]:
+            dict_item["Número telefónico"] = dict_item["tel"]
+        else:
+            dict_item["Número telefónico"] = 'No tiene'
         del dict_item["tel"]
         dict_item["Nivel"] = dict_item["n.nombre"]
         del dict_item["n.nombre"]
