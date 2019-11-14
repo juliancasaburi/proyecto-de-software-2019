@@ -134,7 +134,7 @@ def create():
             op_response["type"] = "error"
         else:
             error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
-            op_response["msg"] = form.errors
+            op_response["msg"] = error_msg
             op_response["type"] = "error"
 
         abort(make_response(jsonify(op_response), 500))
