@@ -60,6 +60,9 @@
                     M.toast({html: toastText, classes: toastClass});
                 },
                 statusCode: {
+                    400: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
                     409: function (jqXHR) {
                         M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                     },
