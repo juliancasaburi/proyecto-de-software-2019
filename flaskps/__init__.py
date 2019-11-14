@@ -34,6 +34,7 @@ from flaskps.resources import user
 from flaskps.resources import dashboard
 from flaskps.resources import role
 from flaskps.resources import docente
+from flaskps.resources import taller
 
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(
@@ -97,6 +98,7 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 app.add_url_rule("/usuario/crear", "user_new_form", dashboard.user_new_form)
 app.add_url_rule("/usuario/editar", "user_edit_form", dashboard.user_edit_form)
 app.add_url_rule("/usuario/baja", "user_destroy_form", dashboard.user_destroy_form)
+app.add_url_rule("/taller/crear", "taller_new_form", dashboard.taller_new_form)
 
 # Usuarios
 app.add_url_rule("/usuario", "user", user.user_data)
@@ -110,6 +112,9 @@ app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["PO
 app.add_url_rule("/tabladocentes", "docente_table", dashboard.docente_table)
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
+
+# Talleres
+app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)

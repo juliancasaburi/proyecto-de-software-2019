@@ -108,3 +108,10 @@ def docente_table():
         tipodoc=tipos_documento(),
         generos=generos,
     )
+
+
+def taller_new_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
+    return render_template("user/actions/taller_crear.html")

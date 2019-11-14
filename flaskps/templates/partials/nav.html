@@ -74,6 +74,15 @@
                         <li><a href="#">Eliminar</a></li>
                         <li><a href="#">Editar</a></li>
                     </ul>
+                    <!-- dropdownTalleres Structure -->
+                    <ul id="dropdownTalleres" class="dropdown-content teal">
+                        <li><a href="#">Ver Listado</a></li>
+                        {% if has_permission('taller_new', session) %}
+                            <li><a href="{{ url_for('taller_new_form') }}">Crear</a></li>
+                        {% endif %}
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
+                    </ul>
 
                     {% if is_authenticated(session) %}
                         <div class="section">
@@ -113,6 +122,14 @@
                                 <li><a class="subheader">Docentes</a></li>
                                 <!-- Dropdown Trigger -->
                                 <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                            </div>
+                        {% endif %}
+                        {% if has_permission('taller_index', session) or has_permission('taller_new', session) or has_permission('taller_destroy', session) or has_permission('taller_update', session) or has_permission('taller_show', session) %}
+                            <div class="divider"></div>
+                            <div class="section">
+                                <li><a class="subheader">Talleres</a></li>
+                                <!-- Dropdown Trigger -->
+                                <li><a class="dropdown-trigger" href="#" data-target="dropdownTalleres">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                             </div>
                         {% endif %}
                         <div class="divider"></div>
