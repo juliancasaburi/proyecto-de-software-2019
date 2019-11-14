@@ -7,7 +7,8 @@ from flask import (
 from flaskps.db import get_db
 from flaskps.helpers import permission
 from flask import jsonify, make_response
-import requests
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.helpers.localidades import localidades
 
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
@@ -101,27 +102,31 @@ def docente_table():
     if not permission.has_permission("docente_index", session):
         abort(401)
 
-    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
-    loc = loc.json()
-
-    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
-    tipo_doc = tipo_doc.json()
-
     Genero.db = get_db()
     generos = Genero.all()
 
-    return render_template("user/actions/docentes.html", localidades=loc, tipodoc=tipo_doc, generos=generos)
+    return render_template(
+        "user/actions/docentes.html",
+        localidades=localidades(),
+        tipodoc=tipos_documento(),
+        generos=generos,
+    )
+
+
+def taller_new_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
+    return render_template("user/actions/taller_crear.html")
 
 
 def estudiante_table():
     if not permission.has_permission("estudiante_index", session):
         abort(401)
 
-    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
-    loc = loc.json()
+    loc = localidades()
 
-    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
-    tipo_doc = tipo_doc.json()
+    tipo_doc = tipos_documento()
 
     Genero.db = get_db()
     generos = Genero.all()

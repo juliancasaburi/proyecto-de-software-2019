@@ -593,6 +593,7 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (1, 14),
 (1, 15),
 (1, 16),
+(1, 22),
 (2, 7),
 (2, 10),
 (2, 11),

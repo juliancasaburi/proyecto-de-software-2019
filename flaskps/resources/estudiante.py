@@ -18,7 +18,8 @@ from flaskps.models.estudiante import Estudiante
 
 from flaskps.helpers.permission import has_permission
 
-from flaskps.helpers.api_reference import get_localidades, get_tipos_doc
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.helpers.localidades import localidades
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
 
@@ -30,8 +31,8 @@ def get_estudiantes():
     Estudiante.db = get_db()
     estudiantes = Estudiante.all()
 
-    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento').json()
-    localidades = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad').json()
+    tipo_doc = tipos_documento()
+    locs = localidades()
 
     for dict_item in estudiantes:
         dict_item["ID"] = dict_item["id"]
@@ -42,7 +43,7 @@ def get_estudiantes():
         del dict_item["apellido"]
         dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"]
         del dict_item["fecha_nac"]
-        for loc in localidades:
+        for loc in locs:
             if int(loc['id']) == dict_item["localidad_id"]:
                 dict_item["Localidad"] = loc['nombre']
                 break
@@ -78,12 +79,12 @@ def create():
 
     form = EstudianteCreateForm()
 
-    localidades = get_localidades()
+    locs = localidades()
     Barrio.db = get_db()
     barrios = Barrio.all()
     Genero.db = get_db()
     generos = Genero.all()
-    tipos_doc = get_tipos_doc()
+    tipos_doc = tipos_documento()
     Escuela.db = get_db()
     escuelas = Escuela.all()
     Nivel.db = get_db()
@@ -91,7 +92,7 @@ def create():
 
     # choices de los selects
     form.select_localidad.choices = [
-        (localidad["id"], localidad["nombre"]) for localidad in localidades
+        (localidad["id"], localidad["nombre"]) for localidad in locs
     ]
     form.select_barrio.choices = [
         (barrio["id"], barrio["nombre"]) for barrio in barrios
