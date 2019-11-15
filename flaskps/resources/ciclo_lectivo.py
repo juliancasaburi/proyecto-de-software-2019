@@ -28,7 +28,9 @@ def create():
         fecha_ini = params["fecha_inicio"]
         fecha_fin = params["fecha_fin"]
         if fecha_fin <= fecha_ini:
-            op_response["msg"] = "La fecha de finalización es menor o igual a la fecha de inicio"
+            op_response[
+                "msg"
+            ] = "La fecha de finalización es menor o igual a la fecha de inicio"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 400))
 
@@ -55,4 +57,3 @@ def create():
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)
-
