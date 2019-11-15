@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import (
     request,
     session,
@@ -10,8 +12,11 @@ from flaskps.db import get_db
 from flaskps.forms.form_docente_create import DocenteCreateForm
 
 from flaskps.models.docente import Docente
+from flaskps.models.genero import Genero
 
 from flaskps.helpers.permission import has_permission
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
 
 
 def get_docentes():
@@ -28,15 +33,20 @@ def get_docentes():
         del dict_item["nombre"]
         dict_item["Apellido"] = dict_item["apellido"]
         del dict_item["apellido"]
-        dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"]
+        dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         del dict_item["fecha_nac"]
-        dict_item["Localidad"] = dict_item["localidad_id"]
+        locs = localidades()
+        dict_item["Localidad"] = locs[dict_item["localidad_id"] - 1]["nombre"]
         del dict_item["localidad_id"]
         dict_item["Domicilio"] = dict_item["domicilio"]
         del dict_item["domicilio"]
-        dict_item["Genero"] = dict_item["genero_id"]
+        Genero.db = get_db()
+        dict_item["Genero"] = Genero.find_by_id(dict_item["ID"])[0]["nombre"]
         del dict_item["genero_id"]
-        dict_item["Tipo de documento"] = dict_item["tipo_doc_id"]
+        tipos_doc = tipos_documento()
+        dict_item["Tipo de documento"] = tipos_doc[dict_item["tipo_doc_id"] - 1][
+            "nombre"
+        ]
         del dict_item["tipo_doc_id"]
         dict_item["Numero de documento"] = dict_item["numero"]
         del dict_item["numero"]
@@ -59,15 +69,18 @@ def create():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
 
         Docente.db = get_db()
         created = Docente.create(params)
 
         if created:
-            op_response["msg"] = "Se ha agregado al Docente exitosamente"
+            op_response["msg"] = "Se ha agregado al docente exitosamente"
             op_response["type"] = "success"
         else:
-            op_response["msg"] = "Ha ocurrido un error al crear al Docente"
+            op_response["msg"] = "Ha ocurrido un error al crear al docente"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 409))
 

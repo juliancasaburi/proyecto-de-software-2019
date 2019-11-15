@@ -1,5 +1,4 @@
 from flask import (
-    current_app as app,
     redirect,
     render_template,
     request,
@@ -12,8 +11,6 @@ from flask import (
     flash,
 )
 from flaskps.db import get_db
-from flask_bcrypt import Bcrypt
-
 from flaskps.models.user import User
 from flaskps.models.role import Role
 
@@ -27,11 +24,13 @@ from flaskps.helpers.permission import has_permission
 
 from flaskps.resources.email_threading import send_async
 
+from flaskps import bcrypt
 
-def get_users():
-    if not has_permission("usuario_index", session):
-        abort(401)
+from flaskps.serverside.serverside_table import ServerSideTable
+from flaskps.serverside import table_schemas
 
+
+def users():
     User.db = get_db()
     users = User.all()
 
@@ -51,14 +50,35 @@ def get_users():
         del dict_item["password"]
         dict_item["Email"] = dict_item["email"]
         del dict_item["email"]
-        dict_item["Registrado"] = dict_item["created_at"]
+        dict_item["Registrado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
         del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"]
+        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
         del dict_item["updated_at"]
 
-    users = jsonify(users)
+    return users
 
-    return make_response(users, 200)
+
+def get_users():
+    if not has_permission("usuario_index", session):
+        abort(401)
+
+    all_users = jsonify(users())
+
+    return make_response(all_users, 200)
+
+
+def collect_data_serverside(req):
+    columns = table_schemas.SERVERSIDE_USUARIOS_TABLE_COLUMNS
+
+    return ServerSideTable(req, users(), columns).output_result()
+
+
+def serverside_table_content():
+    if not has_permission("usuario_index", session):
+        abort(401)
+
+    data = collect_data_serverside(request)
+    return jsonify(data)
 
 
 def create():
@@ -78,7 +98,6 @@ def create():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        bcrypt = Bcrypt(app)
         plain_pw = params["password"]
         params["password"] = bcrypt.generate_password_hash(plain_pw).decode("utf - 8")
 
@@ -300,7 +319,6 @@ def password_update():
     form = PasswordUpdateForm()
     if form.validate_on_submit():
         password = request.form.get("password")
-        bcrypt = Bcrypt(app)
         bcrypt_password = bcrypt.generate_password_hash(password).decode("utf - 8")
         User.db = get_db()
         User.update_password(bcrypt_password, session.get("user"))

@@ -30,29 +30,43 @@ class Docente(object):
     @classmethod
     def create(cls, data):
         sql = """
-            INSERT INTO usuario 
-                        (first_name, 
-                         last_name, 
-                         email, 
-                         username, 
-                         PASSWORD) 
-            VALUES      (%s, 
-                         %s, 
-                         %s, 
-                         %s, 
-                         %s)
-        """
+                INSERT INTO docente 
+                            (apellido, 
+                             nombre, 
+                             fecha_nac, 
+                             localidad_id, 
+                             domicilio,
+                             genero_id,
+                             tipo_doc_id,
+                             numero,
+                             tel
+                             ) 
+                VALUES      (%s, 
+                             %s, 
+                             %s, 
+                             %s, 
+                             %s,
+                             %s,
+                             %s,
+                             %s,
+                             %s
+                             )
+            """
 
         try:
             with cls.db.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
-                        data.get("first_name"),
-                        data.get("last_name"),
-                        data.get("email"),
-                        data.get("username"),
-                        data.get("password"),
+                        data.get("apellido"),
+                        data.get("nombre"),
+                        data.get("fecha_nacimiento"),
+                        data.get("select_localidad"),
+                        data.get("domicilio"),
+                        data.get("select_genero"),
+                        data.get("select_tipo"),
+                        data.get("documento_numero"),
+                        data.get("telefono_numero"),
                     ),
                 )
                 cls.db.commit()
@@ -62,3 +76,19 @@ class Docente(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def genero(cls, did):
+        sql = """
+                SELECT  g.nombre
+                FROM    docente AS d
+                        INNER JOIN genero g
+                        ON d.genero_id = g.id
+                WHERE   d.id = %s
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, did)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()

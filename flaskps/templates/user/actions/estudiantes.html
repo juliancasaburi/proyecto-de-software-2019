@@ -1,0 +1,282 @@
+{% extends "layout.html" %}
+{% block title %}Listado de Estudiantes - {{ siteconfig['titulo'] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.material.min.css') }}" media="screen">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/responsive.dataTables.min.css') }}" media="screen">
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section">
+
+            <div class="row">
+                <div class="col s12 center">
+                    <h1>Listado de Estudiantes</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card material-table">
+                    <div class="table-header">
+                        <span class="table-title">Estudiantes</span>
+                        <div class="actions">
+                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaEstudiante" data-position="top" data-tooltip="Crear estudiante"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                                <i class="large material-icons">search</i>
+                            </a>
+                        </div>
+                    </div>
+                    <table id="tablaEstudiantes" class="highlight nowrap" style="width:100%">
+                        <thead>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Localidad</th>
+                            <th>Domicilio</th>
+                            <th>Barrio</th>
+                            <th>Género</th>
+                            <th>Tipo de Documento</th>
+                            <th>Numero de Documento</th>
+                            <th>Número telefónico</th>
+                            <th>Escuela</th>
+                            <th>Nivel</th>
+                            <th class="nosort">Editar</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Localidad</th>
+                            <th>Domicilio</th>
+                            <th>Barrio</th>
+                            <th>Género</th>
+                            <th>Tipo de Documento</th>
+                            <th>Número de Documento</th>
+                            <th>Número telefónico</th>
+                            <th>Escuela</th>
+                            <th>Nivel</th>
+                            <th class="nosort">Editar</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            {% include 'partials/modal_alta_estudiante.html' %}
+            {% include 'partials/modal_editar_estudiante.html' %}
+
+            <div class="col-md-12 center text-center">
+                <span class="left" id="total_reg"></span>
+                <ul class="pagination pager" id="pager"></ul>
+            </div>
+
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
+                    <i class="large material-icons">search</i>
+                </a>
+            </div>
+
+            <!-- Modal Structure -->
+            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+                <div class="modal-content">
+                    <h3 class="header">Filtrar el listado de Estudiantes</h3>
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterEstudiante" id="filterNombreEstudiante" type="text">
+                                <label for="filterNombreEstudiante">Filtrar por nombre</label>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
+                                <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#tablaEstudiantes').DataTable( {
+                "ajax": {
+                    "url": "{{ url_for('estudiante_all') }}",
+                    "dataType": "json",
+                    "dataSrc": "",
+                    "contentType":"application/json"
+                },
+                "columns": [
+                    {"data": "ID"},
+                    {"data": "Nombre"},
+                    {"data": "Apellido"},
+                    {"data": "Fecha de nacimiento"},
+                    {"data": "Localidad"},
+                    {"data": "Domicilio"},
+                    {"data": "Barrio"},
+                    {"data": "Género"},
+                    {"data": "Tipo de documento"},
+                    {"data": "Número de documento"},
+                    {"data": "Número telefónico"},
+                    {"data": "Escuela"},
+                    {"data": "Nivel"},
+                    {
+                        data: null,
+                        className: "center",
+                        defaultContent: '<a class="editButton btn blue-grey"><i class="fas fa-edit"></i></a>'
+                    },
+                ],
+                "language": {
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
+                    "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>"
+                },
+                "columnDefs": [
+                    { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
+                ],
+                sDom: 't,i,p', // Hide info
+                pageLength: $('#items-per-page').data("ammount"),
+                "scrollX": true
+            } );
+            setInterval( function () {
+                var table = $('#tablaEstudiantes').DataTable();
+                table.ajax.reload( null, false ); // user paging is not reset on reload
+            }, 5000 );
+        } );
+    </script>
+    <script> // Alta de Estudiante
+    $(document).ready(function(){
+        $('#modalAltaEstudiante').modal();
+        $('select').formSelect();
+    });
+    </script>
+    <script> // Filtros
+        $(document).ready(function(){
+            var table = $('#tablaEstudiantes').DataTable();
+            $("#filterNombreEstudiante").on("keyup", function() {
+                table
+                    .columns( 1 )
+                    .search( this.value )
+                    .draw();
+            });
+            $("#filterDocumentoEstudiante").on("keyup", function() {
+                table
+                    .columns( 9 )
+                    .search( this.value )
+                    .draw();
+            });
+        });
+    </script>
+    <script>
+        $('#modalFilters').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                    //  alert("Ready");
+                    console.log(modal, trigger);
+                },
+                complete: function() { //alert('Closed');
+                } // Callback for Modal close
+            }
+        );
+    </script>
+    <script>
+        // Edit a record
+        $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaEstudiantes').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var eid = rowData.ID;
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('estudiante') }}",
+                data: {
+                    id: eid
+                },
+                success: function (response) {
+                    $('#modal_editar_id').val(response['id']);
+                    $('#modal_editar_apellido').attr("placeholder", response['apellido']);
+                    $('#modal_editar_apellido').attr("value", response['apellido']);
+                    $('#modal_editar_nombre').attr("placeholder", response['nombre']);
+                    $('#modal_editar_nombre').attr("value", response['nombre']);
+                    $('#modal_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
+                    $('#modal_fecha_nacimiento').attr("value", response['fecha_nac']);
+                    $("#modal_select_genero select").val(response['genero_id']);
+                    $("#modal_select_localidad select").val(response['localidad_id']);
+                    $('#modal_domicilio').attr("placeholder", response['domicilio']);
+                    $('#modal_domicilio').attr("value", response['domicilio']);
+                    $("#modal_select_tipo select").val(response['tipo_doc_id']);
+                    $('#modal_documento_numero').attr("placeholder", response['numero']);
+                    $('#modal_documento_numero').attr("value", response['numero']);
+                    $('#modal_telefono_numero').attr("placeholder", response['tel']);
+                    $('#modal_telefono_numero').attr("value", response['tel']);
+                    $("#modal_select_escuela select").val(response['escuela_id']);
+                    $("#modal_select_nivel select").val(response['nivel_id']);
+                    M.updateTextFields();
+                    $('#modalEditarEstudiante').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var frm = $('#formEditarEstudiante');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $('#modalEditarEstudiante').modal('close');
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: function (response) {
+                        var table = $('#tablaEstudiantes').DataTable();
+                        table.ajax.reload( null, false );
+                        var toastText = "El estudiante fue editado con éxito";
+                        M.toast({html: toastText, classes: 'green'});
+                    },
+                    error: function (data) {
+                        console.log('Error');
+                        console.log(data);
+                    },
+                });
+            });
+        });
+    </script>
+{% endblock %}

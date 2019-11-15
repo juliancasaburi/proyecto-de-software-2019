@@ -7,12 +7,18 @@ from flask import (
 from flaskps.db import get_db
 from flaskps.helpers import permission
 from flask import jsonify, make_response
-import requests
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.helpers.localidades import localidades
 
+from flaskps.models.siteconfig import SiteConfig
+from flaskps.models.barrio import Barrio
+from flaskps.models.escuela import Escuela
+from flaskps.models.nivel import Nivel
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 from flaskps.models.genero import Genero
-from flaskps.models.siteconfig import SiteConfig
+from flaskps.models.taller import Taller
+from flaskps.models.ciclo_lectivo import CicloLectivo
 
 
 def user_table():
@@ -98,13 +104,62 @@ def docente_table():
     if not permission.has_permission("docente_index", session):
         abort(401)
 
-    loc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/localidad')
-    loc = loc.json()
+    Genero.db = get_db()
+    generos = Genero.all()
 
-    tipo_doc = requests.get('https://api-referencias.proyecto2019.linti.unlp.edu.ar/tipo-documento')
-    tipo_doc = tipo_doc.json()
+    return render_template(
+        "user/actions/docentes.html",
+        localidades=localidades(),
+        tipodoc=tipos_documento(),
+        generos=generos,
+    )
+
+
+def taller_new_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
+    return render_template("user/actions/taller_crear.html")
+
+
+def estudiante_table():
+    if not permission.has_permission("estudiante_index", session):
+        abort(401)
+
+    loc = localidades()
+
+    tipo_doc = tipos_documento()
 
     Genero.db = get_db()
     generos = Genero.all()
 
-    return render_template("user/actions/docentes.html", localidades=loc, tipodoc=tipo_doc, generos=generos)
+    Barrio.db = get_db()
+    barrios = Barrio.all()
+
+    Nivel.db = get_db()
+    niveles = Nivel.all()
+
+    # Responsables ???
+
+    Escuela.db = get_db()
+    escuelas = Escuela.all()
+
+    return render_template(
+        "user/actions/estudiantes.html",
+        localidades=loc,
+        tipodoc=tipo_doc,
+        generos=generos,
+        barrios=barrios,
+        escuelas=escuelas,
+        niveles=niveles,
+    )
+
+
+def taller_set_ciclo_form():
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    return render_template("user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos)

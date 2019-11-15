@@ -60,9 +60,9 @@
                             <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
                         {% endif %}
                     </ul>
-                    <!-- dropdownAlumnos Structure -->
+                    <!-- dropdownEstudiantes Structure -->
                     <ul id="dropdownAlumnos" class="dropdown-content teal">
-                        <li><a href="#">Ver Listado</a></li>
+                        <li><a href="{{ url_for('estudiante_table') }}">Ver Listado</a></li>
                         <li><a href="#">Crear</a></li>
                         <li><a href="#">Eliminar</a></li>
                         <li><a href="#">Editar</a></li>
@@ -71,6 +71,16 @@
                     <ul id="dropdownInstrumentos" class="dropdown-content teal">
                         <li><a href="#">Ver Listado</a></li>
                         <li><a href="#">Crear</a></li>
+                        <li><a href="#">Eliminar</a></li>
+                        <li><a href="#">Editar</a></li>
+                    </ul>
+                    <!-- dropdownTalleres Structure -->
+                    <ul id="dropdownTalleres" class="dropdown-content teal">
+                        <li><a href="#">Ver Listado</a></li>
+                        {% if has_permission('taller_new', session) %}
+                            <li><a href="{{ url_for('taller_new_form') }}">Crear</a></li>
+                            <li><a href="{{ url_for('taller_set_ciclo_form') }}">Asociar</a></li>
+                        {% endif %}
                         <li><a href="#">Eliminar</a></li>
                         <li><a href="#">Editar</a></li>
                     </ul>
@@ -115,9 +125,17 @@
                                 <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                             </div>
                         {% endif %}
+                        {% if has_permission('taller_index', session) or has_permission('taller_new', session) or has_permission('taller_destroy', session) or has_permission('taller_update', session) or has_permission('taller_show', session) %}
+                            <div class="divider"></div>
+                            <div class="section">
+                                <li><a class="subheader">Talleres</a></li>
+                                <!-- Dropdown Trigger -->
+                                <li><a class="dropdown-trigger" href="#" data-target="dropdownTalleres">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                            </div>
+                        {% endif %}
                         <div class="divider"></div>
                         <div class="section">
-                            <li><a class="subheader">Alumnos</a></li>
+                            <li><a class="subheader">Estudiantes</a></li>
                             <!-- Dropdown Trigger -->
                             <li><a class="dropdown-trigger" href="#" data-target="dropdownAlumnos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                         </div>

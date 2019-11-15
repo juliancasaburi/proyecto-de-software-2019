@@ -1,0 +1,92 @@
+<div id="modalEditarEstudiante" class="modal">
+    <form id="formEditarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <h1>Editar estudiante</h1>
+            <div class="row">
+                <input id="modal_editar_id" name="id" type="number" hidden>
+                <div class="col s12 m6 input-field">
+                    <label for="modal_editar_apellido">Apellido</label>
+                    <input id="modal_editar_apellido" name="last_name" class="validate active" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="modal_editar_nombre">Nombre</label>
+                    <input id="modal_editar_nombre" name="first_name" class="validate active" type="text" required>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="modal_fecha_nacimiento">Fecha de nacimiento</label>
+                    <input id="modal_fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
+                </div>
+                <div class="col s12 input-field">
+                    <select id="modal_select_genero" name="select_genero">
+                        <option value="" disabled selected>Selecciona un género</option>
+                        {% for genero in generos %}
+                            <option value="{{genero.id}}">{{genero.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_genero">Género</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_localidad" name="select_localidad">
+                        <option value="" disabled selected>Selecciona una localidad</option>
+                        {% for localidad in localidades %}
+                            <option value="{{localidad.id}}">{{localidad.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_localidad">Localidad</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="modal_domicilio">Domicilio</label>
+                    <input id="modal_domicilio" name="domicilio" class="validate" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_barrio" name="select_barrio">
+                        <option value="" disabled selected>Selecciona un barrio</option>
+                        {% for barrio in barrios %}
+                            <option value="{{barrio.id}}">{{barrio.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_barrio">Barrio</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_tipo" name="select_tipo">
+                        <option value="" disabled selected>Selecciona un tipo de documento</option>
+                        {% for tipo in tipodoc %}
+                            <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_tipo">Tipo de Documento</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="modal_documento_numero">Número de Documento</label>
+                    <input id="modal_documento_numero" name="documento_numero" class="validate" type="number" required>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="modal_telefono_numero">Número telefónico (opcional)</label>
+                    <input id="modal_telefono_numero" name="telefono_numero" class="validate" type="text">
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_escuela" name="select_escuela">
+                        <option value="" disabled selected>Selecciona la escuela de donde proviene</option>
+                        {% for escuela in escuelas %}
+                            <option value="{{escuela.id}}">{{escuela.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_escuela">Escuela</label>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_nivel" name="select_nivel">
+                        <option value="" disabled selected>Selecciona el nivel actual</option>
+                        {% for nivel in niveles %}
+                            <option value="{{nivel.id}}">{{nivel.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_nivel">Nivel</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="editarEstudianteSubmit" class="btn blue">Guardar</button>
+        </div>
+    </form>
+</div>

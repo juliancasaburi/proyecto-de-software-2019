@@ -6,21 +6,14 @@ from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
 from flaskps.models import siteconfig
 from flask_wtf.csrf import CSRFProtect
-
-# Resources
-from flaskps.resources import auth
-from flaskps.resources import user
-from flaskps.resources import dashboard
-from flaskps.resources import role
-from flaskps.resources import docente
+from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
 # Configuración inicial de la app
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["JSON_AS_ASCII"] = False
-csrf = CSRFProtect(app)
-
 # Mail Config
 app.config["MAIL_SERVER"] = Config.MAIL_SERVER
 app.config["MAIL_PORT"] = Config.MAIL_PORT
@@ -28,10 +21,21 @@ app.config["MAIL_USERNAME"] = Config.MAIL_USERNAME
 app.config["MAIL_PASSWORD"] = Config.MAIL_PASSWORD
 app.config["MAIL_USE_TLS"] = Config.MAIL_USE_TLS
 app.config["MAIL_USE_SSL"] = Config.MAIL_USE_SSL
-
 # Server Side session
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+csrf = CSRFProtect(app)
+bcrypt = Bcrypt(app)
+mail = Mail(app)
+
+# Resources
+from flaskps.resources import auth, ciclo_lectivo
+from flaskps.resources import user
+from flaskps.resources import dashboard
+from flaskps.resources import role
+from flaskps.resources import docente
+from flaskps.resources import taller
+from flaskps.resources import estudiante
 
 # Funciones que se exportan al contexto de Jinja2
 app.jinja_env.globals.update(
@@ -95,10 +99,16 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 app.add_url_rule("/usuario/crear", "user_new_form", dashboard.user_new_form)
 app.add_url_rule("/usuario/editar", "user_edit_form", dashboard.user_edit_form)
 app.add_url_rule("/usuario/baja", "user_destroy_form", dashboard.user_destroy_form)
+app.add_url_rule("/taller/crear", "taller_new_form", dashboard.taller_new_form)
 
 # Usuarios
 app.add_url_rule("/usuario", "user", user.user_data)
 app.add_url_rule("/tablausuarios", "user_table", dashboard.user_table)
+app.add_url_rule(
+    "/usuarios_serverside_table",
+    "user_serverside_table_content",
+    user.serverside_table_content,
+)
 app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
 app.add_url_rule("/usuario/baja", "user_destroy", user.destroy, methods=["POST"])
@@ -109,7 +119,28 @@ app.add_url_rule("/tabladocentes", "docente_table", dashboard.docente_table)
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
 
+# Talleres
+app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
+app.add_url_rule("/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"])
+app.add_url_rule("/taller/asociar", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form)
+
+# Ciclos lectivos
+app.add_url_rule(
+    "/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
+)
+
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
 app.register_error_handler(401, handler.unauthorized_error)
 app.register_error_handler(500, handler.internal_server_error)
+
+# Estudiantes
+app.add_url_rule("/estudiante", "estudiante", estudiante.estudiante_data)
+app.add_url_rule("/tablaestudiantes", "estudiante_table", dashboard.estudiante_table)
+app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
+app.add_url_rule(
+    "/estudiantes/crear", "estudiante_new", estudiante.create, methods=["POST"]
+)
+app.add_url_rule(
+    "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
+)
