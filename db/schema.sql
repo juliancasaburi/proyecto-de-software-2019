@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante` (
   `escuela_id` INT(11) NOT NULL,
   `tipo_doc_id` INT(11) NOT NULL,
   `numero` INT(11) NOT NULL,
-  `tel` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+  `tel` VARCHAR(255) CHARACTER SET 'utf8',
   `barrio_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `FK_nivel_id` (`nivel_id` ASC),
