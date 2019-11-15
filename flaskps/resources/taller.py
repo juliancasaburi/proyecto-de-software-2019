@@ -4,6 +4,7 @@ from flask import (
     abort,
     make_response,
     jsonify,
+    render_template
 )
 from flaskps.db import get_db
 from flaskps.models.taller import Taller
@@ -32,7 +33,7 @@ def create():
             op_response["msg"] = "Se ha agregado al taller con éxito"
             op_response["type"] = "success"
         else:
-            op_response["msg"] = "Ha ocurrido un error al crear el Talleer"
+            op_response["msg"] = "Ha ocurrido un error al crear el Taller"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 409))
 
@@ -46,5 +47,25 @@ def create():
             op_response["type"] = "error"
 
         abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+def set_ciclo():
+    params = request.form.to_dict()
+
+    Taller.db = get_db()
+    created = Taller.set_ciclo(params)
+
+    op_response = dict()
+    responsecode = 201
+
+    if created:
+        op_response["msg"] = "Se ha establecido la relación"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "Ha ocurrido un error al establecer la relación"
+        op_response["type"] = "error"
+        abort(make_response(jsonify(op_response), 409))
 
     return make_response(jsonify(op_response), responsecode)

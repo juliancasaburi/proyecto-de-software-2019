@@ -1,0 +1,55 @@
+<div id="modalTallerAsociar" class="modal">
+    <form id="tallerAsociar" method="post" action="{{ url_for('taller_set_ciclo') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <h1>Asociar Taller A Ciclo Lectivo</h1>
+            <div class="row">
+                <div class="col s12 input-field">
+                    <select id="select_taller" name="taller_id">
+                        <option value="" disabled selected>Selecciona un taller</option>
+                    </select>
+                    <label for="select_taller">Género</label>
+                </div>
+                <div class="col s12 input-field">
+                    <select id="select_ciclo" name="ciclo_id">
+                        <option value="" disabled selected>Selecciona un ciclo</option>
+                    </select>
+                    <label for="select_ciclo">Localidad</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue">Asociar</button>
+            <button class="btn red">Cancelar</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        var frm = $('#tallerAsociar');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalTallerAsociar').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    $('#tallerAsociar').trigger("reset");
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    409: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    }
+                }
+            });
+        });
+    });
+</script>

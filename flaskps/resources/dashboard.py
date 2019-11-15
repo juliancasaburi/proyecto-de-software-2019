@@ -10,13 +10,15 @@ from flask import jsonify, make_response
 from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.localidades import localidades
 
+from flaskps.models.siteconfig import SiteConfig
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 from flaskps.models.nivel import Nivel
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 from flaskps.models.genero import Genero
-from flaskps.models.siteconfig import SiteConfig
+from flaskps.models.taller import Taller
+from flaskps.models.ciclo_lectivo import CicloLectivo
 
 
 def user_table():
@@ -151,3 +153,13 @@ def estudiante_table():
         escuelas=escuelas,
         niveles=niveles,
     )
+
+
+def taller_set_ciclo_form():
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    return render_template("user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos)

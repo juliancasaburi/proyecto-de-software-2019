@@ -5,6 +5,19 @@ class CicloLectivo(object):
     db = None
 
     @classmethod
+    def all(cls):
+        sql = """
+            SELECT  *
+            FROM    ciclo_lectivo
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()
+
+    @classmethod
     def create(cls, data):
         sql = """
                 INSERT INTO ciclo_lectivo 
