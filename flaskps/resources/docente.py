@@ -33,7 +33,7 @@ def get_docentes():
         del dict_item["nombre"]
         dict_item["Apellido"] = dict_item["apellido"]
         del dict_item["apellido"]
-        dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"]
+        dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         del dict_item["fecha_nac"]
         locs = localidades()
         dict_item["Localidad"] = locs[dict_item["localidad_id"] - 1]["nombre"]

@@ -50,9 +50,9 @@ def users():
         del dict_item["password"]
         dict_item["Email"] = dict_item["email"]
         del dict_item["email"]
-        dict_item["Registrado"] = dict_item["created_at"]
+        dict_item["Registrado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
         del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"]
+        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
         del dict_item["updated_at"]
 
     return users
