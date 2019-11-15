@@ -22,7 +22,7 @@
                     <div class="table-header">
                         <span class="table-title">Usuarios</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Crear Usuario"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Crear Usuario"><i class="material-icons">person_add</i></a>
                             <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
@@ -122,12 +122,10 @@
     <script>
         $(document).ready(function() {
             $('#tablaUsuarios').DataTable( {
-                "ajax": {
-                    "url": "{{ url_for('user_all') }}",
-                    "dataType": "json",
-                    "dataSrc": "",
-                    "contentType":"application/json"
-                },
+                bProcessing: true,
+                bServerSide: true,
+                sPaginationType: "full_numbers",
+                sAjaxSource:"{{ url_for('user_serverside_table_content') }}",
                 "columns": [
                     {"data": "ID"},
                     {"data": "Activo"},
@@ -159,9 +157,6 @@
                     "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
                     "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)"
                 },
-                "columnDefs": [
-                    { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
-                ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
                 "scrollX": true
@@ -177,7 +172,7 @@
             var table = $('#tablaUsuarios').DataTable();
             $(".filterUsuario").on("keyup", function() {
                 table
-                    .columns( 5 )
+                    .column(6)
                     .search( this.value )
                     .draw();
             });
@@ -189,23 +184,17 @@
                 var table = $('#tablaUsuarios').DataTable();
                 if($("#filterActive").prop("checked") == true)
                 {
-                    $.fn.dataTable.ext.search.pop();
-                    table.draw('full-hold');
-
+                    table
+                        .column(1)
+                        .search('')
+                        .draw();
                 }
                 else
                 {
-                    /* Custom filtering function which will search data in column 1 */
-                    $.fn.dataTable.ext.search.push(
-                        function( settings, data, dataIndex ) {
-                            if (data[1] == 0)
-                            {
-                                return false;
-                            }
-                            return true;
-                        }
-                    );
-                    table.draw('full-hold');
+                    table
+                        .column(1)
+                        .search(1)
+                        .draw();
                 }
             });
         });

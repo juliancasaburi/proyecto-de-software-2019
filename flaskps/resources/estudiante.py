@@ -66,7 +66,7 @@ def get_estudiantes():
         if dict_item["tel"]:
             dict_item["Número telefónico"] = dict_item["tel"]
         else:
-            dict_item["Número telefónico"] = 'No tiene'
+            dict_item["Número telefónico"] = "No tiene"
         del dict_item["tel"]
         dict_item["Nivel"] = dict_item["n.nombre"]
         del dict_item["n.nombre"]

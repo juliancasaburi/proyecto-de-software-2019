@@ -104,6 +104,11 @@ app.add_url_rule("/taller/crear", "taller_new_form", dashboard.taller_new_form)
 # Usuarios
 app.add_url_rule("/usuario", "user", user.user_data)
 app.add_url_rule("/tablausuarios", "user_table", dashboard.user_table)
+app.add_url_rule(
+    "/usuarios_serverside_table",
+    "user_serverside_table_content",
+    user.serverside_table_content,
+)
 app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
 app.add_url_rule("/usuario/baja", "user_destroy", user.destroy, methods=["POST"])
@@ -118,7 +123,9 @@ app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POS
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
 
 # Ciclos lectivos
-app.add_url_rule("/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"])
+app.add_url_rule(
+    "/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
+)
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)

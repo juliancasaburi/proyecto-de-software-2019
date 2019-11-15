@@ -26,11 +26,11 @@ from flaskps.resources.email_threading import send_async
 
 from flaskps import bcrypt
 
+from flaskps.serverside.serverside_table import ServerSideTable
+from flaskps.serverside import table_schemas
 
-def get_users():
-    if not has_permission("usuario_index", session):
-        abort(401)
 
+def users():
     User.db = get_db()
     users = User.all()
 
@@ -55,9 +55,30 @@ def get_users():
         dict_item["Actualizado"] = dict_item["updated_at"]
         del dict_item["updated_at"]
 
-    users = jsonify(users)
+    return users
 
-    return make_response(users, 200)
+
+def get_users():
+    if not has_permission("usuario_index", session):
+        abort(401)
+
+    all_users = jsonify(users())
+
+    return make_response(all_users, 200)
+
+
+def collect_data_serverside(req):
+    columns = table_schemas.SERVERSIDE_USUARIOS_TABLE_COLUMNS
+
+    return ServerSideTable(req, users(), columns).output_result()
+
+
+def serverside_table_content():
+    if not has_permission("usuario_index", session):
+        abort(401)
+
+    data = collect_data_serverside(request)
+    return jsonify(data)
 
 
 def create():
