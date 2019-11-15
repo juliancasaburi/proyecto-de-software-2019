@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`docente` (
   `genero_id` INT(11) NOT NULL,
   `tipo_doc_id` INT(11) NOT NULL,
   `numero` INT(11) NOT NULL,
-  `tel` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+  `tel` VARCHAR(255) CHARACTER SET 'utf8',
   PRIMARY KEY (`id`),
   INDEX `FK_genero_docente_id` (`genero_id` ASC),
   CONSTRAINT `FK_genero_docente_id`
