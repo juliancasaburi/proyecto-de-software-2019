@@ -44,6 +44,7 @@
                             <th>Número telefónico</th>
                             <th>Escuela</th>
                             <th>Nivel</th>
+                            <th class="nosort">Editar</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -61,6 +62,7 @@
                             <th>Número telefónico</th>
                             <th>Escuela</th>
                             <th>Nivel</th>
+                            <th class="nosort">Editar</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -68,6 +70,7 @@
             </div>
 
             {% include 'partials/modal_alta_estudiante.html' %}
+            {% include 'partials/modal_editar_estudiante.html' %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -141,7 +144,12 @@
                     {"data": "Número de documento"},
                     {"data": "Número telefónico"},
                     {"data": "Escuela"},
-                    {"data": "Nivel"}
+                    {"data": "Nivel"},
+                    {
+                        data: null,
+                        className: "center",
+                        defaultContent: '<a class="editButton btn blue-grey"><i class="fas fa-edit"></i></a>'
+                    },
                 ],
                 "language": {
                     "paginate": {
@@ -205,5 +213,70 @@
                 } // Callback for Modal close
             }
         );
+    </script>
+    <script>
+        // Edit a record
+        $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaEstudiantes').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var eid = rowData.ID;
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('estudiante') }}",
+                data: {
+                    id: eid
+                },
+                success: function (response) {
+                    $('#modal_editar_id').val(response['id']);
+                    $('#modal_editar_apellido').attr("placeholder", response['apellido']);
+                    $('#modal_editar_apellido').attr("value", response['apellido']);
+                    $('#modal_editar_nombre').attr("placeholder", response['nombre']);
+                    $('#modal_editar_nombre').attr("value", response['nombre']);
+                    $('#modal_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
+                    $('#modal_fecha_nacimiento').attr("value", response['fecha_nac']);
+                    $("#modal_select_genero select").val(response['genero_id']);
+                    $("#modal_select_localidad select").val(response['localidad_id']);
+                    $('#modal_domicilio').attr("placeholder", response['domicilio']);
+                    $('#modal_domicilio').attr("value", response['domicilio']);
+                    $("#modal_select_tipo select").val(response['tipo_doc_id']);
+                    $('#modal_documento_numero').attr("placeholder", response['numero']);
+                    $('#modal_documento_numero').attr("value", response['numero']);
+                    $('#modal_telefono_numero').attr("placeholder", response['tel']);
+                    $('#modal_telefono_numero').attr("value", response['tel']);
+                    $("#modal_select_escuela select").val(response['escuela_id']);
+                    $("#modal_select_nivel select").val(response['nivel_id']);
+                    M.updateTextFields();
+                    $('#modalEditarEstudiante').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var frm = $('#formEditarEstudiante');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $('#modalEditarEstudiante').modal('close');
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: function (response) {
+                        var table = $('#tablaEstudiantes').DataTable();
+                        table.ajax.reload( null, false );
+                        var toastText = "El estudiante fue editado con éxito";
+                        M.toast({html: toastText, classes: 'green'});
+                    },
+                    error: function (data) {
+                        console.log('Error');
+                        console.log(data);
+                    },
+                });
+            });
+        });
     </script>
 {% endblock %}

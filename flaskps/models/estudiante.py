@@ -94,3 +94,68 @@ class Estudiante(object):
         finally:
             cls.db.cursor().close()
         return True
+
+
+    @classmethod
+    def update(cls, data):
+
+        try:
+            with cls.db.cursor() as cursor:
+
+                query = """
+                        UPDATE estudiante
+                        SET    apellido = %s, 
+                               nombre = %s, 
+                               fecha_nac = %s, 
+                               localidad_id = %s, 
+                               nivel_id = %s,
+                               domicilio = %s,
+                               genero_id = %s,
+                               escuela_id = %s,
+                               tipo_doc_id = %s,
+                               numero = %s,
+                               tel = %s,
+                               barrio_id = %s
+                        WHERE  id = %s 
+                    """
+
+                cursor.execute(
+                    query,
+                    (
+                        data.get("last_name"),
+                        data.get("first_name"),
+                        data.get("fecha_nacimiento"),
+                        data.get("select_localidad"),
+                        data.get("select_nivel"),
+                        data.get("domicilio"),
+                        data.get("select_genero"),
+                        data.get("select_escuela"),
+                        data.get("select_tipo"),
+                        data.get("documento_numero"),
+                        data.get("telefono_numero"),
+                        data.get("select_barrio"),
+                    ),
+                )
+                cls.db.commit()
+
+        except IntegrityError:
+            return False
+        finally:
+            cls.db.cursor().close()
+        return True
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+                SELECT  *
+                FROM    estudiante
+                WHERE   id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()

@@ -126,8 +126,10 @@ app.register_error_handler(401, handler.unauthorized_error)
 app.register_error_handler(500, handler.internal_server_error)
 
 # Estudiantes
+app.add_url_rule("/estudiante", "estudiante", estudiante.estudiante_data)
 app.add_url_rule("/tablaestudiantes", "estudiante_table", dashboard.estudiante_table)
 app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
 app.add_url_rule(
     "/estudiantes/crear", "estudiante_new", estudiante.create, methods=["POST"]
 )
+app.add_url_rule("/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"])

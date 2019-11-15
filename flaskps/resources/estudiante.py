@@ -7,10 +7,11 @@ from flask import (
     abort,
     make_response,
     jsonify,
-)
+    flash)
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
+from flaskps.helpers.estudiante import pasarChoices
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 
@@ -81,33 +82,7 @@ def create():
         abort(401)
 
     form = EstudianteCreateForm()
-
-    locs = localidades()
-    Barrio.db = get_db()
-    barrios = Barrio.all()
-    Genero.db = get_db()
-    generos = Genero.all()
-    tipos_doc = tipos_documento()
-    Escuela.db = get_db()
-    escuelas = Escuela.all()
-    Nivel.db = get_db()
-    niveles = Nivel.all()
-
-    # choices de los selects
-    form.select_localidad.choices = [
-        (localidad["id"], localidad["nombre"]) for localidad in locs
-    ]
-    form.select_barrio.choices = [
-        (barrio["id"], barrio["nombre"]) for barrio in barrios
-    ]
-    form.select_genero.choices = [
-        (genero["id"], genero["nombre"]) for genero in generos
-    ]
-    form.select_tipo.choices = [(tipo["id"], tipo["nombre"]) for tipo in tipos_doc]
-    form.select_escuela.choices = [
-        (escuela["id"], escuela["nombre"]) for escuela in escuelas
-    ]
-    form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
+    form = pasarChoices(form)
 
     op_response = dict()
     responsecode = 201
@@ -141,3 +116,66 @@ def create():
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def update():
+    if not has_permission("estudiante_update", session):
+        abort(401)
+
+    form = EstudianteCreateForm() # uso este porq es igual
+    form = pasarChoices(form)
+
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+
+        Estudiante.db = get_db()
+
+        updated = Estudiante.update(params)
+
+        if updated:
+            op_response["msg"] = "Se ha modificado al estudiante con éxito"
+            op_response["type"] = "success"
+        else:
+            op_response["msg"] = "Ocurrió un error"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response["msg"] = "Complete todos los datos del estudiante a modificar"
+            op_response["type"] = "error"
+        else:
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+            op_response["msg"] = error_msg
+            op_response["type"] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+# por id
+def estudiante_data():
+    if not has_permission("estudiante_index", session):
+        abort(401)
+
+    if request.args.get("id"):
+        Estudiante.db = get_db()
+        eid = request.args.get("id")
+        estudiante = Estudiante.find_by_id(eid)
+        if estudiante != None:
+            data = jsonify(estudiante)
+            return make_response(data, 200)
+        else:
+            flash("El estudiante con ID:" + eid + "no existe.", "error")
+            return abort(404)
+
+    else:
+        abort(400)
+
+
+
+
