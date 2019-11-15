@@ -139,4 +139,6 @@ app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
 app.add_url_rule(
     "/estudiantes/crear", "estudiante_new", estudiante.create, methods=["POST"]
 )
-app.add_url_rule("/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"])
+app.add_url_rule(
+    "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
+)

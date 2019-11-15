@@ -103,7 +103,7 @@ class ServerSideTable(object):
             return True if str_direction == "desc" else False
 
         if (self.request_values["iSortCol_0"] != "") and (
-                int(self.request_values["iSortingCols"]) > 0
+            int(self.request_values["iSortingCols"]) > 0
         ):
             for i in range(0, int(self.request_values["iSortingCols"])):
                 column_number = int(self.request_values["iSortCol_" + str(i)])

@@ -95,7 +95,6 @@ class Estudiante(object):
             cls.db.cursor().close()
         return True
 
-
     @classmethod
     def update(cls, data):
 

@@ -1,13 +1,7 @@
 from datetime import datetime
 
 import requests
-from flask import (
-    request,
-    session,
-    abort,
-    make_response,
-    jsonify,
-    flash)
+from flask import request, session, abort, make_response, jsonify, flash
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
@@ -122,7 +116,7 @@ def update():
     if not has_permission("estudiante_update", session):
         abort(401)
 
-    form = EstudianteCreateForm() # uso este porq es igual
+    form = EstudianteCreateForm()  # uso este porq es igual
     form = pasarChoices(form)
 
     op_response = dict()
@@ -175,7 +169,3 @@ def estudiante_data():
 
     else:
         abort(400)
-
-
-
-

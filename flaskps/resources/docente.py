@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import (
     request,
     session,
@@ -34,7 +36,7 @@ def get_docentes():
         dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"]
         del dict_item["fecha_nac"]
         locs = localidades()
-        dict_item["Localidad"] = locs[dict_item["localidad_id"]]["nombre"]
+        dict_item["Localidad"] = locs[dict_item["localidad_id"] - 1]["nombre"]
         del dict_item["localidad_id"]
         dict_item["Domicilio"] = dict_item["domicilio"]
         del dict_item["domicilio"]
@@ -42,7 +44,9 @@ def get_docentes():
         dict_item["Genero"] = Genero.find_by_id(dict_item["ID"])[0]["nombre"]
         del dict_item["genero_id"]
         tipos_doc = tipos_documento()
-        dict_item["Tipo de documento"] = tipos_doc[dict_item["tipo_doc_id"]]["nombre"]
+        dict_item["Tipo de documento"] = tipos_doc[dict_item["tipo_doc_id"] - 1][
+            "nombre"
+        ]
         del dict_item["tipo_doc_id"]
         dict_item["Numero de documento"] = dict_item["numero"]
         del dict_item["numero"]
@@ -65,15 +69,18 @@ def create():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
 
         Docente.db = get_db()
         created = Docente.create(params)
 
         if created:
-            op_response["msg"] = "Se ha agregado al Docente exitosamente"
+            op_response["msg"] = "Se ha agregado al docente exitosamente"
             op_response["type"] = "success"
         else:
-            op_response["msg"] = "Ha ocurrido un error al crear al Docente"
+            op_response["msg"] = "Ha ocurrido un error al crear al docente"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 409))
 
