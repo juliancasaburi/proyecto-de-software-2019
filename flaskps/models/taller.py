@@ -62,7 +62,9 @@ class Taller(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(sql_delete_relation, data.get("taller_id"))
                 cls.db.commit()
-                cursor.execute(sql_insert_relation, (data.get("taller_id"), data.get("ciclo_id")))
+                cursor.execute(
+                    sql_insert_relation, (data.get("taller_id"), data.get("ciclo_id"))
+                )
                 cls.db.commit()
 
         except IntegrityError:

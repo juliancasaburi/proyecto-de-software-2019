@@ -42,9 +42,7 @@ def get_estudiantes():
         dict_item["Barrio"] = dict_item["b.nombre"]
         del dict_item["b.nombre"]
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
-        dict_item["Tipo de documento"] = tipo_doc[
-            "nombre"
-        ]
+        dict_item["Tipo de documento"] = tipo_doc["nombre"]
         dict_item["Número de documento"] = dict_item["numero"]
         del dict_item["numero"]
         if dict_item["tel"]:

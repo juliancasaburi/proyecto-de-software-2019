@@ -121,8 +121,12 @@ app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POS
 
 # Talleres
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
-app.add_url_rule("/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"])
-app.add_url_rule("/taller/asociar", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form)
+app.add_url_rule(
+    "/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
+)
+app.add_url_rule(
+    "/taller/asociar", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
+)
 
 # Ciclos lectivos
 app.add_url_rule(

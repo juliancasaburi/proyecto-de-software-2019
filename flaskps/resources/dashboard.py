@@ -162,4 +162,6 @@ def taller_set_ciclo_form():
     CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
-    return render_template("user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos)
+    return render_template(
+        "user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos
+    )

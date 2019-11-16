@@ -1,11 +1,4 @@
-from flask import (
-    request,
-    session,
-    abort,
-    make_response,
-    jsonify,
-    render_template
-)
+from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
 from flaskps.models.taller import Taller
 

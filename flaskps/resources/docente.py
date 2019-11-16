@@ -44,9 +44,7 @@ def get_docentes():
         dict_item["Genero"] = Genero.find_by_id(dict_item["ID"])[0]["nombre"]
         del dict_item["genero_id"]
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
-        dict_item["Tipo de documento"] = tipo_doc[
-            "nombre"
-        ]
+        dict_item["Tipo de documento"] = tipo_doc["nombre"]
         del dict_item["tipo_doc_id"]
         dict_item["Numero de documento"] = dict_item["numero"]
         del dict_item["numero"]
