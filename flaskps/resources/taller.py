@@ -46,9 +46,10 @@ def create():
 
 def set_ciclo():
     params = request.form.to_dict()
+    params["ciclos"] = request.form.getlist("select_ciclos")
 
     Taller.db = get_db()
-    created = Taller.set_ciclo(params)
+    created = Taller.set_ciclos(params)
 
     op_response = dict()
     responsecode = 201

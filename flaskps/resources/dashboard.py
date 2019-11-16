@@ -162,6 +162,10 @@ def taller_set_ciclo_form():
     CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
     return render_template(
         "user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos
     )
