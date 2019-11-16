@@ -37,7 +37,8 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#cancelarAltaCiclo").click(function(){
+        $("#cancelarAltaCiclo").click(function(e){
+            e.preventDefault();
             $('#altaCiclo').trigger("reset");
         });
     });

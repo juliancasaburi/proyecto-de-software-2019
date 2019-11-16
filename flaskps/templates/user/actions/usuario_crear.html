@@ -82,7 +82,8 @@
     </script>
     <script>
         $(document).ready(function() {
-            $("#cancelarAltaUsuario").click(function(){
+            $("#cancelarAltaUsuario").click(function(e){
+                e.preventDefault();
                 $('#altaUsuario').trigger("reset");
             });
         });

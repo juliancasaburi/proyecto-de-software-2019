@@ -111,7 +111,8 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#cancelarAltaEstudiante").click(function(){
+        $("#cancelarAltaEstudiante").click(function(e){
+            e.preventDefault();
             $('#altaEstudiante').trigger("reset");
         });
     });
