@@ -63,3 +63,14 @@ def set_ciclo():
         abort(make_response(jsonify(op_response), 409))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def get_ciclos():
+    t_id = request.args.get("id")
+    Taller.db = get_db()
+    ciclos = Taller.ciclos(t_id)
+
+    if ciclos is None:
+        abort(404)
+
+    return make_response(jsonify(ciclos), 200)

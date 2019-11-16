@@ -121,6 +121,7 @@ app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POS
 
 # Talleres
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
+app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule(
     "/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )

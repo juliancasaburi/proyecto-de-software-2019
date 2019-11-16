@@ -73,3 +73,19 @@ class Taller(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def ciclos(cls, t_id):
+        sql = """
+                SELECT  ciclo_lectivo_id
+                FROM    ciclo_lectivo_taller
+                WHERE   taller_id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, t_id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchall()

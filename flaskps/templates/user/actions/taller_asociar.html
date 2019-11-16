@@ -45,6 +45,22 @@
     <script>
         $(document).ready(function(){
             $('select').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: $('#select_taller').val()
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                    }
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+            $('#select_ciclos').formSelect();
         });
     </script>
     <script>
@@ -79,6 +95,28 @@
                         }
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        $('#select_taller').on('change', function() {
+            $("#select_ciclos").val("");
+            $('#select_ciclos').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: this.value
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                    }
+                    $('#select_ciclos').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
             });
         });
     </script>
