@@ -1,4 +1,4 @@
-<div id="modalCrearCiclo" class="modal">
+<div id="modalAltaCiclo" class="modal">
     <form id="altaCiclo" method="post" action="{{ url_for('ciclo_new') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
@@ -29,9 +29,20 @@
 </div>
 <script>
     $(document).ready(function() {
+        let current_year = new Date().getFullYear();
         $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            parse: true
+            format: 'dd/mm/yyyy',
+            parse: true,
+            yearRange: [current_year, current_year + 10],
+            i18n: {
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+                cancel: 'Cerrar',
+                done: 'Seleccionar',
+            }
         })
     })
 </script>
@@ -49,7 +60,7 @@
 
         frm.submit(function (e) {
             e.preventDefault();
-            $('#modalCrearCiclo').modal('close');
+            $('#modalAltaCiclo').modal('close');
             $.ajax({
                 type: frm.attr('method'),
                 url: frm.attr('action'),

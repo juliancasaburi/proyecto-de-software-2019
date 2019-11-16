@@ -107,6 +107,33 @@
                     </div>
                 </div>
 
+                {% if has_permission('ciclolectivo_index', session) %}
+                    <div class="col s12">
+                        <div class="card" style="overflow: visible;">
+                            <div class="center-align light-blue block">
+                                <i class="fas fa-calendar-alt fa-3x"></i>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
+                                <p><a href="#">Ver listado</a></p>
+                            </div>
+
+                            <div class="card-action">
+                                {% if has_permission('ciclolectivo_new', session) %}
+                                    <a href="#modalAltaCiclo" class="modal-trigger">Crear</a>
+                                {% endif %}
+                            </div>
+
+                            {% include 'partials/modal_alta_ciclo.html' %}
+
+                            <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                                <span class="card-title grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">close</i></span>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% if has_permission('taller_new', session) %}
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
@@ -355,34 +382,6 @@
                         </div>
                     </div>
                 </div>
-
-                {% if has_permission('ciclolectivo_index', session) %}
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">calendar_today</i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
-                        </div>
-
-                        <div class="card-action">
-                            {% if has_permission('ciclolectivo_new', session) %}
-                            <a href="#modalCrearCiclo" class="modal-trigger">Crear</a>
-                            {% endif %}
-                        </div>
-
-                        {% include 'partials/modal_crear_ciclo.html' %}
-
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">close</i></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
             </div>
         </div>
     </div>
