@@ -277,8 +277,8 @@ DROP TABLE IF EXISTS `grupo2`.`ciclo_lectivo` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`ciclo_lectivo` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `fecha_ini` DATETIME NULL DEFAULT NULL,
-  `fecha_fin` DATETIME NULL DEFAULT NULL,
+  `fecha_ini` DATE NULL DEFAULT NULL,
+  `fecha_fin` DATE NULL DEFAULT NULL,
   `semestre` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
