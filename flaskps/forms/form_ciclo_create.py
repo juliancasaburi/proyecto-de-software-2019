@@ -10,10 +10,12 @@ class CicloCreateForm(FlaskForm):
 
     fecha_inicio = DateField(
         "fecha_inicio",
+        format="%d/%m/%Y",
         validators=[InputRequired(message="Complete la fecha de inicio")],
     )
 
     fecha_fin = DateField(
         "fecha_fin",
+        format="%d/%m/%Y",
         validators=[InputRequired(message="Complete la fecha de finalización")],
     )

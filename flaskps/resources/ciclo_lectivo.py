@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import (
     request,
     session,
@@ -25,8 +27,17 @@ def create():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
+        params["fecha_inicio"] = datetime.strptime(
+            params["fecha_inicio"], "%d/%m/%Y"
+        ).date()
+
+        params["fecha_fin"] = datetime.strptime(
+            params["fecha_fin"], "%d/%m/%Y"
+        ).date()
+
         fecha_ini = params["fecha_inicio"]
         fecha_fin = params["fecha_fin"]
+
         if fecha_fin <= fecha_ini:
             op_response[
                 "msg"
