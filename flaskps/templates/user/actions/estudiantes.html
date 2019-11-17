@@ -22,8 +22,8 @@
                     <div class="table-header">
                         <span class="table-title">Estudiantes</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger waves-effect btn-flat nopadding" href="#modalAltaEstudiante" data-position="top" data-tooltip="Crear estudiante"><i class="material-icons">person_add</i></a>
-                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaEstudiante" data-position="top" data-tooltip="Crear estudiante"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
                         </div>
@@ -155,11 +155,12 @@
                     "paginate": {
                         "first":      "Primera",
                         "last":       "Última",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
+                        "next":       "<i class=\"material-icons\">chevron_right</i>",
+                        "previous":   "<i class=\"material-icons\">chevron_left</i>"
                     },
                     "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
-                    "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>"
+                    "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
+                    "sEmptyTable": "No hay datos para mostrar"
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -181,21 +182,21 @@
     });
     </script>
     <script> // Filtros
-        $(document).ready(function(){
-            var table = $('#tablaEstudiantes').DataTable();
-            $("#filterNombreEstudiante").on("keyup", function() {
-                table
-                    .columns( 1 )
-                    .search( this.value )
-                    .draw();
-            });
-            $("#filterDocumentoEstudiante").on("keyup", function() {
-                table
-                    .columns( 9 )
-                    .search( this.value )
-                    .draw();
-            });
+    $(document).ready(function(){
+        var table = $('#tablaEstudiantes').DataTable();
+        $("#filterNombreEstudiante").on("keyup", function() {
+            table
+                .columns( 1 )
+                .search( this.value )
+                .draw();
         });
+        $("#filterDocumentoEstudiante").on("keyup", function() {
+            table
+                .columns( 9 )
+                .search( this.value )
+                .draw();
+        });
+    });
     </script>
     <script>
         $('#modalFilters').modal({

@@ -29,13 +29,14 @@
                     <label for="modal_editar_email">Email</label>
                     <input id="modal_editar_email" name="email" class="validate" type="email" required>
                 </div>
-                <div class="col s12">
+                <div class="col s12 input-field">
                     <select multiple id="select_roles" name="rol_id" class="validate" required>
                         <option value="" disabled>Selecciona uno o más roles</option>
                         {% for rol in roles %}
                             <option value="{{rol.id}}">{{rol.nombre}}</option>
                         {% endfor %}
                     </select>
+                    <label for="rol_id">Roles</label>
                 </div>
             </div>
         </div>

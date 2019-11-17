@@ -28,13 +28,14 @@
                     <label for="confirm_password">Confirmar contraseña</label>
                     <input id="confirm_password" name="confirm_password" class="validate" type="password" required>
                 </div>
-                <div class="col s12">
+                <div class="col s12 input-field">
                     <select multiple name="rol_id" required>
                         <option value="" disabled selected>Selecciona uno o más roles</option>
                         {% for rol in roles %}
                             <option value="{{rol.id}}">{{rol.nombre}}</option>
                         {% endfor %}
                     </select>
+                    <label for="rol_id">Roles</label>
                 </div>
             </div>
         </div>
@@ -46,7 +47,8 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#cancelarAltaUsuario").click(function(){
+        $("#cancelarAltaUsuario").click(function(e){
+            e.preventDefault();
             $('#altaUsuario').trigger("reset");
         });
     });

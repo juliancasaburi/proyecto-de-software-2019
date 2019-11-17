@@ -42,7 +42,7 @@ class Taller(object):
         return True
 
     @classmethod
-    def set_ciclo(cls, data):
+    def set_ciclos(cls, data):
         sql_delete_relation = """
                 DELETE FROM ciclo_lectivo_taller 
                 WHERE  taller_id = %s 
@@ -62,11 +62,30 @@ class Taller(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(sql_delete_relation, data.get("taller_id"))
                 cls.db.commit()
-                cursor.execute(sql_insert_relation, (data.get("taller_id"), data.get("ciclo_id")))
-                cls.db.commit()
+
+                ciclos = data.get("ciclos")
+                for ciclo in ciclos:
+                    cursor.execute(sql_insert_relation, (data.get("taller_id"), ciclo))
+                    cls.db.commit()
 
         except IntegrityError:
             return False
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def ciclos(cls, t_id):
+        sql = """
+                SELECT  ciclo_lectivo_id
+                FROM    ciclo_lectivo_taller
+                WHERE   taller_id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, t_id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchall()

@@ -84,7 +84,8 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#cancelarAltaDocente").click(function(){
+        $("#cancelarAltaDocente").click(function(e){
+            e.preventDefault();
             $('#altaDocente').trigger("reset");
         });
     });

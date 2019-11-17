@@ -37,7 +37,8 @@
 {% block scripts %}
     <script>
         $(document).ready(function() {
-            $("#cancelarAltaTaller").click(function(){
+            $("#cancelarAltaTaller").click(function(e){
+                e.preventDefault();
                 $('#altaTaller').trigger("reset");
             });
         });

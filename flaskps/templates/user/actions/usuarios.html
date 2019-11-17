@@ -22,10 +22,28 @@
                     <div class="table-header">
                         <span class="table-title">Usuarios</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Crear Usuario"><i class="material-icons">person_add</i></a>
-                            <a class="tooltipped modal-trigger btn-flat nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaUsuario" data-position="top" data-tooltip="Crear Usuario"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
+                        </div>
+                    </div>
+                    <div hidden id="progress" class="row">
+                        <p class="teal-text center"><b>Operación en progreso ...</b></p>
+                        <div class="progress">
+                            <div class="indeterminate orange"></div>
+                        </div>
+                    </div>
+                    <div hidden id="actionSuccess" class="row">
+                        <p class="teal-text center"><b>Operación exitosa!</b></p>
+                        <div class="progress">
+                            <div class="determinate green" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div hidden id="actionError" class="row">
+                        <p class="teal-text center"><b>Ha Ocurrido un error</b></p>
+                        <div class="progress">
+                            <div class="determinate red" style="width: 100%"></div>
                         </div>
                     </div>
                     <table id="tablaUsuarios" class="highlight nowrap" style="width:100%">
@@ -139,23 +157,24 @@
                     {
                         data: null,
                         className: "center",
-                        defaultContent: '<a class="editButton btn blue-grey"><i class="fas fa-edit"></i></a>'
+                        defaultContent: '<a class="editButton btn blue-grey waves-effect waves-light hoverable"><i class="fas fa-edit"></i></a>'
                     },
                     {
                         data: null,
                         className: "center",
-                        defaultContent: '<a class="deleteButton btn red"><i class="material-icons">cancel</i></a>'
+                        defaultContent: '<a class="deleteButton btn red waves-effect waves-light hoverable"><i class="material-icons">cancel</i></a>'
                     }
                 ],
                 "language": {
                     "paginate": {
                         "first":      "Primera",
                         "last":       "Última",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
+                        "next":       "<i class=\"material-icons\">chevron_right</i>",
+                        "previous":   "<i class=\"material-icons\">chevron_left</i>"
                     },
                     "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
-                    "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)"
+                    "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)",
+                    "sEmptyTable": "No hay datos para mostrar"
                 },
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
@@ -241,34 +260,6 @@
         });
     </script>
     <script>
-        // Delete a record
-        $('#tablaUsuarios').on('click', 'a.deleteButton', function (e) {
-            var table = $('#tablaUsuarios').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
-            var uid = rowData.ID;
-            var username = rowData['Nombre de usuario'];
-            if (confirm('¿Está seguro de bloquear al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
-                $.ajax({
-                    type: "POST",
-                    url: "{{ url_for('user_destroy') }}",
-                    data: JSON.stringify({"id": uid}),
-                    dataType: 'json',
-                    contentType: 'application/json;charset=UTF-8',
-                    success: function () {
-                        table.ajax.reload( null, false );
-                        var toastText = 'El usuario "' + username + '" (ID: ' + uid + ') fue eliminado';
-                        M.toast({html: toastText, classes: 'green'});
-                    },
-                    statusCode: {
-                        404: function (jqXHR) {
-                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                        }
-                    }
-                });
-            }
-        });
-    </script>
-    <script>
         // Edit a record
         $('#tablaUsuarios').on('click', 'a.editButton', function (e) {
             var table = $('#tablaUsuarios').DataTable();
@@ -303,28 +294,76 @@
             });
         });
     </script>
-    <script>
+    <script async>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
         $(document).ready(function(){
             var frm = $('#formEditarUsuario');
 
             frm.submit(function (e) {
                 e.preventDefault();
+                $('#progress').show();
                 $('#modalEditarUsuario').modal('close');
                 $.ajax({
                     type: frm.attr('method'),
                     url: frm.attr('action'),
                     data: frm.serialize(),
-                    success: function (response) {
+                    success: async function (response) {
+                        $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "El usuario fue editado con éxito";
+                        await sleep(2000);
+                        $('#actionSuccess').show();
+                        $('#actionSuccess').delay(2000).fadeOut('slow');
                         var table = $('#tablaUsuarios').DataTable();
                         table.ajax.reload( null, false );
-                        var toastText = "El usuario fue editado con éxito";
                         M.toast({html: toastText, classes: 'green'});
                     },
-                    error: function (data) {
-                        console.log('Error');
-                        console.log(data);
+                    error: async function (data) {
+                        $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "Ha ocurrido un error";
+                        await sleep(2000);
+                        $('#actionError').show();
+                        $('#actionError').delay(2000).fadeOut('slow');
+                        M.toast({html: toastText, classes: 'error'});
                     },
                 });
+            });
+
+            // Delete a record
+            $('#tablaUsuarios').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablaUsuarios').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var uid = rowData.ID;
+                var username = rowData['Nombre de usuario'];
+                if (confirm('¿Está seguro de bloquear al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
+                    $('#progress').show();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url_for('user_destroy') }}",
+                        data: JSON.stringify({"id": uid}),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=UTF-8',
+                        success: async function () {
+                            table.ajax.reload( null, false );
+                            $('#progress').delay(2000).fadeOut('slow');
+                            await sleep(2000);
+                            $('#actionSuccess').show();
+                            $('#actionSuccess').delay(2000).fadeOut('slow');
+                            var toastText = 'El usuario "' + username + '" (ID: ' + uid + ') fue eliminado';
+                            M.toast({html: toastText, classes: 'green'});
+                        },
+                        statusCode: {
+                            404: async function (jqXHR) {
+                                $('#progress').delay(2000).fadeOut('slow');
+                                await sleep(2000);
+                                $('#actionError').show();
+                                $('#actionError').delay(2000).fadeOut('slow');
+                                M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                            }
+                        }
+                    });
+                }
             });
         });
     </script>

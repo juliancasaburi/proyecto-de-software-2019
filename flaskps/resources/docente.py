@@ -15,8 +15,8 @@ from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
 
 from flaskps.helpers.permission import has_permission
-from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.helpers.localidades import localidad
+from flaskps.helpers.tipos_documento import tipo_documento
 
 
 def get_docentes():
@@ -35,18 +35,16 @@ def get_docentes():
         del dict_item["apellido"]
         dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         del dict_item["fecha_nac"]
-        locs = localidades()
-        dict_item["Localidad"] = locs[dict_item["localidad_id"] - 1]["nombre"]
+        loc = localidad(dict_item["localidad_id"])
+        dict_item["Localidad"] = loc["nombre"]
         del dict_item["localidad_id"]
         dict_item["Domicilio"] = dict_item["domicilio"]
         del dict_item["domicilio"]
         Genero.db = get_db()
         dict_item["Genero"] = Genero.find_by_id(dict_item["ID"])[0]["nombre"]
         del dict_item["genero_id"]
-        tipos_doc = tipos_documento()
-        dict_item["Tipo de documento"] = tipos_doc[dict_item["tipo_doc_id"] - 1][
-            "nombre"
-        ]
+        tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
+        dict_item["Tipo de documento"] = tipo_doc["nombre"]
         del dict_item["tipo_doc_id"]
         dict_item["Numero de documento"] = dict_item["numero"]
         del dict_item["numero"]

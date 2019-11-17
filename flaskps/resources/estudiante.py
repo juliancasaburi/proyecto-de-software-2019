@@ -1,22 +1,17 @@
 from datetime import datetime
 
-import requests
 from flask import request, session, abort, make_response, jsonify, flash
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
 from flaskps.helpers.estudiante import pasarChoices
-from flaskps.models.barrio import Barrio
-from flaskps.models.escuela import Escuela
 
 from flaskps.models.estudiante import Estudiante
 
 from flaskps.helpers.permission import has_permission
 
-from flaskps.helpers.tipos_documento import tipos_documento
-from flaskps.helpers.localidades import localidades
-from flaskps.models.genero import Genero
-from flaskps.models.nivel import Nivel
+from flaskps.helpers.tipos_documento import tipo_documento
+from flaskps.helpers.localidades import localidad
 
 
 def get_estudiantes():
@@ -25,9 +20,6 @@ def get_estudiantes():
 
     Estudiante.db = get_db()
     estudiantes = Estudiante.all()
-
-    tipo_doc = tipos_documento()
-    locs = localidades()
 
     for dict_item in estudiantes:
         dict_item["ID"] = dict_item["id"]
@@ -38,10 +30,8 @@ def get_estudiantes():
         del dict_item["apellido"]
         dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         del dict_item["fecha_nac"]
-        for loc in locs:
-            if int(loc["id"]) == dict_item["localidad_id"]:
-                dict_item["Localidad"] = loc["nombre"]
-                break
+        loc = localidad(dict_item["localidad_id"])
+        dict_item["Localidad"] = loc["nombre"]
         del dict_item["localidad_id"]
         dict_item["Domicilio"] = dict_item["domicilio"]
         del dict_item["domicilio"]
@@ -51,11 +41,8 @@ def get_estudiantes():
         del dict_item["es.nombre"]
         dict_item["Barrio"] = dict_item["b.nombre"]
         del dict_item["b.nombre"]
-        for t_doc in tipo_doc:
-            if int(t_doc["id"]) == dict_item["tipo_doc_id"]:
-                dict_item["Tipo de documento"] = t_doc["nombre"]
-                break
-        del dict_item["tipo_doc_id"]
+        tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
+        dict_item["Tipo de documento"] = tipo_doc["nombre"]
         dict_item["Número de documento"] = dict_item["numero"]
         del dict_item["numero"]
         if dict_item["tel"]:

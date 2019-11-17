@@ -49,13 +49,14 @@
                                 <label for="email">Email</label>
                                 <input id="email"  name="email" class="validate" type="email" required>
                             </div>
-                            <div class="col s12">
+                            <div class="col s12 input-field">
                                 <select multiple id="select_roles" name="rol_id" class="validate" required>
                                     <option value="" disabled>Roles</option>
                                     {% for rol in roles %}
                                         <option value="{{rol.id}}">{{rol.nombre}}</option>
                                     {% endfor %}
                                 </select>
+                                <label for="rol_id">Roles</label>
                             </div>
                             <divider></divider>
                             <div class="modal-footer col s12">

@@ -1,11 +1,4 @@
-from flask import (
-    request,
-    session,
-    abort,
-    make_response,
-    jsonify,
-    render_template
-)
+from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
 from flaskps.models.taller import Taller
 
@@ -53,9 +46,10 @@ def create():
 
 def set_ciclo():
     params = request.form.to_dict()
+    params["ciclos"] = request.form.getlist("select_ciclos")
 
     Taller.db = get_db()
-    created = Taller.set_ciclo(params)
+    created = Taller.set_ciclos(params)
 
     op_response = dict()
     responsecode = 201
@@ -69,3 +63,14 @@ def set_ciclo():
         abort(make_response(jsonify(op_response), 409))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def get_ciclos():
+    t_id = request.args.get("id")
+    Taller.db = get_db()
+    ciclos = Taller.ciclos(t_id)
+
+    if ciclos is None:
+        abort(404)
+
+    return make_response(jsonify(ciclos), 200)
