@@ -5,6 +5,10 @@ body {
     flex-direction: column;
 }
 
+.navbar-fixed {
+    margin-bottom: 2rem !important;
+}
+
 main {
     flex: 1 0 auto;
 }
