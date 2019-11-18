@@ -133,6 +133,8 @@ app.add_url_rule(
 app.add_url_rule(
     "/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
 )
+app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", dashboard.ciclo_table)
+app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
