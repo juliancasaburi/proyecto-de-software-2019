@@ -15,8 +15,8 @@ from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
 
 from flaskps.helpers.permission import has_permission
-from flaskps.helpers.localidades import localidad
-from flaskps.helpers.tipos_documento import tipo_documento
+from flaskps.helpers.localidades import localidad, localidades
+from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
 
 
 def get_docentes():
@@ -41,7 +41,7 @@ def get_docentes():
         dict_item["Domicilio"] = dict_item["domicilio"]
         del dict_item["domicilio"]
         Genero.db = get_db()
-        dict_item["Genero"] = Genero.find_by_id(dict_item["ID"])[0]["nombre"]
+        dict_item["Genero"] = Genero.find_by_id(dict_item["genero_id"])[0]["nombre"]
         del dict_item["genero_id"]
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
         dict_item["Tipo de documento"] = tipo_doc["nombre"]
@@ -60,7 +60,19 @@ def create():
     if not has_permission("docente_new", session):
         abort(401)
 
+    # Validación - Fill choices
     form = DocenteCreateForm()
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    form.select_genero.choices = [(g['id'], g['nombre']) for g in generos]
+
+    locs = localidades()
+    form.select_localidad.choices = [(l['id'], l['nombre']) for l in locs]
+
+    tipos = tipos_documento()
+    form.select_tipo.choices = [(t['id'], t['nombre']) for t in tipos]
 
     op_response = dict()
     responsecode = 201
@@ -83,14 +95,9 @@ def create():
             abort(make_response(jsonify(op_response), 409))
 
     else:
-        if len(form.errors) >= 2:
-            op_response["msg"] = "Complete todos los datos del nuevo docente"
-            op_response["type"] = "error"
-        else:
-            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
-            op_response["msg"] = error_msg
-            op_response["type"] = "error"
-
+        error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+        op_response["msg"] = error_msg
+        op_response["type"] = "error"
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)

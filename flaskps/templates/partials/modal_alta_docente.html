@@ -13,7 +13,7 @@
                     <input id="nombre" name="nombre" class="validate" type="text" required>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="select_genero" name="select_genero">
+                    <select id="select_genero" name="select_genero" required>
                         <option value="" disabled selected>Selecciona un género</option>
                         {% for genero in generos %}
                             <option value="{{genero.id}}">{{genero.nombre}}</option>
@@ -26,7 +26,7 @@
                     <input id="fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_localidad" name="select_localidad">
+                    <select id="select_localidad" name="select_localidad" required>
                         <option value="" disabled selected>Selecciona una Localidad</option>
                         {% for localidad in localidades %}
                             <option value="{{localidad.id}}">{{localidad.nombre}}</option>
@@ -39,7 +39,7 @@
                     <input id="domicilio" name="domicilio" class="validate" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_tipo" name="select_tipo">
+                    <select id="select_tipo" name="select_tipo" required>
                         <option value="" disabled selected>Selecciona un tipo</option>
                         {% for tipo in tipodoc %}
                             <option value="{{tipo.id}}">{{tipo.nombre}}</option>
