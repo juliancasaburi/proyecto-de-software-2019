@@ -1,4 +1,5 @@
 import re
+import abc
 
 
 class ServerSideTable(object):
@@ -61,6 +62,7 @@ class ServerSideTable(object):
             rows.append(row)
         return rows
 
+    @abc.abstractmethod
     def _custom_filter(self, data):
         """
         Args:
@@ -68,25 +70,7 @@ class ServerSideTable(object):
         Returns:
             Filtered data.
         """
-
-        def check_row_username(row):
-            """ Checks whether a row should be displayed or not. """
-            value = row[self.columns[5]["column_name"]]
-            regex = "(?i)" + self.request_values["sSearch_6"]
-            if re.compile(regex).search(str(value)):
-                return True
-            return False
-
-        def check_row_active(row):
-            """ Checks whether a row should be displayed or not. """
-            value = row[self.columns[1]["column_name"]]
-            regex = "(?i)" + self.request_values["sSearch_1"]
-            if re.compile(regex).search(str(value)):
-                return True
-            return False
-
-        rows_f1 = [row for row in data if check_row_username(row)]
-        return [row for row in rows_f1 if check_row_active(row)]
+        return
 
     def _custom_sort(self, data):
         """
