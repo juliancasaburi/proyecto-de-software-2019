@@ -556,12 +556,12 @@ INSERT INTO `permiso` (`id`, `nombre`) VALUES
 (18, 'ciclolectivo_new'),
 (19, 'ciclolectivo_update'),
 (20, 'ciclolectivo_show'),
-(21, 'ciclolectivo_destroy'),
-(22, 'taller_index'),
-(23, 'taller_new'),
-(24, 'taller_destroy'),
-(25, 'taller_update'),
-(26, 'taller_show');
+(21, 'taller_index'),
+(22, 'taller_new'),
+(23, 'taller_destroy'),
+(24, 'taller_update'),
+(25, 'taller_show'),
+(26, 'ciclolectivo_destroy');
 
 -- --------------------------------------------------------
 
@@ -596,8 +596,8 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (1, 16),
 (1, 17),
 (1, 18),
-(1, 21),
-(1, 23),
+(1, 22),
+(1, 26),
 (2, 7),
 (2, 10),
 (2, 11),
