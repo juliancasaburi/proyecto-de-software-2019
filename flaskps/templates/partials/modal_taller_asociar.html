@@ -1,8 +1,8 @@
 <div id="modalTallerAsociar" class="modal">
+    <header class="modal-header">Asociar Taller a Ciclo Lectivo</header>
     <form id="tallerAsociar" method="post" action="{{ url_for('taller_set_ciclo') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
-            <h1>Asociar Taller A Ciclo Lectivo</h1>
             <div class="row">
                 <div class="col s12 input-field">
                     <select id="select_taller" name="taller_id">
