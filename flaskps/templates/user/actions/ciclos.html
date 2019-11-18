@@ -35,7 +35,9 @@
                             <th>Semestre</th>
                             <th>Fecha de inicio</th>
                             <th>Fecha de finalización</th>
-                            <th class="nosort">Eliminar</th>
+                            {% if has_permission('ciclolectivo_destroy', session) %}
+                                <th class="nosort">Eliminar</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tfoot>
@@ -44,7 +46,9 @@
                             <th>Semestre</th>
                             <th>Fecha de inicio</th>
                             <th>Fecha de finalización</th>
-                            <th class="nosort">Eliminar</th>
+                            {% if has_permission('ciclolectivo_destroy', session) %}
+                                <th class="nosort">Eliminar</th>
+                            {% endif %}
                         </tr>
                         </tfoot>
                     </table>
@@ -162,27 +166,27 @@
         } );
     </script>
     <script> // Filtros
-        $(document).ready(function(){
-            var table = $('#tablaCiclos').DataTable();
-            $("#filterSemestre").on("keyup", function() {
-                table
-                    .columns( 1 )
-                    .search( this.value )
-                    .draw();
-            });
-            $("#filterFechaIni").on("keyup", function() {
-                table
-                    .columns( 2 )
-                    .search( this.value )
-                    .draw();
-            });
-            $("#filterFechaFin").on("keyup", function() {
-                table
-                    .columns( 3 )
-                    .search( this.value )
-                    .draw();
-            });
+    $(document).ready(function(){
+        var table = $('#tablaCiclos').DataTable();
+        $("#filterSemestre").on("keyup", function() {
+            table
+                .columns( 1 )
+                .search( this.value )
+                .draw();
         });
+        $("#filterFechaIni").on("keyup", function() {
+            table
+                .columns( 2 )
+                .search( this.value )
+                .draw();
+        });
+        $("#filterFechaFin").on("keyup", function() {
+            table
+                .columns( 3 )
+                .search( this.value )
+                .draw();
+        });
+    });
     </script>
     <script>
         $('#modalFilters').modal({
