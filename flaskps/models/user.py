@@ -93,7 +93,7 @@ class User(object):
     def delete(cls, uid):
         sql = """
             UPDATE  usuario 
-            SET     activo = FALSE
+            SET     activo = NOT activo
             WHERE  id = %s 
         """
         try:

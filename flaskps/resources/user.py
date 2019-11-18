@@ -154,10 +154,10 @@ def destroy():
     responsecode = 200
 
     if success:
-        op_response["msg"] = "Se ha eliminado al usuario exitosamente"
+        op_response["msg"] = "Se ha bloqueado/activado al usuario exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El usuario a eliminar no existe"
+        op_response["msg"] = "El usuario a bloquear/activar no existe"
         op_response["type"] = "error"
         responsecode = 404
 
