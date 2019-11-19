@@ -141,6 +141,47 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`barrio` (
 ENGINE = InnoDB;
 
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `responsable_tipo`
+--
+
+CREATE TABLE `responsable_tipo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `responsable_tipo`
+--
+
+INSERT INTO `responsable_tipo` (`id`, `nombre`) VALUES
+(1, 'Padre'),
+(2, 'Madre'),
+(3, 'Tutor');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `responsable_tipo`
+--
+ALTER TABLE `responsable_tipo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `responsable_tipo`
+--
+ALTER TABLE `responsable_tipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+
 -- -----------------------------------------------------
 -- Table `grupo2`.`estudiante`
 -- -----------------------------------------------------
@@ -148,6 +189,7 @@ DROP TABLE IF EXISTS `grupo2`.`estudiante` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `activo` tinyint(4) NOT NULL DEFAULT '1',
   `apellido` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `fecha_nac` DATE NOT NULL,
@@ -160,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante` (
   `numero` INT(11) NOT NULL,
   `tel` VARCHAR(255) CHARACTER SET 'utf8',
   `barrio_id` INT(11) NOT NULL,
+  `responsable_tipo_id` int(11) NOT NULL
   PRIMARY KEY (`id`),
   INDEX `FK_nivel_id` (`nivel_id` ASC),
   INDEX `FK_genero_estudiante_id` (`genero_id` ASC),
