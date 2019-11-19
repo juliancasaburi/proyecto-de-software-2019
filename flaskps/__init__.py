@@ -117,6 +117,11 @@ app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["PO
 # Docentes
 app.add_url_rule("/docente", "docente", docente.data)
 app.add_url_rule("/tabladocentes", "docente_table", dashboard.docente_table)
+app.add_url_rule(
+    "/docente_serverside_table",
+    "docente_serverside_table_content",
+    docente.serverside_table_content,
+)
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])

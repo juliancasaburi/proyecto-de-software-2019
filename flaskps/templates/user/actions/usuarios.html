@@ -342,7 +342,7 @@
                     confirmText = "bloquear";
                 else
                     confirmText = "activar";
-                if (confirm('¿Está seguro de ' + confirmText + ' al usuario "' + docentename + '" (ID: ' + uid + ')?') == true) {
+                if (confirm('¿Está seguro de ' + confirmText + ' al usuario "' + username + '" (ID: ' + uid + ')?') == true) {
                     $('#progress').show();
                     $.ajax({
                         type: "POST",
