@@ -50,6 +50,12 @@
                     <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
                 {% endif %}
             </ul>
+            <!-- dropdownEstudiantes Structure -->
+            <ul id="dropdownEstudiantes" class="dropdown-content teal">
+                {% if has_permission('estudiante_index', session) %}
+                    <li><a href="{{ url_for('estudiante_table') }}">Ver Listado</a></li>
+                {% endif %}
+            </ul>
             <!-- dropdownDocentes Structure -->
             <ul id="dropdownDocentes" class="dropdown-content teal">
                 {% if has_permission('docente_index', session) %}
@@ -64,13 +70,6 @@
                 {% if has_permission('docente_update', session) %}
                     <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
                 {% endif %}
-            </ul>
-            <!-- dropdownEstudiantes Structure -->
-            <ul id="dropdownAlumnos" class="dropdown-content teal">
-                <li><a href="{{ url_for('estudiante_table') }}">Ver Listado</a></li>
-                <li><a href="#">Crear</a></li>
-                <li><a href="#">Eliminar</a></li>
-                <li><a href="#">Editar</a></li>
             </ul>
             <!-- dropdownInstrumentos Structure -->
             <ul id="dropdownInstrumentos" class="dropdown-content teal">
@@ -103,6 +102,14 @@
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownUsuarios">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
+                {% if has_permission('estudiante_index', session) or has_permission('estudiante_new', session) or has_permission('estudiante_destroy', session) or has_permission('estudiante_update', session) or has_permission('estudiante_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Estudiantes</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownEstudiantes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
                 {% if has_permission('docente_index', session) or has_permission('docente_new', session) or has_permission('docente_destroy', session) or has_permission('docente_update', session) or has_permission('docente_show', session) %}
                     <div class="divider"></div>
                     <div class="section">
@@ -120,11 +127,7 @@
                     </div>
                 {% endif %}
                 <div class="divider"></div>
-                <div class="section">
-                    <li><a class="subheader">Estudiantes</a></li>
-                    <!-- Dropdown Trigger -->
-                    <li><a class="dropdown-trigger" href="#" data-target="dropdownAlumnos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
-                </div>
+                <h6 class="center-align red-text">Próximamente</h6>
                 <div class="divider"></div>
                 <div class="section">
                     <li><a class="subheader">Instrumentos</a></li>
