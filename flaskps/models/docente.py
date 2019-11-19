@@ -8,7 +8,8 @@ class Docente(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT  id, 
+            SELECT  id,
+                    activo, 
                     apellido, 
                     nombre, 
                     fecha_nac, 
@@ -26,6 +27,22 @@ class Docente(object):
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT  *
+            FROM    docente
+            WHERE   id = %s
+        """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()
 
     @classmethod
     def create(cls, data):
@@ -71,6 +88,23 @@ class Docente(object):
                 )
                 cls.db.commit()
 
+        except IntegrityError:
+            return False
+        finally:
+            cls.db.cursor().close()
+        return True
+
+    @classmethod
+    def delete(cls, d_id):
+        sql = """
+            UPDATE  docente 
+            SET     activo = NOT activo
+            WHERE  id = %s 
+        """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, d_id)
+                cls.db.commit()
         except IntegrityError:
             return False
         finally:

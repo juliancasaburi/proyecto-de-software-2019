@@ -1,8 +1,7 @@
 <div id="modalConfiguracion" class="modal">
-    <form id="formConfiguracion" method="post" action="{{ url_for('config_update') }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <div class="modal-content">
-            <h1>Configuración del sitio</h1>
+    <header class="modal-header">Configuración del sitio</header>
+    <div class="modal-content">
+        <form id="formConfiguracion" method="post" action="{{ url_for('config_update') }}">
             <div class="row">
                 <h2 class="center light-blue-text">Información de contacto</h2>
                 <div class="col s12 m6 input-field">
@@ -14,7 +13,7 @@
                     <input id="emailContacto" name="email" class="validate" type="email" value="{{ siteconfig['email_contacto'] }}" placeholder="{{ siteconfig['email_contacto'] }}" required>
                 </div>
                 <div class="col s12 input-field">
-                    <textarea id="descripcion" name="descripcion" class="materialize-textarea"  placeholder="{{ siteconfig['descripcion'] }}">{{ siteconfig['descripcion'] }}</textarea>
+                    <textarea id="descripcion" name="descripcion" class="materialize-textarea" placeholder="{{ siteconfig['descripcion'] }}">{{ siteconfig['descripcion'] }}</textarea>
                     <label for="descripcion">Descripción</label>
                 </div>
             </div>
@@ -25,11 +24,11 @@
                     <input id="itemsPorPagina" name="items_por_pagina" class="validate" type="number" step="1" value="{{ siteconfig['items_por_pagina'] }}" placeholder="{{ siteconfig['items_por_pagina'] }}" required>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
-        </div>
-    </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>

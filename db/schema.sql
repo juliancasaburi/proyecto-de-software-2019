@@ -236,6 +236,7 @@ DROP TABLE IF EXISTS `grupo2`.`docente` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`docente` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `activo` TINYINT(1) NOT NULL DEFAULT '1',
   `apellido` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `fecha_nac` DATE NOT NULL,
@@ -277,8 +278,8 @@ DROP TABLE IF EXISTS `grupo2`.`ciclo_lectivo` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`ciclo_lectivo` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `fecha_ini` DATETIME NULL DEFAULT NULL,
-  `fecha_fin` DATETIME NULL DEFAULT NULL,
+  `fecha_ini` DATE NULL DEFAULT NULL,
+  `fecha_fin` DATE NULL DEFAULT NULL,
   `semestre` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -401,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`usuario` (
   `email` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `username` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `password` CHAR(60) CHARACTER SET 'utf8' NOT NULL,
-  `activo` TINYINT(1) NOT NULL DEFAULT '0',
+  `activo` TINYINT(1) NOT NULL DEFAULT '1',
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `first_name` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
@@ -560,7 +561,8 @@ INSERT INTO `permiso` (`id`, `nombre`) VALUES
 (22, 'taller_new'),
 (23, 'taller_destroy'),
 (24, 'taller_update'),
-(25, 'taller_show');
+(25, 'taller_show'),
+(26, 'ciclolectivo_destroy');
 
 -- --------------------------------------------------------
 
@@ -596,6 +598,7 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (1, 17),
 (1, 18),
 (1, 22),
+(1, 26),
 (2, 7),
 (2, 10),
 (2, 11),

@@ -26,8 +26,8 @@ from flaskps.resources.email_threading import send_async
 
 from flaskps import bcrypt
 
-from flaskps.serverside.serverside_table import ServerSideTable
-from flaskps.serverside import table_schemas
+from flaskps.serverside_dt.serverside_table_usuarios import UsuariosServerSideTable
+from flaskps.serverside_dt import table_schemas
 
 
 def users():
@@ -70,7 +70,7 @@ def get_users():
 def collect_data_serverside(req):
     columns = table_schemas.SERVERSIDE_USUARIOS_TABLE_COLUMNS
 
-    return ServerSideTable(req, users(), columns).output_result()
+    return UsuariosServerSideTable(req, users(), columns).output_result()
 
 
 def serverside_table_content():
@@ -154,10 +154,10 @@ def destroy():
     responsecode = 200
 
     if success:
-        op_response["msg"] = "Se ha eliminado al usuario exitosamente"
+        op_response["msg"] = "Se ha bloqueado/activado al usuario exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El usuario a eliminar no existe"
+        op_response["msg"] = "El usuario a bloquear/activar no existe"
         op_response["type"] = "error"
         responsecode = 404
 

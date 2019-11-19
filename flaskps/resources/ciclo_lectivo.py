@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import (
     request,
     session,
@@ -25,8 +27,17 @@ def create():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
+        params["fecha_inicio"] = datetime.strptime(
+            params["fecha_inicio"], "%d/%m/%Y"
+        ).date()
+
+        params["fecha_fin"] = datetime.strptime(
+            params["fecha_fin"], "%d/%m/%Y"
+        ).date()
+
         fecha_ini = params["fecha_inicio"]
         fecha_fin = params["fecha_fin"]
+
         if fecha_fin <= fecha_ini:
             op_response[
                 "msg"
@@ -57,3 +68,29 @@ def create():
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def get_ciclos():
+    if not has_permission("ciclolectivo_index", session):
+        abort(401)
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    for dict_item in ciclos:
+        dict_item["ID"] = dict_item["id"]
+        del dict_item["id"]
+        dict_item["Fecha de inicio"] = dict_item["fecha_ini"]
+        del dict_item["fecha_ini"]
+        dict_item["Fecha de fin"] = dict_item["fecha_fin"]
+        del dict_item["fecha_fin"]
+        dict_item["Semestre"] = dict_item["semestre"]
+        del dict_item["semestre"]
+
+    ciclos = jsonify(ciclos)
+
+    return make_response(ciclos, 200)

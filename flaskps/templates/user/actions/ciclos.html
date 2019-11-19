@@ -1,0 +1,210 @@
+{% extends "layout.html" %}
+{% block title %}Listado de ciclos lectivos - {{ siteconfig['titulo'] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.material.min.css') }}" media="screen">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/responsive.dataTables.min.css') }}" media="screen">
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section">
+
+            <div class="row">
+                <div class="col s12 center">
+                    <h1>Listado de ciclos lectivos</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card material-table">
+                    <div class="table-header">
+                        <span class="table-title">Ciclos lectivos</span>
+                        <div class="actions">
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaCiclo" data-position="top" data-tooltip="Crear ciclo lectivo"><i class="material-icons">add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                                <i class="large material-icons">search</i>
+                            </a>
+                        </div>
+                    </div>
+                    <table id="tablaCiclos" class="highlight nowrap" style="width:100%">
+                        <thead>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Semestre</th>
+                            <th>Fecha de inicio</th>
+                            <th>Fecha de finalización</th>
+                            {% if has_permission('ciclolectivo_destroy', session) %}
+                                <th class="nosort">Eliminar</th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr class="orange">
+                            <th>ID</th>
+                            <th>Semestre</th>
+                            <th>Fecha de inicio</th>
+                            <th>Fecha de finalización</th>
+                            {% if has_permission('ciclolectivo_destroy', session) %}
+                                <th class="nosort">Eliminar</th>
+                            {% endif %}
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            {% include 'partials/modal_alta_ciclo.html' %}
+
+            <div class="col-md-12 center text-center">
+                <span class="left" id="total_reg"></span>
+                <ul class="pagination pager" id="pager"></ul>
+            </div>
+
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
+                    <i class="large material-icons">search</i>
+                </a>
+            </div>
+
+            <!-- Modal Structure -->
+            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+                <div class="modal-content">
+                    <h3 class="header">Filtrar el listado de Ciclos</h3>
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="fas fa-list-ol black-text prefix"></i>
+                                <input class="filterSemestre" id="filterSemestre" type="text">
+                                <label for="filterSemestre">Filtrar por semestre</label>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="fas fa-calendar black-text prefix"></i>
+                                <input class="filterFechaIni" id="filterFechaIni" type="text">
+                                <label for="filterFechaIni">Filtrar por fecha de inicio</label>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <div class="input-field col s12">
+                                <i class="fas fa-calendar-check black-text prefix"></i>
+                                <input class="filterFechaFin" id="filterFechaFin" type="text">
+                                <label for="filterFechaFin">Filtrar por fecha de finalización</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('.modal').modal();
+            $('select').formSelect();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#tablaCiclos').DataTable( {
+                "ajax": {
+                    "url": "{{ url_for('ciclo_all') }}",
+                    "dataType": "json",
+                    "dataSrc": "",
+                    "contentType":"application/json"
+                },
+                "columns": [
+                    {"data": "ID"},
+                    {"data": "Semestre"},
+                    {"data": "Fecha de inicio"},
+                    {"data": "Fecha de fin"},
+                    {% if has_permission('ciclolectivo_destroy', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            defaultContent: '<a class="editButton btn red"><i class=\"material-icons\">delete</i></a>'
+                        },
+                    {% endif %}
+                ],
+                "language": {
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
+                    "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
+                    "sEmptyTable": "No hay datos para mostrar",
+                    "sInfoEmpty": "No hay datos para mostrar",
+                },
+                "columnDefs": [
+                    { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
+                ],
+                sDom: 't,i,p', // Hide info
+                pageLength: $('#items-per-page').data("ammount"),
+                "scrollX": true
+            } );
+            setInterval( function () {
+                var table = $('#tablaCiclos').DataTable();
+                table.ajax.reload( null, false ); // user paging is not reset on reload
+            }, 5000 );
+        } );
+    </script>
+    <script> // Filtros
+    $(document).ready(function(){
+        var table = $('#tablaCiclos').DataTable();
+        $("#filterSemestre").on("keyup", function() {
+            table
+                .columns( 1 )
+                .search( this.value )
+                .draw();
+        });
+        $("#filterFechaIni").on("keyup", function() {
+            table
+                .columns( 2 )
+                .search( this.value )
+                .draw();
+        });
+        $("#filterFechaFin").on("keyup", function() {
+            table
+                .columns( 3 )
+                .search( this.value )
+                .draw();
+        });
+    });
+    </script>
+    <script>
+        $('#modalFilters').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                    //  alert("Ready");
+                    console.log(modal, trigger);
+                },
+                complete: function() { //alert('Closed');
+                } // Callback for Modal close
+            }
+        );
+    </script>
+{% endblock %}

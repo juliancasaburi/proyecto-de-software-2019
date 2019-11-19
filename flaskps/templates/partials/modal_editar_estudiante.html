@@ -1,8 +1,8 @@
 <div id="modalEditarEstudiante" class="modal">
+    <header class="modal-header">Editar Estudiante</header>
     <form id="formEditarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
-            <h1>Editar estudiante</h1>
             <div class="row">
                 <input id="modal_editar_id" name="id" type="number" hidden>
                 <div class="col s12 m6 input-field">

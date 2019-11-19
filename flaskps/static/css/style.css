@@ -3,6 +3,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 .navbar-fixed {
@@ -206,4 +207,14 @@ strong {
     .login-page {
         width: 75%;
     }
+}
+
+.modal-header {
+    padding: 1%;
+    margin-bottom: 1%;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+    background-color: #03a9f4;
+    font-weight: bolder;
 }
