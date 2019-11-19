@@ -46,3 +46,42 @@ class CicloLectivo(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def destroy(cls, id_ciclo):
+        sql_eliminar = """
+                    DELETE 
+                    FROM ciclo_lectivo 
+                    WHERE (id = %s) AND (ciclo_lectivo.id NOT IN (
+                        SELECT ciclo_lectivo_taller.ciclo_lectivo_id
+                        FROM ciclo_lectivo_taller 
+                        WHERE ciclo_lectivo_id = %s))
+                """
+
+        sql_comprobar_eliminacion = """
+                                    SELECT id FROM ciclo_lectivo
+                                    WHERE id = %s    
+                                    """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(
+                    sql_eliminar,
+                    (
+                        id_ciclo,
+                        id_ciclo
+                    ),
+                )
+                cls.db.commit()
+                cursor.execute(
+                    sql_comprobar_eliminacion,
+                    (
+                        id_ciclo
+                    ),
+                )
+        finally:
+            cls.db.cursor().close()
+        row = cursor.fetchone()
+        if row is None:
+            return True
+        return False
