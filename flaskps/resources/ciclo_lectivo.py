@@ -31,9 +31,7 @@ def create():
             params["fecha_inicio"], "%d/%m/%Y"
         ).date()
 
-        params["fecha_fin"] = datetime.strptime(
-            params["fecha_fin"], "%d/%m/%Y"
-        ).date()
+        params["fecha_fin"] = datetime.strptime(params["fecha_fin"], "%d/%m/%Y").date()
 
         fecha_ini = params["fecha_inicio"]
         fecha_fin = params["fecha_fin"]

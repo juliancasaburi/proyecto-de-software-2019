@@ -56,13 +56,13 @@ def create():
     Genero.db = get_db()
     generos = Genero.all()
 
-    form.select_genero.choices = [(g['id'], g['nombre']) for g in generos]
+    form.select_genero.choices = [(g["id"], g["nombre"]) for g in generos]
 
     locs = localidades()
-    form.select_localidad.choices = [(l['id'], l['nombre']) for l in locs]
+    form.select_localidad.choices = [(l["id"], l["nombre"]) for l in locs]
 
     tipos = tipos_documento()
-    form.select_tipo.choices = [(t['id'], t['nombre']) for t in tipos]
+    form.select_tipo.choices = [(t["id"], t["nombre"]) for t in tipos]
 
     op_response = dict()
     responsecode = 201

@@ -66,18 +66,11 @@ class CicloLectivo(object):
         try:
             with cls.db.cursor() as cursor:
                 cursor.execute(
-                    sql_eliminar,
-                    (
-                        id_ciclo,
-                        id_ciclo
-                    ),
+                    sql_eliminar, (id_ciclo, id_ciclo),
                 )
                 cls.db.commit()
                 cursor.execute(
-                    sql_comprobar_eliminacion,
-                    (
-                        id_ciclo
-                    ),
+                    sql_comprobar_eliminacion, (id_ciclo),
                 )
         finally:
             cls.db.cursor().close()

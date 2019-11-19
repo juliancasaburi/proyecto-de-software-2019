@@ -125,16 +125,32 @@ app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule(
-    "/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
+    "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
 )
 app.add_url_rule(
-    "/taller/asociar/docentes", "taller_set_docentes_form", dashboard.taller_set_docentes_form
+    "/taller/asociar/docentes",
+    "taller_set_docentes_form",
+    dashboard.taller_set_docentes_form,
 )
 app.add_url_rule(
-    "/taller/asociar", "taller_set_docentes", taller.set_docentes, methods=["POST"]
+    "/taller/asociar/docentes",
+    "taller_set_docentes",
+    taller.set_docentes,
+    methods=["POST"],
+)
+app.add_url_rule(
+    "/taller/asociar/estudiantes",
+    "taller_set_estudiantes_form",
+    dashboard.taller_set_estudiantes_form,
+)
+app.add_url_rule(
+    "/taller/asociar/estudiantes",
+    "taller_set_estudiantes",
+    taller.set_estudiantes,
+    methods=["POST"],
 )
 
 # Ciclos lectivos
@@ -144,7 +160,9 @@ app.add_url_rule(
 app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", dashboard.ciclo_table)
 app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
 app.add_url_rule("/ciclo/talleres", "ciclo_talleres", ciclo_lectivo.get_talleres)
-app.add_url_rule("/ciclos/baja", "ciclo_destroy", ciclo_lectivo.destroy, methods=["POST"])
+app.add_url_rule(
+    "/ciclos/baja", "ciclo_destroy", ciclo_lectivo.destroy, methods=["POST"]
+)
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
