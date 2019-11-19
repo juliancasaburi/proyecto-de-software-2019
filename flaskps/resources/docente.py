@@ -20,8 +20,11 @@ from flaskps.helpers.permission import has_permission
 from flaskps.helpers.localidades import localidad, localidades
 from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
 
+from flaskps.serverside_dt.serverside_table_docentes import DocentesServerSideTable
+from flaskps.serverside_dt import table_schemas
 
-def get_docentes():
+
+def docentes():
     if not has_permission("docente_index", session):
         abort(401)
 
@@ -41,9 +44,30 @@ def get_docentes():
         dict_item["tipo de documento"] = tipo_doc["nombre"]
         del dict_item["tipo_doc_id"]
 
-    docentes = jsonify(docentes)
+    return docentes
 
-    return make_response(docentes, 200)
+
+def get_docentes():
+    if not has_permission("docente_index", session):
+        abort(401)
+
+    all_docentes = jsonify(docentes())
+
+    return make_response(all_docentes, 200)
+
+
+def collect_data_serverside(req):
+    columns = table_schemas.SERVERSIDE_DOCENTES_TABLE_COLUMNS
+
+    return DocentesServerSideTable(req, docentes(), columns).output_result()
+
+
+def serverside_table_content():
+    if not has_permission("docente_index", session):
+        abort(401)
+
+    data = collect_data_serverside(request)
+    return jsonify(data)
 
 
 def create():
