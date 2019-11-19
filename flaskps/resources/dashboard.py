@@ -50,7 +50,7 @@ def user_destroy_form():
     Role.db = get_db()
     roles = Role.all()
 
-    return render_template("user/actions/usuario_eliminar.html", roles=roles)
+    return render_template("user/actions/usuario_bloquear.html", roles=roles)
 
 
 def user_new_form():

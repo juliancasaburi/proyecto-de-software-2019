@@ -44,7 +44,7 @@
                     <li><a href="{{ url_for('user_new_form') }}">Crear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_destroy', session) %}
-                    <li><a href="{{ url_for('user_destroy_form') }}">Eliminar</a></li>
+                    <li><a href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_update', session) %}
                     <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
