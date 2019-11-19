@@ -46,3 +46,19 @@ class CicloLectivo(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def talleres(cls, c_id):
+        sql = """
+                SELECT  t.id, t.nombre, t.nombre_corto
+                FROM    ciclo_lectivo_taller c INNER JOIN taller t on c.taller_id = t.id
+                WHERE   ciclo_lectivo_id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, c_id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchall()

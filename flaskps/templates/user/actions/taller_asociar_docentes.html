@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Asociar Taller a Ciclo Lectivo - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Asociar Docentes a Taller - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -8,26 +8,28 @@
     <div class="container">
         <div class="section center">
             <div class="row">
-                <h1>Asociar Taller A Ciclo Lectivo</h1>
-                <form id="tallerAsociar" method="post" action="{{ url_for('taller_set_ciclo') }}">
+                <h1>Asociar Docentes A Taller</h1>
+                <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_docentes') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <div class="row">
                             <div class="col s12 input-field">
-                                <select id="select_taller" name="taller_id" required>
-                                    {% for taller in talleres %}
-                                        <option value="{{taller.id}}">{{taller.nombre}} ({{taller.nombre_corto}})</option>
-                                    {% endfor %}
-                                </select>
-                                <label for="select_taller">Taller</label>
-                            </div>
-                            <div class="col s12 input-field">
-                                <select id="select_ciclos" multiple name="select_ciclos">
+                                <select id="select_ciclo" name="select_ciclo" required>
                                     {% for ciclo in ciclos %}
                                         <option value="{{ciclo.id}}">[{{ciclo.fecha_ini}}] al [{{ciclo.fecha_fin}}]</option>
                                     {% endfor %}
                                 </select>
-                                <label for="select_ciclos">Ciclo</label>
+                                <label for="select_ciclo">Ciclo Lectivo</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_taller" name="taller_id" required>
+                                </select>
+                                <label for="select_taller">Taller</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_docentes" multiple name="select_docentes">
+                                </select>
+                                <label for="select_docentes">Docentes</label>
                             </div>
                         </div>
                     </div>
@@ -47,33 +49,34 @@
             $('select').formSelect();
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('taller_ciclos') }}",
+                url: "{{ url_for('ciclo_talleres') }}",
                 data: {
-                    id: $('#select_taller').val()
+                    id: $('#select_ciclo').val()
                 },
                 success: function (response) {
+                    $("#select_taller").html('');
                     for (var key in response){
-                        $("#select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                        $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
                     }
+                    $('#select_taller').formSelect()
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
                 }
             });
-            $('#select_ciclos').formSelect();
         });
     </script>
     <script>
         $(document).ready(function() {
             $("#cancelar").click(function(e){
                 e.preventDefault();
-                $('#tallerAsociar').trigger("reset");
+                $('#tallerAsociarDocentes').trigger("reset");
             });
         });
     </script>
     <script>
         $(document).ready(function() {
-            var frm = $('#tallerAsociar');
+            var frm = $('#tallerAsociarDocentes');
 
             frm.submit(function (e) {
                 e.preventDefault();
@@ -99,20 +102,20 @@
         });
     </script>
     <script>
-        $('#select_taller').on('change', function() {
-            $("#select_ciclos").val("");
-            $('#select_ciclos').formSelect();
+        $('#select_ciclo').on('change', function() {
+            $("#select_taller").html('');
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('taller_ciclos') }}",
+                url: "{{ url_for('ciclo_talleres') }}",
                 data: {
                     id: this.value
                 },
                 success: function (response) {
+                    $("#select_taller").html('');
                     for (var key in response){
-                        $("#select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                        $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
                     }
-                    $('#select_ciclos').formSelect();
+                    $('#select_taller').formSelect();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);

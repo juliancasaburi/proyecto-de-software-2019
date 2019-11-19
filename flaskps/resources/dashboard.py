@@ -19,6 +19,7 @@ from flaskps.models import siteconfig
 from flaskps.models.genero import Genero
 from flaskps.models.taller import Taller
 from flaskps.models.ciclo_lectivo import CicloLectivo
+from flaskps.models.docente import Docente
 
 
 def user_table():
@@ -156,6 +157,9 @@ def estudiante_table():
 
 
 def taller_set_ciclo_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
     Taller.db = get_db()
     talleres = Taller.all()
 
@@ -167,7 +171,29 @@ def taller_set_ciclo_form():
         ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
     return render_template(
-        "user/actions/taller_asociar.html", talleres=talleres, ciclos=ciclos
+        "user/actions/taller_asociar_ciclo.html", talleres=talleres, ciclos=ciclos
+    )
+
+
+def taller_set_docentes_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    Docente.db = get_db()
+    docentes = Docente.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    return render_template(
+        "user/actions/taller_asociar_docentes.html", ciclos=ciclos
     )
 
 

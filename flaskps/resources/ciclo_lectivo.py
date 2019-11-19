@@ -94,3 +94,14 @@ def get_ciclos():
     ciclos = jsonify(ciclos)
 
     return make_response(ciclos, 200)
+
+
+def get_talleres():
+    c_id = request.args.get("id")
+    CicloLectivo.db = get_db()
+    talleres = CicloLectivo.talleres(c_id)
+
+    if talleres is None:
+        abort(404)
+
+    return make_response(jsonify(talleres), 200)

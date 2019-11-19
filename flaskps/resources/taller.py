@@ -74,3 +74,25 @@ def get_ciclos():
         abort(404)
 
     return make_response(jsonify(ciclos), 200)
+
+
+def set_docentes():
+    params = request.form.to_dict()
+    params["docentes"] = request.form.getlist("select_docentes")
+
+    # TODO:
+    Taller.db = get_db()
+    created = Taller.set_ciclos(params)
+
+    op_response = dict()
+    responsecode = 201
+
+    if created:
+        op_response["msg"] = "Se ha establecido la relación"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "Ha ocurrido un error al establecer la relación"
+        op_response["type"] = "error"
+        abort(make_response(jsonify(op_response), 409))
+
+    return make_response(jsonify(op_response), responsecode)

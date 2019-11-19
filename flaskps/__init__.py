@@ -128,7 +128,13 @@ app.add_url_rule(
     "/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )
 app.add_url_rule(
-    "/taller/asociar", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
+    "/taller/asociar/ciclo", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
+)
+app.add_url_rule(
+    "/taller/asociar/docentes", "taller_set_docentes_form", dashboard.taller_set_docentes_form
+)
+app.add_url_rule(
+    "/taller/asociar", "taller_set_docentes", taller.set_docentes, methods=["POST"]
 )
 
 # Ciclos lectivos
@@ -137,6 +143,7 @@ app.add_url_rule(
 )
 app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", dashboard.ciclo_table)
 app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
+app.add_url_rule("/ciclo/talleres", "ciclo_talleres", ciclo_lectivo.get_talleres)
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
