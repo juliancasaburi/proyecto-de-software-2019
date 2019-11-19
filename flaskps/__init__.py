@@ -136,6 +136,9 @@ app.add_url_rule(
     dashboard.taller_set_docentes_form,
 )
 app.add_url_rule(
+    "/taller_ciclo/docentes", "taller_ciclo_docentes", taller.get_docentes_ciclo
+)
+app.add_url_rule(
     "/taller/asociar/docentes",
     "taller_set_docentes",
     taller.set_docentes,

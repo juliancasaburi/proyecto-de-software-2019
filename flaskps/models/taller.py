@@ -89,3 +89,58 @@ class Taller(object):
             cls.db.cursor().close()
 
         return cursor.fetchall()
+
+    @classmethod
+    def docentes_ciclo(cls, t_id, c_id):
+        sql = """
+                SELECT  d.id, d.nombre, d.apellido
+                FROM    docente_responsable_taller c INNER JOIN docente d on c.docente_id = d.id
+                WHERE   taller_id = %s AND ciclo_lectivo_id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, (t_id, c_id))
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchall()
+
+    @classmethod
+    def set_docentes(cls, data):
+        sql_delete_relation = """
+                DELETE FROM docente_responsable_taller
+                WHERE  taller_id = %s AND ciclo_lectivo_id = %s
+            """
+
+        sql_insert_relation = """
+            INSERT INTO docente_responsable_taller 
+                        (docente_id,
+                         ciclo_lectivo_id,
+                         taller_id 
+                         ) 
+            VALUES      (%s, 
+                         %s,
+                         %s
+                         )
+                    """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(
+                    sql_delete_relation,
+                    (data.get("taller_id"), data.get("ciclo_lectivo_id")),
+                )
+                cls.db.commit()
+
+                docentes = data.get("docentes")
+                for docente in docentes:
+                    cursor.execute(
+                        sql_insert_relation,
+                        (docente, data.get("ciclo_lectivo_id"), data.get("taller_id")),
+                    )
+                    cls.db.commit()
+
+        finally:
+            cls.db.cursor().close()
+        return True
