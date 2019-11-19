@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import request, session, abort, make_response, jsonify, flash
+from flask import request, session, abort, make_response, jsonify, flash, json
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
@@ -24,6 +24,8 @@ def get_estudiantes():
     for dict_item in estudiantes:
         dict_item["ID"] = dict_item["id"]
         del dict_item["id"]
+        dict_item["Activo"] = dict_item["activo"]
+        del dict_item["activo"]
         dict_item["Nombre"] = dict_item["nombre"]
         del dict_item["nombre"]
         dict_item["Apellido"] = dict_item["apellido"]
@@ -52,6 +54,8 @@ def get_estudiantes():
         del dict_item["tel"]
         dict_item["Nivel"] = dict_item["n.nombre"]
         del dict_item["n.nombre"]
+        dict_item["Responsable a cargo"] = dict_item["r.nombre"]
+        del dict_item["r.nombre"]
 
     estudiantes = jsonify(estudiantes)
 
@@ -111,6 +115,9 @@ def update():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
 
         Estudiante.db = get_db()
 
@@ -126,7 +133,9 @@ def update():
 
     else:
         if len(form.errors) >= 2:
-            op_response["msg"] = "Complete todos los datos del estudiante a modificar"
+            error_msg = "".join(form.errors)
+            op_response["msg"] = error_msg
+            #op_response["msg"] = "Complete todos los datos del estudiante a modificar"
             op_response["type"] = "error"
         else:
             error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
@@ -134,6 +143,30 @@ def update():
             op_response["type"] = "error"
 
         abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+def destroy():
+    if not has_permission("estudiante_destroy", session):
+        abort(401)
+
+    params = json.loads(request.data)
+    eid = params["id"]
+
+    Estudiante.db = get_db()
+    success = Estudiante.delete(eid)
+
+    op_response = dict()
+    responsecode = 200
+
+    if success:
+        op_response["msg"] = "Se ha bloqueado/activado al estudiante exitosamente"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "El estudiante a bloquear/activar no existe"
+        op_response["type"] = "error"
+        responsecode = 404
 
     return make_response(jsonify(op_response), responsecode)
 

@@ -5,19 +5,23 @@ from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
+from flaskps.models.responsable_tipo import Responsable_tipo
 
 
 def pasarChoices(form):
+    db = get_db()
     locs = localidades()
-    Barrio.db = get_db()
+    Barrio.db = db
     barrios = Barrio.all()
-    Genero.db = get_db()
+    Genero.db = db
     generos = Genero.all()
     tipos_doc = tipos_documento()
-    Escuela.db = get_db()
+    Escuela.db = db
     escuelas = Escuela.all()
-    Nivel.db = get_db()
+    Nivel.db = db
     niveles = Nivel.all()
+    Responsable_tipo.db = db
+    responsables_tipos = Responsable_tipo.all()
 
     # choices de los selects
     form.select_localidad.choices = [
@@ -34,5 +38,6 @@ def pasarChoices(form):
         (escuela["id"], escuela["nombre"]) for escuela in escuelas
     ]
     form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
+    form.select_responsable_tipo.choices = [(responsable_tipo["id"], responsable_tipo["nombre"]) for responsable_tipo in responsables_tipos]
 
     return form

@@ -9,6 +9,7 @@ from flaskps.helpers import permission
 from flask import jsonify, make_response
 from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.localidades import localidades
+from flaskps.models.responsable_tipo import Responsable_tipo
 
 from flaskps.models.siteconfig import SiteConfig
 from flaskps.models.barrio import Barrio
@@ -140,7 +141,8 @@ def estudiante_table():
     Nivel.db = get_db()
     niveles = Nivel.all()
 
-    # Responsables ???
+    Responsable_tipo.db = get_db()
+    responsables_tipos = Responsable_tipo.all()
 
     Escuela.db = get_db()
     escuelas = Escuela.all()
@@ -153,6 +155,7 @@ def estudiante_table():
         barrios=barrios,
         escuelas=escuelas,
         niveles=niveles,
+        responsables_tipos=responsables_tipos
     )
 
 

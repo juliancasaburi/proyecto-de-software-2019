@@ -1,6 +1,6 @@
 <div id="modalEditarEstudiante" class="modal">
     <header class="modal-header">Editar Estudiante</header>
-    <form id="formEditarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
+    <form id="editarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <div class="row">
@@ -18,7 +18,7 @@
                     <input id="modal_fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="modal_select_genero" name="select_genero">
+                    <select id="modal_select_genero" name="select_genero" required>
                         <option value="" disabled selected>Selecciona un género</option>
                         {% for genero in generos %}
                             <option value="{{genero.id}}">{{genero.nombre}}</option>
@@ -27,7 +27,7 @@
                     <label for="modal_select_genero">Género</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="modal_select_localidad" name="select_localidad">
+                    <select id="modal_select_localidad" name="select_localidad" required>
                         <option value="" disabled selected>Selecciona una localidad</option>
                         {% for localidad in localidades %}
                             <option value="{{localidad.id}}">{{localidad.nombre}}</option>
@@ -40,7 +40,7 @@
                     <input id="modal_domicilio" name="domicilio" class="validate" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="modal_select_barrio" name="select_barrio">
+                    <select id="modal_select_barrio" name="select_barrio" required>
                         <option value="" disabled selected>Selecciona un barrio</option>
                         {% for barrio in barrios %}
                             <option value="{{barrio.id}}">{{barrio.nombre}}</option>
@@ -49,7 +49,7 @@
                     <label for="modal_select_barrio">Barrio</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="modal_select_tipo" name="select_tipo">
+                    <select id="modal_select_tipo" name="select_tipo" required>
                         <option value="" disabled selected>Selecciona un tipo de documento</option>
                         {% for tipo in tipodoc %}
                             <option value="{{tipo.id}}">{{tipo.nombre}}</option>
@@ -61,12 +61,21 @@
                     <label for="modal_documento_numero">Número de Documento</label>
                     <input id="modal_documento_numero" name="documento_numero" class="validate" type="number" required>
                 </div>
+                <div class="col s12 m6 input-field">
+                    <select id="modal_select_responsable_tipo" name="select_responsable_tipo" required>
+                        <option value="" disabled selected>Selecciona el responsable a cargo</option>
+                        {% for responsable_tipo in responsables_tipos %}
+                            <option value="{{responsable_tipo.id}}">{{responsable_tipo.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_responsable_tipo">Responsable a cargo</label>
+                </div>
                 <div class="col s12 input-field">
                     <label for="modal_telefono_numero">Número telefónico (opcional)</label>
                     <input id="modal_telefono_numero" name="telefono_numero" class="validate" type="text">
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="modal_select_escuela" name="select_escuela">
+                    <select id="modal_select_escuela" name="select_escuela" required>
                         <option value="" disabled selected>Selecciona la escuela de donde proviene</option>
                         {% for escuela in escuelas %}
                             <option value="{{escuela.id}}">{{escuela.nombre}}</option>
@@ -75,7 +84,7 @@
                     <label for="modal_select_escuela">Escuela</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="modal_select_nivel" name="select_nivel">
+                    <select id="modal_select_nivel" name="select_nivel" required>
                         <option value="" disabled selected>Selecciona el nivel actual</option>
                         {% for nivel in niveles %}
                             <option value="{{nivel.id}}">{{nivel.nombre}}</option>
@@ -87,6 +96,98 @@
         </div>
         <div class="modal-footer">
             <button type="submit" id="editarEstudianteSubmit" class="btn blue">Guardar</button>
+            <button id="cancelarEditarEstudiante" class="btn red">Reiniciar</button>
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        //$('#modal_fecha_nacimiento')
+        let current_year = new Date().getFullYear();
+        $('#modal_fecha_nacimiento').datepicker({
+            format: 'dd/mm/yyyy',
+            parse: true,
+            yearRange: [current_year - 100, current_year],
+            i18n: {
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+                cancel: 'Cerrar',
+                done: 'Seleccionar',
+            }
+        })
+    })
+</script>
+<script>
+    // para resetear los campos a los originales
+    $(document).ready(function() {
+        $("#cancelarEditarEstudiante").click(function(e){
+            e.preventDefault();
+            //$('#editarEstudiante').trigger("reset");
+            var eid = $('#modal_editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('estudiante') }}",
+                data: {
+                    id: eid
+                },
+                success: function (response) {
+                    $('#modal_editar_id').val(response['id']);
+                    $('#modal_editar_apellido').attr("placeholder", response['apellido']);
+                    $('#modal_editar_apellido').val(response['apellido']);
+                    $('#modal_editar_nombre').attr("placeholder", response['nombre']);
+                    $('#modal_editar_nombre').val(response['nombre']);
+                    $('#modal_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
+                    $('#modal_fecha_nacimiento').val(response['fecha_nac']);
+                    $("#modal_select_genero").val(response['genero_id']);
+                    $("#modal_select_localidad").val(response['localidad_id']);
+                    $('#modal_domicilio').attr("placeholder", response['domicilio']);
+                    $('#modal_domicilio').val(response['domicilio']);
+                    $("#modal_select_barrio").val(response['barrio_id']);
+                    $("#modal_select_tipo").val(response['tipo_doc_id']);
+                    $('#modal_documento_numero').attr("placeholder", response['numero']);
+                    $('#modal_documento_numero').val(response['numero']);
+                    $('#modal_telefono_numero').attr("placeholder", response['tel']);
+                    $('#modal_telefono_numero').val(response['tel']);
+                    $("#modal_select_escuela").val(response['escuela_id']);
+                    $("#modal_select_nivel").val(response['nivel_id']);
+                    $("#modal_select_responsable_tipo").val(response['responsable_tipo_id']);
+                    M.updateTextFields();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        })})
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#editarEstudiante');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalEditarEstudiante').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    $('#editarEstudiante').trigger("reset");
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    409: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    }
+                }
+            });
+        });
+    });
+</script>

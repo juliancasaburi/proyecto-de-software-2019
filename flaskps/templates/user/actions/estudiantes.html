@@ -28,10 +28,29 @@
                             </a>
                         </div>
                     </div>
+                    <div hidden id="progress" class="row">
+                        <p class="teal-text center"><b>Operación en progreso...</b></p>
+                        <div class="progress">
+                            <div class="indeterminate orange"></div>
+                        </div>
+                    </div>
+                    <div hidden id="actionSuccess" class="row">
+                        <p class="teal-text center"><b>¡Operación exitosa!</b></p>
+                        <div class="progress">
+                            <div class="determinate green" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div hidden id="actionError" class="row">
+                        <p class="teal-text center"><b>Ha ocurrido un error</b></p>
+                        <div class="progress">
+                            <div class="determinate red" style="width: 100%"></div>
+                        </div>
+                    </div>
                     <table id="tablaEstudiantes" class="highlight nowrap" style="width:100%">
                         <thead>
                         <tr class="orange">
                             <th>ID</th>
+                            <th>Activo</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Fecha de nacimiento</th>
@@ -44,12 +63,19 @@
                             <th>Número telefónico</th>
                             <th>Escuela</th>
                             <th>Nivel</th>
-                            <th class="nosort">Editar</th>
+                            <th>Responsable a cargo</th>
+                            {% if has_permission('estudiante_update', session) %}
+                                <th class="nosort">Editar</th>
+                            {% endif %}
+                            {% if has_permission('estudiante_destroy', session) %}
+                                <th class="nosort">Bloquear/Activar</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tfoot>
                         <tr class="orange">
                             <th>ID</th>
+                            <th>Activo</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Fecha de nacimiento</th>
@@ -62,15 +88,26 @@
                             <th>Número telefónico</th>
                             <th>Escuela</th>
                             <th>Nivel</th>
-                            <th class="nosort">Editar</th>
+                            <th>Responsable a cargo</th>
+                            {% if has_permission('estudiante_update', session) %}
+                                <th class="nosort">Editar</th>
+                            {% endif %}
+                            {% if has_permission('estudiante_destroy', session) %}
+                                <th class="nosort">Bloquear/Activar</th>
+                            {% endif %}
                         </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
 
-            {% include 'partials/modal_alta_estudiante.html' %}
-            {% include 'partials/modal_editar_estudiante.html' %}
+            {% if has_permission('estudiante_new', session) %}
+                {% include 'partials/modal_alta_estudiante.html' %}
+            {% endif %}
+
+            {% if has_permission('estudiante_update', session) %}
+                {% include 'partials/modal_editar_estudiante.html' %}
+            {% endif %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -101,6 +138,14 @@
                                 <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
                                 <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
                             </div>
+                        </li>
+                        <li class="collection-item">
+                            <p>
+                                <label>
+                                    <input id="filterActive" type="checkbox"/>
+                                    <span>Listar estudiantes bloqueados</span>
+                                </label>
+                            </p>
                         </li>
                     </ul>
                 </div>
@@ -133,6 +178,7 @@
                 },
                 "columns": [
                     {"data": "ID"},
+                    {"data": "Activo"},
                     {"data": "Nombre"},
                     {"data": "Apellido"},
                     {"data": "Fecha de nacimiento"},
@@ -145,11 +191,21 @@
                     {"data": "Número telefónico"},
                     {"data": "Escuela"},
                     {"data": "Nivel"},
-                    {
-                        data: null,
-                        className: "center",
-                        defaultContent: '<a class="editButton btn blue-grey"><i class="fas fa-edit"></i></a>'
-                    },
+                    {"data": "Responsable a cargo"},
+                    {% if has_permission('estudiante_update', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            defaultContent: '<a class="editButton btn blue-grey waves-effect waves-light hoverable"><i class="fas fa-edit"></i></a>'
+                        },
+                    {% endif %}
+                    {% if has_permission('estudiante_destroy', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            defaultContent: '<a class="deleteButton btn black waves-effect waves-light hoverable"><i class="material-icons">loop</i></a>'
+                        },
+                    {% endif %}
                 ],
                 "language": {
                     "paginate": {
@@ -179,25 +235,48 @@
     <script> // Alta de Estudiante
     $(document).ready(function(){
         $('#modalAltaEstudiante').modal();
+        $('#modalEditarEstudiante').modal();
         $('select').formSelect();
     });
     </script>
     <script> // Filtros
-    $(document).ready(function(){
+    $(document).ready(function() {
+        validar_filtro_activo();
         var table = $('#tablaEstudiantes').DataTable();
         $("#filterNombreEstudiante").on("keyup", function() {
             table
-                .columns( 1 )
+                .columns( 2 )
                 .search( this.value )
                 .draw();
         });
         $("#filterDocumentoEstudiante").on("keyup", function() {
             table
-                .columns( 9 )
+                .columns( 10 )
                 .search( this.value )
                 .draw();
         });
     });
+    </script>
+    <script>
+        var filtro_activo = document.getElementById("filterActive");
+        function validar_filtro_activo() {
+            var table = $('#tablaEstudiantes').DataTable();
+            if($("#filterActive").prop("checked") == true)
+            {
+                table
+                    .column(1)
+                    .search('')
+                    .draw();
+            }
+            else
+            {
+                table
+                    .column(1)
+                    .search(1)
+                    .draw();
+            }
+        }
+        filtro_activo.onchange = validar_filtro_activo;
     </script>
     <script>
         $('#modalFilters').modal({
@@ -231,22 +310,25 @@
                 success: function (response) {
                     $('#modal_editar_id').val(response['id']);
                     $('#modal_editar_apellido').attr("placeholder", response['apellido']);
-                    $('#modal_editar_apellido').attr("value", response['apellido']);
+                    $('#modal_editar_apellido').val(response['apellido']);
                     $('#modal_editar_nombre').attr("placeholder", response['nombre']);
-                    $('#modal_editar_nombre').attr("value", response['nombre']);
+                    $('#modal_editar_nombre').val(response['nombre']);
                     $('#modal_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
-                    $('#modal_fecha_nacimiento').attr("value", response['fecha_nac']);
-                    $("#modal_select_genero select").val(response['genero_id']);
-                    $("#modal_select_localidad select").val(response['localidad_id']);
+                    $('#modal_fecha_nacimiento').val(response['fecha_nac']);
+                    $('#modal_fecha_nacimiento').datepicker()
+                    $("#modal_select_genero").val(response['genero_id']);
+                    $("#modal_select_localidad").val(response['localidad_id']);
                     $('#modal_domicilio').attr("placeholder", response['domicilio']);
-                    $('#modal_domicilio').attr("value", response['domicilio']);
-                    $("#modal_select_tipo select").val(response['tipo_doc_id']);
+                    $('#modal_domicilio').val(response['domicilio']);
+                    $("#modal_select_barrio").val(response['barrio_id']);
+                    $("#modal_select_tipo").val(response['tipo_doc_id']);
                     $('#modal_documento_numero').attr("placeholder", response['numero']);
-                    $('#modal_documento_numero').attr("value", response['numero']);
+                    $('#modal_documento_numero').val(response['numero']);
                     $('#modal_telefono_numero').attr("placeholder", response['tel']);
-                    $('#modal_telefono_numero').attr("value", response['tel']);
-                    $("#modal_select_escuela select").val(response['escuela_id']);
-                    $("#modal_select_nivel select").val(response['nivel_id']);
+                    $('#modal_telefono_numero').val(response['tel']);
+                    $("#modal_select_escuela").val(response['escuela_id']);
+                    $("#modal_select_nivel").val(response['nivel_id']);
+                    $("#modal_select_responsable_tipo").val(response['responsable_tipo_id']);
                     M.updateTextFields();
                     $('#modalEditarEstudiante').modal('open');
                 },
@@ -256,28 +338,50 @@
             });
         });
     </script>
-    <script>
+    <script async>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
         $(document).ready(function(){
-            var frm = $('#formEditarEstudiante');
-
-            frm.submit(function (e) {
-                e.preventDefault();
-                $('#modalEditarEstudiante').modal('close');
-                $.ajax({
-                    type: frm.attr('method'),
-                    url: frm.attr('action'),
-                    data: frm.serialize(),
-                    success: function (response) {
-                        var table = $('#tablaEstudiantes').DataTable();
-                        table.ajax.reload( null, false );
-                        var toastText = "El estudiante fue editado con éxito";
-                        M.toast({html: toastText, classes: 'green'});
-                    },
-                    error: function (data) {
-                        console.log('Error');
-                        console.log(data);
-                    },
-                });
+            // Delete a record
+            $('#tablaEstudiantes').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablaEstudiantes').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var eid = rowData.ID;
+                var estudiantename = rowData.Apellido + ", " + rowData.Nombre;
+                var confirmText;
+                if(rowData.Activo == 1)
+                    confirmText = "bloquear";
+                else
+                    confirmText = "activar";
+                if (confirm('¿Está seguro de ' + confirmText + ' al estudiante ' + estudiantename + ' (ID: ' + eid + ')?') == true) {
+                    $('#progress').show();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url_for('estudiante_destroy') }}",
+                        data: JSON.stringify({"id": eid}),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=UTF-8',
+                        success: async function () {
+                            table.ajax.reload( null, false );
+                            $('#progress').delay(2000).fadeOut('slow');
+                            await sleep(2000);
+                            $('#actionSuccess').show();
+                            $('#actionSuccess').delay(2000).fadeOut('slow');
+                            var toastText = 'El estudiante ' + estudiantename + ' (ID: ' + eid + ') fue activado/bloqueado';
+                            M.toast({html: toastText, classes: 'green'});
+                        },
+                        statusCode: {
+                            404: async function (jqXHR) {
+                                $('#progress').delay(2000).fadeOut('slow');
+                                await sleep(2000);
+                                $('#actionError').show();
+                                $('#actionError').delay(2000).fadeOut('slow');
+                                M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                            }
+                        }
+                    });
+                }
             });
         });
     </script>

@@ -8,7 +8,8 @@ class Estudiante(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT  e.id, 
+            SELECT  e.id,
+                    e.activo,
                     e.apellido, 
                     e.nombre, 
                     e.fecha_nac, 
@@ -20,7 +21,8 @@ class Estudiante(object):
                     e.tipo_doc_id, 
                     e.numero,
                     e.tel,
-                    b.nombre 
+                    b.nombre,
+                    r.nombre
             FROM    estudiante AS e
                     INNER JOIN nivel AS n
                             ON n.id = e.nivel_id
@@ -30,6 +32,8 @@ class Estudiante(object):
                             ON es.id = e.escuela_id
                     INNER JOIN barrio AS b
                             ON b.id = e.barrio_id
+                    INNER JOIN responsable_tipo as r
+                            ON r.id = e.responsable_tipo_id
         """
         try:
             with cls.db.cursor() as cursor:
@@ -53,11 +57,13 @@ class Estudiante(object):
                          tipo_doc_id,
                          numero,
                          tel,
-                         barrio_id) 
+                         barrio_id,
+                         responsable_tipo_id) 
             VALUES      (%s, 
                          %s, 
                          %s, 
                          %s, 
+                         %s,
                          %s,
                          %s,
                          %s,
@@ -85,6 +91,7 @@ class Estudiante(object):
                         data.get("documento_numero"),
                         data.get("telefono_numero"),
                         data.get("select_barrio"),
+                        data.get("select_responsable_tipo")
                     ),
                 )
                 cls.db.commit()
@@ -114,7 +121,8 @@ class Estudiante(object):
                                tipo_doc_id = %s,
                                numero = %s,
                                tel = %s,
-                               barrio_id = %s
+                               barrio_id = %s,
+                               responsable_tipo_id = %s
                         WHERE  id = %s 
                     """
 
@@ -133,6 +141,7 @@ class Estudiante(object):
                         data.get("documento_numero"),
                         data.get("telefono_numero"),
                         data.get("select_barrio"),
+                        data.get("select_responsable_tipo")
                     ),
                 )
                 cls.db.commit()
@@ -142,6 +151,24 @@ class Estudiante(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def delete(cls, eid):
+        sql = """
+                UPDATE  estudiante 
+                SET     activo = NOT activo
+                WHERE  id = %s 
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, eid)
+                cls.db.commit()
+        except IntegrityError:
+            return False
+        finally:
+            cls.db.cursor().close()
+        return True
+
 
     @classmethod
     def find_by_id(cls, id):
