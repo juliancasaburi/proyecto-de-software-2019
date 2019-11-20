@@ -101,18 +101,25 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
+    <!-- Animations -->
+    <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
+            new WOW().init();
             $('.parallax').parallax();
             $('.carousel.carousel-slider').carousel({
                 fullWidth: true,
                 indicators: true
             });
-
-            var lat            = -34.92595;
-            var lon            = -57.89335;
-            var zoom           = 20;
+        });
+    </script>
+    <!-- OpenLayers -->
+    <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            var lat = -34.92595;
+            var lon = -57.89335;
+            var zoom = 20;
 
             var info = new ol.Feature({
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
@@ -140,7 +147,7 @@
                         updateWhileAnimating: true,
                         updateWhileInteracting: true,
                         style: function(feature, resolution) {
-                            iconStyle.getImage().setScale(map.getView().getResolutionForZoom(zoom) / resolution);
+                            iconStyle.getImage().setScale(1/Math.pow(resolution, 1/6));
                             return iconStyle;
                         }
                     })
@@ -159,11 +166,5 @@
                 ])
             });
         });
-    </script>
-
-    <!-- Animations -->
-    <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
-    <script>
-        new WOW().init();
     </script>
 {% endblock %}
