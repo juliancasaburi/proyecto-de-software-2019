@@ -130,9 +130,11 @@
                 {% if has_permission('ciclolectivo_index', session) %}
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
-                            <div class="center-align light-blue block">
-                                <i class="fas fa-calendar-alt fa-3x"></i>
-                            </div>
+                            <a {% if has_permission('ciclolectivo_index', session) %} href="{{ url_for('ciclo_table') }}" {% endif %}>
+                                <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                                    <i class="fas fa-calendar-alt fa-3x black-text"></i>
+                                </div>
+                            </a>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
                                 {% if has_permission('ciclolectivo_index', session) %}

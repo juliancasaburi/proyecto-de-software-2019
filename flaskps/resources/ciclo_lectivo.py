@@ -119,6 +119,9 @@ def destroy():
 
 
 def get_talleres():
+    if not has_permission("ciclolectivo_index", session):
+        abort(401)
+
     c_id = request.args.get("id")
     CicloLectivo.db = get_db()
     talleres = CicloLectivo.talleres(c_id)

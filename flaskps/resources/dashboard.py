@@ -162,7 +162,7 @@ def estudiante_table():
 
 
 def taller_set_ciclo_form():
-    if not permission.has_permission("taller_new", session):
+    if not permission.has_permission("taller_update", session):
         abort(401)
 
     Taller.db = get_db()
@@ -181,7 +181,7 @@ def taller_set_ciclo_form():
 
 
 def taller_set_docentes_form():
-    if not permission.has_permission("taller_new", session):
+    if not permission.has_permission("taller_update", session):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -200,7 +200,7 @@ def taller_set_docentes_form():
 
 
 def taller_set_estudiantes_form():
-    if not permission.has_permission("taller_new", session):
+    if not permission.has_permission("taller_update", session):
         abort(401)
 
     CicloLectivo.db = get_db()

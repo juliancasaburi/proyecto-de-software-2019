@@ -349,7 +349,39 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
-            // Delete a record
+            // Editar estudiante
+            var frm = $('#formEditarEstudiante');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $('#progress').show();
+                $('#modalEditarEstudiante').modal('close');
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: async function (response) {
+                        $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "El estudiante fue editado con éxito";
+                        await sleep(2000);
+                        $('#actionSuccess').show();
+                        $('#actionSuccess').delay(2000).fadeOut('slow');
+                        var table = $('#tablaEstudiantes').DataTable();
+                        table.ajax.reload( null, false );
+                        M.toast({html: toastText, classes: 'green'});
+                    },
+                    error: async function (data) {
+                        $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "Ha ocurrido un error";
+                        await sleep(2000);
+                        $('#actionError').show();
+                        $('#actionError').delay(2000).fadeOut('slow');
+                        M.toast({html: toastText, classes: 'error'});
+                    },
+                });
+            });
+
+            // Bloquear estudiante
             $('#tablaEstudiantes').on('click', 'a.deleteButton', function (e) {
                 var table = $('#tablaEstudiantes').DataTable();
                 var rowData = table.row($(this).parents("tr")).data();

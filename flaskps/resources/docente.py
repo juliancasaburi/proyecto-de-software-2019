@@ -25,9 +25,6 @@ from flaskps.serverside_dt import table_schemas
 
 
 def docentes():
-    if not has_permission("docente_index", session):
-        abort(401)
-
     Docente.db = get_db()
     docentes = Docente.all()
 
@@ -146,7 +143,7 @@ def destroy():
 
 
 def data():
-    if not has_permission("docente_index", session):
+    if not has_permission("docente_show", session):
         abort(401)
 
     Docente.db = get_db()

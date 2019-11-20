@@ -1,6 +1,6 @@
 <div id="modalEditarEstudiante" class="modal">
     <header class="modal-header">Editar Estudiante</header>
-    <form id="editarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
+    <form id="formEditarEstudiante" method="post" action="{{ url_for('estudiante_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <div class="row">
@@ -125,7 +125,6 @@
     $(document).ready(function() {
         $("#cancelarEditarEstudiante").click(function(e){
             e.preventDefault();
-            //$('#editarEstudiante').trigger("reset");
             var eid = $('#modal_editar_id').val();
             $.ajax({
                 type: "GET",
@@ -162,6 +161,7 @@
             });
         })})
 </script>
+<!--
 <script>
     $(document).ready(function() {
         var frm = $('#editarEstudiante');
@@ -191,3 +191,4 @@
         });
     });
 </script>
+-->
