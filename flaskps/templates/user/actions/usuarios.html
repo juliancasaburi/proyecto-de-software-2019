@@ -287,6 +287,7 @@
                     $('#modal_editar_username').attr("placeholder", response['username']);
                     $('#modal_editar_username').attr("value", response['username']);
                     M.updateTextFields();
+                    $('select').formSelect();
                     $('#modalEditarUsuario').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
