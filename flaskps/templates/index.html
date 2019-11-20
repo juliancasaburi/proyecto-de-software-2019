@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}" media="screen">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/ol.css') }}" media="screen">
 {% endblock %}
 
 {% block main %}
@@ -91,19 +92,67 @@
                     <p class="text-justify light">{{ siteconfig['descripcion'] }}</p>
                 </div>
             </div>
-            <div class="col s12 center z-depth-4 wow zoomIn" data-wow-delay="0.5s">
-                <iframe title="Escuela 25 de Berisso" aria-label="Escuela 25 de Berisso" src="https://www.openstreetmap.org/export/embed.html?bbox=-57.895344793796546%2C-34.92683778809732%2C-57.89180427789689%2C-34.924891561791604&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=19/-34.90373/-57.93844">Ver mapa más grande</a></small>
-            </div>
+            <div id="map" class="col s12 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:550px"></div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
+    <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
     <script>
-        $('.parallax').parallax();
-        $('.carousel.carousel-slider').carousel({
-            fullWidth: true,
-            indicators: true
+        $(document).ready(function(){
+            $('.parallax').parallax();
+            $('.carousel.carousel-slider').carousel({
+                fullWidth: true,
+                indicators: true
+            });
+
+            var lat            = -34.92595;
+            var lon            = -57.89335;
+            var zoom           = 20;
+
+            var info = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+                name: 'Escuela 25'
+            });
+
+            info.setStyle(new ol.style.Style({
+                image: new ol.style.Icon({
+                    crossOrigin: 'anonymous',
+                    src: '{{ url_for('static', filename='img/escuela.png') }}'
+                })
+            }));
+
+
+            var vectorSource = new ol.source.Vector({
+                features: [info]
+            });
+
+
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    }),
+                    new ol.layer.Vector({
+                        source: vectorSource
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([lon, lat]),
+                    zoom: zoom
+                }),
+                controls: new ol.control.defaults().extend([
+                    new ol.control.Rotate(),
+                    new ol.control.MousePosition(),
+                    new ol.control.OverviewMap(),
+                    new ol.control.ZoomToExtent(),
+                    new ol.control.ScaleLine(),
+                    new ol.control.ZoomSlider()
+                ]),
+            });
         });
     </script>
 
