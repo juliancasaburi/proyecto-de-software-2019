@@ -182,13 +182,15 @@
                 pageLength: $('#items-per-page').data("ammount"),
                 "scrollX": true
             } );
-            setInterval( function () {
-                table.ajax.reload( null, false ); // user paging is not reset on reload
-            }, 5000 );
-            table
+
+            table // Filtrar Bloqueados por default
                 .column(1)
                 .search(1)
                 .draw();
+
+            setInterval( function () {
+                table.ajax.reload( null, false ); // user paging is not reset on reload
+            }, 5000 );
         } );
     </script>
     <script>
