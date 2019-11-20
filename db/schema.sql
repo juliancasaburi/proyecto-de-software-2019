@@ -141,6 +141,47 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`barrio` (
 ENGINE = InnoDB;
 
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `responsable_tipo`
+--
+
+CREATE TABLE `responsable_tipo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `responsable_tipo`
+--
+
+INSERT INTO `responsable_tipo` (`id`, `nombre`) VALUES
+(1, 'Padre'),
+(2, 'Madre'),
+(3, 'Tutor');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `responsable_tipo`
+--
+ALTER TABLE `responsable_tipo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `responsable_tipo`
+--
+ALTER TABLE `responsable_tipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+
 -- -----------------------------------------------------
 -- Table `grupo2`.`estudiante`
 -- -----------------------------------------------------
@@ -148,6 +189,7 @@ DROP TABLE IF EXISTS `grupo2`.`estudiante` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `activo` tinyint(4) NOT NULL DEFAULT '1',
   `apellido` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `fecha_nac` DATE NOT NULL,
@@ -160,6 +202,9 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante` (
   `numero` INT(11) NOT NULL,
   `tel` VARCHAR(255) CHARACTER SET 'utf8',
   `barrio_id` INT(11) NOT NULL,
+  `responsable_tipo_id` int(11) NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `FK_nivel_id` (`nivel_id` ASC),
   INDEX `FK_genero_estudiante_id` (`genero_id` ASC),
@@ -246,6 +291,8 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`docente` (
   `tipo_doc_id` INT(11) NOT NULL,
   `numero` INT(11) NOT NULL,
   `tel` VARCHAR(255) CHARACTER SET 'utf8',
+  `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `FK_genero_docente_id` (`genero_id` ASC),
   CONSTRAINT `FK_genero_docente_id`
@@ -265,6 +312,8 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`taller` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre_corto` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -296,6 +345,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`docente_responsable_taller` (
   `docente_id` INT(11) NOT NULL,
   `ciclo_lectivo_id` INT(11) NOT NULL,
   `taller_id` INT(11) NOT NULL,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `FK_docente_responsable_taller_ciclo_lectivo_id_idx` (`ciclo_lectivo_id` ASC),
   INDEX `FK_docente_responsable_taller_taller_id_idx` (`taller_id` ASC),
   CONSTRAINT `FK_docente_responsable_taller_docente_id`
@@ -348,6 +398,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`estudiante_taller` (
   `estudiante_id` INT(11) NOT NULL,
   `ciclo_lectivo_id` INT(11) NOT NULL,
   `taller_id` INT(11) NOT NULL,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`estudiante_id`, `ciclo_lectivo_id`, `taller_id`),
   INDEX `FK_estudiante_taller_ciclo_lectivo_id` (`ciclo_lectivo_id` ASC),
   INDEX `FK_estudiante_taller_taller_id` (`taller_id` ASC),

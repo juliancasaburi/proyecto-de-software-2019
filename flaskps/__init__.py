@@ -98,7 +98,7 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 # Forms
 app.add_url_rule("/usuario/crear", "user_new_form", dashboard.user_new_form)
 app.add_url_rule("/usuario/editar", "user_edit_form", dashboard.user_edit_form)
-app.add_url_rule("/usuario/baja", "user_destroy_form", dashboard.user_destroy_form)
+app.add_url_rule("/usuario/bloquear", "user_destroy_form", dashboard.user_destroy_form)
 app.add_url_rule("/taller/crear", "taller_new_form", dashboard.taller_new_form)
 
 # Usuarios
@@ -111,12 +111,17 @@ app.add_url_rule(
 )
 app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
-app.add_url_rule("/usuario/baja", "user_destroy", user.destroy, methods=["POST"])
+app.add_url_rule("/usuario/bloquear", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
 
 # Docentes
 app.add_url_rule("/docente", "docente", docente.data)
 app.add_url_rule("/tabladocentes", "docente_table", dashboard.docente_table)
+app.add_url_rule(
+    "/docente_serverside_table",
+    "docente_serverside_table_content",
+    docente.serverside_table_content,
+)
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
@@ -125,10 +130,38 @@ app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule(
-    "/taller/asociar", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
+    "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )
 app.add_url_rule(
-    "/taller/asociar", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
+    "/taller/asociar/ciclo", "taller_set_ciclo_form", dashboard.taller_set_ciclo_form
+)
+app.add_url_rule(
+    "/taller/asociar/docentes",
+    "taller_set_docentes_form",
+    dashboard.taller_set_docentes_form,
+)
+app.add_url_rule(
+    "/taller_ciclo/docentes", "taller_ciclo_docentes", taller.get_docentes_ciclo
+)
+app.add_url_rule(
+    "/taller/asociar/docentes",
+    "taller_set_docentes",
+    taller.set_docentes,
+    methods=["POST"],
+)
+app.add_url_rule(
+    "/taller_ciclo/estudiantes", "taller_ciclo_estudiantes", taller.get_estudiantes_ciclo
+)
+app.add_url_rule(
+    "/taller/asociar/estudiantes",
+    "taller_set_estudiantes_form",
+    dashboard.taller_set_estudiantes_form,
+)
+app.add_url_rule(
+    "/taller/asociar/estudiantes",
+    "taller_set_estudiantes",
+    taller.set_estudiantes,
+    methods=["POST"],
 )
 
 # Ciclos lectivos
@@ -137,6 +170,10 @@ app.add_url_rule(
 )
 app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", dashboard.ciclo_table)
 app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
+app.add_url_rule("/ciclo/talleres", "ciclo_talleres", ciclo_lectivo.get_talleres)
+app.add_url_rule(
+    "/ciclos/baja", "ciclo_destroy", ciclo_lectivo.destroy, methods=["POST"]
+)
 
 # Handlers
 app.register_error_handler(404, handler.not_found_error)
@@ -153,3 +190,4 @@ app.add_url_rule(
 app.add_url_rule(
     "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
 )
+app.add_url_rule("/estudiante/baja", "estudiante_destroy", estudiante.destroy, methods=["POST"])

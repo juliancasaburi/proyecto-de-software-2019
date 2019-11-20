@@ -13,7 +13,7 @@
                     <input id="nombre" name="first_name" class="validate" type="text" required>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="select_genero" name="select_genero">
+                    <select id="select_genero" name="select_genero" required>
                         <option value="" disabled selected>Selecciona un género</option>
                         {% for genero in generos %}
                             <option value="{{genero.id}}">{{genero.nombre}}</option>
@@ -26,7 +26,7 @@
                     <input id="fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_localidad" name="select_localidad">
+                    <select id="select_localidad" name="select_localidad" required>
                         <option value="" disabled selected>Selecciona una localidad</option>
                         {% for localidad in localidades %}
                             <option value="{{localidad.id}}">{{localidad.nombre}}</option>
@@ -39,7 +39,7 @@
                     <input id="domicilio" name="domicilio" class="validate" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_barrio" name="select_barrio">
+                    <select id="select_barrio" name="select_barrio" required>
                         <option value="" disabled selected>Selecciona un barrio</option>
                         {% for barrio in barrios %}
                             <option value="{{barrio.id}}">{{barrio.nombre}}</option>
@@ -48,7 +48,7 @@
                     <label for="select_barrio">Barrio</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_tipo" name="select_tipo">
+                    <select id="select_tipo" name="select_tipo" required>
                         <option value="" disabled selected>Selecciona un tipo</option>
                         {% for tipo in tipodoc %}
                             <option value="{{tipo.id}}">{{tipo.nombre}}</option>
@@ -60,12 +60,21 @@
                     <label for="documento_numero">Numero de Documento</label>
                     <input id="documento_numero" name="documento_numero" class="validate" type="number" required>
                 </div>
+                <div class="col s12 m6 input-field">
+                    <select id="select_responsable_tipo" name="select_responsable_tipo" required>
+                        <option value="" disabled selected>Selecciona el responsable a cargo</option>
+                        {% for responsable_tipo in responsables_tipos %}
+                            <option value="{{responsable_tipo.id}}">{{responsable_tipo.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="select_responsable_tipo">Responsable a cargo</label>
+                </div>
                 <div class="col s12 input-field">
                     <label for="telefono_numero">Numero telefónico (opcional)</label>
                     <input id="telefono_numero" name="telefono_numero" class="validate" type="text">
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_escuela" name="select_escuela">
+                    <select id="select_escuela" name="select_escuela" required>
                         <option value="" disabled selected>Selecciona la escuela de donde proviene</option>
                         {% for escuela in escuelas %}
                             <option value="{{escuela.id}}">{{escuela.nombre}}</option>
@@ -74,7 +83,7 @@
                     <label for="select_escuela">Escuela</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_nivel" name="select_nivel">
+                    <select id="select_nivel" name="select_nivel" required>
                         <option value="" disabled selected>Selecciona el nivel actual</option>
                         {% for nivel in niveles %}
                             <option value="{{nivel.id}}">{{nivel.nombre}}</option>

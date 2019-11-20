@@ -108,7 +108,7 @@ def create():
 
         if created:
             html = render_template(
-                "helpers/mail_alta_usuario.html",
+                "emails/mail_alta_usuario.html",
                 username=params["username"],
                 passwd=plain_pw,
             )
@@ -211,7 +211,7 @@ def update():
             if old_email != new_email:
                 # Mail al email viejo
                 html = render_template(
-                    "helpers/mail_oldmail_change.html", nombre=params["first_name"]
+                    "emails/mail_oldmail_change.html", nombre=params["first_name"]
                 )
                 send_async(
                     old_email,
@@ -221,7 +221,7 @@ def update():
 
                 # Mail al email nuevo
                 html = render_template(
-                    "helpers/mail_newmail_change.html", nombre=params["first_name"]
+                    "emails/mail_newmail_change.html", nombre=params["first_name"]
                 )
                 send_async(
                     new_email,
@@ -231,7 +231,7 @@ def update():
 
             # Mail por defecto de que hubo un update
             html = render_template(
-                "helpers/mail_update_usuario.html", params=params, roles=roles_names
+                "emails/mail_update_usuario.html", params=params, roles=roles_names
             )
             send_async(
                 params["email"],

@@ -60,6 +60,8 @@
                             <th>Tipo de Documento</th>
                             <th>Numero de Documento</th>
                             <th>Numero telefónico</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('docente_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -81,6 +83,8 @@
                             <th>Tipo de Documento</th>
                             <th>Numero de Documento</th>
                             <th>Numero telefónico</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('docente_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -115,7 +119,7 @@
             <!-- Modal Structure -->
             <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
-                    <h3 class="header">Filtrar el listado de Estudiantes</h3>
+                    <h3 class="header">Filtrar el listado de Docentes</h3>
                     <ul class="collection">
                         <li class="collection-item">
                             <div class="input-field col s12">
@@ -155,24 +159,24 @@
     <script>
         $(document).ready(function() {
             $('#tablaDocentes').DataTable( {
-                "ajax": {
-                    "url": "{{ url_for('docente_all') }}",
-                    "dataType": "json",
-                    "dataSrc": "",
-                    "contentType":"application/json"
-                },
+                bProcessing: true,
+                bServerSide: true,
+                sPaginationType: "full_numbers",
+                sAjaxSource:"{{ url_for('docente_serverside_table_content') }}",
                 "columns": [
-                    {"data": "id"},
-                    {"data": "activo"},
-                    {"data": "nombre"},
-                    {"data": "apellido"},
-                    {"data": "fecha de nacimiento"},
-                    {"data": "localidad"},
-                    {"data": "domicilio"},
-                    {"data": "genero"},
-                    {"data": "tipo de documento"},
-                    {"data": "numero"},
-                    {"data": "tel"},
+                    {"data": "ID"},
+                    {"data": "Activo"},
+                    {"data": "Nombre"},
+                    {"data": "Apellido"},
+                    {"data": "Fecha de Nacimiento"},
+                    {"data": "Localidad"},
+                    {"data": "Domicilio"},
+                    {"data": "Genero"},
+                    {"data": "Tipo de Documento"},
+                    {"data": "Numero de Documento"},
+                    {"data": "Numero telefónico"},
+                    {"data": "Creado"},
+                    {"data": "Actualizado"},
                     {% if has_permission('docente_update', session) %}
                         {
                             data: null,
@@ -242,7 +246,7 @@
     $('#tablaDocentes').on('click', 'a.editButton', function (e) {
         var table = $('#tablaDocentes').DataTable();
         var rowData = table.row($(this).parents("tr")).data();
-        var d_id = rowData['id'];
+        var d_id = rowData['ID'];
         $.ajax({
             type: "GET",
             url: "{{ url_for('docente') }}",
@@ -276,10 +280,10 @@
         $('#tablaDocentes').on('click', 'a.deleteButton', function (e) {
             var table = $('#tablaDocentes').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var d_id = rowData['id'];
-            var docentename = rowData['nombre'] + ", " + rowData['apellido'];
+            var d_id = rowData['ID'];
+            var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
             var confirmText;
-            if(rowData['activo'] == 1)
+            if(rowData['Activo'] == 1)
                 confirmText = "bloquear";
             else
                 confirmText = "activar";

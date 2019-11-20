@@ -4,12 +4,8 @@ from wtforms.validators import InputRequired
 
 
 class DocenteCreateForm(FlaskForm):
-    nombre = StringField(
-        "nombre", [InputRequired(message="Complete el nombre")]
-    )
-    apellido = StringField(
-        "nombre", [InputRequired(message="Complete el apellido")]
-    )
+    nombre = StringField("nombre", [InputRequired(message="Complete el nombre")])
+    apellido = StringField("nombre", [InputRequired(message="Complete el apellido")])
     select_genero = SelectField(
         "select_genero",
         coerce=int,

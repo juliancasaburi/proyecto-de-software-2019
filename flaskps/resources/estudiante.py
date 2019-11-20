@@ -1,17 +1,23 @@
 from datetime import datetime
 
-from flask import request, session, abort, make_response, jsonify, flash
+from flask import request, session, abort, make_response, jsonify, flash, json
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
-from flaskps.helpers.estudiante import pasarChoices
 
 from flaskps.models.estudiante import Estudiante
+from flaskps.models.barrio import Barrio
+from flaskps.models.escuela import Escuela
+from flaskps.models.genero import Genero
+from flaskps.models.nivel import Nivel
+from flaskps.models.responsable_tipo import Responsable_tipo
 
 from flaskps.helpers.permission import has_permission
 
 from flaskps.helpers.tipos_documento import tipo_documento
 from flaskps.helpers.localidades import localidad
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
 
 
 def get_estudiantes():
@@ -24,6 +30,8 @@ def get_estudiantes():
     for dict_item in estudiantes:
         dict_item["ID"] = dict_item["id"]
         del dict_item["id"]
+        dict_item["Activo"] = dict_item["activo"]
+        del dict_item["activo"]
         dict_item["Nombre"] = dict_item["nombre"]
         del dict_item["nombre"]
         dict_item["Apellido"] = dict_item["apellido"]
@@ -52,10 +60,51 @@ def get_estudiantes():
         del dict_item["tel"]
         dict_item["Nivel"] = dict_item["n.nombre"]
         del dict_item["n.nombre"]
+        dict_item["Responsable a cargo"] = dict_item["r.nombre"]
+        del dict_item["r.nombre"]
+        dict_item["Creado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["created_at"]
+        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["updated_at"]
 
     estudiantes = jsonify(estudiantes)
 
     return make_response(estudiantes, 200)
+
+
+def pasarChoices(form):
+    db = get_db()
+    locs = localidades()
+    Barrio.db = db
+    barrios = Barrio.all()
+    Genero.db = db
+    generos = Genero.all()
+    tipos_doc = tipos_documento()
+    Escuela.db = db
+    escuelas = Escuela.all()
+    Nivel.db = db
+    niveles = Nivel.all()
+    Responsable_tipo.db = db
+    responsables_tipos = Responsable_tipo.all()
+
+    # choices de los selects
+    form.select_localidad.choices = [
+        (localidad["id"], localidad["nombre"]) for localidad in locs
+    ]
+    form.select_barrio.choices = [
+        (barrio["id"], barrio["nombre"]) for barrio in barrios
+    ]
+    form.select_genero.choices = [
+        (genero["id"], genero["nombre"]) for genero in generos
+    ]
+    form.select_tipo.choices = [(tipo["id"], tipo["nombre"]) for tipo in tipos_doc]
+    form.select_escuela.choices = [
+        (escuela["id"], escuela["nombre"]) for escuela in escuelas
+    ]
+    form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
+    form.select_responsable_tipo.choices = [(responsable_tipo["id"], responsable_tipo["nombre"]) for responsable_tipo in responsables_tipos]
+
+    return form
 
 
 def create():
@@ -111,6 +160,9 @@ def update():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
 
         Estudiante.db = get_db()
 
@@ -126,7 +178,9 @@ def update():
 
     else:
         if len(form.errors) >= 2:
-            op_response["msg"] = "Complete todos los datos del estudiante a modificar"
+            error_msg = "".join(form.errors)
+            op_response["msg"] = error_msg
+            #op_response["msg"] = "Complete todos los datos del estudiante a modificar"
             op_response["type"] = "error"
         else:
             error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
@@ -134,6 +188,30 @@ def update():
             op_response["type"] = "error"
 
         abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+def destroy():
+    if not has_permission("estudiante_destroy", session):
+        abort(401)
+
+    params = json.loads(request.data)
+    eid = params["id"]
+
+    Estudiante.db = get_db()
+    success = Estudiante.delete(eid)
+
+    op_response = dict()
+    responsecode = 200
+
+    if success:
+        op_response["msg"] = "Se ha bloqueado/activado al estudiante exitosamente"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "El estudiante a bloquear/activar no existe"
+        op_response["type"] = "error"
+        responsecode = 404
 
     return make_response(jsonify(op_response), responsecode)
 

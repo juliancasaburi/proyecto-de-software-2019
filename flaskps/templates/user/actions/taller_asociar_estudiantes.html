@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% block title %}Asociar Estudiantes a Taller - {{ siteconfig['titulo'] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section center">
+            <div class="row">
+                <h1>Asociar Estudiantes A Taller</h1>
+                <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="modal-content">
+                        <div class="row">
+                            <div class="col s12 input-field">
+                                <select id="select_ciclo" name="ciclo_lectivo_id" required>
+                                    {% for ciclo in ciclos %}
+                                        <option value="{{ciclo.id}}">[{{ciclo.fecha_ini}}] al [{{ciclo.fecha_fin}}]</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="select_ciclo">Ciclo Lectivo</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_taller" name="taller_id" required>
+                                </select>
+                                <label for="select_taller">Taller</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_estudiantes" multiple name="select_estudiantes">
+                                    {% for estudiante in estudiantes %}
+                                        <option value="{{estudiante.id}}">{{estudiante.apellido}}, {{estudiante.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="select_estudiantes">Estudiantes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Asociar</button>
+                        <button id="cancelar" class="btn red">Reiniciar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('ciclo_talleres') }}",
+                data: {
+                    id: $('#select_ciclo').val()
+                },
+                success: function (response) {
+                    $("#select_taller").html('');
+                    for (var key in response){
+                        $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
+                    }
+                    $('#select_taller').formSelect()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                        data: {
+                            t_id: $('#select_taller').val(),
+                            c_id: $('#select_ciclo').val()
+                        },
+                        success: function (response) {
+                            for (var key in response){
+                                $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                            }
+                            $('#select_estudiantes').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#cancelar").click(function(e){
+                e.preventDefault();
+                $('#tallerAsociarDocentes').trigger("reset");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var frm = $('#tallerAsociarDocentes');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: function (response) {
+                        var toastText = response['msg'];
+                        var toastClass = response['type'];
+                        M.toast({html: toastText, classes: toastClass});
+                    },
+                    statusCode: {
+                        409: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        },
+                        500: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $('#select_ciclo').on('change', function() {
+            $("#select_taller").html('');
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('ciclo_talleres') }}",
+                data: {
+                    id: this.value
+                },
+                success: function (response) {
+                    $("#select_taller").html('');
+                    for (var key in response){
+                        $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
+                    }
+                    $('#select_taller').formSelect();
+                    $("#select_estudiantes").val("");
+                    $('#select_estudiantes').formSelect();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                        data: {
+                            t_id: $('#select_taller').val(),
+                            c_id: $('#select_ciclo').val()
+                        },
+                        success: function (response) {
+                            for (var key in response){
+                                $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                            }
+                            $('#select_estudiantes').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $('#select_taller').on('change', function() {
+            $("#select_estudiantes").val("");
+            $('#select_estudiantes').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                data: {
+                    t_id: this.value,
+                    c_id: $('#select_ciclo').val()
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                    }
+                    $('#select_estudiantes').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+{% endblock %}

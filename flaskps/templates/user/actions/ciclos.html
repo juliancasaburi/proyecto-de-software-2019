@@ -138,7 +138,7 @@
                         {
                             data: null,
                             className: "center",
-                            defaultContent: '<a class="editButton btn red"><i class=\"material-icons\">delete</i></a>'
+                            defaultContent: '<a class="deleteBtn btn red"><i class=\"material-icons\">delete</i></a>'
                         },
                     {% endif %}
                 ],
@@ -206,5 +206,30 @@
                 } // Callback for Modal close
             }
         );
+    </script>
+    <script>
+        // Borrar ciclo
+        $('#tablaCiclos').on('click', 'a.deleteBtn', function (e) {
+            var table = $('#tablaCiclos').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var cid = rowData.ID;
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('ciclo_destroy') }}",
+                data: {
+                    id: cid
+                },
+                success: function (response) {
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    404: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                }
+            });
+        });
     </script>
 {% endblock %}

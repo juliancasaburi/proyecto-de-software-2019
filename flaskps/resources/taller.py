@@ -74,3 +74,73 @@ def get_ciclos():
         abort(404)
 
     return make_response(jsonify(ciclos), 200)
+
+
+def get_docentes_ciclo():
+    t_id = request.args.get("t_id")
+    c_id = request.args.get("c_id")
+
+    Taller.db = get_db()
+    docentes = Taller.docentes_ciclo(t_id, c_id)
+
+    if docentes is None:
+        abort(404)
+
+    return make_response(jsonify(docentes), 200)
+
+
+def set_docentes():
+    params = request.form.to_dict()
+    params["docentes"] = request.form.getlist("select_docentes")
+
+    # TODO:
+    Taller.db = get_db()
+    created = Taller.set_docentes(params)
+
+    op_response = dict()
+    responsecode = 201
+
+    if created:
+        op_response["msg"] = "Se ha establecido la relación"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "Ha ocurrido un error al establecer la relación"
+        op_response["type"] = "error"
+        abort(make_response(jsonify(op_response), 409))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+def get_estudiantes_ciclo():
+    t_id = request.args.get("t_id")
+    c_id = request.args.get("c_id")
+
+    Taller.db = get_db()
+    estudiantes = Taller.estudiantes_ciclo(t_id, c_id)
+
+    if estudiantes is None:
+        abort(404)
+
+    return make_response(jsonify(estudiantes), 200)
+
+
+def set_estudiantes():
+    params = request.form.to_dict()
+    params["estudiantes"] = request.form.getlist("select_estudiantes")
+
+    # TODO:
+    Taller.db = get_db()
+    created = Taller.set_estudiantes(params)
+
+    op_response = dict()
+    responsecode = 201
+
+    if created:
+        op_response["msg"] = "Se ha establecido la relación"
+        op_response["type"] = "success"
+    else:
+        op_response["msg"] = "Ha ocurrido un error al establecer la relación"
+        op_response["type"] = "error"
+        abort(make_response(jsonify(op_response), 409))
+
+    return make_response(jsonify(op_response), responsecode)
