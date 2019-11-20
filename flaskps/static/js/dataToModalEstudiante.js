@@ -6,6 +6,7 @@ dataToModalEstudiante = function(response) {
     $('#modal_editar_nombre').val(response['nombre']);
     $('#modal_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
     $('#modal_fecha_nacimiento').val(response['fecha_nac']);
+    $('.datepicker').datepicker("setDate", new Date(response['fecha_nac']));
     $("#modal_select_genero").val(response['genero_id']);
     $("#modal_select_localidad").val(response['localidad_id']);
     $('#modal_domicilio').attr("placeholder", response['domicilio']);

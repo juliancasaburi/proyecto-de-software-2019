@@ -8,6 +8,7 @@ dataToModalDocente = function(response) {
 
     $('#editar_fecha_nacimiento').attr("placeholder", response['fecha_nac']);
     $('#editar_fecha_nacimiento').val(response['fecha_nac']);
+    $('.datepicker').datepicker("setDate", new Date(response['fecha_nac']));
 
     $('#editar_domicilio').attr("placeholder", response['domicilio']);
     $('#editar_domicilio').val(response['domicilio']);
