@@ -45,6 +45,9 @@ def create():
 
 
 def set_ciclo():
+    if not has_permission("taller_update", session):
+        abort(401)
+
     params = request.form.to_dict()
     params["ciclos"] = request.form.getlist("select_ciclos")
 
@@ -66,6 +69,9 @@ def set_ciclo():
 
 
 def get_ciclos():
+    if not has_permission("ciclolectivo_index", session):
+        abort(401)
+
     t_id = request.args.get("id")
     Taller.db = get_db()
     ciclos = Taller.ciclos(t_id)
@@ -77,6 +83,9 @@ def get_ciclos():
 
 
 def get_docentes_ciclo():
+    if not has_permission("docente_index", session):
+        abort(401)
+
     t_id = request.args.get("t_id")
     c_id = request.args.get("c_id")
 
@@ -90,6 +99,9 @@ def get_docentes_ciclo():
 
 
 def set_docentes():
+    if not has_permission("taller_update", session):
+        abort(401)
+
     params = request.form.to_dict()
     params["docentes"] = request.form.getlist("select_docentes")
 
@@ -112,6 +124,9 @@ def set_docentes():
 
 
 def get_estudiantes_ciclo():
+    if not has_permission("estudiante_index", session):
+        abort(401)
+
     t_id = request.args.get("t_id")
     c_id = request.args.get("c_id")
 
@@ -125,6 +140,9 @@ def get_estudiantes_ciclo():
 
 
 def set_estudiantes():
+    if not has_permission("taller_update", session):
+        abort(401)
+
     params = request.form.to_dict()
     params["estudiantes"] = request.form.getlist("select_estudiantes")
 
