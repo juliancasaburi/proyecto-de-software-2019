@@ -29,7 +29,7 @@
                                 <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
                                 <!-- Switch -->
                                 <div class="switch center">
-                                    <p>Modo mantenimiento</p>
+                                    <h6>Modo mantenimiento</h6>
                                     <label>
                                         Deshabilitado
                                         {% if siteconfig['modo_mantenimiento'] == 1 %}
@@ -90,7 +90,7 @@
                     <div class="card" style="overflow: visible;">
                         <a {% if has_permission('estudiante_index', session) %} href="{{ url_for('estudiante_table') }}" {% endif %}>
                             <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                <i class="fas fa-user-tie fa-3x black-text"></i>
+                                <i class="material-icons fa-3x black-text">school</i>
                             </div>
                         </a>
                         <div class="card-content">
