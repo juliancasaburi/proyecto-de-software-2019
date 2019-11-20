@@ -178,9 +178,7 @@ def update():
 
     else:
         if len(form.errors) >= 2:
-            error_msg = "".join(form.errors)
-            op_response["msg"] = error_msg
-            #op_response["msg"] = "Complete todos los datos del estudiante a modificar"
+            op_response["msg"] = "Complete todos los datos del estudiante a modificar"
             op_response["type"] = "error"
         else:
             error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
@@ -226,6 +224,10 @@ def estudiante_data():
         eid = request.args.get("id")
         estudiante = Estudiante.find_by_id(eid)
         if estudiante != None:
+            # lo tuve que pasar a string desde acá
+            estudiante['fecha_nac'] = datetime.strftime(
+                estudiante["fecha_nac"], "%d/%m/%Y"
+            )
             data = jsonify(estudiante)
             return make_response(data, 200)
         else:
