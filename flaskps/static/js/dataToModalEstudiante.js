@@ -19,5 +19,6 @@ dataToModalEstudiante = function(response) {
     $("#modal_select_escuela").val(response['escuela_id']);
     $("#modal_select_nivel").val(response['nivel_id']);
     $("#modal_select_responsable_tipo").val(response['responsable_tipo_id']);
+    $('select').formSelect();
     M.updateTextFields();
 }

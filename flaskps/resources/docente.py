@@ -154,6 +154,9 @@ def data():
     d_id = request.args.get("id")
     docente = Docente.find_by_id(d_id)
     if docente != None:
+        docente['fecha_nac'] = datetime.strftime(
+            docente["fecha_nac"], "%d/%m/%Y"
+        )
         data = jsonify(docente)
         return make_response(data, 200)
     else:

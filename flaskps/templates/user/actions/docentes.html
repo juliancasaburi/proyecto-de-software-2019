@@ -135,6 +135,14 @@
                                 <label for="filterApellidoDocente">Filtrar por apellido</label>
                             </div>
                         </li>
+                        <li class="collection-item">
+                            <p>
+                                <label>
+                                    <input id="filterActive" type="checkbox"/>
+                                    <span>Listar docentes bloqueados</span>
+                                </label>
+                            </p>
+                        </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -150,6 +158,7 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalDocente.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#modalFilters').modal();
@@ -219,6 +228,7 @@
     </script>
     <script> // Filtros
     $(document).ready(function(){
+        validar_filtro_activo();
         var table = $('#tablaDocentes').DataTable();
         $("#filterNombreDocente").on("keyup", function() {
             table
@@ -234,6 +244,27 @@
         });
     });
     </script>
+    <script>
+        var filtro_activo = document.getElementById("filterActive");
+        function validar_filtro_activo() {
+            var table = $('#tablaDocentes').DataTable();
+            if($("#filterActive").prop("checked") == true)
+            {
+                table
+                    .column(1)
+                    .search('')
+                    .draw();
+            }
+            else
+            {
+                table
+                    .column(1)
+                    .search(1)
+                    .draw();
+            }
+        }
+        filtro_activo.onchange = validar_filtro_activo;
+    </script>
     <script> // Alta de Docente
     $(document).ready(function(){
         $('#modalAltaDocente').modal();
@@ -241,108 +272,113 @@
         $('#modalEditarDocente').modal();
     });
     </script>
-    <script> // Editar Docente
-    // Edit a record
-    $('#tablaDocentes').on('click', 'a.editButton', function (e) {
-        var table = $('#tablaDocentes').DataTable();
-        var rowData = table.row($(this).parents("tr")).data();
-        var d_id = rowData['ID'];
-        $.ajax({
-            type: "GET",
-            url: "{{ url_for('docente') }}",
-            data: {
-                id: d_id
-            },
-            success: function (response) {
-                $('#editar_id').val(response['id']);
-                $('#editar_activo').prop('checked', response['activo']);
-                $('#editar_nombre').attr("placeholder", response['nombre']);
-                $('#editar_nombre').attr("value", response['nombre']);
-                $('#editar_apellido').attr("placeholder", response['apellido']);
-                $('#editar_apellido').attr("value", response['apellido']);
-
-                $('#editar_fecha_nacimiento').val(new Date(response['fecha_nac'])); //Valor por defecto no valido
-                $('#editar_fecha_nacimiento').datepicker("setDate", new Date(response['fecha_nac']));
-
-                $('#editar_domicilio').attr("placeholder", response['domicilio']);
-                $('#editar_domicilio').attr("value", response['domicilio']);
-                $('#editar_documento_numero').attr("placeholder", response['numero']);
-                $('#editar_documento_numero').attr("value", response['numero']);
-
-                if ((response['tel'] != "") && (response['tel'] != null)){
-                    $('#editar_telefono_numero').attr("placeholder", response['tel']);
-                    $('#editar_telefono_numero').attr("value", response['tel']);
-                }
-                else{
-                    $('#editar_telefono_numero').attr("placeholder", null);
-                    $('#editar_telefono_numero').attr("value", null);
-                }
-
-                $("#editar_select_genero").val(response['genero_id']);
-                $("#editar_select_localidad").val(response['localidad_id']);
-                $("#editar_select_tipo").val(response['tipo_doc_id']);
-
-                M.updateTextFields();
-                $('#modalEditarDocente').modal('open');
-            },
-            error: function (jqXhr, textStatus, errorMessage) {
-                console.log("Error: ", errorMessage);
-            }
-        });
-    });
-    </script>
-    <script async> // Baja de docente
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    // Delete a record
-    $(document).ready(function(){
-        $('#tablaDocentes').on('click', 'a.deleteButton', function (e) {
+    <script>
+        // Editar docente
+        $('#tablaDocentes').on('click', 'a.editButton', function (e) {
             var table = $('#tablaDocentes').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
             var d_id = rowData['ID'];
-            var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
-            var confirmText;
-            var estoyActivo = rowData['Activo'] == 1;
-            if(estoyActivo)
-                confirmText = "bloquear";
-            else
-                confirmText = "activar";
-            if (confirm('¿Está seguro de ' + confirmText + ' al docente "' + docentename + '" (ID: ' + d_id + ')?') == true) {
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('docente') }}",
+                data: {
+                    id: d_id
+                },
+                success: function (response) {
+                    dataToModalDocente(response);
+                    $('#modalEditarDocente').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script async>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        $(document).ready(function(){
+            // Editar docente
+            var frm = $('#editarDocente');
+
+            frm.submit(function (e) {
+                e.preventDefault();
                 $('#progress').show();
+                $('#modalEditarDocente').modal('close');
                 $.ajax({
-                    type: "POST",
-                    url: "{{ url_for('docente_destroy') }}",
-                    data: JSON.stringify({"id": d_id, "activo": estoyActivo}),
-                    dataType: 'json',
-                    contentType: 'application/json;charset=UTF-8',
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
                     success: async function (response) {
-                        table.ajax.reload( null, false );
                         $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "El docente fue editado con éxito";
                         await sleep(2000);
                         $('#actionSuccess').show();
                         $('#actionSuccess').delay(2000).fadeOut('slow');
-                        M.toast({html: response['msg'], classes: response['type']});
+                        var table = $('#tablaDocentes').DataTable();
+                        table.ajax.reload( null, false );
+                        M.toast({html: toastText, classes: 'green'});
                     },
-                    statusCode: {
-                        404: async function (jqXHR) {
-                            $('#progress').delay(2000).fadeOut('slow');
-                            await sleep(2000);
-                            $('#actionError').show();
-                            $('#actionError').delay(2000).fadeOut('slow');
-                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                        },
-                        500: async function (jqXHR) {
-                            $('#progress').delay(2000).fadeOut('slow');
-                            await sleep(2000);
-                            $('#actionError').show();
-                            $('#actionError').delay(2000).fadeOut('slow');
-                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                        }
-                    }
+                    error: async function (jqXHR, textStatus, errorMessage) {
+                        $('#progress').delay(2000).fadeOut('slow');
+                        var toastText = "Ha ocurrido un error (" + errorMessage + ")";
+                        await sleep(2000);
+                        $('#actionError').show();
+                        $('#actionError').delay(2000).fadeOut('slow');
+                        M.toast({html: toastText, classes: 'error'});
+                    },
                 });
-            }
+            });
+
+            // Delete a record
+
+            $('#tablaDocentes').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablaDocentes').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var d_id = rowData['ID'];
+                var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
+                var confirmText;
+                var estoyActivo = rowData['Activo'] == 1;
+                if(estoyActivo)
+                    confirmText = "bloquear";
+                else
+                    confirmText = "activar";
+                if (confirm('¿Está seguro de ' + confirmText + ' al docente "' + docentename + '" (ID: ' + d_id + ')?') == true) {
+                    $('#progress').show();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url_for('docente_destroy') }}",
+                        data: JSON.stringify({"id": d_id, "activo": estoyActivo}),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=UTF-8',
+                        success: async function (response) {
+                            table.ajax.reload( null, false );
+                            $('#progress').delay(2000).fadeOut('slow');
+                            await sleep(2000);
+                            $('#actionSuccess').show();
+                            $('#actionSuccess').delay(2000).fadeOut('slow');
+                            M.toast({html: response['msg'], classes: response['type']});
+                        },
+                        statusCode: {
+                            404: async function (jqXHR) {
+                                $('#progress').delay(2000).fadeOut('slow');
+                                await sleep(2000);
+                                $('#actionError').show();
+                                $('#actionError').delay(2000).fadeOut('slow');
+                                M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                            },
+                            500: async function (jqXHR) {
+                                $('#progress').delay(2000).fadeOut('slow');
+                                await sleep(2000);
+                                $('#actionError').show();
+                                $('#actionError').delay(2000).fadeOut('slow');
+                                M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                            }
+                        }
+                    });
+                }
+            });
         });
-    });
     </script>
 {% endblock %}
