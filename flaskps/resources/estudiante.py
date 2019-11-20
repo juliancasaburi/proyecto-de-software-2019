@@ -218,7 +218,7 @@ def destroy():
 
 # por id
 def estudiante_data():
-    if not has_permission("estudiante_index", session):
+    if not has_permission("estudiante_show", session):
         abort(401)
 
     if request.args.get("id"):
