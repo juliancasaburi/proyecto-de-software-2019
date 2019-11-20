@@ -387,6 +387,7 @@
                 var eid = rowData.ID;
                 var estudiantename = rowData.Apellido + ", " + rowData.Nombre;
                 var confirmText;
+                var estoyActivo = rowData.Activo == 1;
                 if(rowData.Activo == 1)
                     confirmText = "bloquear";
                 else
@@ -396,17 +397,16 @@
                     $.ajax({
                         type: "POST",
                         url: "{{ url_for('estudiante_destroy') }}",
-                        data: JSON.stringify({"id": eid}),
+                        data: JSON.stringify({"id": eid, "activo": estoyActivo}),
                         dataType: 'json',
                         contentType: 'application/json;charset=UTF-8',
-                        success: async function () {
+                        success: async function (response) {
                             table.ajax.reload( null, false );
                             $('#progress').delay(2000).fadeOut('slow');
                             await sleep(2000);
                             $('#actionSuccess').show();
                             $('#actionSuccess').delay(2000).fadeOut('slow');
-                            var toastText = 'El estudiante ' + estudiantename + ' (ID: ' + eid + ') fue activado/bloqueado';
-                            M.toast({html: toastText, classes: 'green'});
+                            M.toast({html: response['msg'], classes: response['type']});
                         },
                         statusCode: {
                             404: async function (jqXHR) {
