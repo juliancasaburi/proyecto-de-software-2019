@@ -9,12 +9,12 @@
         <div class="section center">
             <div class="row">
                 <h1>Asociar Estudiantes A Taller</h1>
-                <form id="tallerAsociarEstudiantes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
+                <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <div class="row">
                             <div class="col s12 input-field">
-                                <select id="select_ciclo" name="select_ciclo" required>
+                                <select id="select_ciclo" name="ciclo_lectivo_id" required>
                                     {% for ciclo in ciclos %}
                                         <option value="{{ciclo.id}}">[{{ciclo.fecha_ini}}] al [{{ciclo.fecha_fin}}]</option>
                                     {% endfor %}
@@ -28,6 +28,9 @@
                             </div>
                             <div class="col s12 input-field">
                                 <select id="select_estudiantes" multiple name="select_estudiantes">
+                                    {% for estudiante in estudiantes %}
+                                        <option value="{{estudiante.id}}">{{estudiante.apellido}}, {{estudiante.nombre}}</option>
+                                    {% endfor %}
                                 </select>
                                 <label for="select_estudiantes">Estudiantes</label>
                             </div>
@@ -59,6 +62,23 @@
                         $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
                     }
                     $('#select_taller').formSelect()
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                        data: {
+                            t_id: $('#select_taller').val(),
+                            c_id: $('#select_ciclo').val()
+                        },
+                        success: function (response) {
+                            for (var key in response){
+                                $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                            }
+                            $('#select_estudiantes').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -70,13 +90,13 @@
         $(document).ready(function() {
             $("#cancelar").click(function(e){
                 e.preventDefault();
-                $('#tallerAsociarEstudiantes').trigger("reset");
+                $('#tallerAsociarDocentes').trigger("reset");
             });
         });
     </script>
     <script>
         $(document).ready(function() {
-            var frm = $('#tallerAsociarEstudiantes');
+            var frm = $('#tallerAsociarDocentes');
 
             frm.submit(function (e) {
                 e.preventDefault();
@@ -116,6 +136,48 @@
                         $("#select_taller").append('<option value="'+ response[key]['id'] +'">'+ response[key]['nombre'] +'</option>');
                     }
                     $('#select_taller').formSelect();
+                    $("#select_estudiantes").val("");
+                    $('#select_estudiantes').formSelect();
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                        data: {
+                            t_id: $('#select_taller').val(),
+                            c_id: $('#select_ciclo').val()
+                        },
+                        success: function (response) {
+                            for (var key in response){
+                                $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                            }
+                            $('#select_estudiantes').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script>
+        $('#select_taller').on('change', function() {
+            $("#select_estudiantes").val("");
+            $('#select_estudiantes').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                data: {
+                    t_id: this.value,
+                    c_id: $('#select_ciclo').val()
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                    }
+                    $('#select_estudiantes').formSelect();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);

@@ -8,17 +8,7 @@ class Docente(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT  id,
-                    activo, 
-                    apellido, 
-                    nombre, 
-                    fecha_nac, 
-                    localidad_id, 
-                    domicilio, 
-                    genero_id, 
-                    tipo_doc_id, 
-                    numero,
-                    tel
+            SELECT  *
             FROM    docente
         """
         try:

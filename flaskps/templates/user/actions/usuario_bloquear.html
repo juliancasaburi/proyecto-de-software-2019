@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Eliminar de Usuario - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Activar/bloquear - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -11,8 +11,8 @@
                 <form id="eliminarUsuario" method="post" action="{{ url_for('user_destroy') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
-                        <h1>Eliminar un Usuario</h1>
-                        <h6>Recordá que también podés eliminar usuarios desde el <a href="{{ url_for ('user_table') }}">listado completo de usuarios</a>.</h6>
+                        <h1>Activar/bloquear un Usuario</h1>
+                        <h6>Recordá que también podés Activar/bloquear usuarios desde el <a href="{{ url_for ('user_table') }}">listado completo de usuarios</a>.</h6>
                         <br>
                         <div class="row">
                             <div class="input-field col s12">
@@ -60,7 +60,7 @@
                             <divider></divider>
                             <div class="modal-footer col s12">
                                 <button type="button" id="cancel" class="btn red">Cancelar</button>
-                                <button type="submit" class="btn blue">Eliminar</button>
+                                <button type="submit" class="btn blue">Activar/bloquear</button>
                             </div>
                         </div>
                     </div>

@@ -64,6 +64,8 @@
                             <th>Escuela</th>
                             <th>Nivel</th>
                             <th>Responsable a cargo</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('estudiante_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -89,6 +91,8 @@
                             <th>Escuela</th>
                             <th>Nivel</th>
                             <th>Responsable a cargo</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('estudiante_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -192,6 +196,8 @@
                     {"data": "Escuela"},
                     {"data": "Nivel"},
                     {"data": "Responsable a cargo"},
+                    {"data": "Creado"},
+                    {"data": "Actualizado"},
                     {% if has_permission('estudiante_update', session) %}
                         {
                             data: null,

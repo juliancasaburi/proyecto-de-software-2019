@@ -98,7 +98,7 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 # Forms
 app.add_url_rule("/usuario/crear", "user_new_form", dashboard.user_new_form)
 app.add_url_rule("/usuario/editar", "user_edit_form", dashboard.user_edit_form)
-app.add_url_rule("/usuario/baja", "user_destroy_form", dashboard.user_destroy_form)
+app.add_url_rule("/usuario/bloquear", "user_destroy_form", dashboard.user_destroy_form)
 app.add_url_rule("/taller/crear", "taller_new_form", dashboard.taller_new_form)
 
 # Usuarios
@@ -111,7 +111,7 @@ app.add_url_rule(
 )
 app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
-app.add_url_rule("/usuario/baja", "user_destroy", user.destroy, methods=["POST"])
+app.add_url_rule("/usuario/bloquear", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
 
 # Docentes
@@ -148,6 +148,9 @@ app.add_url_rule(
     "taller_set_docentes",
     taller.set_docentes,
     methods=["POST"],
+)
+app.add_url_rule(
+    "/taller_ciclo/estudiantes", "taller_ciclo_estudiantes", taller.get_estudiantes_ciclo
 )
 app.add_url_rule(
     "/taller/asociar/estudiantes",

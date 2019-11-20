@@ -44,7 +44,7 @@
                     <li><a href="{{ url_for('user_new_form') }}">Crear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_destroy', session) %}
-                    <li><a href="{{ url_for('user_destroy_form') }}">Eliminar</a></li>
+                    <li><a href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_update', session) %}
                     <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
@@ -71,13 +71,6 @@
                     <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
                 {% endif %}
             </ul>
-            <!-- dropdownInstrumentos Structure -->
-            <ul id="dropdownInstrumentos" class="dropdown-content teal">
-                <li><a href="#">Ver Listado</a></li>
-                <li><a href="#">Crear</a></li>
-                <li><a href="#">Eliminar</a></li>
-                <li><a href="#">Editar</a></li>
-            </ul>
             <!-- dropdownTalleres Structure -->
             <ul id="dropdownTalleres" class="dropdown-content teal">
                 <li><a href="#">Ver Listado</a></li>
@@ -87,6 +80,13 @@
                     <li><a href="{{ url_for('taller_set_docentes_form') }}">Docentes</a></li>
                     <li><a href="{{ url_for('taller_set_estudiantes_form') }}">Estudiantes</a></li>
                 {% endif %}
+                <li><a href="#">Eliminar</a></li>
+                <li><a href="#">Editar</a></li>
+            </ul>
+            <!-- dropdownInstrumentos Structure -->
+            <ul id="dropdownInstrumentos" class="dropdown-content teal">
+                <li><a href="#">Ver Listado</a></li>
+                <li><a href="#">Crear</a></li>
                 <li><a href="#">Eliminar</a></li>
                 <li><a href="#">Editar</a></li>
             </ul>

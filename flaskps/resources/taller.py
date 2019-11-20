@@ -111,13 +111,26 @@ def set_docentes():
     return make_response(jsonify(op_response), responsecode)
 
 
+def get_estudiantes_ciclo():
+    t_id = request.args.get("t_id")
+    c_id = request.args.get("c_id")
+
+    Taller.db = get_db()
+    estudiantes = Taller.estudiantes_ciclo(t_id, c_id)
+
+    if estudiantes is None:
+        abort(404)
+
+    return make_response(jsonify(estudiantes), 200)
+
+
 def set_estudiantes():
     params = request.form.to_dict()
-    params["docentes"] = request.form.getlist("select_estudiantes")
+    params["estudiantes"] = request.form.getlist("select_estudiantes")
 
     # TODO:
     Taller.db = get_db()
-    created = Taller.set_ciclos(params)
+    created = Taller.set_estudiantes(params)
 
     op_response = dict()
     responsecode = 201
