@@ -110,7 +110,7 @@
                         <li class="collection-item">
                             <p>
                                 <label>
-                                    <input id="filterActive" type="checkbox" checked="checked"/>
+                                    <input id="filterActive" type="checkbox"/>
                                     <span>Listar usuarios bloqueados</span>
                                 </label>
                             </p>
@@ -140,7 +140,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaUsuarios').DataTable( {
+            let table = $('#tablaUsuarios').DataTable( {
                 bProcessing: true,
                 bServerSide: true,
                 sPaginationType: "full_numbers",
@@ -183,9 +183,12 @@
                 "scrollX": true
             } );
             setInterval( function () {
-                var table = $('#tablaUsuarios').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
             }, 5000 );
+            table
+                .column(1)
+                .search(1)
+                .draw();
         } );
     </script>
     <script>
