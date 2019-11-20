@@ -284,7 +284,7 @@
             var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
             var confirmText;
             var estoyActivo = rowData['Activo'] == 1;
-            if(rowData['Activo'] == 1)
+            if(estoyActivo)
                 confirmText = "bloquear";
             else
                 confirmText = "activar";
