@@ -387,6 +387,7 @@
                 var eid = rowData.ID;
                 var estudiantename = rowData.Apellido + ", " + rowData.Nombre;
                 var confirmText;
+                var estoyActivo = rowData.Activo == 1;
                 if(rowData.Activo == 1)
                     confirmText = "bloquear";
                 else
@@ -405,7 +406,8 @@
                             await sleep(2000);
                             $('#actionSuccess').show();
                             $('#actionSuccess').delay(2000).fadeOut('slow');
-                            var toastText = 'El estudiante ' + estudiantename + ' (ID: ' + eid + ') fue activado/bloqueado';
+                            var auxText = (estoyActivo ? "bloqueado" : "activado");
+                            var toastText = 'El estudiante ' + estudiantename + ' (ID: ' + eid + ') fue ' + auxText;
                             M.toast({html: toastText, classes: 'green'});
                         },
                         statusCode: {
