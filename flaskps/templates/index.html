@@ -118,19 +118,16 @@
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
                 name: 'Escuela 25'
             });
-
-            info.setStyle(new ol.style.Style({
+            var iconStyle = new ol.style.Style({
                 image: new ol.style.Icon({
                     crossOrigin: 'anonymous',
                     src: '{{ url_for('static', filename='img/escuela.png') }}'
                 })
-            }));
-
+            });
 
             var vectorSource = new ol.source.Vector({
                 features: [info]
             });
-
 
             var map = new ol.Map({
                 target: 'map',
@@ -139,7 +136,13 @@
                         source: new ol.source.OSM()
                     }),
                     new ol.layer.Vector({
-                        source: vectorSource
+                        source: vectorSource,
+                        updateWhileAnimating: true,
+                        updateWhileInteracting: true,
+                        style: function(feature, resolution) {
+                            iconStyle.getImage().setScale(map.getView().getResolutionForZoom(zoom) / resolution);
+                            return iconStyle;
+                        }
                     })
                 ],
                 view: new ol.View({
@@ -153,7 +156,7 @@
                     new ol.control.ZoomToExtent(),
                     new ol.control.ScaleLine(),
                     new ol.control.ZoomSlider()
-                ]),
+                ])
             });
         });
     </script>
