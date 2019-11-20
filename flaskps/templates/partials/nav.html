@@ -21,17 +21,15 @@
         <li><div class="orange white-text darken-3 section center"><h5>Orquesta Escuela de Berisso</h5></div></li>
         <div class="section">
             {% if is_authenticated(session) %}
-                <p class="subheader center light-blue white-text">Autenticado como: {{ session['user'] }}</p>
-                <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}"><i class="material-icons">person</i>Administrar Cuenta</a></li>
+                <p class="subheader center light-blue white-text valign-wrapper"><i class="material-icons">person</i>Autenticado como: {{ session['user'] }}</p>
+                <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}">Administrar Cuenta</a></li>
+                <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
             {% endif %}
         </div>
         <div class="section">
             <p class="subheader light-blue white-text"><b>General</b></p>
             <li><a href="{{ url_for('index') }}">Inicio</a></li>
-            {% if is_authenticated(session) %}
-                <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
-                <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
-            {% else %}
+            {% if not is_authenticated(session) %}
                 <li><a href="{{ url_for('auth_login') }}">Iniciar sesión</a></li>
             {% endif %}
 
@@ -95,6 +93,7 @@
                 <div class="section">
                     <p class="subheader light-blue white-text"><b>Acciones</b></p>
                 </div>
+                <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
                 {% if has_permission('usuario_index', session) or has_permission('usuario_new', session) or has_permission('usuario_destroy', session) or has_permission('usuario_update', session) or has_permission('usuario_show', session) %}
                     <div class="section">
                         <li><a class="subheader">Usuarios</a></li>
