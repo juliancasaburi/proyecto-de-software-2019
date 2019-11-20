@@ -6,10 +6,13 @@
                     <img src="{{ url_for('static', filename='img/logo-white.png') }}" width="96" class="responsive-img" alt="Logo Orquesta Escuela de Berisso">
                 </a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a class="white-text waves-effect waves-light" href="{{ url_for('index') }}">Inicio</a></li>
+                    <li><a class="white-text waves-effect waves-light" href="{{ url_for('index') }}"><b>Inicio</b></a></li>
                     {% if is_authenticated(session) %}
-                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('user_dashboard') }}">Panel</a></li>
-                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
+                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('user_profile') }}"><b>Mi Cuenta</b></a></li>
+                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('user_dashboard') }}"><b>Panel</b></a></li>
+                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('auth_logout') }}"><b>Cerrar sesión</b></a></li>
+                    {% else %}
+                        <li><a class="white-text waves-effect waves-light" href="{{ url_for('auth_login') }}"><b>Iniciar sesión</b></a></li>
                     {% endif %}
                 </ul>
                 <a href="#" aria-label="Abrir menú de navegación" data-target="nav-mobile" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
@@ -22,7 +25,7 @@
         <div class="section">
             {% if is_authenticated(session) %}
                 <p class="subheader center light-blue white-text valign-wrapper"><i class="material-icons">person</i>Autenticado como: {{ session['user'] }}</p>
-                <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}">Administrar Cuenta</a></li>
+                <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}">Mi Cuenta</a></li>
                 <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
             {% endif %}
         </div>
