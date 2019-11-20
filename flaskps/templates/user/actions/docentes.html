@@ -254,14 +254,34 @@
                 id: d_id
             },
             success: function (response) {
-                $('#modal_editar_id').val(response['id']);
-                $('#modal_editar_activo').prop('checked', response['activo']);
-                $('#nombre').attr("placeholder", response['nombre']);
-                $('#nombre').attr("value", response['nombre']);
-                $('#apellido').attr("placeholder", response['apellido']);
-                $('#apellido').attr("value", response['apellido']);
-                $('#fecha_nacimiento').attr("placeholder", response['fecha_nac']);
-                $('#fecha_nacimiento').attr("value", response['fecha_nac']);
+                $('#editar_id').val(response['id']);
+                $('#editar_activo').prop('checked', response['activo']);
+                $('#editar_nombre').attr("placeholder", response['nombre']);
+                $('#editar_nombre').attr("value", response['nombre']);
+                $('#editar_apellido').attr("placeholder", response['apellido']);
+                $('#editar_apellido').attr("value", response['apellido']);
+
+                $('#editar_fecha_nacimiento').val(new Date(response['fecha_nac'])); //Valor por defecto no valido
+                $('#editar_fecha_nacimiento').datepicker("setDate", new Date(response['fecha_nac']));
+
+                $('#editar_domicilio').attr("placeholder", response['domicilio']);
+                $('#editar_domicilio').attr("value", response['domicilio']);
+                $('#editar_documento_numero').attr("placeholder", response['numero']);
+                $('#editar_documento_numero').attr("value", response['numero']);
+
+                if ((response['tel'] != "") && (response['tel'] != null)){
+                    $('#editar_telefono_numero').attr("placeholder", response['tel']);
+                    $('#editar_telefono_numero').attr("value", response['tel']);
+                }
+                else{
+                    $('#editar_telefono_numero').attr("placeholder", null);
+                    $('#editar_telefono_numero').attr("value", null);
+                }
+
+                $("#editar_select_genero").val(response['genero_id']);
+                $("#editar_select_localidad").val(response['localidad_id']);
+                $("#editar_select_tipo").val(response['tipo_doc_id']);
+
                 M.updateTextFields();
                 $('#modalEditarDocente').modal('open');
             },
