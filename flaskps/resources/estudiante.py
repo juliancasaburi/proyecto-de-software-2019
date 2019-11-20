@@ -196,6 +196,7 @@ def destroy():
 
     params = json.loads(request.data)
     eid = params["id"]
+    activo = params["activo"]
 
     Estudiante.db = get_db()
     success = Estudiante.delete(eid)
@@ -204,10 +205,12 @@ def destroy():
     responsecode = 200
 
     if success:
-        op_response["msg"] = "Se ha bloqueado/activado al estudiante exitosamente"
+        condicion = 'bloqueado' if activo else 'activado'
+        op_response["msg"] = "Se ha " + condicion + " al estudiante exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El estudiante a bloquear/activar no existe"
+        condicion = 'bloquear' if activo else 'activar'
+        op_response["msg"] = "El estudiante a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
 

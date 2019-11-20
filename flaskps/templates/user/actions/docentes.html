@@ -283,6 +283,7 @@
             var d_id = rowData['ID'];
             var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
             var confirmText;
+            var estoyActivo = rowData['Activo'] == 1;
             if(rowData['Activo'] == 1)
                 confirmText = "bloquear";
             else
@@ -292,7 +293,7 @@
                 $.ajax({
                     type: "POST",
                     url: "{{ url_for('docente_destroy') }}",
-                    data: JSON.stringify({"id": d_id}),
+                    data: JSON.stringify({"id": d_id, "activo": estoyActivo}),
                     dataType: 'json',
                     contentType: 'application/json;charset=UTF-8',
                     success: async function (response) {
