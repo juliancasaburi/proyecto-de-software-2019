@@ -60,6 +60,8 @@
                             <th>Tipo de Documento</th>
                             <th>Numero de Documento</th>
                             <th>Numero telefónico</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('docente_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -81,6 +83,8 @@
                             <th>Tipo de Documento</th>
                             <th>Numero de Documento</th>
                             <th>Numero telefónico</th>
+                            <th>Creado</th>
+                            <th>Actualizado</th>
                             {% if has_permission('docente_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -171,6 +175,8 @@
                     {"data": "Tipo de Documento"},
                     {"data": "Numero de Documento"},
                     {"data": "Numero telefónico"},
+                    {"data": "Creado"},
+                    {"data": "Actualizado"},
                     {% if has_permission('docente_update', session) %}
                         {
                             data: null,

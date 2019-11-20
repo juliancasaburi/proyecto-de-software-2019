@@ -43,6 +43,10 @@ def docentes():
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
         dict_item["tipo de documento"] = tipo_doc["nombre"]
         del dict_item["tipo_doc_id"]
+        dict_item["Creado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["created_at"]
+        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["updated_at"]
 
     return docentes
 

@@ -142,4 +142,18 @@ SERVERSIDE_DOCENTES_TABLE_COLUMNS = [
         "order": 10,
         "searchable": False,
     },
+    {
+        "data_name": "Creado",
+        "column_name": "Creado",
+        "default": 0,
+        "order": 11,
+        "searchable": False,
+    },
+    {
+        "data_name": "Actualizado",
+        "column_name": "Actualizado",
+        "default": 0,
+        "order": 12,
+        "searchable": False,
+    },
 ]

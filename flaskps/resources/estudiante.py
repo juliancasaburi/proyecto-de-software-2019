@@ -62,6 +62,10 @@ def get_estudiantes():
         del dict_item["n.nombre"]
         dict_item["Responsable a cargo"] = dict_item["r.nombre"]
         del dict_item["r.nombre"]
+        dict_item["Creado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["created_at"]
+        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
+        del dict_item["updated_at"]
 
     estudiantes = jsonify(estudiantes)
 

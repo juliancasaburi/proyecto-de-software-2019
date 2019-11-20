@@ -8,19 +8,10 @@ class Estudiante(object):
     @classmethod
     def all(cls):
         sql = """
-            SELECT  e.id,
-                    e.activo,
-                    e.apellido, 
-                    e.nombre, 
-                    e.fecha_nac, 
-                    e.localidad_id,
-                    n.nombre, 
-                    e.domicilio, 
+            SELECT  e.*,
+                    n.nombre,  
                     g.nombre,
                     es.nombre,
-                    e.tipo_doc_id, 
-                    e.numero,
-                    e.tel,
                     b.nombre,
                     r.nombre
             FROM    estudiante AS e
