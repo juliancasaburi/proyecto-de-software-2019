@@ -228,3 +228,15 @@ nav ul a {
   padding: 0 10px;
   cursor: pointer;
 }
+
+.index {
+    margin: 5%
+}
+
+.about {
+    margin: 5% 5%;
+}
+
+.error-page {
+    margin: 5rem;
+}
