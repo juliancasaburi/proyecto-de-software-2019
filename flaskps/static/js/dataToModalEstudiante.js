@@ -21,4 +21,4 @@ dataToModalEstudiante = function(response) {
     $("#modal_select_responsable_tipo").val(response['responsable_tipo_id']);
     $('select').formSelect();
     M.updateTextFields();
-}
+};

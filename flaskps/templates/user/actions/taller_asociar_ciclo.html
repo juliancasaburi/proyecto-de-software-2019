@@ -55,12 +55,12 @@
                     for (var key in response){
                         $("#select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
                     }
+                    $('#select_ciclos').formSelect();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
                 }
             });
-            $('#select_ciclos').formSelect();
         });
     </script>
     <script>

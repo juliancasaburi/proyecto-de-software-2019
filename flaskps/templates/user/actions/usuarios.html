@@ -110,7 +110,7 @@
                         <li class="collection-item">
                             <p>
                                 <label>
-                                    <input id="filterActive" type="checkbox" checked="checked"/>
+                                    <input id="filterActive" type="checkbox"/>
                                     <span>Listar usuarios bloqueados</span>
                                 </label>
                             </p>
@@ -131,6 +131,7 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalUsuario.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.fixed-action-btn').floatingActionButton();
@@ -139,7 +140,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaUsuarios').DataTable( {
+            let table = $('#tablaUsuarios').DataTable( {
                 bProcessing: true,
                 bServerSide: true,
                 sPaginationType: "full_numbers",
@@ -182,9 +183,12 @@
                 "scrollX": true
             } );
             setInterval( function () {
-                var table = $('#tablaUsuarios').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
             }, 5000 );
+            table
+                .column(1)
+                .search(1)
+                .draw();
         } );
     </script>
     <script>
@@ -273,20 +277,7 @@
                     id: uid
                 },
                 success: function (response) {
-                    for (var key in response['roles']){
-                        $("#select_roles option[value='" + response['roles'][key]['id'] + "']").prop("selected", true);
-                    }
-                    $('#modal_editar_id').val(response['id']);
-                    $('#modal_editar_activo').prop('checked', response['activo']);
-                    $('#modal_editar_nombre').attr("placeholder", response['first_name']);
-                    $('#modal_editar_nombre').attr("value", response['first_name']);
-                    $('#modal_editar_apellido').attr("placeholder", response['last_name']);
-                    $('#modal_editar_apellido').attr("value", response['last_name']);
-                    $('#modal_editar_email').attr("placeholder", response['email']);
-                    $('#modal_editar_email').attr("value", response['email']);
-                    $('#modal_editar_username').attr("placeholder", response['username']);
-                    $('#modal_editar_username').attr("value", response['username']);
-                    M.updateTextFields();
+                    dataToModalUsuario(response);
                     $('#modalEditarUsuario').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
