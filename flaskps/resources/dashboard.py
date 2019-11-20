@@ -7,9 +7,9 @@ from flask import (
 from flaskps.db import get_db
 from flaskps.helpers import permission
 from flask import jsonify, make_response
+
 from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.localidades import localidades
-from flaskps.models.responsable_tipo import Responsable_tipo
 
 from flaskps.models.siteconfig import SiteConfig
 from flaskps.models.barrio import Barrio
@@ -21,6 +21,8 @@ from flaskps.models.genero import Genero
 from flaskps.models.taller import Taller
 from flaskps.models.ciclo_lectivo import CicloLectivo
 from flaskps.models.docente import Docente
+from flaskps.models.estudiante import Estudiante
+from flaskps.models.responsable_tipo import Responsable_tipo
 
 
 def user_table():
@@ -204,12 +206,15 @@ def taller_set_estudiantes_form():
     CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
+    Estudiante.db = get_db()
+    estudiantes = Estudiante.all()
+
     for ciclo in ciclos:
         ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
         ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
     return render_template(
-        "user/actions/taller_asociar_estudiantes.html", ciclos=ciclos
+        "user/actions/taller_asociar_estudiantes.html", ciclos=ciclos, estudiantes=estudiantes
     )
 
 

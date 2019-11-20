@@ -150,6 +150,9 @@ app.add_url_rule(
     methods=["POST"],
 )
 app.add_url_rule(
+    "/taller_ciclo/estudiantes", "taller_ciclo_estudiantes", taller.get_estudiantes_ciclo
+)
+app.add_url_rule(
     "/taller/asociar/estudiantes",
     "taller_set_estudiantes_form",
     dashboard.taller_set_estudiantes_form,
