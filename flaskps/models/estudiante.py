@@ -132,7 +132,8 @@ class Estudiante(object):
                         data.get("documento_numero"),
                         data.get("telefono_numero"),
                         data.get("select_barrio"),
-                        data.get("select_responsable_tipo")
+                        data.get("select_responsable_tipo"),
+                        data.get("id")
                     ),
                 )
                 cls.db.commit()
