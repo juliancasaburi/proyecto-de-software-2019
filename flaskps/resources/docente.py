@@ -12,6 +12,7 @@ from flaskps.db import get_db
 import json
 
 from flaskps.forms.form_docente_create import DocenteCreateForm
+from flaskps.forms.form_docente_update import DocenteUpdateForm
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -157,3 +158,45 @@ def data():
         return make_response(data, 200)
     else:
         return abort(404)
+
+
+def update():
+    if not has_permission("docente_update", session):
+        abort(401)
+
+    form = DocenteUpdateForm()
+
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+
+        Docente.db = get_db()
+
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
+
+        updated = Docente.update(params)
+
+        if updated:
+            op_response["msg"] = "Se ha modificado al docente con éxito"
+            op_response["type"] = "success"
+        else:
+            op_response["msg"] = "Ha ocurrido un error al editar al docente"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response["msg"] = "Complete todos los datos del usuario a modificar"
+            op_response["type"] = "error"
+        else:
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+            op_response["msg"] = error_msg
+            op_response["type"] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
