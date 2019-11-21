@@ -26,6 +26,14 @@ class DocentesServerSideTable(ServerSideTable, ABC):
             Filtered data.
         """
 
+        def check_row_active(row):
+            """ Checks whether a row should be displayed or not. """
+            value = row[self.columns[1]["column_name"]]
+            regex = "(?i)" + self.request_values["sSearch_1"]
+            if re.compile(regex).search(str(value)):
+                return True
+            return False
+
         def check_row_firstname(row):
             """ Checks whether a row should be displayed or not. """
             value = row[self.columns[2]["column_name"]]
@@ -42,5 +50,6 @@ class DocentesServerSideTable(ServerSideTable, ABC):
                 return True
             return False
 
-        rows_f1 = [row for row in data if check_row_firstname(row)]
-        return [row for row in rows_f1 if check_row_lastname(row)]
+        rows_f1 = [row for row in data if check_row_active(row)]
+        rows_f2 = [row for row in rows_f1 if check_row_firstname(row)]
+        return [row for row in rows_f2 if check_row_lastname(row)]

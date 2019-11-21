@@ -70,7 +70,7 @@ SERVERSIDE_DOCENTES_TABLE_COLUMNS = [
         "column_name": "Activo",
         "default": "",
         "order": 1,
-        "searchable": False,
+        "searchable": True,
     },
     {
         "data_name": "tipo de documento",

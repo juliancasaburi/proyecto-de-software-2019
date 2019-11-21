@@ -167,7 +167,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaDocentes').DataTable( {
+            let table = $('#tablaDocentes').DataTable( {
                 bProcessing: true,
                 bServerSide: true,
                 sPaginationType: "full_numbers",
@@ -218,17 +218,23 @@
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true
+                "scrollX": true,
+                "fnInitComplete": function() {
+                    table // Filtrar Bloqueados por default
+                        .column(1)
+                        .search(1)
+                        .draw();
+                }
             } );
+
+
             setInterval( function () {
-                var table = $('#tablaDocentes').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
             }, 5000 );
         } );
     </script>
     <script> // Filtros
     $(document).ready(function(){
-        validar_filtro_activo();
         var table = $('#tablaDocentes').DataTable();
         $("#filterNombreDocente").on("keyup", function() {
             table
@@ -245,25 +251,25 @@
     });
     </script>
     <script>
-        var filtro_activo = document.getElementById("filterActive");
-        function validar_filtro_activo() {
-            var table = $('#tablaDocentes').DataTable();
-            if($("#filterActive").prop("checked") == true)
-            {
-                table
-                    .column(1)
-                    .search('')
-                    .draw();
-            }
-            else
-            {
-                table
-                    .column(1)
-                    .search(1)
-                    .draw();
-            }
-        }
-        filtro_activo.onchange = validar_filtro_activo;
+        $(document).ready(function () {
+            $("#filterActive").on("change", function(){
+                var table = $('#tablaDocentes').DataTable();
+                if($("#filterActive").prop("checked") == true)
+                {
+                    table
+                        .column(1)
+                        .search('')
+                        .draw();
+                }
+                else
+                {
+                    table
+                        .column(1)
+                        .search(1)
+                        .draw();
+                }
+            });
+        });
     </script>
     <script> // Alta de Docente
     $(document).ready(function(){
