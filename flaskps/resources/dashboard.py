@@ -32,7 +32,7 @@ def user_table():
     Role.db = get_db()
     roles = Role.all()
 
-    return render_template("user/actions/usuarios.html", roles=roles)
+    return render_template("user/actions/lists/usuarios.html", roles=roles)
 
 
 def user_edit_form():
@@ -112,7 +112,7 @@ def docente_table():
     generos = Genero.all()
 
     return render_template(
-        "user/actions/docentes.html",
+        "user/actions/lists/docentes.html",
         localidades=localidades(),
         tipodoc=tipos_documento(),
         generos=generos,
@@ -150,7 +150,7 @@ def estudiante_table():
     escuelas = Escuela.all()
 
     return render_template(
-        "user/actions/estudiantes.html",
+        "user/actions/lists/estudiantes.html",
         localidades=loc,
         tipodoc=tipo_doc,
         generos=generos,
@@ -229,4 +229,4 @@ def ciclo_table():
         ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
         ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
-    return render_template("user/actions/ciclos.html", ciclos=ciclos)
+    return render_template("user/actions/lists/ciclos.html", ciclos=ciclos)

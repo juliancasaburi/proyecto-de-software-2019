@@ -24,12 +24,12 @@ from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
-from flaskps.resources.email_threading import send_async
+from flaskps.resources.helpers.email_threading import send_async
 
 from flaskps import bcrypt
 
-from flaskps.serverside_dt.serverside_table_usuarios import UsuariosServerSideTable
-from flaskps.serverside_dt import table_schemas
+from flaskps.resources.helpers.serverside_dt.serverside_table_usuarios import UsuariosServerSideTable
+from flaskps.resources.helpers.serverside_dt import table_schemas
 
 
 def users():

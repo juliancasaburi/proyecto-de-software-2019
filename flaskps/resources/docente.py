@@ -23,8 +23,8 @@ from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
-from flaskps.serverside_dt.serverside_table_docentes import DocentesServerSideTable
-from flaskps.serverside_dt import table_schemas
+from flaskps.resources.helpers.serverside_dt.serverside_table_docentes import DocentesServerSideTable
+from flaskps.resources.helpers.serverside_dt import table_schemas
 
 
 def docentes():

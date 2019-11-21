@@ -98,11 +98,11 @@
             </div>
 
             {% if has_permission('docente_new', session) %}
-                {% include 'partials/modal_alta_docente.html' %}
+                {% include 'partials/modals/modal_alta_docente.html' %}
             {% endif %}
 
             {% if has_permission('docente_update', session) %}
-                {% include 'partials/modal_editar_docente.html' %}
+                {% include 'partials/modals/modal_editar_docente.html' %}
             {% endif %}
 
             <div class="col-md-12 center text-center">
