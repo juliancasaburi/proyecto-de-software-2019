@@ -13,5 +13,5 @@ dataToModalUsuario = function(response) {
     $('#modal_editar_username').attr("placeholder", response['username']);
     $('#modal_editar_username').attr("value", response['username']);
     M.updateTextFields();
-    $('select_roles').formSelect();
+    $('#select_roles').formSelect();
 };
