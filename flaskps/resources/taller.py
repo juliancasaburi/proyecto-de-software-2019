@@ -13,7 +13,8 @@ from flaskps.helpers.role import has_role
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("taller_new", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = TallerCreateForm()
@@ -52,7 +53,8 @@ def create():
 def set_ciclo():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = request.form.to_dict()
@@ -78,7 +80,8 @@ def set_ciclo():
 def get_ciclos():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     t_id = request.args.get("id")
@@ -94,7 +97,8 @@ def get_ciclos():
 def get_docentes_ciclo():
     s_config = siteconfig.get_config()
     if not has_permission("docente_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     t_id = request.args.get("t_id")
@@ -112,7 +116,8 @@ def get_docentes_ciclo():
 def set_docentes():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = request.form.to_dict()
@@ -139,7 +144,8 @@ def set_docentes():
 def get_estudiantes_ciclo():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     t_id = request.args.get("t_id")
@@ -157,7 +163,8 @@ def get_estudiantes_ciclo():
 def set_estudiantes():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = request.form.to_dict()

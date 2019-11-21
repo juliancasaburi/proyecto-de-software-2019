@@ -192,7 +192,11 @@ class Taller(object):
                 for estudiante in estudiantes:
                     cursor.execute(
                         sql_insert_relation,
-                        (estudiante, data.get("ciclo_lectivo_id"), data.get("taller_id")),
+                        (
+                            estudiante,
+                            data.get("ciclo_lectivo_id"),
+                            data.get("taller_id"),
+                        ),
                     )
                     cls.db.commit()
 

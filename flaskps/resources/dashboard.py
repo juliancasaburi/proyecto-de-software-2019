@@ -157,7 +157,7 @@ def estudiante_table():
         barrios=barrios,
         escuelas=escuelas,
         niveles=niveles,
-        responsables_tipos=responsables_tipos
+        responsables_tipos=responsables_tipos,
     )
 
 
@@ -214,7 +214,9 @@ def taller_set_estudiantes_form():
         ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
     return render_template(
-        "user/actions/taller_asociar_estudiantes.html", ciclos=ciclos, estudiantes=estudiantes
+        "user/actions/taller_asociar_estudiantes.html",
+        ciclos=ciclos,
+        estudiantes=estudiantes,
     )
 
 
