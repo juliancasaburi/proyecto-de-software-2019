@@ -7,12 +7,15 @@
 {% block main %}
     <div class="container">
         <div class="section">
+            <div class="row">
+                <div class="col s12 center">
+                    <h1>Mi Cuenta</h1>
+                </div>
+            </div>
             <div class="card-panel z-depth-5">
                 <div class="row">
-                    <h4 class="center">Mi Cuenta</h4>
-                    <div class="divider"></div>
                     <div class="col s12">
-                        <h5 class="center">Mis datos</h5>
+                        <h5 class="center light-blue-text">Mis datos</h5>
                         <table class="responsive-table">
                             <thead>
                             <tr>
@@ -40,7 +43,7 @@
                 <div class="row">
                     <div class="col s12" style="padding: 5%">
                         <div class="row">
-                            <h5 class="col s12">Modificar email y contraseña</h5>
+                            <h5 class="light-blue-text">Modificar email</h5>
                             <form class="col s12" method="POST" action="{{ url_for('user_email_update') }}" id="email_form">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <input type="hidden" id="userAux" value="{{ username }}"/>
@@ -56,6 +59,7 @@
                             </form>
                         </div><!--row-->
                         <div class="row">
+                            <h5 class="light-blue-text">Modificar contraseña</h5>
                             <form class="col s12" method="post" action="{{ url_for('user_password_update') }}" id="password_form">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <div class="row">
@@ -79,7 +83,7 @@
                 </div><!--row-->
             </div><!--card-->
         </div><!--section-->
-    </div><!--conatiner-->
+    </div><!--container-->
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/passwordConfirm.js') }}"></script>

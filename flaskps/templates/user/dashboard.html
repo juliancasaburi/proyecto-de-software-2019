@@ -6,379 +6,296 @@
 
 {% block main %}
     <div class="container">
-        <div class="section">
-            <div class="row">
-                <div class="col s12 center">
-                    <h1>Panel</h1>
-                </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12 center">
+                <h1>Panel</h1>
             </div>
-            <div class="row">
-                {% if has_permission('config_update', session) %}
-                    <div class="col s12">
-                        <div class="card" style="overflow: visible;">
-                            <a {% if has_permission('config_update', session) %} href="#modalConfiguracion" class="modal-trigger" {% endif %}>
-                                <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                    <i class="fas fa-cogs fa-3x black-text"></i>
-                                </div>
-                            </a>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Configuración del sitio<i class="material-icons right">more_vert</i></span>
-                            </div>
-
-                            <div class="card-action">
-                                <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
-                                <!-- Switch -->
-                                <div class="switch center">
-                                    <p>Modo mantenimiento</p>
-                                    <label>
-                                        Deshabilitado
-                                        {% if siteconfig['modo_mantenimiento'] == 1 %}
-                                            <input id="switchMantenimiento" type="checkbox" checked="checked">
-                                        {% else %}
-                                            <input id="switchMantenimiento" type="checkbox">
-                                        {% endif %}
-                                        <span class="lever"></span>
-                                        Habilitado
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="card-reveal" style="display: none; transform: translateY(0%)">
-                                <span class="card-title grey-text text-darken-4">Configuración del sitio<i class="material-icons right">close</i></span>
-                                <p>Podrás configurar distintos parámetros del sitio, entre ellos: el título, la descripción, el mail de contacto y la cantidad de elementos por página (en tablas y listas). Además podrá deshabilitar el sitio en caso de mantenimiento, de esta manera nadie podrá acceder, excepto los usuarios administradores.</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if has_permission('usuario_index', session) %}
-                    <div class="col s12">
-                        <div class="card" style="overflow: visible;">
-                            <a {% if has_permission('usuario_index', session) %} href="{{ url_for('user_table') }}" {% endif %}>
-                                <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                    <i class="fas fa-user fa-3x black-text"></i>
-                                </div>
-                            </a>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Usuarios<i class="material-icons right">more_vert</i></span>
-                                {% if has_permission('usuario_index', session) %}
-                                    <p><a href="{{ url_for('user_table') }}">Ver y administrar</a></p>
-                                {% endif %}
-                            </div>
-
-                            <div class="card-action">
-                                {% if has_permission('usuario_new', session) %}
-                                    <a href="{{ url_for('user_new_form') }}" class="modal-trigger">Crear</a>
-                                {% endif %}
-                                {% if has_permission('usuario_destroy', session) %}
-                                    <a href="{{ url_for('user_destroy_form') }}">Eliminar</a>
-                                {% endif %}
-                                {% if has_permission('usuario_update', session) %}
-                                    <a href="{{ url_for('user_edit_form') }}">Editar</a>
-                                {% endif %}
-                            </div>
-
-                            <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                                <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
-                                <p>Podrás ver el listado de usuarios completo con toda su información relacionada. Además podrás agregar, eliminar, modificar los datos y activar o deshabilitar usuarios.</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
+        </div>
+        <div class="row">
+            {% if has_permission('config_update', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <a {% if has_permission('estudiante_index', session) %} href="{{ url_for('estudiante_table') }}" {% endif %}>
+                        <a {% if has_permission('config_update', session) %} href="#modalConfiguracion" class="modal-trigger" {% endif %}>
                             <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                <i class="fas fa-user-tie fa-3x black-text"></i>
+                                <i class="fas fa-cogs fa-3x black-text"></i>
                             </div>
                         </a>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Estudiantes<i class="material-icons right">more_vert</i></span>
-                            {% if has_permission('estudiante_index', session) %}
-                                <p><a href="{{ url_for('estudiante_table') }}">Ver y administrar</a></p>
-                            {% endif %}
-                        </div>
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Estudiantes<i class="material-icons right">close</i></span>
-                            <p>Podrás ver el listado completo de todos los estudiantes de la escuela, con todos sus datos. Además podrás registrar nuevos, modificar sus datos o incluso bloquearlos.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <a {% if has_permission('docente_index', session) %} href="{{ url_for('docente_table') }}" {% endif %}>
-                            <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                <i class="fas fa-user-tie fa-3x black-text"></i>
-                            </div>
-                        </a>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Docentes<i class="material-icons right">more_vert</i></span>
-                            {% if has_permission('docente_index', session) %}
-                                <p><a href="{{ url_for('docente_table') }}">Ver y administrar</a></p>
-                            {% endif %}
-                        </div>
-
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Docentes<i class="material-icons right">close</i></span>
-                            <p>Podrás ver el listado de docentes completo con toda su información relacionada. Además podrás agregar, eliminar y modificar los datos.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {% if has_permission('ciclolectivo_index', session) %}
-                    <div class="col s12">
-                        <div class="card" style="overflow: visible;">
-                            <a {% if has_permission('ciclolectivo_index', session) %} href="{{ url_for('ciclo_table') }}" {% endif %}>
-                                <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
-                                    <i class="fas fa-calendar-alt fa-3x black-text"></i>
-                                </div>
-                            </a>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
-                                {% if has_permission('ciclolectivo_index', session) %}
-                                    <p><a href="{{ url_for('ciclo_table') }}">Ver listado</a></p>
-                                {% endif %}
-                            </div>
-
-                            <div class="card-action">
-                                {% if has_permission('ciclolectivo_new', session) %}
-                                    <a href="#modalAltaCiclo" class="modal-trigger">Crear</a>
-                                {% endif %}
-                            </div>
-
-                            {% include 'partials/modal_alta_ciclo.html' %}
-
-                            <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                                <span class="card-title grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">close</i></span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if has_permission('taller_new', session) %}
-                    <div class="col s12">
-                        <div class="card" style="overflow: visible;">
-                            <div class="center-align light-blue block">
-                                <i class="fas fa-chalkboard fa-3x black-text"></i>
-                            </div>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Talleres<i class="material-icons right">more_vert</i></span>
-                            </div>
-
-                            <div class="card-action">
-                                <a href="{{ url_for('taller_new_form') }}" class="modal-trigger">Crear</a>
-                                <a href="{{ url_for('taller_set_ciclo_form') }}" class="modal-trigger">Asociar A Ciclo</a>
-                                <a href="{{ url_for('taller_set_docentes_form') }}" class="modal-trigger">Asociar Docentes</a>
-                                <a href="{{ url_for('taller_set_estudiantes_form') }}" class="modal-trigger">Asociar Estudiantes</a>
-                            </div>
-
-                            <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                                <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-            </div>
-            <div class="row">
-                <div class="divider"></div>
-                <h6 class="center-align red-text">Próximamente</h6>
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="fas fa-guitar fa-3x"></i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
+                            <span class="card-title activator grey-text text-darken-4">Configuración del sitio<i class="material-icons right">more_vert</i></span>
                         </div>
 
                         <div class="card-action">
-                            <a href="#">Crear</a>
-                            <a href="#">Eliminar</a>
-                            <a href="#">Editar</a>
+                            <a href="#modalConfiguracion" class="modal-trigger">Configurar</a>
+                            <!-- Switch -->
+                            <div class="switch center">
+                                <h6>Modo mantenimiento</h6>
+                                <label>
+                                    Deshabilitado
+                                    {% if siteconfig['modo_mantenimiento'] == 1 %}
+                                        <input id="switchMantenimiento" type="checkbox" checked="checked">
+                                    {% else %}
+                                        <input id="switchMantenimiento" type="checkbox">
+                                    {% endif %}
+                                    <span class="lever"></span>
+                                    Habilitado
+                                </label>
+                            </div>
                         </div>
 
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="fas fa-podcast fa-3x"></i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Orquestas<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
-                        </div>
-
-                        <div class="card-action">
-                            <a href="#">Crear</a>
-                            <a href="#">Eliminar</a>
-                            <a href="#">Editar</a>
-                        </div>
-
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Orquestas<i class="material-icons right">close</i></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">mode_edit</i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title grey-text text-darken-4">Registro de asistencias<i title="Información del panel" style="cursor: pointer" class="material-icons right activator">more_vert</i></span>
-                        </div>
                         <div class="card-reveal" style="display: none; transform: translateY(0%)">
-                            <span class="card-title grey-text text-darken-4">Detalle<i class="material-icons right">close</i></span>
-                            <p>Para registrar las asistencias de los alumnos en sus respectivas actividades, consultar estadísticas y ver porcentajes. También podrá modificar el nivel de un alumno y justificar las inasistencias.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Ir al panel</a>
+                            <span class="card-title grey-text text-darken-4">Configuración del sitio<i class="material-icons right">close</i></span>
+                            <p>Podrás configurar distintos parámetros del sitio, entre ellos: el título, la descripción, el mail de contacto y la cantidad de elementos por página (en tablas y listas). Además podrá deshabilitar el sitio en caso de mantenimiento, de esta manera nadie podrá acceder, excepto los usuarios administradores.</p>
                         </div>
                     </div>
                 </div>
+            {% endif %}
+
+            {% if has_permission('usuario_index', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">mode_edit</i>
-                        </div>
+                        <a {% if has_permission('usuario_index', session) %} href="{{ url_for('user_table') }}" {% endif %}>
+                            <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                                <i class="fas fa-user fa-3x black-text"></i>
+                            </div>
+                        </a>
                         <div class="card-content">
-                            <span class="card-title grey-text text-darken-4">Asignación de alumnos a orquestas<i title="Información del panel" style="cursor: pointer" class="material-icons activator right">more_vert</i></span>
+                            <span class="card-title activator grey-text text-darken-4">Usuarios<i class="material-icons right">more_vert</i></span>
+                            {% if has_permission('usuario_index', session) %}
+                                <p><a href="{{ url_for('user_table') }}">Ver y administrar</a></p>
+                            {% endif %}
                         </div>
 
                         <div class="card-action">
-                            <a href="#">Ir al panel</a>
+                            {% if has_permission('usuario_new', session) %}
+                                <a href="{{ url_for('user_new_form') }}" class="modal-trigger">Crear</a>
+                            {% endif %}
+                            {% if has_permission('usuario_destroy', session) %}
+                                <a href="{{ url_for('user_destroy_form') }}">Eliminar</a>
+                            {% endif %}
+                            {% if has_permission('usuario_update', session) %}
+                                <a href="{{ url_for('user_edit_form') }}">Editar</a>
+                            {% endif %}
                         </div>
 
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Detalle<i class="material-icons right">close</i></span>
-                            <p>Para asignar alumnos a las orquestas disponibles.</p>
+                            <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
+                            <p>Podrás ver el listado de usuarios completo con toda su información relacionada. Además podrás agregar, eliminar, modificar los datos y activar o deshabilitar usuarios.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">mode_edit</i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title grey-text text-darken-4">Registro de ensayos<i title="Información del panel" style="cursor: pointer" class="material-icons activator right">more_vert</i></span>
-                        </div>
+            {% endif %}
 
-                        <div class="card-action">
-                            <a href="#">Ir al panel</a>
+            <div class="col s12">
+                <div class="card" style="overflow: visible;">
+                    <a {% if has_permission('estudiante_index', session) %} href="{{ url_for('estudiante_table') }}" {% endif %}>
+                        <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                            <i class="material-icons fa-3x black-text">school</i>
                         </div>
-
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Detalle<i class="material-icons right">close</i></span>
-                            <p>Para registrar los ensayos, definir en qué núcleo y cuándo se llevarán a cabo.</p>
-                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Estudiantes<i class="material-icons right">more_vert</i></span>
+                        {% if has_permission('estudiante_index', session) %}
+                            <p><a href="{{ url_for('estudiante_table') }}">Ver y administrar</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Estudiantes<i class="material-icons right">close</i></span>
+                        <p>Podrás ver el listado completo de todos los estudiantes de la escuela, con todos sus datos. Además podrás registrar nuevos, modificar sus datos o incluso bloquearlos.</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="col s12">
+                <div class="card" style="overflow: visible;">
+                    <a {% if has_permission('docente_index', session) %} href="{{ url_for('docente_table') }}" {% endif %}>
+                        <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                            <i class="fas fa-user-tie fa-3x black-text"></i>
+                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Docentes<i class="material-icons right">more_vert</i></span>
+                        {% if has_permission('docente_index', session) %}
+                            <p><a href="{{ url_for('docente_table') }}">Ver y administrar</a></p>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Docentes<i class="material-icons right">close</i></span>
+                        <p>Podrás ver el listado de docentes completo con toda su información relacionada. Además podrás agregar, eliminar y modificar los datos.</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if has_permission('ciclolectivo_index', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">assignment_turned_in</i>
-                        </div>
+                        <a {% if has_permission('ciclolectivo_index', session) %} href="{{ url_for('ciclo_table') }}" {% endif %}>
+                            <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                                <i class="fas fa-calendar-alt fa-3x black-text"></i>
+                            </div>
+                        </a>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Registro de asistencias<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
+                            <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
+                            {% if has_permission('ciclolectivo_index', session) %}
+                                <p><a href="{{ url_for('ciclo_table') }}">Ver listado</a></p>
+                            {% endif %}
                         </div>
 
                         <div class="card-action">
-                            <a href="#">Crear</a>
-                            <a href="#">Eliminar</a>
-                            <a href="#">Modificar justificación</a>
+                            {% if has_permission('ciclolectivo_new', session) %}
+                                <a href="#modalAltaCiclo" class="modal-trigger">Crear</a>
+                            {% endif %}
                         </div>
 
+                        {% include 'partials/modals/modal_alta_ciclo.html' %}
+
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Registro de asistencias<i class="material-icons right">close</i></span>
+                            <span class="card-title grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">close</i></span>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
                         </div>
                     </div>
                 </div>
+            {% endif %}
 
+            {% if has_permission('taller_new', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">autorenew</i>
+                        <div class="center-align light-blue block">
+                            <i class="fas fa-chalkboard fa-3x black-text"></i>
                         </div>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Préstamos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
+                            <span class="card-title activator grey-text text-darken-4">Talleres<i class="material-icons right">more_vert</i></span>
                         </div>
 
                         <div class="card-action">
-                            <a href="#">Crear</a>
-                            <a href="#">Eliminar</a>
-                            <a href="#">Editar</a>
+                            <a href="{{ url_for('taller_new_form') }}" class="modal-trigger">Crear</a>
+                            <a href="{{ url_for('taller_set_ciclo_form') }}" class="modal-trigger">Asociar A Ciclo</a>
+                            <a href="{{ url_for('taller_set_docentes_form') }}" class="modal-trigger">Asociar Docentes</a>
+                            <a href="{{ url_for('taller_set_estudiantes_form') }}" class="modal-trigger">Asociar Estudiantes</a>
                         </div>
 
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Préstamos<i class="material-icons right">close</i></span>
+                            <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
                         </div>
                     </div>
                 </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="divider"></div>
+            <h6 class="center red-text">Próximamente</h6>
+            <div class="col l4 m6 s12">
+                <div class="card" style="overflow: visible;">
+                    <div class="center-align light-blue waves-effect waves-block waves-light">
+                        <i class="fas fa-guitar fa-3x"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
+                        <p><a href="#">Ver listado</a></p>
+                    </div>
 
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">assignment_ind</i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Asignación de alumnos a orquestas<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
-                        </div>
+                    <div class="card-action">
+                        <a href="#">Crear</a>
+                        <a href="#">Eliminar</a>
+                        <a href="#">Editar</a>
+                    </div>
 
-                        <div class="card-action">
-                            <a href="#">Agregar alumno</a>
-                            <a href="#">Eliminar alumno</a>
-                        </div>
-
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Asignación de alumnos a orquestas<i class="material-icons right">close</i></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                        </div>
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
                     </div>
                 </div>
+            </div>
 
-                <div class="col s12">
-                    <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="material-icons">library_music</i>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">Ensayos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
-                        </div>
+            <div class="col l4 m6 s12">
+                <div class="card" style="overflow: visible;">
+                    <div class="center-align light-blue waves-effect waves-block waves-light">
+                        <i class="fas fa-podcast fa-3x"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Orquestas<i class="material-icons right">more_vert</i></span>
+                        <p><a href="#">Ver listado</a></p>
+                    </div>
 
-                        <div class="card-action">
-                            <a href="#">Crear</a>
-                            <a href="#">Eliminar</a>
-                            <a href="#">Editar</a>
-                        </div>
+                    <div class="card-action">
+                        <a href="#">Crear</a>
+                        <a href="#">Eliminar</a>
+                        <a href="#">Editar</a>
+                    </div>
 
-                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                            <span class="card-title grey-text text-darken-4">Ensayos<i class="material-icons right">close</i></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                        </div>
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Orquestas<i class="material-icons right">close</i></span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col l4 m6 s12">
+                <div class="card" style="overflow: visible;">
+                    <div class="center-align light-blue waves-effect waves-block waves-light">
+                        <i class="material-icons fa-3x">autorenew</i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Préstamos<i class="material-icons right">more_vert</i></span>
+                        <p><a href="#">Ver listado</a></p>
+                    </div>
+
+                    <div class="card-action">
+                        <a href="#">Crear</a>
+                        <a href="#">Eliminar</a>
+                        <a href="#">Editar</a>
+                    </div>
+
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Préstamos<i class="material-icons right">close</i></span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col l4 m6 s12">
+                <div class="card" style="overflow: visible;">
+                    <div class="center-align light-blue waves-effect waves-block waves-light">
+                        <i class="material-icons fa-3x">assignment_ind</i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Asignación de estudiantes a orquestas<i class="material-icons right">more_vert</i></span>
+                        <p><a href="#">Ver listado</a></p>
+                    </div>
+
+                    <div class="card-action">
+                        <a href="#">Agregar estudiante</a>
+                        <a href="#">Eliminar estudiante</a>
+                    </div>
+
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Asignación de estudiantes a orquestas<i class="material-icons right">close</i></span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col l4 m6 s12">
+                <div class="card" style="overflow: visible;">
+                    <div class="center-align light-blue waves-effect waves-block waves-light">
+                        <i class="material-icons fa-3x">library_music</i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Ensayos<i class="material-icons right">more_vert</i></span>
+                        <p><a href="#">Ver listado</a></p>
+                    </div>
+
+                    <div class="card-action">
+                        <a href="#">Crear</a>
+                        <a href="#">Eliminar</a>
+                        <a href="#">Editar</a>
+                    </div>
+
+                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                        <span class="card-title grey-text text-darken-4">Ensayos<i class="material-icons right">close</i></span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
                     </div>
                 </div>
             </div>
@@ -388,6 +305,7 @@
 {% block scripts %}
     <script>
         $(document).ready(function(){
+            $('.collapsible').collapsible();
             $('.modal').modal();
             $('select').formSelect();
         });

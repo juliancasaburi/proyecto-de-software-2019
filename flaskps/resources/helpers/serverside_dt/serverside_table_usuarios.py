@@ -1,7 +1,7 @@
 import re
 from abc import ABC
 
-from flaskps.serverside_dt.serverside_table import ServerSideTable
+from flaskps.resources.helpers.serverside_dt.serverside_table import ServerSideTable
 
 
 class UsuariosServerSideTable(ServerSideTable, ABC):

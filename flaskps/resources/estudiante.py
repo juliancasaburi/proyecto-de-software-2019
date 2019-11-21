@@ -11,8 +11,10 @@ from flaskps.models.escuela import Escuela
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
 from flaskps.models.responsable_tipo import Responsable_tipo
+from flaskps.models import siteconfig
 
 from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 
 from flaskps.helpers.tipos_documento import tipo_documento
 from flaskps.helpers.localidades import localidad
@@ -21,7 +23,9 @@ from flaskps.helpers.tipos_documento import tipos_documento
 
 
 def get_estudiantes():
-    if not has_permission("estudiante_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_index", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Estudiante.db = get_db()
@@ -108,7 +112,9 @@ def pasarChoices(form):
 
 
 def create():
-    if not has_permission("estudiante_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_new", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     form = EstudianteCreateForm()
@@ -149,7 +155,9 @@ def create():
 
 
 def update():
-    if not has_permission("estudiante_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_update", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     form = EstudianteCreateForm()  # uso este porq es igual
@@ -191,11 +199,14 @@ def update():
 
 
 def destroy():
-    if not has_permission("estudiante_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_destroy", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     params = json.loads(request.data)
     eid = params["id"]
+    activo = params["activo"]
 
     Estudiante.db = get_db()
     success = Estudiante.delete(eid)
@@ -204,10 +215,12 @@ def destroy():
     responsecode = 200
 
     if success:
-        op_response["msg"] = "Se ha bloqueado/activado al estudiante exitosamente"
+        condicion = 'bloqueado' if activo else 'activado'
+        op_response["msg"] = "Se ha " + condicion + " al estudiante exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El estudiante a bloquear/activar no existe"
+        condicion = 'bloquear' if activo else 'activar'
+        op_response["msg"] = "El estudiante a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
 
@@ -216,7 +229,9 @@ def destroy():
 
 # por id
 def estudiante_data():
-    if not has_permission("estudiante_show", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_show", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     if request.args.get("id"):

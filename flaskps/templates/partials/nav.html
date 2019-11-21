@@ -39,7 +39,7 @@
             <!-- dropdownUsuarios Structure -->
             <ul id="dropdownUsuarios" class="dropdown-content teal">
                 {% if has_permission('usuario_index', session) %}
-                    <li><a href="{{ url_for('user_table') }}">Ver Listado</a></li>
+                    <li><a href="{{ url_for('user_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
                 {% if has_permission('usuario_new', session) %}
                     <li><a href="{{ url_for('user_new_form') }}">Crear</a></li>
@@ -54,35 +54,32 @@
             <!-- dropdownEstudiantes Structure -->
             <ul id="dropdownEstudiantes" class="dropdown-content teal">
                 {% if has_permission('estudiante_index', session) %}
-                    <li><a href="{{ url_for('estudiante_table') }}">Ver Listado</a></li>
+                    <li><a href="{{ url_for('estudiante_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownDocentes Structure -->
             <ul id="dropdownDocentes" class="dropdown-content teal">
                 {% if has_permission('docente_index', session) %}
-                    <li><a href="{{ url_for('docente_table') }}">Ver Listado</a></li>
-                {% endif %}
-                {% if has_permission('docente_new', session) %}
-                    <li><a href="{{ url_for('docente_table') }}">Crear</a></li>
-                {% endif %}
-                {% if has_permission('docente_destroy', session) %}
-                    <li><a href="{{ url_for('docente_table') }}">Eliminar</a></li>
-                {% endif %}
-                {% if has_permission('docente_update', session) %}
-                    <li><a href="{{ url_for('docente_table') }}">Editar</a></li>
+                    <li><a href="{{ url_for('docente_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownTalleres Structure -->
             <ul id="dropdownTalleres" class="dropdown-content teal">
-                <li><a href="#">Ver Listado</a></li>
+                <li><a href="#">Ver listado (próximamente)</a></li>
                 {% if has_permission('taller_new', session) %}
                     <li><a href="{{ url_for('taller_new_form') }}">Crear</a></li>
-                    <li><a href="{{ url_for('taller_set_ciclo_form') }}">Ciclos</a></li>
-                    <li><a href="{{ url_for('taller_set_docentes_form') }}">Docentes</a></li>
-                    <li><a href="{{ url_for('taller_set_estudiantes_form') }}">Estudiantes</a></li>
+                    <li><a href="{{ url_for('taller_set_ciclo_form') }}">Asociar a ciclos lectivos</a></li>
+                    <li><a href="{{ url_for('taller_set_docentes_form') }}">Asociar docentes</a></li>
+                    <li><a href="{{ url_for('taller_set_estudiantes_form') }}">Asociar estudiantes</a></li>
                 {% endif %}
-                <li><a href="#">Eliminar</a></li>
-                <li><a href="#">Editar</a></li>
+                <li><a href="#">Eliminar (próximamente)</a></li>
+                <li><a href="#">Editar (próximamente)</a></li>
+            </ul>
+            <!-- dropdownCiclosLectivos Structure -->
+            <ul id="dropdownCiclosLectivos" class="dropdown-content teal">
+                {% if has_permission('ciclolectivo_index', session) %}
+                    <li><a href="{{ url_for('ciclo_table') }}">Ver listado y administrar</a></li>
+                {% endif %}
             </ul>
             <!-- dropdownInstrumentos Structure -->
             <ul id="dropdownInstrumentos" class="dropdown-content teal">
@@ -118,6 +115,14 @@
                         <li><a class="subheader">Docentes</a></li>
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
+                {% if has_permission('ciclolectivo_index', session) or has_permission('ciclolectivo_new', session) or has_permission('ciclolectivo_destroy', session) or has_permission('ciclolectivo_update', session) or has_permission('ciclolectivo_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Ciclos lectivos</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownCiclosLectivos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
                 {% if has_permission('taller_index', session) or has_permission('taller_new', session) or has_permission('taller_destroy', session) or has_permission('taller_update', session) or has_permission('taller_show', session) %}
@@ -159,6 +164,6 @@
         </div>
     </ul>
 
-    {% include 'partials/modal_configuracion.html' %}
+    {% include 'partials/modals/modal_configuracion.html' %}
 
 {% endblock %}

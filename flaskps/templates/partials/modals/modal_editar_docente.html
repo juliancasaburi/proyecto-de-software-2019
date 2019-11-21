@@ -1,60 +1,60 @@
 <div id="modalEditarDocente" class="modal">
     <header class="modal-header">Editar Docente</header>
-    <form id="editarDocente" method="post">
+    <form id="editarDocente" method="post" action="{{ url_for('docente_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <div class="row">
-                <input id="modal_editar_id" name="id" type="number" hidden>
+                <input id="editar_id" name="id" type="number" hidden>
                 <div class="col s12 m6 input-field">
-                    <label for="apellido">Apellido</label>
-                    <input id="apellido" name="apellido" class="validate" type="text" required>
+                    <label for="editar_apellido">Apellido</label>
+                    <input id="editar_apellido" name="apellido" class="validate" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <label for="nombre">Nombre</label>
-                    <input id="nombre" name="nombre" class="validate" type="text" required>
+                    <label for="editar_nombre">Nombre</label>
+                    <input id="editar_nombre" name="nombre" class="validate" type="text" required>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="select_genero" name="select_genero" required>
-                        <option value="" disabled selected>Selecciona un género</option>
+                    <select id="editar_select_genero" name="select_genero" required>
+                        <option value="" selected disabled>Selecciona un género</option>
                         {% for genero in generos %}
                             <option value="{{genero.id}}">{{genero.nombre}}</option>
                         {% endfor %}
                     </select>
-                    <label for="select_genero">Género</label>
+                    <label for="editar_select_genero">Género</label>
                 </div>
                 <div class="col s12 input-field">
-                    <label for="fecha_nacimiento">Fecha de nacimiento</label>
-                    <input id="fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
+                    <label for="editar_fecha_nacimiento">Fecha de nacimiento</label>
+                    <input id="editar_fecha_nacimiento" name="fecha_nacimiento" class="datepicker" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_localidad" name="select_localidad" required>
-                        <option value="" disabled selected>Selecciona una Localidad</option>
+                    <select id="editar_select_localidad" name="select_localidad" required>
+                        <option value="" selected disabled>Selecciona una Localidad</option>
                         {% for localidad in localidades %}
                             <option value="{{localidad.id}}">{{localidad.nombre}}</option>
                         {% endfor %}
                     </select>
-                    <label for="select_localidad">Localidad</label>
+                    <label for="editar_select_localidad">Localidad</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <label for="domicilio">Domicilio</label>
-                    <input id="domicilio" name="domicilio" class="validate" type="text" required>
+                    <label for="editar_domicilio">Domicilio</label>
+                    <input id="editar_domicilio" name="domicilio" class="validate" type="text" required>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <select id="select_tipo" name="select_tipo" required>
+                    <select id="editar_select_tipo" name="select_tipo" required>
                         <option value="" disabled selected>Selecciona un tipo</option>
                         {% for tipo in tipodoc %}
                             <option value="{{tipo.id}}">{{tipo.nombre}}</option>
                         {% endfor %}
                     </select>
-                    <label for="select_tipo">Tipo de Documento</label>
+                    <label for="editar_select_tipo">Tipo de Documento</label>
                 </div>
                 <div class="col s12 m6 input-field">
-                    <label for="documento_numero">Numero de Documento</label>
-                    <input id="documento_numero" name="documento_numero" class="validate" type="number" required>
+                    <label for="editar_documento_numero">Numero de Documento</label>
+                    <input id="editar_documento_numero" name="documento_numero" class="validate" type="number" required>
                 </div>
                 <div class="col s12 input-field">
-                    <label for="telefono_numero">Numero telefónico (Opcional)</label>
-                    <input id="telefono_numero" name="telefono_numero" class="validate" type="text">
+                    <label for="editar_telefono_numero">Numero telefónico (Opcional)</label>
+                    <input id="editar_telefono_numero" name="telefono_numero" class="validate" type="text">
                 </div>
             </div>
         </div>
@@ -64,6 +64,7 @@
         </div>
     </form>
 </div>
+
 <script>
     $(document).ready(function() {
         let current_year = new Date().getFullYear();
@@ -79,7 +80,7 @@
                 weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
                 cancel: 'Cerrar',
                 done: 'Seleccionar',
-            }
+            },
         })
     })
 </script>
@@ -87,11 +88,25 @@
     $(document).ready(function() {
         $("#cancelarEditarDocente").click(function(e){
             e.preventDefault();
-            $('#editarDocente').trigger("reset");
+            var did = $('#editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('docente') }}",
+                data: {
+                    id: did
+                },
+                success: function (response) {
+                    dataToModalDocente(response);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
         });
     });
 </script>
 <script>
+    /*
     $(document).ready(function() {
         var frm = $('#editarDocente');
 
@@ -119,4 +134,6 @@
             });
         });
     });
+    */
+
 </script>

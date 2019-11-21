@@ -81,8 +81,8 @@
                 </div>
             </div>
 
-            {% include 'partials/modal_alta_usuario.html' %}
-            {% include 'partials/modal_editar_usuario.html' %}
+            {% include 'partials/modals/modal_alta_usuario.html' %}
+            {% include 'partials/modals/modal_editar_usuario.html' %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -101,16 +101,21 @@
                     <h3 class="header">Filtrar el listado de Usuarios</h3>
                     <ul class="collection">
                         <li class="collection-item">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix">account_circle</i>
-                                <input class="filterUsuario" id="filterUsuario" type="text">
-                                <label for="filterUsuario">Filtrar por Usuario</label>
+                            <div class="row valign-wrapper center-align">
+                                <div class="input-field col s10">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input class="filterUsuario" id="filterUsuario" type="text">
+                                    <label for="filterUsuario">Filtrar por Nombre de Usuario</label>
+                                </div>
+                                <div class="col s2">
+                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser"></i></a>
+                                </div>
                             </div>
                         </li>
                         <li class="collection-item">
                             <p>
                                 <label>
-                                    <input id="filterActive" type="checkbox" checked="checked"/>
+                                    <input id="filterActive" type="checkbox"/>
                                     <span>Listar usuarios bloqueados</span>
                                 </label>
                             </p>
@@ -131,6 +136,7 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalUsuario.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.fixed-action-btn').floatingActionButton();
@@ -139,7 +145,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaUsuarios').DataTable( {
+            let table = $('#tablaUsuarios').DataTable( {
                 bProcessing: true,
                 bServerSide: true,
                 sPaginationType: "full_numbers",
@@ -179,10 +185,16 @@
                 },
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true
+                "scrollX": true,
+                "fnInitComplete": function() {
+                    table // Filtrar Bloqueados por default
+                        .column(1)
+                        .search(1)
+                        .draw();
+                }
             } );
+
             setInterval( function () {
-                var table = $('#tablaUsuarios').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
             }, 5000 );
         } );
@@ -190,7 +202,7 @@
     <script>
         $(document).ready(function(){
             var table = $('#tablaUsuarios').DataTable();
-            $(".filterUsuario").on("keyup", function() {
+            $(".filterUsuario").on("keyup change", function() {
                 table
                     .column(6)
                     .search( this.value )
@@ -227,12 +239,6 @@
                 outDuration: 200, // Transition out duration
                 startingTop: '4%', // Starting top style attribute
                 endingTop: '10%', // Ending top style attribute
-                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-                    //  alert("Ready");
-                    console.log(modal, trigger);
-                },
-                complete: function() { //alert('Closed');
-                } // Callback for Modal close
             }
         );
     </script>
@@ -273,20 +279,7 @@
                     id: uid
                 },
                 success: function (response) {
-                    for (var key in response['roles']){
-                        $("#select_roles option[value='" + response['roles'][key]['id'] + "']").prop("selected", true);
-                    }
-                    $('#modal_editar_id').val(response['id']);
-                    $('#modal_editar_activo').prop('checked', response['activo']);
-                    $('#modal_editar_nombre').attr("placeholder", response['first_name']);
-                    $('#modal_editar_nombre').attr("value", response['first_name']);
-                    $('#modal_editar_apellido').attr("placeholder", response['last_name']);
-                    $('#modal_editar_apellido').attr("value", response['last_name']);
-                    $('#modal_editar_email').attr("placeholder", response['email']);
-                    $('#modal_editar_email').attr("value", response['email']);
-                    $('#modal_editar_username').attr("placeholder", response['username']);
-                    $('#modal_editar_username').attr("value", response['username']);
-                    M.updateTextFields();
+                    dataToModalUsuario(response);
                     $('#modalEditarUsuario').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
@@ -371,6 +364,14 @@
                     });
                 }
             });
+        });
+    </script>
+    <script>
+        // limpiar inputs
+        $('a.eraseFilter').on('click', function(e) {
+            var input = $(this).parent().parent().find("input");
+            input.val('');
+            input.change();
         });
     </script>
     <script>

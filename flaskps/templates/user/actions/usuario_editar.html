@@ -102,6 +102,7 @@
                         $('#email').attr('value', response['email']);
                         $('#email').attr('placeholder', response['email']);
                         M.updateTextFields();
+                        $('select').formSelect();
                         userFound();
                     },
                     error: function (jqXhr, textStatus, errorMessage) {

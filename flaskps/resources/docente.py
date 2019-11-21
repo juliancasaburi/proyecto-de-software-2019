@@ -12,16 +12,19 @@ from flaskps.db import get_db
 import json
 
 from flaskps.forms.form_docente_create import DocenteCreateForm
+from flaskps.forms.form_docente_update import DocenteUpdateForm
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
+from flaskps.models import siteconfig
 
-from flaskps.helpers.permission import has_permission
 from flaskps.helpers.localidades import localidad, localidades
 from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 
-from flaskps.serverside_dt.serverside_table_docentes import DocentesServerSideTable
-from flaskps.serverside_dt import table_schemas
+from flaskps.resources.helpers.serverside_dt.serverside_table_docentes import DocentesServerSideTable
+from flaskps.resources.helpers.serverside_dt import table_schemas
 
 
 def docentes():
@@ -49,7 +52,9 @@ def docentes():
 
 
 def get_docentes():
-    if not has_permission("docente_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_index", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     all_docentes = jsonify(docentes())
@@ -72,7 +77,9 @@ def serverside_table_content():
 
 
 def create():
-    if not has_permission("docente_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_new", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     # Validación - Fill choices
@@ -119,11 +126,14 @@ def create():
 
 
 def destroy():
-    if not has_permission("docente_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_destroy", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     params = json.loads(request.data)
     d_id = params["id"]
+    activo = params["activo"]
 
     Docente.db = get_db()
     success = Docente.delete(d_id)
@@ -132,10 +142,12 @@ def destroy():
     responsecode = 200
 
     if success:
-        op_response["msg"] = "Se ha bloqueado/activado al docente exitosamente"
+        condicion = 'bloqueado' if activo else 'activado'
+        op_response["msg"] = "Se ha " + condicion + " al docente exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El usuario a bloquear/activar no existe"
+        condicion = 'bloquear' if activo else 'activar'
+        op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
 
@@ -143,14 +155,63 @@ def destroy():
 
 
 def data():
-    if not has_permission("docente_show", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_show", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Docente.db = get_db()
     d_id = request.args.get("id")
     docente = Docente.find_by_id(d_id)
     if docente != None:
+        docente['fecha_nac'] = datetime.strftime(
+            docente["fecha_nac"], "%d/%m/%Y"
+        )
         data = jsonify(docente)
         return make_response(data, 200)
     else:
         return abort(404)
+
+
+def update():
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_update", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        abort(401)
+
+    form = DocenteUpdateForm()
+
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+
+        Docente.db = get_db()
+
+        params["fecha_nacimiento"] = datetime.strptime(
+            params["fecha_nacimiento"], "%d/%m/%Y"
+        ).date()
+
+        updated = Docente.update(params)
+
+        if updated:
+            op_response["msg"] = "Se ha modificado al docente con éxito"
+            op_response["type"] = "success"
+        else:
+            op_response["msg"] = "Ha ocurrido un error al editar al docente"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response["msg"] = "Complete todos los datos del usuario a modificar"
+            op_response["type"] = "error"
+        else:
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+            op_response["msg"] = error_msg
+            op_response["type"] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)

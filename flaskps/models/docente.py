@@ -116,3 +116,44 @@ class Docente(object):
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()
+
+    @classmethod
+    def update(cls, data):
+
+        sql = """
+                    UPDATE docente 
+                    SET apellido = %s, 
+                        nombre = %s, 
+                        fecha_nac = %s, 
+                        localidad_id = %s, 
+                        domicilio = %s, 
+                        genero_id = %s,
+                        tipo_doc_id = %s,
+                        numero = %s,
+                        tel = %s
+                    WHERE id = %s 
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(
+                    sql,
+                    (
+                        data.get("apellido"),
+                        data.get("nombre"),
+                        data.get("fecha_nacimiento"),
+                        data.get("select_localidad"),
+                        data.get("domicilio"),
+                        data.get("select_genero"),
+                        data.get("select_tipo"),
+                        data.get("documento_numero"),
+                        data.get("telefono_numero"),
+                        data.get("id"),
+                    ),
+                )
+                cls.db.commit()
+
+        except IntegrityError:
+            return False
+        finally:
+            cls.db.cursor().close()
+        return True
