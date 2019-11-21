@@ -16,10 +16,12 @@ from flaskps.forms.form_docente_update import DocenteUpdateForm
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
+from flaskps.models import siteconfig
 
-from flaskps.helpers.permission import has_permission
 from flaskps.helpers.localidades import localidad, localidades
 from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 
 from flaskps.serverside_dt.serverside_table_docentes import DocentesServerSideTable
 from flaskps.serverside_dt import table_schemas
@@ -50,7 +52,9 @@ def docentes():
 
 
 def get_docentes():
-    if not has_permission("docente_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_index", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     all_docentes = jsonify(docentes())
@@ -73,7 +77,9 @@ def serverside_table_content():
 
 
 def create():
-    if not has_permission("docente_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_new", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     # Validación - Fill choices
@@ -120,7 +126,9 @@ def create():
 
 
 def destroy():
-    if not has_permission("docente_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_destroy", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     params = json.loads(request.data)
@@ -147,7 +155,9 @@ def destroy():
 
 
 def data():
-    if not has_permission("docente_show", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_show", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Docente.db = get_db()
@@ -164,7 +174,9 @@ def data():
 
 
 def update():
-    if not has_permission("docente_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_update", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     form = DocenteUpdateForm()

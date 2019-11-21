@@ -13,6 +13,7 @@ from flask import (
 from flaskps.db import get_db
 from flaskps.models.user import User
 from flaskps.models.role import Role
+from flaskps.models import siteconfig
 
 from flaskps.forms.form_user_create import UserCreateForm
 from flaskps.forms.form_user_update import UserUpdateForm
@@ -21,6 +22,7 @@ from flaskps.forms.form_password_update import PasswordUpdateForm
 
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 
 from flaskps.resources.email_threading import send_async
 
@@ -59,7 +61,8 @@ def users():
 
 
 def get_users():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) and (s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     all_users = jsonify(users())
@@ -82,7 +85,9 @@ def serverside_table_content():
 
 
 def create():
-    if not has_permission("usuario_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_new", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Role.db = get_db()
@@ -141,7 +146,9 @@ def create():
 
 
 def destroy():
-    if not has_permission("usuario_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_destroy", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     params = json.loads(request.data)
@@ -165,7 +172,9 @@ def destroy():
 
 
 def update():
-    if not has_permission("usuario_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_update", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Role.db = get_db()
@@ -262,12 +271,12 @@ def update():
 
 def dashboard():
     if not authenticated(session):
-        abort(401)
+        return render_template("auth/login.html")
+    else:
+        Role.db = get_db()
+        roles = Role.all()
 
-    Role.db = get_db()
-    roles = Role.all()
-
-    return render_template("user/dashboard.html", roles=roles)
+        return render_template("user/dashboard.html", roles=roles)
 
 
 def profile():
@@ -293,7 +302,9 @@ def profile():
 
 
 def email_update():
-    if not authenticated(session):
+    s_config = siteconfig.get_config()
+    if not authenticated(session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     form = EmailUpdateForm()
@@ -313,7 +324,9 @@ def email_update():
 
 
 def password_update():
-    if not authenticated(session):
+    s_config = siteconfig.get_config()
+    if not authenticated(session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     form = PasswordUpdateForm()
@@ -333,7 +346,9 @@ def password_update():
 
 
 def user_data():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     if request.args.get("id"):

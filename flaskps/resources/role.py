@@ -1,11 +1,17 @@
 from flask import jsonify, make_response, session, abort
 from flaskps.db import get_db
+
 from flaskps.models.role import Role
-from flaskps.helpers import permission
+from flaskps.models import siteconfig
+
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 
 
 def all_roles():
-    if not permission.has_permission("usuario_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_new", session) and (
+            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
         abort(401)
 
     Role.db = get_db()
