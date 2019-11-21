@@ -20,7 +20,7 @@ from flaskps.helpers.role import has_role
 
 def create():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_new", session) and (
+    if not has_permission("ciclolectivo_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -76,7 +76,7 @@ def create():
 
 def get_ciclos():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_index", session) and (
+    if not has_permission("ciclolectivo_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -105,7 +105,7 @@ def get_ciclos():
 
 def destroy():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_destroy", session) and (
+    if not has_permission("ciclolectivo_destroy", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -132,7 +132,7 @@ def destroy():
 
 def get_talleres():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_index", session) and (
+    if not has_permission("ciclolectivo_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)

@@ -12,7 +12,7 @@ from flaskps.helpers.role import has_role
 
 def create():
     s_config = siteconfig.get_config()
-    if not has_permission("taller_new", session) and (
+    if not has_permission("taller_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -52,7 +52,7 @@ def create():
 
 def set_ciclo():
     s_config = siteconfig.get_config()
-    if not has_permission("taller_update", session) and (
+    if not has_permission("taller_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -79,7 +79,7 @@ def set_ciclo():
 
 def get_ciclos():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_index", session) and (
+    if not has_permission("ciclolectivo_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -96,7 +96,7 @@ def get_ciclos():
 
 def get_docentes_ciclo():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_index", session) and (
+    if not has_permission("docente_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -115,7 +115,7 @@ def get_docentes_ciclo():
 
 def set_docentes():
     s_config = siteconfig.get_config()
-    if not has_permission("taller_update", session) and (
+    if not has_permission("taller_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -143,7 +143,7 @@ def set_docentes():
 
 def get_estudiantes_ciclo():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_index", session) and (
+    if not has_permission("estudiante_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -162,7 +162,7 @@ def get_estudiantes_ciclo():
 
 def set_estudiantes():
     s_config = siteconfig.get_config()
-    if not has_permission("taller_update", session) and (
+    if not has_permission("taller_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)

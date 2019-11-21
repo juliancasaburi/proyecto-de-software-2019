@@ -24,7 +24,7 @@ from flaskps.helpers.tipos_documento import tipos_documento
 
 def get_estudiantes():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_index", session) and (
+    if not has_permission("estudiante_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -117,7 +117,7 @@ def pasarChoices(form):
 
 def create():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_new", session) and (
+    if not has_permission("estudiante_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -161,7 +161,7 @@ def create():
 
 def update():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_update", session) and (
+    if not has_permission("estudiante_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -206,7 +206,7 @@ def update():
 
 def destroy():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_destroy", session) and (
+    if not has_permission("estudiante_destroy", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -237,7 +237,7 @@ def destroy():
 # por id
 def estudiante_data():
     s_config = siteconfig.get_config()
-    if not has_permission("estudiante_show", session) and (
+    if not has_permission("estudiante_show", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
