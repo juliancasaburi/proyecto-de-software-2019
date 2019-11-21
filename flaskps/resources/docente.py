@@ -55,7 +55,7 @@ def docentes():
 
 def get_docentes():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_index", session) and (
+    if not has_permission("docente_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -81,7 +81,7 @@ def serverside_table_content():
 
 def create():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_new", session) and (
+    if not has_permission("docente_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -131,7 +131,7 @@ def create():
 
 def destroy():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_destroy", session) and (
+    if not has_permission("docente_destroy", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -161,7 +161,7 @@ def destroy():
 
 def data():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_show", session) and (
+    if not has_permission("docente_show", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -179,7 +179,7 @@ def data():
 
 def update():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_update", session) and (
+    if not has_permission("docente_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)

@@ -10,7 +10,7 @@ from flaskps.helpers.role import has_role
 
 def all_roles():
     s_config = siteconfig.get_config()
-    if not has_permission("usuario_new", session) and (
+    if not has_permission("usuario_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
