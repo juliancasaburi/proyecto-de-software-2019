@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" prefix="og: http://ogp.me/ns#">
 <head>
     {% block head %}
         <title>{% block title %}{% endblock %}</title>
@@ -9,6 +9,9 @@
         <meta name="author" content="Grupo 2">
         <meta name="description" content="Proyecto de Software 2019">
         <meta name="keywords" content="Administracion, Orquesta Escuela de Berisso, Proyecto de Software, 2019, Grupo2">
+
+        <!-- OpenGraph -->
+        <meta property="og:image" content="{{ url_for('static', filename='img/logo-black.png') }}">
 
         <!-- Icons -->
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon-32x32.png') }}" sizes="32x32" />
