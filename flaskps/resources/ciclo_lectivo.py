@@ -21,7 +21,8 @@ from flaskps.helpers.role import has_role
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_new", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = CicloCreateForm()
@@ -76,7 +77,8 @@ def create():
 def get_ciclos():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -104,7 +106,8 @@ def get_ciclos():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_destroy", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = request.form.to_dict()
@@ -130,7 +133,8 @@ def destroy():
 def get_talleres():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     c_id = request.args.get("id")

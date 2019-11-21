@@ -125,7 +125,9 @@ app.add_url_rule(
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
-app.add_url_rule("/docente/actualizar", "docente_update", docente.update, methods=["POST"])
+app.add_url_rule(
+    "/docente/actualizar", "docente_update", docente.update, methods=["POST"]
+)
 
 # Talleres
 app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
@@ -151,7 +153,9 @@ app.add_url_rule(
     methods=["POST"],
 )
 app.add_url_rule(
-    "/taller_ciclo/estudiantes", "taller_ciclo_estudiantes", taller.get_estudiantes_ciclo
+    "/taller_ciclo/estudiantes",
+    "taller_ciclo_estudiantes",
+    taller.get_estudiantes_ciclo,
 )
 app.add_url_rule(
     "/taller/asociar/estudiantes",
@@ -191,4 +195,6 @@ app.add_url_rule(
 app.add_url_rule(
     "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
 )
-app.add_url_rule("/estudiante/baja", "estudiante_destroy", estudiante.destroy, methods=["POST"])
+app.add_url_rule(
+    "/estudiante/baja", "estudiante_destroy", estudiante.destroy, methods=["POST"]
+)

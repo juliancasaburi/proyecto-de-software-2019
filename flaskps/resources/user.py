@@ -28,7 +28,9 @@ from flaskps.resources.helpers.email_threading import send_async
 
 from flaskps import bcrypt
 
-from flaskps.resources.helpers.serverside_dt.serverside_table_usuarios import UsuariosServerSideTable
+from flaskps.resources.helpers.serverside_dt.serverside_table_usuarios import (
+    UsuariosServerSideTable,
+)
 from flaskps.resources.helpers.serverside_dt import table_schemas
 
 
@@ -62,7 +64,9 @@ def users():
 
 def get_users():
     s_config = siteconfig.get_config()
-    if not has_permission("usuario_index", session) and (s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+    if not has_permission("usuario_index", session) and (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     all_users = jsonify(users())
@@ -87,7 +91,8 @@ def serverside_table_content():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -148,7 +153,8 @@ def create():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_destroy", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = json.loads(request.data)
@@ -174,7 +180,8 @@ def destroy():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -304,7 +311,8 @@ def profile():
 def email_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = EmailUpdateForm()
@@ -326,7 +334,8 @@ def email_update():
 def password_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = PasswordUpdateForm()
@@ -348,7 +357,8 @@ def password_update():
 def user_data():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     if request.args.get("id"):

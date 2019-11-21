@@ -25,7 +25,8 @@ from flaskps.helpers.tipos_documento import tipos_documento
 def get_estudiantes():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Estudiante.db = get_db()
@@ -106,7 +107,10 @@ def pasarChoices(form):
         (escuela["id"], escuela["nombre"]) for escuela in escuelas
     ]
     form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
-    form.select_responsable_tipo.choices = [(responsable_tipo["id"], responsable_tipo["nombre"]) for responsable_tipo in responsables_tipos]
+    form.select_responsable_tipo.choices = [
+        (responsable_tipo["id"], responsable_tipo["nombre"])
+        for responsable_tipo in responsables_tipos
+    ]
 
     return form
 
@@ -114,7 +118,8 @@ def pasarChoices(form):
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_new", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = EstudianteCreateForm()
@@ -157,7 +162,8 @@ def create():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = EstudianteCreateForm()  # uso este porq es igual
@@ -201,7 +207,8 @@ def update():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_destroy", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = json.loads(request.data)
@@ -215,11 +222,11 @@ def destroy():
     responsecode = 200
 
     if success:
-        condicion = 'bloqueado' if activo else 'activado'
+        condicion = "bloqueado" if activo else "activado"
         op_response["msg"] = "Se ha " + condicion + " al estudiante exitosamente"
         op_response["type"] = "success"
     else:
-        condicion = 'bloquear' if activo else 'activar'
+        condicion = "bloquear" if activo else "activar"
         op_response["msg"] = "El estudiante a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
@@ -231,7 +238,8 @@ def destroy():
 def estudiante_data():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_show", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     if request.args.get("id"):
@@ -240,7 +248,7 @@ def estudiante_data():
         estudiante = Estudiante.find_by_id(eid)
         if estudiante != None:
             # lo tuve que pasar a string desde acá
-            estudiante['fecha_nac'] = datetime.strftime(
+            estudiante["fecha_nac"] = datetime.strftime(
                 estudiante["fecha_nac"], "%d/%m/%Y"
             )
             data = jsonify(estudiante)

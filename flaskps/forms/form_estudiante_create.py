@@ -16,8 +16,7 @@ class EstudianteCreateForm(FlaskForm):
         validators=[InputRequired(message="Complete la fecha de nacimiento")],
     )
     select_localidad = SelectField(
-        "select_localidad",
-        validators=[InputRequired(message="Complete la localidad")]
+        "select_localidad", validators=[InputRequired(message="Complete la localidad")]
     )
     domicilio = StringField(
         "domicilio", [InputRequired(message="Complete el domicilio")]
@@ -42,7 +41,7 @@ class EstudianteCreateForm(FlaskForm):
     select_responsable_tipo = SelectField(
         "select_responsable_tipo",
         coerce=int,
-        validators=[InputRequired(message="Seleccione el responsable a cargo")]
+        validators=[InputRequired(message="Seleccione el responsable a cargo")],
     )
     telefono_numero = StringField("telefono_numero")
     select_escuela = SelectField(

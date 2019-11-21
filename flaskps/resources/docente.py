@@ -23,7 +23,9 @@ from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
-from flaskps.resources.helpers.serverside_dt.serverside_table_docentes import DocentesServerSideTable
+from flaskps.resources.helpers.serverside_dt.serverside_table_docentes import (
+    DocentesServerSideTable,
+)
 from flaskps.resources.helpers.serverside_dt import table_schemas
 
 
@@ -54,7 +56,8 @@ def docentes():
 def get_docentes():
     s_config = siteconfig.get_config()
     if not has_permission("docente_index", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     all_docentes = jsonify(docentes())
@@ -79,7 +82,8 @@ def serverside_table_content():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("docente_new", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     # Validación - Fill choices
@@ -128,7 +132,8 @@ def create():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("docente_destroy", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     params = json.loads(request.data)
@@ -142,11 +147,11 @@ def destroy():
     responsecode = 200
 
     if success:
-        condicion = 'bloqueado' if activo else 'activado'
+        condicion = "bloqueado" if activo else "activado"
         op_response["msg"] = "Se ha " + condicion + " al docente exitosamente"
         op_response["type"] = "success"
     else:
-        condicion = 'bloquear' if activo else 'activar'
+        condicion = "bloquear" if activo else "activar"
         op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
@@ -157,16 +162,15 @@ def destroy():
 def data():
     s_config = siteconfig.get_config()
     if not has_permission("docente_show", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Docente.db = get_db()
     d_id = request.args.get("id")
     docente = Docente.find_by_id(d_id)
     if docente != None:
-        docente['fecha_nac'] = datetime.strftime(
-            docente["fecha_nac"], "%d/%m/%Y"
-        )
+        docente["fecha_nac"] = datetime.strftime(docente["fecha_nac"], "%d/%m/%Y")
         data = jsonify(docente)
         return make_response(data, 200)
     else:
@@ -176,7 +180,8 @@ def data():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("docente_update", session) and (
-            s_config['modo_mantenimiento'] == 1 and not has_role("administrador", session)):
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     form = DocenteUpdateForm()

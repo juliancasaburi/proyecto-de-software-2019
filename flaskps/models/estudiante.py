@@ -82,7 +82,7 @@ class Estudiante(object):
                         data.get("documento_numero"),
                         data.get("telefono_numero"),
                         data.get("select_barrio"),
-                        data.get("select_responsable_tipo")
+                        data.get("select_responsable_tipo"),
                     ),
                 )
                 cls.db.commit()
@@ -133,7 +133,7 @@ class Estudiante(object):
                         data.get("telefono_numero"),
                         data.get("select_barrio"),
                         data.get("select_responsable_tipo"),
-                        data.get("id")
+                        data.get("id"),
                     ),
                 )
                 cls.db.commit()
@@ -160,7 +160,6 @@ class Estudiante(object):
         finally:
             cls.db.cursor().close()
         return True
-
 
     @classmethod
     def find_by_id(cls, id):
