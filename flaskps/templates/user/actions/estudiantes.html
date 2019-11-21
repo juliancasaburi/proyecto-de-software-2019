@@ -130,17 +130,27 @@
                     <h3 class="header">Filtrar el listado de Estudiantes</h3>
                     <ul class="collection">
                         <li class="collection-item">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix">account_circle</i>
-                                <input class="filterEstudiante" id="filterNombreEstudiante" type="text">
-                                <label for="filterNombreEstudiante">Filtrar por nombre</label>
+                            <div class="row valign-wrapper center-align">
+                                <div class="input-field col s10">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input class="filterEstudiante" id="filterNombreEstudiante" type="text">
+                                    <label for="filterNombreEstudiante">Filtrar por nombre</label>
+                                </div>
+                                <div class="col s2">
+                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser"></i></a>
+                                </div>
                             </div>
                         </li>
                         <li class="collection-item">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix">account_circle</i>
-                                <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
-                                <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
+                            <div class="row valign-wrapper center-align">
+                                <div class="input-field col s10">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
+                                    <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
+                                </div>
+                                <div class="col s2">
+                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
+                                </div>
                             </div>
                         </li>
                         <li class="collection-item">
@@ -239,33 +249,19 @@
             }, 5000 );
         } );
     </script>
-    <script> // Alta de Estudiante
-    $(document).ready(function(){
-        $('#modalAltaEstudiante').modal();
-        $('#modalEditarEstudiante').modal();
-        $('select').formSelect();
-    });
-    </script>
-    <script> // Filtros
-    $(document).ready(function() {
-        validar_filtro_activo();
-        var table = $('#tablaEstudiantes').DataTable();
-        $("#filterNombreEstudiante").on("keyup", function() {
-            table
-                .columns( 2 )
-                .search( this.value )
-                .draw();
+    <script>
+        $(document).ready(function(){
+            $('#modalAltaEstudiante').modal();
+            $('#modalEditarEstudiante').modal();
+            validar_filtro_activo();
+            $('select').formSelect();
         });
-        $("#filterDocumentoEstudiante").on("keyup", function() {
-            table
-                .columns( 10 )
-                .search( this.value )
-                .draw();
-        });
-    });
     </script>
     <script>
         var filtro_activo = document.getElementById("filterActive");
+        var filtro_dni = document.getElementById("filterDocumentoEstudiante");
+        var filtro_nombre = document.getElementById("filterNombreEstudiante");
+
         function validar_filtro_activo() {
             var table = $('#tablaEstudiantes').DataTable();
             if($("#filterActive").prop("checked") == true)
@@ -283,7 +279,26 @@
                     .draw();
             }
         }
+        function validar_dni() {
+            var table = $('#tablaEstudiantes').DataTable();
+            table
+                .columns( 10 )
+                .search(filtro_dni.value)
+                .draw();
+        }
+        function validar_nombre() {
+            var table = $('#tablaEstudiantes').DataTable();
+            table
+                .columns(2)
+                .search(filtro_nombre.value)
+                .draw();
+        }
+
         filtro_activo.onchange = validar_filtro_activo;
+        filtro_nombre.onchange = validar_nombre;
+        filtro_nombre.onkeyup = validar_nombre;
+        filtro_dni.onchange = validar_dni;
+        filtro_dni.onkeyup = validar_dni;
     </script>
     <script>
         $('#modalFilters').modal({
@@ -401,6 +416,14 @@
                     });
                 }
             });
+        });
+    </script>
+    <script>
+        // limpiar inputs
+        $('a.eraseFilter').on('click', function(e) {
+            var input = $(this).parent().parent().find("input");
+            input.val('');
+            input.change();
         });
     </script>
 {% endblock %}
