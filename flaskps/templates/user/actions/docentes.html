@@ -218,13 +218,15 @@
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true
+                "scrollX": true,
+                "fnInitComplete": function() {
+                    table // Filtrar Bloqueados por default
+                        .column(1)
+                        .search(1)
+                        .draw();
+                }
             } );
 
-            table // Filtrar Bloqueados por default
-                .column(1)
-                .search(1)
-                .draw();
 
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
