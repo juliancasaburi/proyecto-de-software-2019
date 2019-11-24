@@ -102,6 +102,7 @@ class User(object):
                 cursor.execute(sql, uid)
                 cls.db.commit()
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -159,6 +160,7 @@ class User(object):
                     cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()

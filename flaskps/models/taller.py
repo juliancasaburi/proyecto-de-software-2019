@@ -36,6 +36,7 @@ class Taller(object):
                 cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -69,6 +70,7 @@ class Taller(object):
                     cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
