@@ -167,6 +167,8 @@ def destroy():
     responsecode = 200
 
     if success:
+        # TODO: Email notificando bloqueo de la cuenta
+
         op_response["msg"] = "Se ha bloqueado/activado al usuario exitosamente"
         op_response["type"] = "success"
     else:
@@ -210,18 +212,18 @@ def update():
 
         updated = User.update(params)
 
-        # armo el string de roles para el mail
-        roles_dict = User.user_roles(params["username"])
-        roles_names = ""
-        first = True
-        for rol in roles_dict:
-            if first:
-                first = False
-            else:
-                roles_names += ", "
-            roles_names += rol["nombre"]
-
         if updated:
+            # armo el string de roles para el mail
+            roles_dict = User.user_roles(params["username"])
+            roles_names = ""
+            first = True
+            for rol in roles_dict:
+                if first:
+                    first = False
+                else:
+                    roles_names += ", "
+                roles_names += rol["nombre"]
+
             new_email = User.find_by_id(uid)["email"]
 
             if old_email != new_email:
@@ -320,10 +322,13 @@ def email_update():
     if form.validate_on_submit():
         email = request.form.get("email")
         User.db = get_db()
-        User.update_email(email, session.get("user"))
-        flash("El email se ha modificado con éxito", "success")
+        updated = User.update_email(email, session.get("user"))
+        if updated:
+            # TODO: Email a la dirección de email anterior y a la nueva notificando actualización del email
+            flash("El email se ha modificado con éxito", "success")
+        else:
+            flash("Se ha producido un error al actualizar el email", "error")
 
-    # TODO: Mensajes de error
     else:
         error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
         flash(error_msg, "error")
@@ -343,10 +348,13 @@ def password_update():
         password = request.form.get("password")
         bcrypt_password = bcrypt.generate_password_hash(password).decode("utf - 8")
         User.db = get_db()
-        User.update_password(bcrypt_password, session.get("user"))
-        flash("La contraseña se ha modificado con éxito", "success")
+        updated = User.update_password(bcrypt_password, session.get("user"))
+        if updated:
+            # TODO: Email notificando la actualización de contraseña
+            flash("La contraseña se ha modificado con éxito", "success")
+        else:
+            flash("Se ha producido un error al actualizar la contraseña", "error")
 
-    # TODO: Mensajes de error
     else:
         error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
         flash(error_msg, "error")
