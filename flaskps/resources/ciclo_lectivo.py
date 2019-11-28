@@ -1,15 +1,10 @@
 from datetime import datetime
 
-from flask import (
-    request,
-    session,
-    abort,
-    make_response,
-    jsonify,
-)
+from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
 
 from flaskps.forms.form_ciclo_create import CicloCreateForm
+from flaskps.helpers import permission
 
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -145,3 +140,17 @@ def get_talleres():
         abort(404)
 
     return make_response(jsonify(talleres), 200)
+
+
+def ciclo_table():
+    if not permission.has_permission("ciclolectivo_index", session):
+        abort(401)
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    return render_template("user/actions/lists/ciclos.html", ciclos=ciclos)

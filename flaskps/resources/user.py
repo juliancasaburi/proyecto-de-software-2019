@@ -11,6 +11,7 @@ from flask import (
     flash,
 )
 from flaskps.db import get_db
+from flaskps.helpers import permission
 from flaskps.models.user import User
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
@@ -395,3 +396,43 @@ def user_data():
 
     else:
         abort(400)
+
+
+def user_table():
+    if not permission.has_permission("usuario_index", session):
+        abort(401)
+
+    Role.db = get_db()
+    roles = Role.all()
+
+    return render_template("user/actions/lists/usuarios.html", roles=roles)
+
+
+def user_edit_form():
+    if not permission.has_permission("usuario_update", session):
+        abort(401)
+
+    Role.db = get_db()
+    roles = Role.all()
+
+    return render_template("user/actions/usuario_editar.html", roles=roles)
+
+
+def user_destroy_form():
+    if not permission.has_permission("usuario_destroy", session):
+        abort(401)
+
+    Role.db = get_db()
+    roles = Role.all()
+
+    return render_template("user/actions/usuario_bloquear.html", roles=roles)
+
+
+def user_new_form():
+    if not permission.has_permission("usuario_new", session):
+        abort(401)
+
+    Role.db = get_db()
+    roles = Role.all()
+
+    return render_template("user/actions/usuario_crear.html", roles=roles)

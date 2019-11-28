@@ -1,9 +1,19 @@
 from datetime import datetime
 
-from flask import request, session, abort, make_response, jsonify, flash, json
+from flask import (
+    request,
+    session,
+    abort,
+    make_response,
+    jsonify,
+    flash,
+    json,
+    render_template,
+)
 from flaskps.db import get_db
 
 from flaskps.forms.form_estudiante_create import EstudianteCreateForm
+from flaskps.helpers import permission
 
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.barrio import Barrio
@@ -16,8 +26,8 @@ from flaskps.models import siteconfig
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
-from flaskps.helpers.tipos_documento import tipo_documento
-from flaskps.helpers.localidades import localidad
+from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
+from flaskps.helpers.localidades import localidad, localidades
 from flaskps.helpers.localidades import localidades
 from flaskps.helpers.tipos_documento import tipos_documento
 
@@ -259,3 +269,38 @@ def estudiante_data():
 
     else:
         abort(400)
+
+
+def estudiante_table():
+    if not permission.has_permission("estudiante_index", session):
+        abort(401)
+
+    loc = localidades()
+
+    tipo_doc = tipos_documento()
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    Barrio.db = get_db()
+    barrios = Barrio.all()
+
+    Nivel.db = get_db()
+    niveles = Nivel.all()
+
+    Responsable_tipo.db = get_db()
+    responsables_tipos = Responsable_tipo.all()
+
+    Escuela.db = get_db()
+    escuelas = Escuela.all()
+
+    return render_template(
+        "user/actions/lists/estudiantes.html",
+        localidades=loc,
+        tipodoc=tipo_doc,
+        generos=generos,
+        barrios=barrios,
+        escuelas=escuelas,
+        niveles=niveles,
+        responsables_tipos=responsables_tipos,
+    )
