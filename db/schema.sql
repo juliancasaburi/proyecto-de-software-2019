@@ -526,6 +526,8 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`instrumento` (
   `tipo_id` int(11) NOT NULL,
   `num_inventario` text COLLATE utf8_unicode_ci NOT NULL,
   `image_path` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `FK_tipo_instrumento_id` (`tipo_id` ASC),
   CONSTRAINT `FK_tipo_instrumento_id`
