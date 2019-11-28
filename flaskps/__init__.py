@@ -9,12 +9,16 @@ from flaskps.models import siteconfig as sc
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 # ----------------- App Config -----------------
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["JSON_AS_ASCII"] = False
+# Flask Uploads
+images = UploadSet("images", IMAGES)
+configure_uploads(app, images)
 # Mail Config
 app.config["MAIL_SERVER"] = Config.MAIL_SERVER
 app.config["MAIL_PORT"] = Config.MAIL_PORT
@@ -39,6 +43,7 @@ from flaskps.resources import role
 from flaskps.resources import docente
 from flaskps.resources import taller
 from flaskps.resources import estudiante
+from flaskps.resources import instrumento
 from flaskps.resources import siteconfig
 
 # Funciones que se exportan al contexto de Jinja2
@@ -122,6 +127,9 @@ app.add_url_rule(
     "taller_set_estudiantes_form",
     taller.taller_set_estudiantes_form,
 )
+app.add_url_rule(
+    "/instrumento/crear", "instrumento_new_form", instrumento.instrumento_new_form
+)
 
 # User
 app.add_url_rule("/usuario", "user", user.user_data)
@@ -201,4 +209,9 @@ app.add_url_rule(
 )
 app.add_url_rule(
     "/estudiante/baja", "estudiante_destroy", estudiante.destroy, methods=["POST"]
+)
+
+# Instrumento
+app.add_url_rule(
+    "/instrumento/crear", "instrumento_new", instrumento.create, methods=["POST"]
 )

@@ -182,32 +182,37 @@
                     </div>
                 </div>
             {% endif %}
+
+            {% if has_permission('taller_new', session) %}
+                <div class="col s12">
+                    <div class="card" style="overflow: visible;">
+                        <div class="center-align light-blue waves-effect waves-block waves-light">
+                            <i class="fas fa-guitar fa-3x"></i>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
+                            <p><a href="#">Ver listado</a></p>
+                        </div>
+
+                        <div class="card-action">
+                            {% if has_permission('instrumento_new', session) %}
+                                <a href="{{ url_for('instrumento_new_form') }}">Crear</a>
+                            {% endif %}
+                            <a href="#">Eliminar</a>
+                            <a href="#">Editar</a>
+                        </div>
+
+                        <div class="card-reveal" style="display: none; transform: translateY(0%);">
+                            <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <div class="row">
             <div class="divider"></div>
             <h6 class="center red-text">Próximamente</h6>
-            <div class="col l4 m6 s12">
-                <div class="card" style="overflow: visible;">
-                    <div class="center-align light-blue waves-effect waves-block waves-light">
-                        <i class="fas fa-guitar fa-3x"></i>
-                    </div>
-                    <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
-                        <p><a href="#">Ver listado</a></p>
-                    </div>
-
-                    <div class="card-action">
-                        <a href="#">Crear</a>
-                        <a href="#">Eliminar</a>
-                        <a href="#">Editar</a>
-                    </div>
-
-                    <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                        <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
-                    </div>
-                </div>
-            </div>
 
             <div class="col l4 m6 s12">
                 <div class="card" style="overflow: visible;">

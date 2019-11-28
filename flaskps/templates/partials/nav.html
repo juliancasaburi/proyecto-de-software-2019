@@ -84,7 +84,9 @@
             <!-- dropdownInstrumentos Structure -->
             <ul id="dropdownInstrumentos" class="dropdown-content teal">
                 <li><a href="#">Ver Listado</a></li>
-                <li><a href="#">Crear</a></li>
+                {% if has_permission('instrumento_new', session) %}
+                    <li><a href="{{ url_for('instrumento_new_form') }}">Crear</a></li>
+                {% endif %}
                 <li><a href="#">Eliminar</a></li>
                 <li><a href="#">Editar</a></li>
             </ul>

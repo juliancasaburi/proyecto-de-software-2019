@@ -521,9 +521,11 @@ COLLATE = utf8_unicode_ci;
 DROP TABLE IF EXISTS `grupo2`.`instrumento` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`instrumento` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  `tipo_id` INT(11) NOT NULL,
+  `tipo_id` int(11) NOT NULL,
+  `num_inventario` text COLLATE utf8_unicode_ci NOT NULL,
+  `image_path` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `FK_tipo_instrumento_id` (`tipo_id` ASC),
   CONSTRAINT `FK_tipo_instrumento_id`
