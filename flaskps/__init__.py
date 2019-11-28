@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 from flask_session import Session
+
+import flaskps.resources.siteconfig
 from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
@@ -83,12 +85,15 @@ app.add_url_rule("/dashboard", "user_dashboard", user.dashboard)
 
 # Configuracion del sitio
 app.add_url_rule(
-    "/mantenimiento", "maintenance", dashboard.maintenance_mode, methods=["POST"]
+    "/mantenimiento",
+    "maintenance",
+    flaskps.resources.siteconfig.maintenance_mode,
+    methods=["POST"],
 )
 app.add_url_rule(
     "/configuracion/actualizar",
     "config_update",
-    dashboard.config_update,
+    flaskps.resources.siteconfig.config_update,
     methods=["POST"],
 )
 

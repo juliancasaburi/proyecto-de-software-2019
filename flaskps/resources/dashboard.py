@@ -2,21 +2,17 @@ from flask import (
     render_template,
     session,
     abort,
-    request,
 )
 from flaskps.db import get_db
 from flaskps.helpers import permission
-from flask import jsonify, make_response
 
 from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.localidades import localidades
 
-from flaskps.models.siteconfig import SiteConfig
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 from flaskps.models.nivel import Nivel
 from flaskps.models.role import Role
-from flaskps.models import siteconfig
 from flaskps.models.genero import Genero
 from flaskps.models.taller import Taller
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -63,45 +59,6 @@ def user_new_form():
     roles = Role.all()
 
     return render_template("user/actions/usuario_crear.html", roles=roles)
-
-
-def maintenance_mode():
-    if not permission.has_permission("config_update", session):
-        abort(401)
-
-    SiteConfig.db = get_db()
-    config = siteconfig.get_config()
-    modo_mantenimiento = config["modo_mantenimiento"]
-
-    if modo_mantenimiento == 0:
-        siteconfig.update_maintenance(1)
-    else:
-        siteconfig.update_maintenance(0)
-
-    config = siteconfig.get_config()
-    modo_mantenimiento = config["modo_mantenimiento"]
-
-    data = {"modo_mantenimiento": modo_mantenimiento}
-    return make_response(jsonify(data), 200)
-
-
-def config_update():
-    if not permission.has_permission("config_update", session):
-        abort(401)
-
-    params = request.form.to_dict()
-
-    SiteConfig.db = get_db()
-
-    data = {"msg": "Configuración actualizada exitosamente"}
-
-    success = siteconfig.update_config(params)
-
-    if success:
-        return make_response(jsonify(data), 200)
-    else:
-        data = {"msg": "Ha ocurrido un error al actualizar la configuración"}
-        return make_response(jsonify(data), 500)
 
 
 def docente_table():
