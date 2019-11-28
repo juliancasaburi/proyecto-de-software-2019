@@ -1,10 +1,14 @@
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
+from flaskps.helpers import permission
 
 from flaskps.models import siteconfig
+from flaskps.models.ciclo_lectivo import CicloLectivo
+from flaskps.models.docente import Docente
+from flaskps.models.estudiante import Estudiante
 from flaskps.models.taller import Taller
 
-from flaskps.forms.form_taller_create import TallerCreateForm
+from flaskps.forms.taller.form_taller_create import TallerCreateForm
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
@@ -186,3 +190,69 @@ def set_estudiantes():
         abort(make_response(jsonify(op_response), 409))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def taller_new_form():
+    if not permission.has_permission("taller_new", session):
+        abort(401)
+
+    return render_template("user/actions/taller_crear.html")
+
+
+def taller_set_docentes_form():
+    if not permission.has_permission("taller_update", session):
+        abort(401)
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    Docente.db = get_db()
+    docentes = Docente.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    return render_template(
+        "user/actions/taller_asociar_docentes.html", ciclos=ciclos, docentes=docentes
+    )
+
+
+def taller_set_estudiantes_form():
+    if not permission.has_permission("taller_update", session):
+        abort(401)
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    Estudiante.db = get_db()
+    estudiantes = Estudiante.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    return render_template(
+        "user/actions/taller_asociar_estudiantes.html",
+        ciclos=ciclos,
+        estudiantes=estudiantes,
+    )
+
+
+def taller_set_ciclo_form():
+    if not permission.has_permission("taller_update", session):
+        abort(401)
+
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    CicloLectivo.db = get_db()
+    ciclos = CicloLectivo.all()
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
+    return render_template(
+        "user/actions/taller_asociar_ciclo.html", talleres=talleres, ciclos=ciclos
+    )

@@ -521,9 +521,11 @@ COLLATE = utf8_unicode_ci;
 DROP TABLE IF EXISTS `grupo2`.`instrumento` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`instrumento` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  `tipo_id` INT(11) NOT NULL,
+  `tipo_id` int(11) NOT NULL,
+  `num_inventario` text COLLATE utf8_unicode_ci NOT NULL,
+  `image_path` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `FK_tipo_instrumento_id` (`tipo_id` ASC),
   CONSTRAINT `FK_tipo_instrumento_id`
@@ -613,7 +615,12 @@ INSERT INTO `permiso` (`id`, `nombre`) VALUES
 (23, 'taller_destroy'),
 (24, 'taller_update'),
 (25, 'taller_show'),
-(26, 'ciclolectivo_destroy');
+(26, 'ciclolectivo_destroy'),
+(27, 'instrumento_index'),
+(28, 'instrumento_new'),
+(29, 'instrumento_destroy'),
+(30, 'instrumento_update'),
+(31, 'instrumento_show');
 
 -- --------------------------------------------------------
 
@@ -659,6 +666,11 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (1, 24),
 (1, 25),
 (1, 26),
+(1, 27),
+(1, 28),
+(1, 29),
+(1, 30),
+(1, 31),
 (2, 7),
 (2, 10),
 (2, 11),
@@ -670,7 +682,9 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (3, 17),
 (3, 20),
 (3, 21),
-(3, 25);
+(3, 25),
+(3, 27),
+(3, 31);
 
 -- --------------------------------------------------------
 

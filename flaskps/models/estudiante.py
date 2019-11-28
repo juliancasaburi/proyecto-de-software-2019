@@ -88,6 +88,7 @@ class Estudiante(object):
                 cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -139,6 +140,7 @@ class Estudiante(object):
                 cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -156,6 +158,7 @@ class Estudiante(object):
                 cursor.execute(sql, eid)
                 cls.db.commit()
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()

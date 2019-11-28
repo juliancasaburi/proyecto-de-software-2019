@@ -1,18 +1,13 @@
 from datetime import datetime
 
-from flask import (
-    request,
-    session,
-    abort,
-    make_response,
-    jsonify,
-)
+from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
 
 import json
 
-from flaskps.forms.form_docente_create import DocenteCreateForm
-from flaskps.forms.form_docente_update import DocenteUpdateForm
+from flaskps.forms.docente.form_docente_create import DocenteCreateForm
+from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
+from flaskps.helpers import permission
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -220,3 +215,18 @@ def update():
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def docente_table():
+    if not permission.has_permission("docente_index", session):
+        abort(401)
+
+    Genero.db = get_db()
+    generos = Genero.all()
+
+    return render_template(
+        "user/actions/lists/docentes.html",
+        localidades=localidades(),
+        tipodoc=tipos_documento(),
+        generos=generos,
+    )

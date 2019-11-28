@@ -9,7 +9,7 @@ from flask import (
 
 from flaskps.db import get_db
 
-from flaskps.forms.form_login import LoginForm
+from flaskps.forms.auth.form_login import LoginForm
 from flaskps.helpers.auth import authenticated
 from flaskps.models.user import User
 from flaskps.models import siteconfig

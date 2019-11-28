@@ -79,6 +79,7 @@ class Docente(object):
                 cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -96,6 +97,7 @@ class Docente(object):
                 cursor.execute(sql, d_id)
                 cls.db.commit()
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
@@ -153,6 +155,7 @@ class Docente(object):
                 cls.db.commit()
 
         except IntegrityError:
+            cls.db.cursor().close()
             return False
         finally:
             cls.db.cursor().close()
