@@ -12,7 +12,7 @@ from flask import (
 )
 from flaskps.db import get_db
 
-from flaskps.forms.form_estudiante_create import EstudianteCreateForm
+from flaskps.forms.estudiante.form_estudiante_create import EstudianteCreateForm
 from flaskps.helpers import permission
 
 from flaskps.models.estudiante import Estudiante
@@ -26,8 +26,8 @@ from flaskps.models import siteconfig
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
-from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
-from flaskps.helpers.localidades import localidad, localidades
+from flaskps.helpers.tipos_documento import tipo_documento
+from flaskps.helpers.localidades import localidad
 from flaskps.helpers.localidades import localidades
 from flaskps.helpers.tipos_documento import tipos_documento
 

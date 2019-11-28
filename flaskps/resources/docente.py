@@ -5,8 +5,8 @@ from flaskps.db import get_db
 
 import json
 
-from flaskps.forms.form_docente_create import DocenteCreateForm
-from flaskps.forms.form_docente_update import DocenteUpdateForm
+from flaskps.forms.docente.form_docente_create import DocenteCreateForm
+from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
 from flaskps.helpers import permission
 
 from flaskps.models.docente import Docente

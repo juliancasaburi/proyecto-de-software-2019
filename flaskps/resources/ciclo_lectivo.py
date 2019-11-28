@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
 
-from flaskps.forms.form_ciclo_create import CicloCreateForm
+from flaskps.forms.ciclo.form_ciclo_create import CicloCreateForm
 from flaskps.helpers import permission
 
 from flaskps.models import siteconfig

@@ -16,10 +16,10 @@ from flaskps.models.user import User
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 
-from flaskps.forms.form_user_create import UserCreateForm
-from flaskps.forms.form_user_update import UserUpdateForm
-from flaskps.forms.form_email_update import EmailUpdateForm
-from flaskps.forms.form_password_update import PasswordUpdateForm
+from flaskps.forms.user.form_user_create import UserCreateForm
+from flaskps.forms.user.form_user_update import UserUpdateForm
+from flaskps.forms.user.form_email_update import EmailUpdateForm
+from flaskps.forms.user.form_password_update import PasswordUpdateForm
 
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission

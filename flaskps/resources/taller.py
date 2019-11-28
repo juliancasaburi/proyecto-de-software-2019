@@ -8,7 +8,7 @@ from flaskps.models.docente import Docente
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.taller import Taller
 
-from flaskps.forms.form_taller_create import TallerCreateForm
+from flaskps.forms.taller.form_taller_create import TallerCreateForm
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
