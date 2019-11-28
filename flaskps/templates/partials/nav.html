@@ -97,6 +97,7 @@
                 </div>
                 <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
                 {% if has_permission('usuario_index', session) or has_permission('usuario_new', session) or has_permission('usuario_destroy', session) or has_permission('usuario_update', session) or has_permission('usuario_show', session) %}
+                    <div class="divider"></div>
                     <div class="section">
                         <li><a class="subheader">Usuarios</a></li>
                         <!-- Dropdown Trigger -->
@@ -135,16 +136,16 @@
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownTalleres">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
-                <div class="divider"></div>
-                <h6 class="center-align red-text">Próximamente</h6>
-                <div class="divider"></div>
-                <div class="section">
-                    <li><a class="subheader">Instrumentos</a></li>
-                    <!-- Dropdown Trigger -->
-                    <li><a class="dropdown-trigger" href="#" data-target="dropdownInstrumentos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
-                </div>
-                <div class="divider"></div>
+                {% if has_permission('instrumento_index', session) or has_permission('instrumento_new', session) or has_permission('instrumento_destroy', session) or has_permission('instrumento_update', session) or has_permission('instrumento_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Instrumentos</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownInstrumentos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
                 {% if has_permission('config_update', session) %}
+                    <div class="divider"></div>
                     <div class="section">
                         <li><a class="modal-trigger" href="#modalConfiguracion">Editar Configuración</a></li>
                         <li><div class="switch center">
