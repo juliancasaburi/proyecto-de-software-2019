@@ -113,10 +113,10 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 
 # Forms
 app.add_url_rule("/login", "auth_login", auth.login)
-app.add_url_rule("/usuario/crear", "user_new_form", user.user_new_form)
+app.add_url_rule("/usuario/alta", "user_new_form", user.user_new_form)
 app.add_url_rule("/usuario/editar", "user_edit_form", user.user_edit_form)
 app.add_url_rule("/usuario/bloquear", "user_destroy_form", user.user_destroy_form)
-app.add_url_rule("/taller/crear", "taller_new_form", taller.taller_new_form)
+app.add_url_rule("/taller/alta", "taller_new_form", taller.taller_new_form)
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo_form", taller.taller_set_ciclo_form
 )
@@ -131,7 +131,7 @@ app.add_url_rule(
     taller.taller_set_estudiantes_form,
 )
 app.add_url_rule(
-    "/instrumento/crear", "instrumento_new_form", instrumento.instrumento_new_form
+    "/instrumento/alta", "instrumento_new_form", instrumento.instrumento_new_form
 )
 
 # User
@@ -143,7 +143,7 @@ app.add_url_rule(
     user.serverside_table_content,
 )
 app.add_url_rule("/usuarios", "user_all", user.get_users)
-app.add_url_rule("/usuario/crear", "user_new", user.create, methods=["POST"])
+app.add_url_rule("/usuario/alta", "user_new", user.create, methods=["POST"])
 app.add_url_rule("/usuario/bloquear", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
 
@@ -156,14 +156,14 @@ app.add_url_rule(
     docente.serverside_table_content,
 )
 app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
-app.add_url_rule("/docentes/crear", "docente_new", docente.create, methods=["POST"])
+app.add_url_rule("/docentes/alta", "docente_new", docente.create, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
 app.add_url_rule(
     "/docente/actualizar", "docente_update", docente.update, methods=["POST"]
 )
 
 # Taller
-app.add_url_rule("/taller/crear", "taller_new", taller.create, methods=["POST"])
+app.add_url_rule("/taller/alta", "taller_new", taller.create, methods=["POST"])
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
@@ -191,7 +191,7 @@ app.add_url_rule(
 
 # CicloLectivo
 app.add_url_rule(
-    "/ciclolectivo/crear", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
+    "/ciclolectivo/alta", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
 )
 app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", ciclo_lectivo.ciclo_table)
 app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
@@ -205,7 +205,7 @@ app.add_url_rule("/estudiante", "estudiante", estudiante.estudiante_data)
 app.add_url_rule("/tablaestudiantes", "estudiante_table", estudiante.estudiante_table)
 app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
 app.add_url_rule(
-    "/estudiantes/crear", "estudiante_new", estudiante.create, methods=["POST"]
+    "/estudiantes/alta", "estudiante_new", estudiante.create, methods=["POST"]
 )
 app.add_url_rule(
     "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
@@ -216,5 +216,5 @@ app.add_url_rule(
 
 # Instrumento
 app.add_url_rule(
-    "/instrumento/crear", "instrumento_new", instrumento.create, methods=["POST"]
+    "/instrumento/alta", "instrumento_new", instrumento.create, methods=["POST"]
 )
