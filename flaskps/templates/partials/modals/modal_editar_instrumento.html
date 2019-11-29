@@ -1,0 +1,65 @@
+<div id="modalEditarInstrumento" class="modal">
+    <header class="modal-header">Editar Instrumento</header>
+    <form id="formEditarInstrumento" method="post" enctype="multipart/form-data" action="{{ url_for('instrumento_update') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <div class="row">
+                <input id="modal_editar_id" name="id" type="number" hidden>
+                <div class="col s12 input-field">
+                    <label for="modal_editar_nombre">Nombre</label>
+                    <input id="modal_editar_nombre" name="nombre" class="validate" type="text" required>
+                </div>
+                <div class="col s12 input-field">
+                    <select id="modal_editar_tipo_id" name="tipo_id" required>
+                        <option value="" disabled selected>Selecciona un Tipo</option>
+                        {% for tipo in tipos %}
+                            <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_editar_tipo_id">Tipo</label>
+                </div>
+                <div class="col s12 input-field">
+                    <label for="modal_editar_num_inventario">Número de Inventario (Código único que identifica al instrumento)</label>
+                    <input id="modal_editar_num_inventario" name="num_inventario" class="validate" type="text" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span><i class="material-icons">add_photo_alternate</i></span>
+                        <input id="modal_editar_photo" type="file" name="photo">
+                        <label for="modal_editar_photo" class="black-text">Foto (Opcional)</label>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
+            <button id="cancelarAltaInstrumento" class="btn red waves-effect waves-light">Reiniciar</button>
+        </div>
+    </form>
+</div>
+<script>
+    // para resetear los campos a los originales
+    $(document).ready(function() {
+        $("#cancelarEditarInstrumento").click(function(e){
+            e.preventDefault();
+            var eid = $('#modal_editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('instrumento') }}",
+                data: {
+                    id: eid
+                },
+                success: function (response) {
+                    dataToModalInstrumento(response);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        })})
+</script>

@@ -130,9 +130,6 @@ app.add_url_rule(
     "taller_set_estudiantes_form",
     taller.taller_set_estudiantes_form,
 )
-app.add_url_rule(
-    "/instrumento/alta", "instrumento_new_form", instrumento.instrumento_new_form
-)
 
 # User
 app.add_url_rule("/usuario", "user", user.user_data)
@@ -217,4 +214,15 @@ app.add_url_rule(
 # Instrumento
 app.add_url_rule(
     "/instrumento/alta", "instrumento_new", instrumento.create, methods=["POST"]
+)
+app.add_url_rule("/instrumento", "instrumento", instrumento.instrumento_data)
+app.add_url_rule(
+    "/tablainstrumentos", "instrumento_table", instrumento.instrumento_table
+)
+app.add_url_rule("/instrumentos", "instrumento_all", instrumento.get_instrumentos)
+app.add_url_rule(
+    "/instrumento/actualizar",
+    "instrumento_update",
+    instrumento.update,
+    methods=["POST"],
 )
