@@ -183,23 +183,19 @@
                 </div>
             {% endif %}
 
-            {% if has_permission('taller_new', session) %}
+            {% if has_permission('instrumento_index', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">
-                        <div class="center-align light-blue waves-effect waves-block waves-light">
-                            <i class="fas fa-guitar fa-3x"></i>
-                        </div>
+                        <a {% if has_permission('instrumento_index', session) %} href="{{ url_for('instrumento_table') }}" {% endif %}>
+                            <div class="hoverable center-align light-blue waves-effect waves-block waves-light">
+                                <i class="fas fa-guitar fa-3x"></i>
+                            </div>
+                        </a>
                         <div class="card-content">
                             <span class="card-title activator grey-text text-darken-4">Instrumentos<i class="material-icons right">more_vert</i></span>
-                            <p><a href="#">Ver listado</a></p>
-                        </div>
-
-                        <div class="card-action">
-                            {% if has_permission('instrumento_new', session) %}
-                                <a href="{{ url_for('instrumento_table') }}">Crear</a>
+                            {% if has_permission('instrumento_index', session) %}
+                                <p><a href="{{ url_for('instrumento_table') }}">Ver y administrar</a></p>
                             {% endif %}
-                            <a href="#">Eliminar</a>
-                            <a href="#">Editar</a>
                         </div>
 
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
