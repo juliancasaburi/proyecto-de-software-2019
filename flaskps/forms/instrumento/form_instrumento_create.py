@@ -19,7 +19,6 @@ class InstrumentoCreateForm(FlaskForm):
     photo = FileField(
         "photo",
         validators=[
-            FileRequired(message="Debe seleccionar una imagen"),
             FileAllowed(images, "Solo se permiten imagenes!"),
         ],
     )
