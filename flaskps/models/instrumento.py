@@ -52,14 +52,65 @@ class Instrumento(object):
         return True
 
     @classmethod
-    def tipos_instrumento(cls):
+    def find_by_id(cls, id):
         sql = """
-            SELECT  *
-            FROM    tipo_instrumento
-        """
+                SELECT  *
+                FROM    instrumento
+                WHERE   id = %s
+            """
+
         try:
             with cls.db.cursor() as cursor:
-                cursor.execute(sql)
+                cursor.execute(sql, id)
         finally:
             cls.db.cursor().close()
-        return cursor.fetchall()
+
+        return cursor.fetchone()
+
+    @classmethod
+    def image_path(cls, id):
+        sql = """
+                SELECT  image_path
+                FROM    instrumento
+                WHERE   id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()
+
+    @classmethod
+    def update(cls, data):
+
+        try:
+            with cls.db.cursor() as cursor:
+
+                query = """
+                            UPDATE instrumento
+                            SET    nombre = %s, 
+                                   tipo_id = %s, 
+                                   num_inventario = %s 
+                            WHERE  id = %s 
+                        """
+
+                cursor.execute(
+                    query,
+                    (
+                        data.get("nombre"),
+                        data.get("tipo_id"),
+                        data.get("num_inventario"),
+                        data.get("id"),
+                    ),
+                )
+                cls.db.commit()
+
+        except IntegrityError:
+            cls.db.cursor().close()
+            return False
+        finally:
+            cls.db.cursor().close()
+        return True

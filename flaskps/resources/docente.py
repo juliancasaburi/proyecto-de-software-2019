@@ -7,7 +7,6 @@ import json
 
 from flaskps.forms.docente.form_docente_create import DocenteCreateForm
 from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
-from flaskps.helpers import permission
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -29,7 +28,7 @@ def docentes():
     docentes = Docente.all()
 
     for dict_item in docentes:
-        dict_item["fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
+        dict_item["fecha_nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         del dict_item["fecha_nac"]
         loc = localidad(dict_item["localidad_id"])
         dict_item["localidad"] = loc["nombre"]
@@ -38,12 +37,10 @@ def docentes():
         dict_item["genero"] = Genero.find_by_id(dict_item["genero_id"])[0]["nombre"]
         del dict_item["genero_id"]
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
-        dict_item["tipo de documento"] = tipo_doc["nombre"]
+        dict_item["tipo_documento"] = tipo_doc["nombre"]
         del dict_item["tipo_doc_id"]
-        dict_item["Creado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["updated_at"]
+        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        dict_item["updated_at"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
 
     return docentes
 
@@ -218,7 +215,7 @@ def update():
 
 
 def docente_table():
-    if not permission.has_permission("docente_index", session):
+    if not has_permission("docente_index", session):
         abort(401)
 
     Genero.db = get_db()

@@ -1,4 +1,7 @@
 import os
+
+from datetime import datetime
+
 from flaskps import app
 from werkzeug.utils import secure_filename
 from flask import render_template, request, session, abort, make_response, jsonify
@@ -8,22 +11,58 @@ from flaskps.forms.instrumento.form_instrumento_create import InstrumentoCreateF
 
 from flaskps.models import siteconfig
 from flaskps.models.instrumento import Instrumento
+from flaskps.models.tipo_instrumento import TipoInstrumento
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
 
-def instrumento_new_form():
-    if not has_permission("instrumento_new", session):
+def get_instrumentos():
+    s_config = siteconfig.get_config()
+    if not has_permission("instrumento_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
-    # Tipos de instrumentos para el select
     Instrumento.db = get_db()
-    tipos_instrumento = Instrumento.tipos_instrumento()
+    instrumentos = Instrumento.all()
 
-    return render_template(
-        "user/actions/instrumento_crear.html", tipos=tipos_instrumento
-    )
+    for dict_item in instrumentos:
+        tipo_instrumento = TipoInstrumento.find_by_id(dict_item["tipo_id"])
+        dict_item["tipo"] = tipo_instrumento["nombre"]
+        del dict_item["tipo_id"]
+        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        if dict_item["updated_at"] is not None:
+            dict_item["updated_at"] = dict_item["updated_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+        else:
+            dict_item["updated_at"] = "Nunca"
+
+    instrumentos = jsonify(instrumentos)
+
+    return make_response(instrumentos, 200)
+
+
+# por id
+def instrumento_data():
+    s_config = siteconfig.get_config()
+    if not has_permission("instrumento_show", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    if request.args.get("id"):
+        Instrumento.db = get_db()
+        eid = request.args.get("id")
+        instrumento = Instrumento.find_by_id(eid)
+        if instrumento is not None:
+            data = jsonify(instrumento)
+            return make_response(data, 200)
+        else:
+            return abort(404)
+    else:
+        abort(400)
 
 
 def create():
@@ -36,8 +75,8 @@ def create():
     form = InstrumentoCreateForm()
 
     # Tipos de instrumentos para el select
-    Instrumento.db = get_db()
-    tipos_instrumento = Instrumento.tipos_instrumento()
+    TipoInstrumento.db = get_db()
+    tipos_instrumento = TipoInstrumento.all()
 
     form.tipo_id.choices = [
         (tipo_instrumento["id"], tipo_instrumento["nombre"])
@@ -48,13 +87,23 @@ def create():
     responsecode = 201
 
     if form.validate_on_submit():
-        f = form.photo.data
-        filename = secure_filename(f.filename)
-        imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
-        f.save(imagepath)
-
         params = request.form.to_dict()
-        params["image_path"] = imagepath
+
+        # Si el usuario seleccionó una imagen
+        if request.files["photo"].filename != "":
+            f = form.photo.data
+            parts = f.filename.split(".")
+            filename = (
+                "".join(parts[:-1])
+                + "_"
+                + datetime.now().strftime("%d-%m-%Y_%I-%M-%S_%p")
+                + "."
+                + parts[-1]
+            )
+            filename = secure_filename(filename)
+            imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
+            f.save(imagepath)
+            params["image_path"] = imagepath
 
         Instrumento.db = get_db()
         created = Instrumento.create(params)
@@ -79,3 +128,85 @@ def create():
         abort(make_response(jsonify(op_response), 500))
 
     return make_response(jsonify(op_response), responsecode)
+
+
+def update():
+    s_config = siteconfig.get_config()
+    if not has_permission("instrumento_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    form = InstrumentoCreateForm()
+
+    # Tipos de instrumentos para el select
+    TipoInstrumento.db = get_db()
+    tipos_instrumento = TipoInstrumento.all()
+
+    form.tipo_id.choices = [
+        (tipo_instrumento["id"], tipo_instrumento["nombre"])
+        for tipo_instrumento in tipos_instrumento
+    ]
+
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+        Instrumento.db = get_db()
+
+        # Si el usuario seleccionó una imagen
+        if request.files["photo"].filename != "":
+            f = form.photo.data
+            parts = f.filename.split(".")
+            filename = (
+                "".join(parts[:-1])
+                + "_"
+                + datetime.now().strftime("%d-%m-%Y_%I-%M-%S_%p")
+                + "."
+                + parts[-1]
+            )
+            filename = secure_filename(filename)
+            imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
+            f.save(imagepath)
+            params["image_path"] = imagepath
+
+            # Eliminar la foto anterior
+            old_image_path = Instrumento.image_path(params["id"])["image_path"]
+            os.remove(old_image_path)
+
+        updated = Instrumento.update(params)
+
+        if updated:
+            op_response["msg"] = "Se ha modificado al Instrumento con éxito"
+            op_response["type"] = "success"
+        else:
+            op_response["msg"] = "Ocurrió un error"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response["msg"] = "Complete todos los datos del Instrumento a modificar"
+            op_response["type"] = "error"
+        else:
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+            op_response["msg"] = error_msg
+            op_response["type"] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)
+
+
+def instrumento_table():
+    if not has_permission("instrumento_index", session):
+        abort(401)
+
+    # Tipos de instrumentos para el select
+    TipoInstrumento.db = get_db()
+    tipos_instrumento = TipoInstrumento.all()
+
+    return render_template(
+        "user/actions/lists/instrumentos.html", tipos=tipos_instrumento
+    )

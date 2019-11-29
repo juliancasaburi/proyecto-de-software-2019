@@ -86,6 +86,8 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`nucleo` (
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `direccion` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `telefono` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+  `lat` float NOT NULL,
+  `lng` float NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -524,8 +526,8 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`instrumento` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `tipo_id` int(11) NOT NULL,
-  `num_inventario` text COLLATE utf8_unicode_ci NOT NULL,
-  `image_path` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `num_inventario` varchar(32) COLLATE utf8_unicode_ci NOT NULL UNIQUE,
+  `image_path` varchar(1024) COLLATE utf8_unicode_ci,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),

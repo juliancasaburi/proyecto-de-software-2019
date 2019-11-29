@@ -13,7 +13,6 @@ from flask import (
 from flaskps.db import get_db
 
 from flaskps.forms.estudiante.form_estudiante_create import EstudianteCreateForm
-from flaskps.helpers import permission
 
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.barrio import Barrio
@@ -43,44 +42,29 @@ def get_estudiantes():
     estudiantes = Estudiante.all()
 
     for dict_item in estudiantes:
-        dict_item["ID"] = dict_item["id"]
-        del dict_item["id"]
-        dict_item["Activo"] = dict_item["activo"]
-        del dict_item["activo"]
-        dict_item["Nombre"] = dict_item["nombre"]
-        del dict_item["nombre"]
-        dict_item["Apellido"] = dict_item["apellido"]
-        del dict_item["apellido"]
-        dict_item["Fecha de nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
-        del dict_item["fecha_nac"]
+        dict_item["fecha_nac"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
         loc = localidad(dict_item["localidad_id"])
-        dict_item["Localidad"] = loc["nombre"]
+        dict_item["localidad"] = loc["nombre"]
         del dict_item["localidad_id"]
-        dict_item["Domicilio"] = dict_item["domicilio"]
-        del dict_item["domicilio"]
-        dict_item["Género"] = dict_item["g.nombre"]
+        dict_item["género"] = dict_item["g.nombre"]
         del dict_item["g.nombre"]
-        dict_item["Escuela"] = dict_item["es.nombre"]
+        dict_item["escuela"] = dict_item["es.nombre"]
         del dict_item["es.nombre"]
-        dict_item["Barrio"] = dict_item["b.nombre"]
+        dict_item["barrio"] = dict_item["b.nombre"]
         del dict_item["b.nombre"]
         tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
-        dict_item["Tipo de documento"] = tipo_doc["nombre"]
-        dict_item["Número de documento"] = dict_item["numero"]
+        dict_item["tipo_doc"] = tipo_doc["nombre"]
+        del dict_item["tipo_doc_id"]
+        dict_item["numero_doc"] = dict_item["numero"]
         del dict_item["numero"]
-        if dict_item["tel"]:
-            dict_item["Número telefónico"] = dict_item["tel"]
-        else:
-            dict_item["Número telefónico"] = "No tiene"
-        del dict_item["tel"]
-        dict_item["Nivel"] = dict_item["n.nombre"]
+        if "tel" not in dict_item:
+            dict_item["tel"] = "No tiene"
+        dict_item["nivel"] = dict_item["n.nombre"]
         del dict_item["n.nombre"]
-        dict_item["Responsable a cargo"] = dict_item["r.nombre"]
+        dict_item["responsable"] = dict_item["r.nombre"]
         del dict_item["r.nombre"]
-        dict_item["Creado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["updated_at"]
+        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        dict_item["updated_at"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
 
     estudiantes = jsonify(estudiantes)
 
@@ -272,7 +256,7 @@ def estudiante_data():
 
 
 def estudiante_table():
-    if not permission.has_permission("estudiante_index", session):
+    if not has_permission("estudiante_index", session):
         abort(401)
 
     loc = localidades()

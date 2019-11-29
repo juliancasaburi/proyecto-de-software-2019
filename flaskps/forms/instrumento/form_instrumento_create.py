@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import InputRequired
 from flask_uploads import UploadSet, IMAGES
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_wtf.file import FileField, FileAllowed
 
 
 images = UploadSet("images", IMAGES)
@@ -17,9 +17,5 @@ class InstrumentoCreateForm(FlaskForm):
         "num_inventario", [InputRequired(message="Complete el numero de inventario")]
     )
     photo = FileField(
-        "photo",
-        validators=[
-            FileRequired(message="Debe seleccionar una imagen"),
-            FileAllowed(images, "Solo se permiten imagenes!"),
-        ],
+        "photo", validators=[FileAllowed(images, "Solo se permiten imagenes!"),],
     )
