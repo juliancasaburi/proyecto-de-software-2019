@@ -25,66 +25,66 @@
         <div class="section">
             {% if is_authenticated(session) %}
                 <p class="subheader center light-blue white-text valign-wrapper"><i class="material-icons">person</i>Autenticado como: {{ session['user'] }}</p>
-                <li><a class="waves-effect waves-light" href="{{ url_for('user_profile') }}">Mi Cuenta</a></li>
+                <li><a class="waves-effect waves-ripple" href="{{ url_for('user_profile') }}">Mi Cuenta</a></li>
                 <li><a href="{{ url_for('auth_logout') }}">Cerrar sesión</a></li>
             {% endif %}
         </div>
         <div class="section">
             <p class="subheader light-blue white-text"><b>General</b></p>
-            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a class="waves-effect waves-ripple" href="{{ url_for('index') }}">Inicio</a></li>
             {% if not is_authenticated(session) %}
-                <li><a href="{{ url_for('auth_login') }}">Iniciar sesión</a></li>
+                <li><a class="waves-effect waves-ripple" href="{{ url_for('auth_login') }}">Iniciar sesión</a></li>
             {% endif %}
 
             <!-- dropdownUsuarios Structure -->
             <ul id="dropdownUsuarios" class="dropdown-content teal">
                 {% if has_permission('usuario_index', session) %}
-                    <li><a href="{{ url_for('user_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
                 {% if has_permission('usuario_new', session) %}
-                    <li><a href="{{ url_for('user_new_form') }}">Crear</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_new_form') }}">Crear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_destroy', session) %}
-                    <li><a href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
                 {% endif %}
                 {% if has_permission('usuario_update', session) %}
-                    <li><a href="{{ url_for('user_edit_form') }}">Editar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_edit_form') }}">Editar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownEstudiantes Structure -->
             <ul id="dropdownEstudiantes" class="dropdown-content teal">
                 {% if has_permission('estudiante_index', session) %}
-                    <li><a href="{{ url_for('estudiante_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('estudiante_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownDocentes Structure -->
             <ul id="dropdownDocentes" class="dropdown-content teal">
                 {% if has_permission('docente_index', session) %}
-                    <li><a href="{{ url_for('docente_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('docente_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownTalleres Structure -->
             <ul id="dropdownTalleres" class="dropdown-content teal">
                 <li><a href="#">Ver listado (próximamente)</a></li>
                 {% if has_permission('taller_new', session) %}
-                    <li><a href="{{ url_for('taller_new_form') }}">Crear</a></li>
-                    <li><a href="{{ url_for('taller_set_ciclo_form') }}">Asociar a ciclos lectivos</a></li>
-                    <li><a href="{{ url_for('taller_set_docentes_form') }}">Asociar docentes</a></li>
-                    <li><a href="{{ url_for('taller_set_estudiantes_form') }}">Asociar estudiantes</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_new_form') }}">Crear</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_ciclo_form') }}">Asociar a ciclos lectivos</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_docentes_form') }}">Asociar docentes</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_estudiantes_form') }}">Asociar estudiantes</a></li>
                 {% endif %}
-                <li><a href="#">Eliminar (próximamente)</a></li>
-                <li><a href="#">Editar (próximamente)</a></li>
+                <li><a class="waves-effect waves-ripple" href="#">Eliminar (próximamente)</a></li>
+                <li><a class="waves-effect waves-ripple" href="#">Editar (próximamente)</a></li>
             </ul>
             <!-- dropdownCiclosLectivos Structure -->
             <ul id="dropdownCiclosLectivos" class="dropdown-content teal">
                 {% if has_permission('ciclolectivo_index', session) %}
-                    <li><a href="{{ url_for('ciclo_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('ciclo_table') }}">Ver listado y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownInstrumentos Structure -->
             <ul id="dropdownInstrumentos" class="dropdown-content teal">
                 {% if has_permission('instrumento_index', session) %}
-                    <li><a href="{{ url_for('instrumento_table') }}">Ver y Administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('instrumento_table') }}">Ver y Administrar</a></li>
                 {% endif %}
             </ul>
 
@@ -92,7 +92,7 @@
                 <div class="section">
                     <p class="subheader light-blue white-text"><b>Acciones</b></p>
                 </div>
-                <li><a href="{{ url_for('user_dashboard') }}">Panel</a></li>
+                <li><a class="waves-effect waves-ripple" href="{{ url_for('user_dashboard') }}">Panel</a></li>
                 {% if has_permission('usuario_index', session) or has_permission('usuario_new', session) or has_permission('usuario_destroy', session) or has_permission('usuario_update', session) or has_permission('usuario_show', session) %}
                     <div class="divider"></div>
                     <div class="section">
@@ -144,7 +144,7 @@
                 {% if has_permission('config_update', session) %}
                     <div class="divider"></div>
                     <div class="section">
-                        <li><a class="modal-trigger" href="#modalConfiguracion">Editar Configuración</a></li>
+                        <li><a class="modal-trigger waves-effect waves-ripple" href="#modalConfiguracion">Editar Configuración</a></li>
                         <li><div class="switch center">
                             <p class="red white-text">Modo Mantenimiento</p>
                             <label>
