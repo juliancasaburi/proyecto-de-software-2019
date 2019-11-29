@@ -31,15 +31,13 @@ def get_instrumentos():
         tipo_instrumento = TipoInstrumento.find_by_id(dict_item["tipo_id"])
         dict_item["tipo"] = tipo_instrumento["nombre"]
         del dict_item["tipo_id"]
-        dict_item["registrado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["created_at"]
+        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
         if dict_item["updated_at"] is not None:
-            dict_item["actualizado"] = dict_item["updated_at"].strftime(
+            dict_item["updated_at"] = dict_item["updated_at"].strftime(
                 "%d-%m-%Y %H:%M:%S"
             )
         else:
-            dict_item["actualizado"] = "Nunca"
-        del dict_item["updated_at"]
+            dict_item["updated_at"] = "Nunca"
 
     instrumentos = jsonify(instrumentos)
 

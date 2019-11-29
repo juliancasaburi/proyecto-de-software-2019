@@ -39,25 +39,9 @@ def users():
     users = User.all()
 
     for dict_item in users:
-        dict_item["ID"] = dict_item["id"]
-        del dict_item["id"]
-        dict_item["Activo"] = dict_item["activo"]
-        del dict_item["activo"]
-        dict_item["Nombre"] = dict_item["first_name"]
-        del dict_item["first_name"]
-        dict_item["Apellido"] = dict_item["last_name"]
-        del dict_item["last_name"]
-        dict_item["Rol"] = dict_item["rol_nombre"]
-        del dict_item["rol_nombre"]
-        dict_item["Nombre de usuario"] = dict_item["username"]
-        del dict_item["username"]
         del dict_item["password"]
-        dict_item["Email"] = dict_item["email"]
-        del dict_item["email"]
-        dict_item["Registrado"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["created_at"]
-        dict_item["Actualizado"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
-        del dict_item["updated_at"]
+        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
+        dict_item["updated_at"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
 
     return users
 

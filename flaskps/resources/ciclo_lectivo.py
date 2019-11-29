@@ -78,19 +78,9 @@ def get_ciclos():
     CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
-    for ciclo in ciclos:
-        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
-        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
-
     for dict_item in ciclos:
-        dict_item["ID"] = dict_item["id"]
-        del dict_item["id"]
-        dict_item["Fecha de inicio"] = dict_item["fecha_ini"]
-        del dict_item["fecha_ini"]
-        dict_item["Fecha de fin"] = dict_item["fecha_fin"]
-        del dict_item["fecha_fin"]
-        dict_item["Semestre"] = dict_item["semestre"]
-        del dict_item["semestre"]
+        dict_item["fecha_ini"] = dict_item["fecha_ini"].strftime("%d-%m-%Y")
+        dict_item["fecha_fin"] = dict_item["fecha_fin"].strftime("%d-%m-%Y")
 
     ciclos = jsonify(ciclos)
 
