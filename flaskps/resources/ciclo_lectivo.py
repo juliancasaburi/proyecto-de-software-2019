@@ -4,7 +4,6 @@ from flask import request, session, abort, make_response, jsonify, render_templa
 from flaskps.db import get_db
 
 from flaskps.forms.ciclo.form_ciclo_create import CicloCreateForm
-from flaskps.helpers import permission
 
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -143,7 +142,7 @@ def get_talleres():
 
 
 def ciclo_table():
-    if not permission.has_permission("ciclolectivo_index", session):
+    if not has_permission("ciclolectivo_index", session):
         abort(401)
 
     CicloLectivo.db = get_db()

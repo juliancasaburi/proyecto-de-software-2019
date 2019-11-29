@@ -7,7 +7,6 @@ import json
 
 from flaskps.forms.docente.form_docente_create import DocenteCreateForm
 from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
-from flaskps.helpers import permission
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -218,7 +217,7 @@ def update():
 
 
 def docente_table():
-    if not permission.has_permission("docente_index", session):
+    if not has_permission("docente_index", session):
         abort(401)
 
     Genero.db = get_db()

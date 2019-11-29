@@ -1,13 +1,13 @@
 from flask import session, abort, make_response, jsonify, request
 
 from flaskps.db import get_db
-from flaskps.helpers import permission
+from flaskps.helpers.permission import has_permission
 from flaskps.models import siteconfig
 from flaskps.models.siteconfig import SiteConfig
 
 
 def maintenance_mode():
-    if not permission.has_permission("config_update", session):
+    if not has_permission("config_update", session):
         abort(401)
 
     SiteConfig.db = get_db()
@@ -27,7 +27,7 @@ def maintenance_mode():
 
 
 def config_update():
-    if not permission.has_permission("config_update", session):
+    if not has_permission("config_update", session):
         abort(401)
 
     params = request.form.to_dict()

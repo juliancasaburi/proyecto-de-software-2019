@@ -13,7 +13,6 @@ from flask import (
 from flaskps.db import get_db
 
 from flaskps.forms.estudiante.form_estudiante_create import EstudianteCreateForm
-from flaskps.helpers import permission
 
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.barrio import Barrio
@@ -272,7 +271,7 @@ def estudiante_data():
 
 
 def estudiante_table():
-    if not permission.has_permission("estudiante_index", session):
+    if not has_permission("estudiante_index", session):
         abort(401)
 
     loc = localidades()

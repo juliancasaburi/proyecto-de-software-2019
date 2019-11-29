@@ -1,6 +1,6 @@
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
-from flaskps.helpers import permission
+from flaskps.helpers.permission import has_permission
 
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -193,14 +193,14 @@ def set_estudiantes():
 
 
 def taller_new_form():
-    if not permission.has_permission("taller_new", session):
+    if not has_permission("taller_new", session):
         abort(401)
 
     return render_template("user/actions/taller_crear.html")
 
 
 def taller_set_docentes_form():
-    if not permission.has_permission("taller_update", session):
+    if not has_permission("taller_update", session):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -219,7 +219,7 @@ def taller_set_docentes_form():
 
 
 def taller_set_estudiantes_form():
-    if not permission.has_permission("taller_update", session):
+    if not has_permission("taller_update", session):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -240,7 +240,7 @@ def taller_set_estudiantes_form():
 
 
 def taller_set_ciclo_form():
-    if not permission.has_permission("taller_update", session):
+    if not has_permission("taller_update", session):
         abort(401)
 
     Taller.db = get_db()
