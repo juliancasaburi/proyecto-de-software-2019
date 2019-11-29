@@ -18,8 +18,8 @@ app.config.from_object(Config)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["JSON_AS_ASCII"] = False
 # Flask Uploads
-app.config['UPLOADED_FILES_DEST'] = os.path.join(app.root_path, 'static/uploads')
-app.config['UPLOADED_IMAGES_DEST'] = os.path.join(app.root_path, 'static/uploads')
+app.config["UPLOADED_FILES_DEST"] = os.path.join(app.root_path, "static/uploads")
+app.config["UPLOADED_IMAGES_DEST"] = os.path.join(app.root_path, "static/uploads")
 images = UploadSet("images", IMAGES)
 configure_uploads(app, images)
 # Mail Config

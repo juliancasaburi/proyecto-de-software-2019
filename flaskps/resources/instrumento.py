@@ -48,13 +48,15 @@ def create():
     responsecode = 201
 
     if form.validate_on_submit():
-        f = form.photo.data
-        filename = secure_filename(f.filename)
-        imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
-        f.save(imagepath)
-
         params = request.form.to_dict()
-        params["image_path"] = imagepath
+
+        # Si el usuario seleccionó una imagen
+        if request.files["photo"].filename != "":
+            f = form.photo.data
+            filename = secure_filename(f.filename)
+            imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
+            f.save(imagepath)
+            params["image_path"] = imagepath
 
         Instrumento.db = get_db()
         created = Instrumento.create(params)
