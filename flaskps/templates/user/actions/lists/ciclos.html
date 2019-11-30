@@ -154,7 +154,13 @@
                         {
                             data: null,
                             className: "center",
-                            defaultContent: '<a class="deleteBtn btn red"><i class=\"material-icons\">delete</i></a>'
+                            "render": function(data, type){
+                                if(type === 'display'){
+                                    data = '<a class="deleteButton btn red waves-effect waves-light hoverable"><i class="material-icons">delete</i></a>';
+                                }
+
+                                return data;
+                            }
                         },
                     {% endif %}
                 ],
