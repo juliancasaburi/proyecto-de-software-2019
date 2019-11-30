@@ -138,17 +138,9 @@
                         <div class="card-content">
                             <span class="card-title activator grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">more_vert</i></span>
                             {% if has_permission('ciclolectivo_index', session) %}
-                                <p><a href="{{ url_for('ciclo_table') }}">Ver listado</a></p>
+                                <p><a href="{{ url_for('ciclo_table') }}">Ver y administrar</a></p>
                             {% endif %}
                         </div>
-
-                        <div class="card-action">
-                            {% if has_permission('ciclolectivo_new', session) %}
-                                <a href="#modalAltaCiclo" class="modal-trigger">Crear</a>
-                            {% endif %}
-                        </div>
-
-                        {% include 'partials/modals/modal_alta_ciclo.html' %}
 
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
                             <span class="card-title grey-text text-darken-4">Ciclos lectivos<i class="material-icons right">close</i></span>

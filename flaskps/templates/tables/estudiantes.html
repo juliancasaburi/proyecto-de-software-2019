@@ -335,7 +335,7 @@
         $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
             var table = $('#tablaEstudiantes').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var eid = rowData.ID;
+            var eid = rowData['id'];
             $.ajax({
                 type: "GET",
                 url: "{{ url_for('estudiante') }}",
@@ -393,10 +393,10 @@
             $('#tablaEstudiantes').on('click', 'a.deleteButton', function (e) {
                 var table = $('#tablaEstudiantes').DataTable();
                 var rowData = table.row($(this).parents("tr")).data();
-                var eid = rowData.ID;
-                var estudiantename = rowData.Apellido + ", " + rowData.Nombre;
+                var eid = rowData['id'];
+                var estudiantename = rowData['apellido'] + ", " + rowData['nombre'];
                 var confirmText;
-                var estoyActivo = rowData.Activo == 1;
+                var estoyActivo = rowData['activo'] == 1;
                 if(estoyActivo)
                     confirmText = "bloquear";
                 else
