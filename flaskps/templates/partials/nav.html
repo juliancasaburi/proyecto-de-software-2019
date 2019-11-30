@@ -39,7 +39,7 @@
             <!-- dropdownUsuarios Structure -->
             <ul id="dropdownUsuarios" class="dropdown-content teal">
                 {% if has_permission('usuario_index', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_table') }}">Ver y administrar</a></li>
                 {% endif %}
                 {% if has_permission('usuario_new', session) %}
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('user_new_form') }}">Crear</a></li>
@@ -54,13 +54,13 @@
             <!-- dropdownEstudiantes Structure -->
             <ul id="dropdownEstudiantes" class="dropdown-content teal">
                 {% if has_permission('estudiante_index', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('estudiante_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('estudiante_table') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownDocentes Structure -->
             <ul id="dropdownDocentes" class="dropdown-content teal">
                 {% if has_permission('docente_index', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('docente_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('docente_table') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownTalleres Structure -->
@@ -78,7 +78,7 @@
             <!-- dropdownCiclosLectivos Structure -->
             <ul id="dropdownCiclosLectivos" class="dropdown-content teal">
                 {% if has_permission('ciclolectivo_index', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('ciclo_table') }}">Ver listado y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('ciclo_table') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownInstrumentos Structure -->
