@@ -215,6 +215,9 @@ app.add_url_rule(
 app.add_url_rule(
     "/instrumento/alta", "instrumento_new", instrumento.create, methods=["POST"]
 )
+app.add_url_rule(
+    "/instrumento_informacion", "instrumento_info", instrumento.instrumento_info
+)
 app.add_url_rule("/instrumento", "instrumento", instrumento.instrumento_data)
 app.add_url_rule(
     "/tablainstrumentos", "instrumento_table", instrumento.instrumento_table

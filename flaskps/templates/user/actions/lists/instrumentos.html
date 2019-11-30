@@ -55,6 +55,9 @@
                             <th>Num Inventario</th>
                             <th>Registrado</th>
                             <th>Actualizado</th>
+                            {% if has_permission('instrumento_show', session) %}
+                                <th class="nosort">Ver más</th>
+                            {% endif %}
                             {% if has_permission('instrumento_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -71,6 +74,9 @@
                             <th>Num Inventario</th>
                             <th>Registrado</th>
                             <th>Actualizado</th>
+                            {% if has_permission('instrumento_show', session) %}
+                                <th class="nosort">Ver más</th>
+                            {% endif %}
                             {% if has_permission('instrumento_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -157,6 +163,20 @@
                     {"data": "num_inventario"},
                     {"data": "created_at"},
                     {"data": "updated_at"},
+                    {% if has_permission('instrumento_show', session) %}
+                        {
+                            data: "id",
+                            className: "center",
+                            "render": function(data, type){
+                                if(type === 'display'){
+                                    let endpoint = "{{ url_for('instrumento_info') }}";
+                                    data = `<a href=${endpoint}?id=${data} class='btn green waves-effect waves-light hoverable'><i class='material-icons'>info</i></a>`;
+                                }
+
+                                return data;
+                            }
+                        },
+                    {% endif %}
                     {% if has_permission('instrumento_update', session) %}
                         {
                             data: null,
