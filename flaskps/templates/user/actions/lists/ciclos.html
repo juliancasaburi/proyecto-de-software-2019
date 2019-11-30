@@ -112,6 +112,7 @@
                     </ul>
                 </div>
                 <div class="modal-footer">
+                    <a class="resetFilters btn blue waves-effect waves-light hoverable tooltipped" data-position="left" data-tooltip="Reiniciar Filtros"><i class="material-icons">find_replace</i></a>
                     <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
                 </div>
             </div>
@@ -247,12 +248,5 @@
             });
         });
     </script>
-    <script>
-        // limpiar inputs
-        $('a.eraseFilter').on('click', function(e) {
-            var input = $(this).parent().parent().find("input");
-            input.val('');
-            input.change();
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
 {% endblock %}
