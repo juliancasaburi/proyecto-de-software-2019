@@ -106,7 +106,7 @@ app.add_url_rule(
 )
 
 # Dashboard
-app.add_url_rule("/dashboard", "user_dashboard", user.dashboard)
+app.add_url_rule("/panel", "user_dashboard", user.dashboard)
 
 # Roles
 app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
@@ -214,6 +214,9 @@ app.add_url_rule(
 # Instrumento
 app.add_url_rule(
     "/instrumento/alta", "instrumento_new", instrumento.create, methods=["POST"]
+)
+app.add_url_rule(
+    "/instrumento_informacion", "instrumento_info", instrumento.instrumento_info
 )
 app.add_url_rule("/instrumento", "instrumento", instrumento.instrumento_data)
 app.add_url_rule(

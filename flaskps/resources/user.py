@@ -388,7 +388,7 @@ def user_table():
     Role.db = get_db()
     roles = Role.all()
 
-    return render_template("user/actions/lists/usuarios.html", roles=roles)
+    return render_template("tables/usuarios.html", roles=roles)
 
 
 def user_edit_form():

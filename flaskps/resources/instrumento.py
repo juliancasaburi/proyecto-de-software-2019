@@ -103,7 +103,7 @@ def create():
             filename = secure_filename(filename)
             imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
             f.save(imagepath)
-            params["image_path"] = imagepath
+            params["image_path"] = "uploads/" + filename
 
         Instrumento.db = get_db()
         created = Instrumento.create(params)
@@ -207,6 +207,31 @@ def instrumento_table():
     TipoInstrumento.db = get_db()
     tipos_instrumento = TipoInstrumento.all()
 
-    return render_template(
-        "user/actions/lists/instrumentos.html", tipos=tipos_instrumento
-    )
+    return render_template("tables/instrumentos.html", tipos=tipos_instrumento)
+
+
+def instrumento_info():
+    if not has_permission("instrumento_show", session):
+        abort(401)
+
+    id_instrumento = request.args.get("id")
+    Instrumento.db = get_db()
+    instrumento = Instrumento.find_by_id(id_instrumento)
+
+    if instrumento:
+        # Tipo del instrumento
+        TipoInstrumento.db = get_db()
+        tipo = TipoInstrumento.find_by_id(instrumento["tipo_id"])
+        instrumento["tipo"] = tipo["nombre"]
+        instrumento["created_at"] = instrumento["created_at"].strftime(
+            "%d-%m-%Y %H:%M:%S"
+        )
+        if instrumento["updated_at"] is not None:
+            instrumento["updated_at"] = instrumento["updated_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+        else:
+            instrumento["updated_at"] = "Nunca"
+        return render_template("user/instrumento.html", instrumento=instrumento)
+    else:
+        abort(404)
