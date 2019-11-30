@@ -222,7 +222,7 @@ def docente_table():
     generos = Genero.all()
 
     return render_template(
-        "user/actions/lists/docentes.html",
+        "tables/docentes.html",
         localidades=localidades(),
         tipodoc=tipos_documento(),
         generos=generos,

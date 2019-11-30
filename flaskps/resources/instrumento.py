@@ -207,9 +207,7 @@ def instrumento_table():
     TipoInstrumento.db = get_db()
     tipos_instrumento = TipoInstrumento.all()
 
-    return render_template(
-        "user/actions/lists/instrumentos.html", tipos=tipos_instrumento
-    )
+    return render_template("tables/instrumentos.html", tipos=tipos_instrumento)
 
 
 def instrumento_info():
