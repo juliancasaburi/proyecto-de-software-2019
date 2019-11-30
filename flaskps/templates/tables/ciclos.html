@@ -156,7 +156,7 @@
                             className: "center",
                             "render": function(data, type){
                                 if(type === 'display'){
-                                    data = '<a class="deleteButton btn red waves-effect waves-light hoverable"><i class="material-icons">delete</i></a>';
+                                    data = '<a class="deleteBtn btn red waves-effect waves-light hoverable"><i class="material-icons">delete</i></a>';
                                 }
 
                                 return data;
@@ -234,7 +234,7 @@
         $('#tablaCiclos').on('click', 'a.deleteBtn', function (e) {
             var table = $('#tablaCiclos').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var cid = rowData.ID;
+            var cid = rowData['id'];
             $.ajax({
                 type: "POST",
                 url: "{{ url_for('ciclo_destroy') }}",
