@@ -106,7 +106,7 @@ app.add_url_rule(
 )
 
 # Dashboard
-app.add_url_rule("/dashboard", "user_dashboard", user.dashboard)
+app.add_url_rule("/panel", "user_dashboard", user.dashboard)
 
 # Roles
 app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
