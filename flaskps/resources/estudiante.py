@@ -279,7 +279,7 @@ def estudiante_table():
     escuelas = Escuela.all()
 
     return render_template(
-        "user/actions/lists/estudiantes.html",
+        "tables/estudiantes.html",
         localidades=loc,
         tipodoc=tipo_doc,
         generos=generos,
