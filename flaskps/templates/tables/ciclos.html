@@ -235,23 +235,28 @@
             var table = $('#tablaCiclos').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
             var cid = rowData['id'];
-            $.ajax({
-                type: "POST",
-                url: "{{ url_for('ciclo_destroy') }}",
-                data: {
-                    id: cid
-                },
-                success: function (response) {
-                    var toastText = response['msg'];
-                    var toastClass = response['type'];
-                    M.toast({html: toastText, classes: toastClass});
-                },
-                statusCode: {
-                    404: function (jqXHR) {
-                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+            var fecha_ini = rowData['fecha_ini'];
+            var fecha_fin = rowData['fecha_fin'];
+
+            if (confirm('¿Está seguro de eliminar el ciclo desde ' + fecha_ini + ' hasta ' + fecha_fin + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('ciclo_destroy') }}",
+                    data: {
+                        id: cid
                     },
-                }
-            });
+                    success: function (response) {
+                        var toastText = response['msg'];
+                        var toastClass = response['type'];
+                        M.toast({html: toastText, classes: toastClass});
+                    },
+                    statusCode: {
+                        404: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        },
+                    }
+                });
+            }
         });
     </script>
     <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
