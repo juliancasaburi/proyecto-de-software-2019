@@ -161,9 +161,13 @@ app.add_url_rule(
 
 # Taller
 app.add_url_rule("/taller/alta", "taller_new", taller.create, methods=["POST"])
+app.add_url_rule("/taller", "taller", taller.data)
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule("/tablatalleres", "taller_table", taller.taller_table)
 app.add_url_rule("/talleres", "taller_all", taller.get_talleres)
+app.add_url_rule(
+    "/taller/actualizar", "taller_update", taller.update, methods=["POST"]
+)
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )

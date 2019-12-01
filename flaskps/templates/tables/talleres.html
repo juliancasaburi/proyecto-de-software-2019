@@ -125,6 +125,9 @@
                 </div>
             </div>
 
+            {% if has_permission('taller_update', session) %}
+                {% include 'partials/modals/modal_editar_taller.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -133,6 +136,8 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalTaller.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#modalFilters').modal();
@@ -221,6 +226,31 @@
         });
     });
     </script>
-
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('#modalEditarTaller').modal();
+        });
+    </script>
+    <script>
+        // Editar taller
+        $('#tablaTalleres').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaTalleres').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var t_id = rowData['id'];
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller') }}",
+                data: {
+                    id: t_id
+                },
+                success: function (response) {
+                    dataToModalTaller(response);
+                    $('#modalEditarTaller').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
 {% endblock %}
