@@ -108,3 +108,6 @@ venv.bak/
 
 db/db.sqlite
 flask_session
+
+# User uploads
+flaskps/static/uploads/
