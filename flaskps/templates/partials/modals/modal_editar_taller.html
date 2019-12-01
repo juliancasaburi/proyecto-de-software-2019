@@ -1,0 +1,74 @@
+<div id="modalEditarTaller" class="modal">
+    <header class="modal-header">Editar Taller</header>
+    <form id="editarTaller" method="post" action="{{ url_for('taller_update') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <div class="row">
+                <input id="editar_id" name="id" type="number" hidden>
+                <div class="col s12 m6 input-field">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" name="nombre" class="validate" type="text" required>
+                </div>
+                <div class="col s12 m6 input-field">
+                    <label for="nombre_corto">Nombre corto</label>
+                    <input id="nombre_corto" name="nombre_corto" class="validate" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue waves-effect waves-button-input">Confirmar</button>
+            <button id="cancelarEditarTaller" class="btn red waves-effect waves-light">Reiniciar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#cancelarEditarTaller").click(function(e){
+            e.preventDefault();
+            var tid = $('#editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller') }}",
+                data: {
+                    id: tid
+                },
+                success: function (response) {
+                    dataToModalTaller(response);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#editarTaller');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalEditarTaller').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    $('#editarTaller').trigger("reset");
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    409: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    }
+                }
+            });
+        });
+    });
+</script>
