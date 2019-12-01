@@ -256,3 +256,32 @@ def taller_set_ciclo_form():
     return render_template(
         "user/actions/taller_asociar_ciclo.html", talleres=talleres, ciclos=ciclos
     )
+
+
+def taller_table():
+    if not has_permission("taller_index", session):
+        abort(401)
+
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    return render_template("tables/talleres.html", talleres=talleres)
+
+
+def talleres():
+    Taller.db = get_db()
+    all_talleres = Taller.all()
+
+    return all_talleres
+
+
+def get_talleres():
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    all_talleres = jsonify(talleres())
+
+    return make_response(all_talleres, 200)
