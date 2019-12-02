@@ -25,7 +25,24 @@
     $(document).ready(function() {
         $("#cancelar").click(function(e){
             e.preventDefault();
-            // HACER ESTO
+            $('#modal_select_ciclos').val(null);
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: $('#modal_id_taller').val()
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#modal_select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_select_ciclos').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+            $('select').formSelect();
         });
     });
 </script>

@@ -63,7 +63,8 @@ def set_ciclo():
         abort(401)
 
     params = request.form.to_dict()
-    params["ciclos"] = request.form.getlist("select_ciclos")
+    params['taller_id'] = params['modal_id_taller']
+    params["ciclos"] = request.form.getlist("modal_select_ciclos")
 
     Taller.db = get_db()
     created = Taller.set_ciclos(params)

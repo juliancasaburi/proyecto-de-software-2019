@@ -308,6 +308,7 @@
             var rowData = table.row($(this).parents("tr")).data();
             var t_id = rowData['id'];
             $('#modal_select_ciclos').val(null);
+            $('#modal_id_taller').val(t_id);
             $.ajax({
                 type: "GET",
                 url: "{{ url_for('taller_ciclos') }}",
