@@ -95,8 +95,8 @@ class Taller(object):
     @classmethod
     def ciclos(cls, t_id):
         sql = """
-                SELECT  ciclo_lectivo_id
-                FROM    ciclo_lectivo_taller
+                SELECT  clt.ciclo_lectivo_id, cl.fecha_ini, cl.fecha_fin, cl.semestre
+                FROM    ciclo_lectivo_taller clt INNER JOIN ciclo_lectivo cl on clt.ciclo_lectivo_id = cl.id
                 WHERE   taller_id = %s
             """
 

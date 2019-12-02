@@ -94,6 +94,10 @@ def get_ciclos():
     Taller.db = get_db()
     ciclos = Taller.ciclos(t_id)
 
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
+
     if ciclos is None:
         abort(404)
 

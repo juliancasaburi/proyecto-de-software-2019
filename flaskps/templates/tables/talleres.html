@@ -137,7 +137,10 @@
                 {% include 'partials/modals/modal_editar_taller.html' %}
             {% endif %}
             {% if has_permission('taller_update', session) %}
-                {% include 'partials/modals/modal_taller_asociar_ciclo.html' %}
+                {% include 'partials/modals/modal_taller_asociar_ciclos.html' %}
+            {% endif %}
+            {% if has_permission('taller_update', session) %}
+                {% include 'partials/modals/modal_taller_asociar_docentes.html' %}
             {% endif %}
         </div>
     </div>
@@ -303,6 +306,8 @@
                 }
             });
         });
+
+        //Asociar ciclos
         $('#tablaTalleres').on('click', 'a.asociarCiclosButton', function (e) {
             var table = $('#tablaTalleres').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
@@ -326,6 +331,38 @@
                 }
             });
             $('#modalAsociarCiclos').modal('open');
+        });
+
+        //Asociar docentes
+        $('#tablaTalleres').on('click', 'a.asociarDocentesButton', function (e) {
+            var table = $('#tablaTalleres').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var t_id = rowData['id'];
+            $('#modal_id_taller').val(t_id);
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: t_id
+                },
+                success: function (response) {
+                    $("#modal_select_ciclo").html('');
+                    console.log(response);
+                    if (response.length == 0) {
+                        M.toast({html: 'El taller no tiene ciclos lectivos asignados, asóciele alguno primero', classes: 'error'});
+                    }
+                    else {
+                        for (var key in response){
+                            $("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
+                        }
+                        $('#modal_select_ciclo').formSelect();
+                        $('#modalAsociarDocentes').modal('open');
+                    }
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
         });
     </script>
 {% endblock %}
