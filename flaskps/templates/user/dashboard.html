@@ -12,8 +12,12 @@
                 <h1>Panel</h1>
             </div>
         </div>
-        <a href="{{ url_for('administracion') }}">Ir al módulo de administración</a>
+
         <div class="row">
+            <h6>Temporal</h6>
+            <a href="{{ url_for('administracion') }}">Ir al módulo de administración</a>
+            <div class="divider"></div>
+
             {% if has_permission('config_update', session) %}
                 <div class="col s12">
                     <div class="card" style="overflow: visible;">

@@ -43,6 +43,15 @@
                             <th>Nombre</th>
                             <th>Nombre corto</th>
                             {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar ciclos</th>
+                            {% endif %}
+                            {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar docentes</th>
+                            {% endif %}
+                            {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar estudiantes</th>
+                            {% endif %}
+                            {% if has_permission('taller_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
                             {% if has_permission('taller_destroy', session) %}
@@ -55,6 +64,15 @@
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Nombre corto</th>
+                            {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar ciclos</th>
+                            {% endif %}
+                            {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar docentes</th>
+                            {% endif %}
+                            {% if has_permission('taller_update', session) %}
+                                <th class="nosort">Asignar estudiantes</th>
+                            {% endif %}
                             {% if has_permission('taller_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
@@ -118,6 +136,9 @@
             {% if has_permission('taller_update', session) %}
                 {% include 'partials/modals/modal_editar_taller.html' %}
             {% endif %}
+            {% if has_permission('taller_update', session) %}
+                {% include 'partials/modals/modal_taller_asociar_ciclo.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -147,6 +168,45 @@
                     {"data": "id"},
                     {"data": "nombre"},
                     {"data": "nombre_corto"},
+                    {% if has_permission('taller_update', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            "render": function(data, type){
+                                if(type === 'display'){
+                                    data = '<a class="asociarCiclosButton btn blue-grey waves-effect waves-light hoverable"><i class="fas fa-calendar-plus"></i></a>';
+                                }
+
+                                return data;
+                            }
+                        },
+                    {% endif %}
+                    {% if has_permission('taller_update', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            "render": function(data, type){
+                                if(type === 'display'){
+                                    data = '<a class="asociarDocentesButton btn blue-grey waves-effect waves-light hoverable"><i class="fas fa-chalkboard-teacher"></i></a>';
+                                }
+
+                                return data;
+                            }
+                        },
+                    {% endif %}
+                    {% if has_permission('taller_update', session) %}
+                        {
+                            data: null,
+                            className: "center",
+                            "render": function(data, type){
+                                if(type === 'display'){
+                                    data = '<a class="asociarEstudiantesButton btn blue-grey waves-effect waves-light hoverable"><i class="fas fa-user-graduate"></i></a>';
+                                }
+
+                                return data;
+                            }
+                        },
+                    {% endif %}
                     {% if has_permission('taller_update', session) %}
                         {
                             data: null,
@@ -219,6 +279,7 @@
     <script>
         $(document).ready(function(){
             $('#modalEditarTaller').modal();
+            $('#modalAsociarCiclos').modal();
         });
     </script>
     <script>
@@ -241,6 +302,29 @@
                     console.log("Error: ", errorMessage);
                 }
             });
+        });
+        $('#tablaTalleres').on('click', 'a.asociarCiclosButton', function (e) {
+            var table = $('#tablaTalleres').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var t_id = rowData['id'];
+            $('#modal_select_ciclos').val(null);
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: t_id
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#modal_select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_select_ciclos').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+            $('#modalAsociarCiclos').modal('open');
         });
     </script>
 {% endblock %}

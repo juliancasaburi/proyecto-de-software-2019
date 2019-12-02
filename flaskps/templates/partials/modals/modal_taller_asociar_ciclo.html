@@ -1,42 +1,45 @@
-<div id="modalTallerAsociar" class="modal">
-    <header class="modal-header">Asociar Taller a Ciclo Lectivo</header>
-    <form id="tallerAsociar" method="post" action="{{ url_for('taller_set_ciclo') }}">
+<div id="modalAsociarCiclos" class="modal">
+    <header class="modal-header">Asociar ciclos al taller</header>
+    <form id="tallerAsociarCiclos" method="post" action="{{ url_for('taller_set_ciclo') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <div class="row">
+                <input id="modal_id_taller" name="modal_id_taller" type="number" hidden>
                 <div class="col s12 input-field">
-                    <select id="select_taller" name="taller_id">
-                        <option value="" disabled selected>Selecciona un taller</option>
+                    <select id="modal_select_ciclos" multiple name="modal_select_ciclos">
+                        {% for ciclo in ciclos %}
+                            <option value="{{ciclo.id}}">[{{ciclo.fecha_ini}}] al [{{ciclo.fecha_fin}}]</option>
+                        {% endfor %}
                     </select>
-                    <label for="select_taller">Género</label>
-                </div>
-                <div class="col s12 input-field">
-                    <select id="select_ciclo" name="ciclo_id">
-                        <option value="" disabled selected>Selecciona un ciclo</option>
-                    </select>
-                    <label for="select_ciclo">Localidad</label>
+                    <label for="modal_select_ciclos">Ciclos</label>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn blue waves-effect waves-button-input">Asociar</button>
-            <button class="btn red waves-effect waves-light">Cancelar</button>
+            <button type="submit" class="btn blue waves-effect waves-button-input">Aplicar</button>
+            <button id="cancelar" class="btn red waves-effect waves-light">Cancelar</button>
         </div>
     </form>
 </div>
 <script>
     $(document).ready(function() {
-        var frm = $('#tallerAsociar');
+        $("#cancelar").click(function(e){
+            e.preventDefault();
+            // HACER ESTO
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#tallerAsociarCiclos');
 
         frm.submit(function (e) {
             e.preventDefault();
-            $('#modalTallerAsociar').modal('close');
             $.ajax({
                 type: frm.attr('method'),
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (response) {
-                    $('#tallerAsociar').trigger("reset");
                     var toastText = response['msg'];
                     var toastClass = response['type'];
                     M.toast({html: toastText, classes: toastClass});
