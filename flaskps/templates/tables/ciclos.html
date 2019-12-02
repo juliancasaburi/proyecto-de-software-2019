@@ -1,14 +1,5 @@
-{% extends "layout.html" %}
-{% block title %}Listado de ciclos lectivos - {{ siteconfig['titulo'] }}{% endblock %}
-{% block head %}
-    {{ super() }}
-    <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.material.min.css') }}" media="screen">
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/responsive.dataTables.min.css') }}" media="screen">
-{% endblock %}
-
 {% block main %}
-    <div class="container">
+    <div id="tab_ciclos">
         <div class="section">
 
             <div class="row">
@@ -116,7 +107,6 @@
                     <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
                 </div>
             </div>
-
         </div>
     </div>
 {% endblock %}

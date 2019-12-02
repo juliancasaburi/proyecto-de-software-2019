@@ -40,7 +40,7 @@ bcrypt = Bcrypt(app)
 # ---------------- .App Config -----------------
 
 # Resources
-from flaskps.resources import auth, ciclo_lectivo
+from flaskps.resources import auth, ciclo_lectivo, administracion
 from flaskps.resources import user
 from flaskps.resources import role
 from flaskps.resources import docente
@@ -234,4 +234,9 @@ app.add_url_rule(
     "instrumento_update",
     instrumento.update,
     methods=["POST"],
+)
+
+#Módulo administrativo
+app.add_url_rule(
+    "/administracion", "administracion", administracion.administracion
 )

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}{{ siteconfig['titulo'] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.material.min.css') }}" media="screen">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/responsive.dataTables.min.css') }}" media="screen">
+{% endblock %}
+
+{% block main %}
+    <div class="container" style="margin-top:7rem; margin-bottom: 7rem">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s4"><a href="#tab_ciclos" class="active">Ciclos lectivos</a></li>
+                    <li class="tab col s4"><a href="#tab_talleres">Talleres</a></li>
+                    <li class="tab col s4"><a href="#tab_horarios">Horarios profesores</a></li>
+                </ul>
+            </div>
+            {% include 'tables/ciclos.html' %}
+            {% include 'tables/talleres.html' %}
+            <div id="tab_horarios" class="col s12">Horarios profesores</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $('.tabs').tabs();
+        });
+    </script>
+{% endblock %}

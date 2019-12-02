@@ -12,6 +12,7 @@
                 <h1>Panel</h1>
             </div>
         </div>
+        <a href="{{ url_for('administracion') }}">Ir al módulo de administración</a>
         <div class="row">
             {% if has_permission('config_update', session) %}
                 <div class="col s12">
