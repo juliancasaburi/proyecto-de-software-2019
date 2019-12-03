@@ -52,9 +52,26 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#cancelar").click(function(e){
+        $('#modalAsociarDocentes').find('#cancelar').click(function(e){
             e.preventDefault();
-            $('select').formSelect();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclo_docentes') }}",
+                data: {
+                    t_id: $('#modalAsociarDocentes').find('#modal_id_taller').val(),
+                    c_id: $('#modal_select_ciclo').val()
+                },
+                success: function (response) {
+                    $('#modal_select_docentes').val(null);
+                    for (var key in response){
+                        $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_select_docentes').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
         });
     });
 </script>
