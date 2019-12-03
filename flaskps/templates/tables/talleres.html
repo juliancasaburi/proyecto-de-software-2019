@@ -283,6 +283,7 @@
         $(document).ready(function(){
             $('#modalEditarTaller').modal();
             $('#modalAsociarCiclos').modal();
+            $('#modalAsociarDocentes').modal();
         });
     </script>
     <script>
@@ -338,7 +339,7 @@
             var table = $('#tablaTalleres').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
             var t_id = rowData['id'];
-            $('#modal_id_taller').val(t_id);
+            $('#modalAsociarDocentes').find('#modal_id_taller').val(t_id);
             $.ajax({
                 type: "GET",
                 url: "{{ url_for('taller_ciclos') }}",
@@ -351,7 +352,7 @@
                         M.toast({html: 'El taller no tiene ciclos lectivos asignados, asóciele alguno primero', classes: 'error'});
                     }
                     else {
-                        for (var key in response){
+                        for (var key in response) {
                             $("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
                         }
                         $('#modal_select_ciclo').formSelect();
@@ -359,11 +360,10 @@
                             type: "GET",
                             url: "{{ url_for('taller_ciclo_docentes') }}",
                             data: {
-                                t_id: $('#modal_id_taller').val(),
+                                t_id: t_id,
                                 c_id: $('#modal_select_ciclo').val()
                             },
                             success: function (response) {
-                                console.log(response);
                                 $('#modal_select_docentes').val(null);
                                 for (var key in response){
                                     $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);

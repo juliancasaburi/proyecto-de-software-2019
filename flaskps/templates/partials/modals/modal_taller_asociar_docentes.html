@@ -2,11 +2,11 @@
     <header class="modal-header">Asociar docentes al taller</header>
     <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_docentes') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input id="modal_id_taller" name="modal_id_taller" type="number" hidden>
+        <input id="modal_id_taller" name="taller_id" type="number" hidden>
         <div class="modal-content">
             <div class="row">
                 <div class="col s12 input-field">
-                    <select id="modal_select_ciclo" name="modal_select_ciclo" required>
+                    <select id="modal_select_ciclo" name="ciclo_lectivo_id" required>
                     </select>
                     <label for="modal_select_ciclo">Ciclo lectivo</label>
                 </div>
@@ -33,11 +33,10 @@
                 type: "GET",
                 url: "{{ url_for('taller_ciclo_docentes') }}",
                 data: {
-                    t_id: $('#modal_id_taller').val(),
+                    t_id: $('#modalAsociarDocentes').find('#modal_id_taller').val(),
                     c_id: $('#modal_select_ciclo').val()
                 },
                 success: function (response) {
-                    console.log(response);
                     $('#modal_select_docentes').val(null);
                     for (var key in response){
                         $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
@@ -61,7 +60,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        var frm = $('#tallerAsociarCiclos');
+        var frm = $('#tallerAsociarDocentes');
         frm.submit(function (e) {
             e.preventDefault();
             $.ajax({
@@ -78,6 +77,7 @@
                         M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                     },
                     500: function (jqXHR) {
+                        console.log(jqXHR);
                         M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                     }
                 }

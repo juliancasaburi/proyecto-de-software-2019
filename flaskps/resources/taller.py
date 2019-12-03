@@ -131,7 +131,7 @@ def set_docentes():
         abort(401)
 
     params = request.form.to_dict()
-    params["docentes"] = request.form.getlist("select_docentes")
+    params["docentes"] = request.form.getlist("modal_select_docentes")
 
     # TODO:
     Taller.db = get_db()
