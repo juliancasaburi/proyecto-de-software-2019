@@ -347,7 +347,6 @@
                 },
                 success: function (response) {
                     $("#modal_select_ciclo").html('');
-                    console.log(response);
                     if (response.length == 0) {
                         M.toast({html: 'El taller no tiene ciclos lectivos asignados, asóciele alguno primero', classes: 'error'});
                     }
@@ -356,6 +355,25 @@
                             $("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
                         }
                         $('#modal_select_ciclo').formSelect();
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ url_for('taller_ciclo_docentes') }}",
+                            data: {
+                                t_id: $('#modal_id_taller').val(),
+                                c_id: $('#modal_select_ciclo').val()
+                            },
+                            success: function (response) {
+                                console.log(response);
+                                $('#modal_select_docentes').val(null);
+                                for (var key in response){
+                                    $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                                }
+                                $('#modal_select_docentes').formSelect();
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) {
+                                console.log("Error: ", errorMessage);
+                            }
+                        });
                         $('#modalAsociarDocentes').modal('open');
                     }
                 },

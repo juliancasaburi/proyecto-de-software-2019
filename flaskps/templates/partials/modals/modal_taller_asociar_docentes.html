@@ -11,12 +11,12 @@
                     <label for="modal_select_ciclo">Ciclo lectivo</label>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="select_docentes" multiple name="select_docentes">
+                    <select id="modal_select_docentes" multiple name="modal_select_docentes">
                         {% for docente in docentes %}
                             <option value="{{docente.id}}">{{docente.apellido}}, {{docente.nombre}}</option>
                         {% endfor %}
                     </select>
-                    <label for="select_docentes">Docentes</label>
+                    <label for="modal_select_docentes">Docentes</label>
                 </div>
             </div>
         </div>
@@ -26,6 +26,31 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $("#modal_select_ciclo").on('change', function(e){
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclo_docentes') }}",
+                data: {
+                    t_id: $('#modal_id_taller').val(),
+                    c_id: $('#modal_select_ciclo').val()
+                },
+                success: function (response) {
+                    console.log(response);
+                    $('#modal_select_docentes').val(null);
+                    for (var key in response){
+                        $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_select_docentes').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $("#cancelar").click(function(e){
