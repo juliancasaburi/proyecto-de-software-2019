@@ -142,4 +142,4 @@ def ciclo_table():
         ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
         ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
-    return render_template("tables/ciclos.html", ciclos=ciclos)
+    return render_template("partials/tabs/ciclos.html", ciclos=ciclos)

@@ -271,7 +271,7 @@ def taller_table():
     Taller.db = get_db()
     talleres = Taller.all()
 
-    return render_template("tables/talleres.html", talleres=talleres)
+    return render_template("partials/tabs/talleres.html", talleres=talleres)
 
 
 def talleres():
