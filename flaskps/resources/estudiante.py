@@ -254,7 +254,10 @@ def estudiante_data():
 
 
 def estudiante_table():
-    if not has_permission("estudiante_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("estudiante_index", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     loc = localidades()

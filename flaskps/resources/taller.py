@@ -190,14 +190,20 @@ def set_estudiantes():
 
 
 def taller_new_form():
-    if not has_permission("taller_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_new", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     return render_template("user/actions/taller_crear.html")
 
 
 def taller_set_docentes_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -216,7 +222,10 @@ def taller_set_docentes_form():
 
 
 def taller_set_estudiantes_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -237,7 +246,10 @@ def taller_set_estudiantes_form():
 
 
 def taller_set_ciclo_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Taller.db = get_db()
@@ -256,20 +268,16 @@ def taller_set_ciclo_form():
 
 
 def taller_table():
-    if not has_permission("taller_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_index", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Taller.db = get_db()
     talleres = Taller.all()
 
     return render_template("tables/talleres.html", talleres=talleres)
-
-
-def talleres():
-    Taller.db = get_db()
-    all_talleres = Taller.all()
-
-    return all_talleres
 
 
 def get_talleres():
@@ -279,7 +287,10 @@ def get_talleres():
     ):
         abort(401)
 
-    all_talleres = jsonify(talleres())
+    Taller.db = get_db()
+    all_talleres = Taller.all()
+
+    all_talleres = jsonify(all_talleres)
 
     return make_response(all_talleres, 200)
 

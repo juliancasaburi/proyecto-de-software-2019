@@ -67,7 +67,7 @@ def instrumento_data():
 
 def create():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_new", session) or (
+    if not has_permission("instrumento_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -198,7 +198,10 @@ def update():
 
 
 def instrumento_table():
-    if not has_permission("instrumento_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("instrumento_index", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     # Tipos de instrumentos para el select
@@ -209,7 +212,10 @@ def instrumento_table():
 
 
 def instrumento_info():
-    if not has_permission("instrumento_show", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("instrumento_show", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     id_instrumento = request.args.get("id")

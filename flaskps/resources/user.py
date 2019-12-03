@@ -65,7 +65,10 @@ def collect_data_serverside(req):
 
 
 def serverside_table_content():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     data = collect_data_serverside(request)
@@ -263,8 +266,11 @@ def update():
 
 
 def dashboard():
-    if not authenticated(session):
-        return render_template("auth/login.html")
+    s_config = siteconfig.get_config()
+    if not authenticated(session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
     else:
         Role.db = get_db()
         roles = Role.all()
@@ -273,7 +279,10 @@ def dashboard():
 
 
 def profile():
-    if not authenticated(session):
+    s_config = siteconfig.get_config()
+    if not authenticated(session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     username = session.get("user")
@@ -382,7 +391,10 @@ def user_data():
 
 
 def user_table():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -392,7 +404,10 @@ def user_table():
 
 
 def user_edit_form():
-    if not has_permission("usuario_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_update", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -402,7 +417,10 @@ def user_edit_form():
 
 
 def user_destroy_form():
-    if not has_permission("usuario_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_destroy", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -412,7 +430,10 @@ def user_destroy_form():
 
 
 def user_new_form():
-    if not has_permission("usuario_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_new", session) or (
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
