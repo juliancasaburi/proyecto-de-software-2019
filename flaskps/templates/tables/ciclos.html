@@ -14,7 +14,7 @@
                         <span class="table-title">Ciclos lectivos</span>
                         <div class="actions">
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaCiclo" data-position="top" data-tooltip="Crear ciclo lectivo"><i class="material-icons">add</i></a>
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFiltersCiclo" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
                         </div>
@@ -54,13 +54,13 @@
             </div>
 
             <div class="fixed-action-btn">
-                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
+                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFiltersCiclo" data-position="left" data-tooltip="Filtros">
                     <i class="large material-icons">search</i>
                 </a>
             </div>
 
             <!-- Modal Structure -->
-            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+            <div id="modalFiltersCiclo" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
                     <h3 class="header">Filtrar el listado de Ciclos</h3>
                     <ul class="collection">
@@ -203,7 +203,7 @@
     });
     </script>
     <script>
-        $('#modalFilters').modal({
+        $('#modalFiltersCiclo').modal({
                 dismissible: true, // Modal can be dismissed by clicking outside of the modal
                 opacity: .5, // Opacity of modal background
                 inDuration: 300, // Transition in duration

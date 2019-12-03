@@ -13,25 +13,25 @@
                         <span class="table-title">Talleres</span>
                         <div class="actions">
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="{{ url_for('taller_new_form') }}" data-position="top" data-tooltip="Crear taller"><i class="material-icons">add</i></a>
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFiltersTaller" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
                         </div>
                     </div>
                     <div hidden id="progress" class="row">
-                        <p class="teal-text center"><b>Operación en progreso ...</b></p>
+                        <p class="teal-text center"><b>Operación en progreso...</b></p>
                         <div class="progress">
                             <div class="indeterminate orange"></div>
                         </div>
                     </div>
                     <div hidden id="actionSuccess" class="row">
-                        <p class="teal-text center"><b>Operación exitosa!</b></p>
+                        <p class="teal-text center"><b>¡Operación exitosa!</b></p>
                         <div class="progress">
                             <div class="determinate green" style="width: 100%"></div>
                         </div>
                     </div>
                     <div hidden id="actionError" class="row">
-                        <p class="teal-text center"><b>Ha Ocurrido un error</b></p>
+                        <p class="teal-text center"><b>Ha ocurrido un error</b></p>
                         <div class="progress">
                             <div class="determinate red" style="width: 100%"></div>
                         </div>
@@ -91,13 +91,13 @@
             </div>
 
             <div class="fixed-action-btn">
-                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFilters" data-position="left" data-tooltip="Filtros">
+                <a class="btn-floating btn-large tooltipped modal-trigger teal waves-effect waves-light" href="#modalFiltersTaller" data-position="left" data-tooltip="Filtros">
                     <i class="large material-icons">search</i>
                 </a>
             </div>
 
             <!-- Modal Structure -->
-            <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
+            <div id="modalFiltersTaller" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
                     <h3 class="header">Filtrar el listado de Talleres</h3>
                     <ul class="collection">
@@ -154,7 +154,7 @@
     <script src="{{ url_for('static', filename='js/dataToModalTaller.js') }}"></script>
     <script>
         $(document).ready(function(){
-            $('#modalFilters').modal();
+            $('#modalFiltersTaller').modal();
             $('.tooltipped').tooltip();
         });
     </script>
