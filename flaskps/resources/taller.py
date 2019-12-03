@@ -1,5 +1,6 @@
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
+from flaskps.forms.taller.form_taller_update import TallerUpdateForm
 from flaskps.helpers.permission import has_permission
 
 from flaskps.models import siteconfig
@@ -256,3 +257,90 @@ def taller_set_ciclo_form():
     return render_template(
         "user/actions/taller_asociar_ciclo.html", talleres=talleres, ciclos=ciclos
     )
+
+
+def taller_table():
+    if not has_permission("taller_index", session):
+        abort(401)
+
+    Taller.db = get_db()
+    talleres = Taller.all()
+
+    return render_template("tables/talleres.html", talleres=talleres)
+
+
+def talleres():
+    Taller.db = get_db()
+    all_talleres = Taller.all()
+
+    return all_talleres
+
+
+def get_talleres():
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    all_talleres = jsonify(talleres())
+
+    return make_response(all_talleres, 200)
+
+
+def data():
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_show", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    Taller.db = get_db()
+    t_id = request.args.get("id")
+    taller = Taller.find_by_id(t_id)
+    if taller != None:
+        data = jsonify(taller)
+        return make_response(data, 200)
+    else:
+        return abort(404)
+
+
+def update():
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    form = TallerUpdateForm()
+
+    op_response = dict()
+    responsecode = 201
+
+    if form.validate_on_submit():
+        params = request.form.to_dict()
+
+        Taller.db = get_db()
+
+        updated = Taller.update(params)
+
+        if updated:
+            op_response["msg"] = "Se ha modificado el taller con éxito"
+            op_response["type"] = "success"
+        else:
+            op_response["msg"] = "Ha ocurrido un error al editar el taller"
+            op_response["type"] = "error"
+            abort(make_response(jsonify(op_response), 409))
+
+    else:
+        if len(form.errors) >= 2:
+            op_response["msg"] = "Complete todos los datos del taller a modificar"
+            op_response["type"] = "error"
+        else:
+            error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
+            op_response["msg"] = error_msg
+            op_response["type"] = "error"
+
+        abort(make_response(jsonify(op_response), 500))
+
+    return make_response(jsonify(op_response), responsecode)

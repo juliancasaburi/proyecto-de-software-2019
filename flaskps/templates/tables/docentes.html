@@ -170,6 +170,7 @@
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataToModalDocente.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#modalFilters').modal();
@@ -235,6 +236,7 @@
                     "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
+                    "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -253,6 +255,7 @@
 
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
+                customRedraw(table);
             }, 5000 );
         } );
     </script>

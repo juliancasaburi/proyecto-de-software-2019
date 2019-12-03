@@ -207,13 +207,14 @@ def destroy():
 
     params = json.loads(request.data)
     eid = params["id"]
-    activo = params["activo"]
 
     Estudiante.db = get_db()
     success = Estudiante.delete(eid)
 
     op_response = dict()
     responsecode = 200
+
+    activo = params["activo"]
 
     if success:
         condicion = "bloqueado" if activo else "activado"

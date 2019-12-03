@@ -125,6 +125,7 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
@@ -138,7 +139,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaCiclos').DataTable( {
+            let table = $('#tablaCiclos').DataTable( {
                 "ajax": {
                     "url": "{{ url_for('ciclo_all') }}",
                     "dataType": "json",
@@ -175,6 +176,7 @@
                     "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
+                    "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -184,8 +186,8 @@
                 "scrollX": true
             } );
             setInterval( function () {
-                var table = $('#tablaCiclos').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
+                customRedraw(table);
             }, 5000 );
         } );
     </script>
@@ -233,25 +235,35 @@
         // Borrar ciclo
         $('#tablaCiclos').on('click', 'a.deleteBtn', function (e) {
             var table = $('#tablaCiclos').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
+            var tRow = $(this).parents("tr");
+            var rowData = table.row(tRow).data();
             var cid = rowData['id'];
-            $.ajax({
-                type: "POST",
-                url: "{{ url_for('ciclo_destroy') }}",
-                data: {
-                    id: cid
-                },
-                success: function (response) {
-                    var toastText = response['msg'];
-                    var toastClass = response['type'];
-                    M.toast({html: toastText, classes: toastClass});
-                },
-                statusCode: {
-                    404: function (jqXHR) {
-                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+            var fecha_ini = rowData['fecha_ini'];
+            var fecha_fin = rowData['fecha_fin'];
+
+            if (confirm('¿Está seguro de eliminar el ciclo desde ' + fecha_ini + ' hasta ' + fecha_fin + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('ciclo_destroy') }}",
+                    data: {
+                        id: cid
                     },
-                }
-            });
+                    success: function (response) {
+                        table
+                            .row( tRow )
+                            .remove()
+                            .draw('full-hold');
+                        var toastText = response['msg'];
+                        var toastClass = response['type'];
+                        M.toast({html: toastText, classes: toastClass});
+                    },
+                    statusCode: {
+                        404: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        },
+                    }
+                });
+            }
         });
     </script>
     <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>

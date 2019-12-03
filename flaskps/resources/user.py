@@ -49,7 +49,7 @@ def users():
 def get_users():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -75,7 +75,7 @@ def serverside_table_content():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -137,7 +137,7 @@ def create():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_destroy", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -150,13 +150,16 @@ def destroy():
     op_response = dict()
     responsecode = 200
 
+    activo = params["activo"]
+
     if success:
         # TODO: Email notificando bloqueo de la cuenta
-
-        op_response["msg"] = "Se ha bloqueado/activado al usuario exitosamente"
+        condicion = "bloqueado" if activo else "activado"
+        op_response["msg"] = "Se ha " + condicion + " al usuario exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El usuario a bloquear/activar no existe"
+        condicion = "bloquear" if activo else "activar"
+        op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
         responsecode = 404
 
@@ -166,7 +169,7 @@ def destroy():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_update", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -297,7 +300,7 @@ def profile():
 def email_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -323,7 +326,7 @@ def email_update():
 def password_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -349,7 +352,7 @@ def password_update():
 def user_data():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

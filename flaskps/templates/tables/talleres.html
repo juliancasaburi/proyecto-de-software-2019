@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Listado de Instrumentos - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Listado de Talleres - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
     <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
@@ -13,55 +13,49 @@
 
             <div class="row">
                 <div class="col s12 center">
-                    <h1>Listado de Instrumentos</h1>
+                    <h1>Listado de Talleres</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="card material-table">
                     <div class="table-header">
-                        <span class="table-title">Instrumentos</span>
+                        <span class="table-title">Talleres</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaInstrumento" data-position="top" data-tooltip="Registrar instrumento"><i class="material-icons">add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="{{ url_for('taller_new_form') }}" data-position="top" data-tooltip="Crear taller"><i class="material-icons">add</i></a>
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
                         </div>
                     </div>
                     <div hidden id="progress" class="row">
-                        <p class="teal-text center"><b>Operación en progreso...</b></p>
+                        <p class="teal-text center"><b>Operación en progreso ...</b></p>
                         <div class="progress">
                             <div class="indeterminate orange"></div>
                         </div>
                     </div>
                     <div hidden id="actionSuccess" class="row">
-                        <p class="teal-text center"><b>¡Operación exitosa!</b></p>
+                        <p class="teal-text center"><b>Operación exitosa!</b></p>
                         <div class="progress">
                             <div class="determinate green" style="width: 100%"></div>
                         </div>
                     </div>
                     <div hidden id="actionError" class="row">
-                        <p class="teal-text center"><b>Ha ocurrido un error</b></p>
+                        <p class="teal-text center"><b>Ha Ocurrido un error</b></p>
                         <div class="progress">
                             <div class="determinate red" style="width: 100%"></div>
                         </div>
                     </div>
-                    <table id="tablaInstrumentos" class="highlight nowrap" style="width:100%">
+                    <table id="tablaTalleres" class="highlight nowrap" style="width:100%">
                         <thead>
                         <tr class="orange">
                             <th>ID</th>
                             <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Num Inventario</th>
-                            <th>Registrado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('instrumento_show', session) %}
-                                <th class="nosort">Ver más</th>
-                            {% endif %}
-                            {% if has_permission('instrumento_update', session) %}
+                            <th>Nombre corto</th>
+                            {% if has_permission('taller_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('instrumento_destroy', session) %}
+                            {% if has_permission('taller_destroy', session) %}
                                 <th class="nosort">Eliminar</th>
                             {% endif %}
                         </tr>
@@ -70,17 +64,11 @@
                         <tr class="orange">
                             <th>ID</th>
                             <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Num Inventario</th>
-                            <th>Registrado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('instrumento_show', session) %}
-                                <th class="nosort">Ver más</th>
-                            {% endif %}
-                            {% if has_permission('instrumento_update', session) %}
+                            <th>Nombre corto</th>
+                            {% if has_permission('taller_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('instrumento_destroy', session) %}
+                            {% if has_permission('taller_destroy', session) %}
                                 <th class="nosort">Eliminar</th>
                             {% endif %}
                         </tr>
@@ -88,14 +76,6 @@
                     </table>
                 </div>
             </div>
-
-            {% if has_permission('instrumento_new', session) %}
-                {% include 'partials/modals/modal_alta_instrumento.html' %}
-            {% endif %}
-
-            {% if has_permission('instrumento_update', session) %}
-                {% include 'partials/modals/modal_editar_instrumento.html' %}
-            {% endif %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -111,17 +91,29 @@
             <!-- Modal Structure -->
             <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
-                    <h3 class="header">Filtrar el listado de Instrumentos</h3>
+                    <h3 class="header">Filtrar el listado de Talleres</h3>
                     <ul class="collection">
                         <li class="collection-item">
                             <div class="row valign-wrapper center-align">
                                 <div class="input-field col s10">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input class="filterInstrumento" id="filterNombreInstrumento" type="text">
-                                    <label for="filterNombreInstrumento">Filtrar por nombre</label>
+                                    <input id="filterNombreTaller" type="text">
+                                    <label for="filterNombreTaller">Filtrar por nombre</label>
                                 </div>
                                 <div class="col s2">
-                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser"></i></a>
+                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="collection-item">
+                            <div class="row valign-wrapper center-align">
+                                <div class="input-field col s10">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input id="filterNombreCortoTaller" type="text">
+                                    <label for="filterNombreCortoTaller">Filtrar por nombre corto</label>
+                                </div>
+                                <div class="col s2">
+                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
                                 </div>
                             </div>
                         </li>
@@ -133,6 +125,9 @@
                 </div>
             </div>
 
+            {% if has_permission('taller_update', session) %}
+                {% include 'partials/modals/modal_editar_taller.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -141,18 +136,20 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalInstrumento.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalTaller.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
+            $('#modalFilters').modal();
             $('.tooltipped').tooltip();
         });
     </script>
     <script>
         $(document).ready(function() {
-            let table = $('#tablaInstrumentos').DataTable( {
+            let table = $('#tablaTalleres').DataTable( {
                 "ajax": {
-                    "url": "{{ url_for('instrumento_all') }}",
+                    "url": "{{ url_for('taller_all') }}",
                     "dataType": "json",
                     "dataSrc": "",
                     "contentType":"application/json"
@@ -160,27 +157,10 @@
                 "columns": [
                     {"data": "id"},
                     {"data": "nombre"},
-                    {"data": "tipo"},
-                    {"data": "num_inventario"},
-                    {"data": "created_at"},
-                    {"data": "updated_at"},
-                    {% if has_permission('instrumento_show', session) %}
+                    {"data": "nombre_corto"},
+                    {% if has_permission('taller_update', session) %}
                         {
-                            data: "id",
-                            className: "center",
-                            "render": function(data, type){
-                                if(type === 'display'){
-                                    let endpoint = "{{ url_for('instrumento_info') }}";
-                                    data = `<a href=${endpoint}?id=${data} class='btn green waves-effect waves-light hoverable'><i class='material-icons'>info</i></a>`;
-                                }
-
-                                return data;
-                            }
-                        },
-                    {% endif %}
-                    {% if has_permission('instrumento_update', session) %}
-                        {
-                            "data": null,
+                            data: null,
                             className: "center",
                             "render": function(data, type){
                                 if(type === 'display'){
@@ -191,9 +171,9 @@
                             }
                         },
                     {% endif %}
-                    {% if has_permission('instrumento_destroy', session) %}
+                    {% if has_permission('taller_destroy', session) %}
                         {
-                            "data": null,
+                            data: null,
                             className: "center",
                             "render": function(data, type){
                                 if(type === 'display'){
@@ -216,7 +196,6 @@
                     "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
-                    "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -231,59 +210,43 @@
             }, 5000 );
         } );
     </script>
+    <script> // Filtros
+    $(document).ready(function(){
+        var table = $('#tablaTalleres').DataTable();
+        $("#filterNombreTaller").on("keyup change", function() {
+            table
+                .columns( 1 )
+                .search( this.value )
+                .draw();
+        });
+        $("#filterNombreCortoTaller").on("keyup change", function() {
+            table
+                .columns( 2 )
+                .search( this.value )
+                .draw();
+        });
+    });
+    </script>
     <script>
         $(document).ready(function(){
-            $('#modalAltaInstrumento').modal();
-            $('#modalEditarInstrumento').modal();
-            $('select').formSelect();
+            $('#modalEditarTaller').modal();
         });
     </script>
     <script>
-        var filtro_nombre = document.getElementById("filterNombreInstrumento");
-
-        function validar_nombre() {
-            var table = $('#tablaInstrumentos').DataTable();
-            table
-                .columns(1)
-                .search(filtro_nombre.value)
-                .draw();
-        }
-
-        filtro_nombre.onchange = validar_nombre;
-        filtro_nombre.onkeyup = validar_nombre;
-    </script>
-    <script>
-        $('#modalFilters').modal({
-                dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                opacity: .5, // Opacity of modal background
-                inDuration: 300, // Transition in duration
-                outDuration: 200, // Transition out duration
-                startingTop: '4%', // Starting top style attribute
-                endingTop: '10%', // Ending top style attribute
-                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-                    //  alert("Ready");
-                    console.log(modal, trigger);
-                },
-                complete: function() { //alert('Closed');
-                } // Callback for Modal close
-            }
-        );
-    </script>
-    <script>
-        // Edit a record
-        $('#tablaInstrumentos').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaInstrumentos').DataTable();
+        // Editar taller
+        $('#tablaTalleres').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaTalleres').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var eid = rowData['id'];
+            var t_id = rowData['id'];
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('instrumento') }}",
+                url: "{{ url_for('taller') }}",
                 data: {
-                    id: eid
+                    id: t_id
                 },
                 success: function (response) {
-                    dataToModalInstrumento(response);
-                    $('#modalEditarInstrumento').modal('open');
+                    dataToModalTaller(response);
+                    $('#modalEditarTaller').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -291,50 +254,4 @@
             });
         });
     </script>
-    <script async>
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        $(document).ready(function(){
-            // Editar instrumento
-            var frm = $('#formEditarInstrumento');
-
-            frm.submit(function (e) {
-                e.preventDefault();
-                $('#progress').show();
-                $('#modalEditarInstrumento').modal('close');
-                $.ajax({
-                    type: frm.attr('method'),
-                    url: frm.attr('action'),
-                    // Form data
-                    data: new FormData(frm[0]),
-
-                    // Tell jQuery not to process data or worry about content-type
-                    // You *must* include these options!
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: async function (response) {
-                        $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "El instrumento fue editado con éxito";
-                        await sleep(2000);
-                        $('#actionSuccess').show();
-                        $('#actionSuccess').delay(2000).fadeOut('slow');
-                        var table = $('#tablaInstrumentos').DataTable();
-                        table.ajax.reload( null, false );
-                        M.toast({html: toastText, classes: 'green'});
-                    },
-                    error: async function (jqXHR, textStatus, errorMessage) {
-                        $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "Ha ocurrido un error (" + errorMessage + ")";
-                        await sleep(2000);
-                        $('#actionError').show();
-                        $('#actionError').delay(2000).fadeOut('slow');
-                        M.toast({html: toastText, classes: 'error'});
-                    },
-                });
-            });
-        });
-    </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
 {% endblock %}

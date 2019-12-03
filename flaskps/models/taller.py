@@ -19,6 +19,22 @@ class Taller(object):
         return cursor.fetchall()
 
     @classmethod
+    def find_by_id(cls, id):
+        sql = """
+                SELECT  *
+                FROM    taller
+                WHERE   id = %s
+            """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()
+
+    @classmethod
     def create(cls, data):
         sql = """
             INSERT INTO taller
@@ -202,6 +218,34 @@ class Taller(object):
                     )
                     cls.db.commit()
 
+        finally:
+            cls.db.cursor().close()
+        return True
+
+    @classmethod
+    def update(cls, data):
+
+        sql = """
+                        UPDATE taller 
+                        SET nombre = %s, 
+                            nombre_corto = %s 
+                        WHERE id = %s
+                """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(
+                    sql,
+                    (
+                        data.get("nombre"),
+                        data.get("nombre_corto"),
+                        data.get("id"),
+                    ),
+                )
+                cls.db.commit()
+
+        except IntegrityError:
+            cls.db.cursor().close()
+            return False
         finally:
             cls.db.cursor().close()
         return True
