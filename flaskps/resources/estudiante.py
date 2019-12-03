@@ -120,7 +120,6 @@ def create():
     form = pasarChoices(form)
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -137,7 +136,7 @@ def create():
         else:
             op_response["msg"] = "Ha ocurrido un error al crear al estudiante"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -148,9 +147,9 @@ def create():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 201)
 
 
 def update():
@@ -164,7 +163,6 @@ def update():
     form = pasarChoices(form)
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -182,7 +180,7 @@ def update():
         else:
             op_response["msg"] = "Ocurrió un error"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -193,9 +191,9 @@ def update():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def destroy():
@@ -212,7 +210,6 @@ def destroy():
     success = Estudiante.delete(eid)
 
     op_response = dict()
-    responsecode = 200
 
     activo = params["activo"]
 
@@ -224,9 +221,9 @@ def destroy():
         condicion = "bloquear" if activo else "activar"
         op_response["msg"] = "El estudiante a " + condicion + " no existe"
         op_response["type"] = "error"
-        responsecode = 404
+        abort(jsonify(op_response), 422)
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 204)
 
 
 # por id
