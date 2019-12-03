@@ -142,6 +142,9 @@
             {% if has_permission('taller_update', session) %}
                 {% include 'partials/modals/modal_taller_asociar_docentes.html' %}
             {% endif %}
+            {% if has_permission('taller_update', session) %}
+                {% include 'partials/modals/modal_taller_asociar_estudiantes.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -349,21 +352,21 @@
                     id: t_id
                 },
                 success: function (response) {
-                    $("#modal_select_ciclo").html('');
+                    $('#modalAsociarDocentes').find("#modal_select_ciclo").html('');
                     if (response.length == 0) {
                         M.toast({html: 'El taller no tiene ciclos lectivos asignados, asóciele alguno primero', classes: 'error'});
                     }
                     else {
                         for (var key in response) {
-                            $("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
+                            $('#modalAsociarDocentes').find("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
                         }
-                        $('#modal_select_ciclo').formSelect();
+                        $('#modalAsociarDocentes').find('#modal_select_ciclo').formSelect();
                         $.ajax({
                             type: "GET",
                             url: "{{ url_for('taller_ciclo_docentes') }}",
                             data: {
                                 t_id: t_id,
-                                c_id: $('#modal_select_ciclo').val()
+                                c_id: $('#modalAsociarDocentes').find('#modal_select_ciclo').val()
                             },
                             success: function (response) {
                                 $('#modal_select_docentes').val(null);
@@ -377,6 +380,55 @@
                             }
                         });
                         $('#modalAsociarDocentes').modal('open');
+                    }
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+
+        //Asociar estudiantes
+        $('#tablaTalleres').on('click', 'a.asociarEstudiantesButton', function (e) {
+            var table = $('#tablaTalleres').DataTable();
+            var rowData = table.row($(this).parents("tr")).data();
+            var t_id = rowData['id'];
+            $('#modalAsociarEstudiantes').find('#modal_id_taller').val(t_id);
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: t_id
+                },
+                success: function (response) {
+                    $('#modalAsociarEstudiantes').find("#modal_select_ciclo").html('');
+                    if (response.length == 0) {
+                        M.toast({html: 'El taller no tiene ciclos lectivos asignados, asóciele alguno primero', classes: 'error'});
+                    }
+                    else {
+                        for (var key in response) {
+                            $('#modalAsociarEstudiantes').find("#modal_select_ciclo").append('<option value="'+ response[key]['ciclo_lectivo_id'] +'">[' + response[key]['fecha_ini'] + '] al [' + response[key]['fecha_fin'] + ']</option>');
+                        }
+                        $('#modalAsociarEstudiantes').find('#modal_select_ciclo').formSelect();
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ url_for('taller_ciclo_estudiantes') }}",
+                            data: {
+                                t_id: t_id,
+                                c_id: $('#modalAsociarEstudiantes').find('#modal_select_ciclo').val()
+                            },
+                            success: function (response) {
+                                $('#modal_select_estudiantes').val(null);
+                                for (var key in response){
+                                    $("#modal_select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                                }
+                                $('#modal_select_estudiantes').formSelect();
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) {
+                                console.log("Error: ", errorMessage);
+                            }
+                        });
+                        $('#modalAsociarEstudiantes').modal('open');
                     }
                 },
                 error: function (jqXhr, textStatus, errorMessage) {

@@ -1,6 +1,6 @@
-<div id="modalAsociarDocentes" class="modal">
-    <header class="modal-header">Asociar docentes al taller</header>
-    <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_docentes') }}">
+<div id="modalAsociarEstudiantes" class="modal">
+    <header class="modal-header">Asociar estudiantes al taller</header>
+    <form id="tallerAsociarEstudiantes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input id="modal_id_taller" name="taller_id" type="number" hidden>
         <div class="modal-content">
@@ -11,12 +11,12 @@
                     <label for="modal_select_ciclo">Ciclo lectivo</label>
                 </div>
                 <div class="col s12 input-field">
-                    <select id="modal_select_docentes" multiple name="modal_select_docentes">
-                        {% for docente in docentes %}
-                            <option value="{{docente.id}}">{{docente.apellido}}, {{docente.nombre}}</option>
+                    <select id="modal_select_estudiantes" multiple name="modal_select_estudiantes">
+                        {% for estudiante in estudiantes %}
+                            <option value="{{estudiante.id}}">{{estudiante.apellido}}, {{estudiante.nombre}}</option>
                         {% endfor %}
                     </select>
-                    <label for="modal_select_docentes">Docentes</label>
+                    <label for="modal_select_estudiantes">Estudiantes</label>
                 </div>
             </div>
         </div>
@@ -28,20 +28,20 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#modal_select_ciclo").on('change', function(e){
+        $('#modalAsociarEstudiantes').find("#modal_select_ciclo").on('change', function(e){
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('taller_ciclo_docentes') }}",
+                url: "{{ url_for('taller_ciclo_estudiantes') }}",
                 data: {
-                    t_id: $('#modalAsociarDocentes').find('#modal_id_taller').val(),
-                    c_id: $('#modalAsociarDocentes').find('#modal_select_ciclo').val()
+                    t_id: $('#modalAsociarEstudiantes').find('#modal_id_taller').val(),
+                    c_id: $('#modalAsociarEstudiantes').find('#modal_select_ciclo').val()
                 },
                 success: function (response) {
-                    $('#modal_select_docentes').val(null);
+                    $('#modal_select_estudiantes').val(null);
                     for (var key in response){
-                        $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                        $("#modal_select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
                     }
-                    $('#modal_select_docentes').formSelect();
+                    $('#modal_select_estudiantes').formSelect();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -52,21 +52,21 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('#modalAsociarDocentes').find('#cancelar').click(function(e){
+        $('#modalAsociarEstudiantes').find('#cancelar').click(function(e){
             e.preventDefault();
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('taller_ciclo_docentes') }}",
+                url: "{{ url_for('taller_ciclo_estudiantes') }}",
                 data: {
-                    t_id: $('#modalAsociarDocentes').find('#modal_id_taller').val(),
-                    c_id: $('#modalAsociarDocentes').find('#modal_select_ciclo').val()
+                    t_id: $('#modalAsociarEstudiantes').find('#modal_id_taller').val(),
+                    c_id: $('#modalAsociarEstudiantes').find('#modal_select_ciclo').val()
                 },
                 success: function (response) {
-                    $('#modal_select_docentes').val(null);
+                    $('#modal_select_estudiantes').val(null);
                     for (var key in response){
-                        $("#modal_select_docentes option[value='" + response[key]['id'] + "']").prop("selected", true);
+                        $("#modal_select_estudiantes option[value='" + response[key]['id'] + "']").prop("selected", true);
                     }
-                    $('#modal_select_docentes').formSelect();
+                    $('#modal_select_estudiantes').formSelect();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -77,7 +77,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        var frm = $('#tallerAsociarDocentes');
+        var frm = $('#tallerAsociarEstudiantes');
         frm.submit(function (e) {
             e.preventDefault();
             $.ajax({
