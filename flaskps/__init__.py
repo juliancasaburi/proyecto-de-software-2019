@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template
 from flask_session import Session
 
+import flaskps.resources.helpers.serverside_dt.serverside_table_docente
+import flaskps.resources.helpers.serverside_dt.serverside_table_user
 from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
@@ -137,9 +139,8 @@ app.add_url_rule("/tablausuarios", "user_table", user.user_table)
 app.add_url_rule(
     "/usuarios_serverside_table",
     "user_serverside_table_content",
-    user.serverside_table_content,
+    flaskps.resources.helpers.serverside_dt.serverside_table_user.serverside_table_content,
 )
-app.add_url_rule("/usuarios", "user_all", user.get_users)
 app.add_url_rule("/usuario/alta", "user_new", user.create, methods=["POST"])
 app.add_url_rule("/usuario/bloquear", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
@@ -150,9 +151,8 @@ app.add_url_rule("/tabladocentes", "docente_table", docente.docente_table)
 app.add_url_rule(
     "/docente_serverside_table",
     "docente_serverside_table_content",
-    docente.serverside_table_content,
+    flaskps.resources.helpers.serverside_dt.serverside_table_docente.serverside_table_content,
 )
-app.add_url_rule("/docentes", "docente_all", docente.get_docentes)
 app.add_url_rule("/docentes/alta", "docente_new", docente.create, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
 app.add_url_rule(

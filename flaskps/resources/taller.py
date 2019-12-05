@@ -305,14 +305,17 @@ def data():
     ):
         abort(401)
 
-    Taller.db = get_db()
-    t_id = request.args.get("id")
-    taller = Taller.find_by_id(t_id)
-    if taller != None:
-        data = jsonify(taller)
-        return make_response(data, 200)
+    id = request.args.get("id")
+    if id:
+        Taller.db = get_db()
+        taller = Taller.find_by_id(id)
+        if taller is not None:
+            data = jsonify(taller)
+            return make_response(data, 200)
+        else:
+            abort(422)
     else:
-        return abort(404)
+        abort(400)
 
 
 def update():

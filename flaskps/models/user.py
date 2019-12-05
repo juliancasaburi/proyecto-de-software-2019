@@ -353,3 +353,18 @@ class User(object):
         finally:
             cls.db.cursor().close()
         return cursor.fetchall()
+
+    @classmethod
+    def all_table(cls):
+        users = cls.all()
+
+        for dict_item in users:
+            del dict_item["password"]
+            dict_item["created_at"] = dict_item["created_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+            dict_item["updated_at"] = dict_item["updated_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+
+        return users

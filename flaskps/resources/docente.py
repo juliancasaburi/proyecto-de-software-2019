@@ -12,66 +12,10 @@ from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
 from flaskps.models import siteconfig
 
-from flaskps.helpers.localidades import localidad, localidades
-from flaskps.helpers.tipos_documento import tipo_documento, tipos_documento
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
-
-from flaskps.resources.helpers.serverside_dt.serverside_table_docentes import (
-    DocentesServerSideTable,
-)
-from flaskps.resources.helpers.serverside_dt import table_schemas
-
-
-def docentes():
-    Docente.db = get_db()
-    docentes = Docente.all()
-
-    for dict_item in docentes:
-        dict_item["fecha_nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
-        del dict_item["fecha_nac"]
-        loc = localidad(dict_item["localidad_id"])
-        dict_item["localidad"] = loc["nombre"]
-        del dict_item["localidad_id"]
-        Genero.db = get_db()
-        dict_item["genero"] = Genero.find_by_id(dict_item["genero_id"])[0]["nombre"]
-        del dict_item["genero_id"]
-        tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
-        dict_item["tipo_documento"] = tipo_doc["nombre"]
-        del dict_item["tipo_doc_id"]
-        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        dict_item["updated_at"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
-
-    return docentes
-
-
-def get_docentes():
-    s_config = siteconfig.get_config()
-    if not has_permission("docente_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    all_docentes = jsonify(docentes())
-
-    return make_response(all_docentes, 200)
-
-
-def collect_data_serverside(req):
-    columns = table_schemas.SERVERSIDE_DOCENTES_TABLE_COLUMNS
-
-    return DocentesServerSideTable(req, docentes(), columns).output_result()
-
-
-def serverside_table_content():
-    s_config = siteconfig.get_config()
-    if not has_permission("docente_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    data = collect_data_serverside(request)
-    return jsonify(data)
 
 
 def create():
@@ -149,15 +93,19 @@ def data():
     ):
         abort(401)
 
-    Docente.db = get_db()
-    d_id = request.args.get("id")
-    docente = Docente.find_by_id(d_id)
-    if docente != None:
-        docente["fecha_nac"] = datetime.strftime(docente["fecha_nac"], "%d/%m/%Y")
-        data = jsonify(docente)
-        return make_response(data, 200)
+    id = request.args.get("id")
+    if id:
+        Docente.db = get_db()
+        docente = Docente.find_by_id(id)
+
+        if docente is not None:
+            docente["fecha_nac"] = datetime.strftime(docente["fecha_nac"], "%d/%m/%Y")
+            data = jsonify(docente)
+            return make_response(data, 200)
+        else:
+            abort(422)
     else:
-        return abort(404)
+        abort(400)
 
 
 def update():

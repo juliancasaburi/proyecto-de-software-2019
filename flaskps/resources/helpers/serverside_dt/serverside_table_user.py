@@ -1,6 +1,15 @@
 import re
 from abc import ABC
 
+from flask import session, abort, request, jsonify
+
+from flaskps.db import get_db
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.user import User
+from flaskps.resources.helpers.serverside_dt import table_schemas
+
 from flaskps.resources.helpers.serverside_dt.serverside_table import ServerSideTable
 
 
@@ -44,3 +53,23 @@ class UsuariosServerSideTable(ServerSideTable, ABC):
 
         rows_f1 = [row for row in data if check_row_username(row)]
         return [row for row in rows_f1 if check_row_active(row)]
+
+
+def collect_data_serverside(req):
+    columns = table_schemas.SERVERSIDE_USUARIOS_TABLE_COLUMNS
+
+    User.db = get_db()
+    users = User.all_table()
+
+    return UsuariosServerSideTable(req, users, columns).output_result()
+
+
+def serverside_table_content():
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    data = collect_data_serverside(request)
+    return jsonify(data)

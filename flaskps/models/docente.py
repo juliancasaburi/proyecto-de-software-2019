@@ -1,5 +1,10 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+from flaskps.helpers.localidades import localidad
+from flaskps.helpers.tipos_documento import tipo_documento
+from flaskps.models.genero import Genero
+
 
 class Docente(object):
 
@@ -160,3 +165,28 @@ class Docente(object):
         finally:
             cls.db.cursor().close()
         return True
+
+    @classmethod
+    def all_table(cls):
+        docentes = cls.all()
+
+        for dict_item in docentes:
+            dict_item["fecha_nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
+            del dict_item["fecha_nac"]
+            loc = localidad(dict_item["localidad_id"])
+            dict_item["localidad"] = loc["nombre"]
+            del dict_item["localidad_id"]
+            Genero.db = get_db()
+            dict_item["genero"] = Genero.find_by_id(dict_item["genero_id"])[0]["nombre"]
+            del dict_item["genero_id"]
+            tipo_doc = tipo_documento(dict_item["tipo_doc_id"])
+            dict_item["tipo_documento"] = tipo_doc["nombre"]
+            del dict_item["tipo_doc_id"]
+            dict_item["created_at"] = dict_item["created_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+            dict_item["updated_at"] = dict_item["updated_at"].strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+
+        return docentes
