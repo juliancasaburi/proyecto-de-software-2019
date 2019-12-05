@@ -60,7 +60,8 @@ def set_ciclo():
         abort(401)
 
     params = request.form.to_dict()
-    params["ciclos"] = request.form.getlist("select_ciclos")
+    params["taller_id"] = params["modal_id_taller"]
+    params["ciclos"] = request.form.getlist("modal_select_ciclos")
 
     Taller.db = get_db()
     created = Taller.set_ciclos(params)
@@ -88,6 +89,10 @@ def get_ciclos():
     t_id = request.args.get("id")
     Taller.db = get_db()
     ciclos = Taller.ciclos(t_id)
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
     if ciclos is None:
         abort(404)
@@ -122,7 +127,7 @@ def set_docentes():
         abort(401)
 
     params = request.form.to_dict()
-    params["docentes"] = request.form.getlist("select_docentes")
+    params["docentes"] = request.form.getlist("modal_select_docentes")
 
     # TODO:
     Taller.db = get_db()
@@ -168,7 +173,7 @@ def set_estudiantes():
         abort(401)
 
     params = request.form.to_dict()
-    params["estudiantes"] = request.form.getlist("select_estudiantes")
+    params["estudiantes"] = request.form.getlist("modal_select_estudiantes")
 
     # TODO:
     Taller.db = get_db()
@@ -275,7 +280,7 @@ def taller_table():
     Taller.db = get_db()
     talleres = Taller.all()
 
-    return render_template("tables/talleres.html", talleres=talleres)
+    return render_template("partials/tabs/talleres.html", talleres=talleres)
 
 
 def get_talleres():
