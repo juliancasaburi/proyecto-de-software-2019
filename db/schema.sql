@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`nucleo` (
   `telefono` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `lat` float NOT NULL,
   `lng` float NOT NULL,
+  `activo` TINYINT(1) NOT NULL DEFAULT 1
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
