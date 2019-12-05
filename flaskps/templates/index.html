@@ -147,10 +147,12 @@
                     for (var i=0; i<nucleos.length; i++) {
                         $('#map-select').append("<option value='"+ i + "'>" + nucleos[i]['nombre'] + "</option>");
                     }
+
                     $('#map-select').val("");
                     $('#map-select').formSelect();
 
                     var zoom = 15;
+
                     var escuela_25 = [-57.89335, -34.92595];
 
                     var info = new ol.Feature({
@@ -190,7 +192,6 @@
                         }),
                         controls: new ol.control.defaults().extend([
                             new ol.control.Rotate(),
-                            new ol.control.MousePosition(),
                             new ol.control.OverviewMap(),
                             new ol.control.ZoomToExtent(),
                             new ol.control.ScaleLine(),
