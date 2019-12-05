@@ -625,7 +625,12 @@ INSERT INTO `permiso` (`id`, `nombre`) VALUES
 (28, 'instrumento_new'),
 (29, 'instrumento_destroy'),
 (30, 'instrumento_update'),
-(31, 'instrumento_show');
+(31, 'instrumento_show'),
+(32, 'nucleo_index'),
+(33, 'nucleo_show'),
+(34, 'nucleo_new'),
+(35, 'nucleo_update'),
+(36, 'nucleo_destroy');
 
 -- --------------------------------------------------------
 
