@@ -1,0 +1,88 @@
+<div id="modalAltaNucleo" class="modal">
+    <header class="modal-header">Crear Núcleo</header>
+    <form id="altaNucleo" method="post" action="{{ url_for('nucleo_new') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <div class="section">
+                <div class="row">
+                    <div class="col s12 m12 input-field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" name="nombre" class="validate active" type="text" required>
+                    </div>
+                    <div class="col s6 m6 input-field">
+                        <label for="direccion">Dirección</label>
+                        <input id="direccion" name="direccion" class="validate active" type="text" required>
+                    </div>
+                    <div class="col s6 m6 input-field">
+                        <label for="telefono">Nro de teléfono</label>
+                        <input id="telefono" name="telefono" class="validate active" type="text" required>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="section">
+                    <h6 style="margin:0.5rem">Para obtener la latitud y longitud podés obtener las coordenadas desde <a href="https://www.openstreetmap.org">Open Street Map</a>. <i id="infoIcon" class="material-icons tooltipped" data-position="bottom">info</i></h6>
+                </div>
+                <div class="divider"></div>
+                <div class="section">
+                    <div class="row">
+                        <div class="col s6 m6 input-field">
+                            <label for="lat">Latitud</label>
+                            <input id="lat" name="lat" class="validate active" type="number" step=".00001" required>
+                            <small>Con coma para separar decimales. Ejemplo: -34,546892</small>
+                        </div>
+                        <div class="col s6 m6 input-field">
+                            <label for="lng">Longitud</label>
+                            <input id="lng" name="lng" class="validate active" type="number" step=".00001" required>
+                            <small>Con coma para separar decimales. Ejemplo: -57,525164</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
+            <button id="cancelarAltaNucleo" class="btn red waves-effect waves-light">Reiniciar</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $(this).find('tooltipped').tooltip();
+        $('#infoIcon').attr("data-tooltip", "<div style='max-width: 15rem'>Busque la ubicación del núcleo, haga click derecho y seleccione la opción 'Mostrar dirección'. En la parte izquierda tendrá las coordenadas de dicha ubicación.</div>");
+        $("#cancelarAltaNucleo").click(function(e){
+            e.preventDefault();
+            $('#altaNucleo').trigger("reset");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#altaNucleo');
+        frm.submit(function (e) {
+            e.preventDefault();
+            $('#modalAltaNucleo').modal('close');
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    $('#altaNucleo').trigger("reset");
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    422: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    400: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: "Ha ocurrido un error", classes: 'error'});
+                    },
+                }
+            });
+        });
+    });
+</script>

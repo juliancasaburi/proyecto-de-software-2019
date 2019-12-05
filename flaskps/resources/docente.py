@@ -5,8 +5,8 @@ from flaskps.db import get_db
 
 import json
 
-from flaskps.forms.docente.form_docente_create import DocenteCreateForm
-from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
+from flaskps.forms.docente import forms_docente
+from flaskps.forms.docente.forms_docente import DocenteForm
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -64,7 +64,10 @@ def collect_data_serverside(req):
 
 
 def serverside_table_content():
-    if not has_permission("docente_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     data = collect_data_serverside(request)
@@ -79,21 +82,10 @@ def create():
         abort(401)
 
     # Validación - Fill choices
-    form = DocenteCreateForm()
-
-    Genero.db = get_db()
-    generos = Genero.all()
-
-    form.select_genero.choices = [(g["id"], g["nombre"]) for g in generos]
-
-    locs = localidades()
-    form.select_localidad.choices = [(l["id"], l["nombre"]) for l in locs]
-
-    tipos = tipos_documento()
-    form.select_tipo.choices = [(t["id"], t["nombre"]) for t in tipos]
+    choices = forms_docente.choices()
+    form = DocenteForm(choices)
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -110,15 +102,15 @@ def create():
         else:
             op_response["msg"] = "Ha ocurrido un error al crear al docente"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
         op_response["msg"] = error_msg
         op_response["type"] = "error"
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 201)
 
 
 def destroy():
@@ -136,7 +128,6 @@ def destroy():
     success = Docente.delete(d_id)
 
     op_response = dict()
-    responsecode = 200
 
     if success:
         condicion = "bloqueado" if activo else "activado"
@@ -146,9 +137,9 @@ def destroy():
         condicion = "bloquear" if activo else "activar"
         op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
-        responsecode = 404
+        make_response(jsonify(op_response), 422)
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 204)
 
 
 def data():
@@ -176,10 +167,11 @@ def update():
     ):
         abort(401)
 
-    form = DocenteUpdateForm()
+    # Validación - Fill choices
+    choices = forms_docente.choices()
+    form = DocenteForm(choices)
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -198,7 +190,7 @@ def update():
         else:
             op_response["msg"] = "Ha ocurrido un error al editar al docente"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -209,13 +201,16 @@ def update():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def docente_table():
-    if not has_permission("docente_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("docente_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Genero.db = get_db()

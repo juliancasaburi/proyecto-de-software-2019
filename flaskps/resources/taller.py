@@ -1,7 +1,5 @@
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
-from flaskps.forms.taller.form_taller_update import TallerUpdateForm
-from flaskps.helpers.permission import has_permission
 
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -9,7 +7,7 @@ from flaskps.models.docente import Docente
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.taller import Taller
 
-from flaskps.forms.taller.form_taller_create import TallerCreateForm
+from flaskps.forms.taller.forms_taller import TallerForm
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
@@ -22,10 +20,9 @@ def create():
     ):
         abort(401)
 
-    form = TallerCreateForm()
+    form = TallerForm()
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -39,7 +36,7 @@ def create():
         else:
             op_response["msg"] = "Ha ocurrido un error al crear el Taller"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -50,9 +47,9 @@ def create():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 201)
 
 
 def set_ciclo():
@@ -63,13 +60,13 @@ def set_ciclo():
         abort(401)
 
     params = request.form.to_dict()
-    params["ciclos"] = request.form.getlist("select_ciclos")
+    params["taller_id"] = params["modal_id_taller"]
+    params["ciclos"] = request.form.getlist("modal_select_ciclos")
 
     Taller.db = get_db()
     created = Taller.set_ciclos(params)
 
     op_response = dict()
-    responsecode = 201
 
     if created:
         op_response["msg"] = "Se ha establecido la relación"
@@ -77,9 +74,9 @@ def set_ciclo():
     else:
         op_response["msg"] = "Ha ocurrido un error al establecer la relación"
         op_response["type"] = "error"
-        abort(make_response(jsonify(op_response), 409))
+        abort(make_response(jsonify(op_response), 422))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def get_ciclos():
@@ -92,6 +89,10 @@ def get_ciclos():
     t_id = request.args.get("id")
     Taller.db = get_db()
     ciclos = Taller.ciclos(t_id)
+
+    for ciclo in ciclos:
+        ciclo["fecha_ini"] = ciclo["fecha_ini"].strftime("%d-%m-%Y")
+        ciclo["fecha_fin"] = ciclo["fecha_fin"].strftime("%d-%m-%Y")
 
     if ciclos is None:
         abort(404)
@@ -126,14 +127,13 @@ def set_docentes():
         abort(401)
 
     params = request.form.to_dict()
-    params["docentes"] = request.form.getlist("select_docentes")
+    params["docentes"] = request.form.getlist("modal_select_docentes")
 
     # TODO:
     Taller.db = get_db()
     created = Taller.set_docentes(params)
 
     op_response = dict()
-    responsecode = 201
 
     if created:
         op_response["msg"] = "Se ha establecido la relación"
@@ -141,9 +141,9 @@ def set_docentes():
     else:
         op_response["msg"] = "Ha ocurrido un error al establecer la relación"
         op_response["type"] = "error"
-        abort(make_response(jsonify(op_response), 409))
+        abort(make_response(jsonify(op_response), 422))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def get_estudiantes_ciclo():
@@ -173,14 +173,13 @@ def set_estudiantes():
         abort(401)
 
     params = request.form.to_dict()
-    params["estudiantes"] = request.form.getlist("select_estudiantes")
+    params["estudiantes"] = request.form.getlist("modal_select_estudiantes")
 
     # TODO:
     Taller.db = get_db()
     created = Taller.set_estudiantes(params)
 
     op_response = dict()
-    responsecode = 201
 
     if created:
         op_response["msg"] = "Se ha establecido la relación"
@@ -188,20 +187,26 @@ def set_estudiantes():
     else:
         op_response["msg"] = "Ha ocurrido un error al establecer la relación"
         op_response["type"] = "error"
-        abort(make_response(jsonify(op_response), 409))
+        abort(make_response(jsonify(op_response), 422))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def taller_new_form():
-    if not has_permission("taller_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_new", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     return render_template("user/actions/taller_crear.html")
 
 
 def taller_set_docentes_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -220,7 +225,10 @@ def taller_set_docentes_form():
 
 
 def taller_set_estudiantes_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     CicloLectivo.db = get_db()
@@ -241,7 +249,10 @@ def taller_set_estudiantes_form():
 
 
 def taller_set_ciclo_form():
-    if not has_permission("taller_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Taller.db = get_db()
@@ -260,20 +271,16 @@ def taller_set_ciclo_form():
 
 
 def taller_table():
-    if not has_permission("taller_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("taller_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Taller.db = get_db()
     talleres = Taller.all()
 
-    return render_template("tables/talleres.html", talleres=talleres)
-
-
-def talleres():
-    Taller.db = get_db()
-    all_talleres = Taller.all()
-
-    return all_talleres
+    return render_template("partials/tabs/talleres.html", talleres=talleres)
 
 
 def get_talleres():
@@ -283,7 +290,10 @@ def get_talleres():
     ):
         abort(401)
 
-    all_talleres = jsonify(talleres())
+    Taller.db = get_db()
+    all_talleres = Taller.all()
+
+    all_talleres = jsonify(all_talleres)
 
     return make_response(all_talleres, 200)
 
@@ -312,10 +322,9 @@ def update():
     ):
         abort(401)
 
-    form = TallerUpdateForm()
+    form = TallerForm()
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -330,7 +339,7 @@ def update():
         else:
             op_response["msg"] = "Ha ocurrido un error al editar el taller"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -341,6 +350,6 @@ def update():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)

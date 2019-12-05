@@ -9,7 +9,7 @@
         <div class="section center">
             <div class="row">
                 <h1>Asociar Estudiantes A Taller</h1>
-                <form id="tallerAsociarDocentes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
+                <form id="tallerAsociarEstudiantes" method="post" action="{{ url_for('taller_set_estudiantes') }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="modal-content">
                         <div class="row">
@@ -110,12 +110,15 @@
                         M.toast({html: toastText, classes: toastClass});
                     },
                     statusCode: {
-                        409: function (jqXHR) {
+                        422: function (jqXHR) {
                             M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                         },
-                        500: function (jqXHR) {
-                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                        }
+                        400: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: "Ha ocurrido un error", classes: 'error'});
+                    },
                     }
                 });
             });

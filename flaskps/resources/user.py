@@ -15,8 +15,7 @@ from flaskps.models.user import User
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 
-from flaskps.forms.user.form_user_create import UserCreateForm
-from flaskps.forms.user.form_user_update import UserUpdateForm
+from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
 from flaskps.forms.user.form_email_update import EmailUpdateForm
 from flaskps.forms.user.form_password_update import PasswordUpdateForm
 
@@ -65,7 +64,10 @@ def collect_data_serverside(req):
 
 
 def serverside_table_content():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     data = collect_data_serverside(request)
@@ -79,15 +81,9 @@ def create():
     ):
         abort(401)
 
-    Role.db = get_db()
-    roles = Role.all()
     form = UserCreateForm()
-    form.rol_id.choices = [
-        (rol["id"], rol["nombre"]) for rol in roles
-    ]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -118,7 +114,7 @@ def create():
         else:
             op_response["msg"] = "El nombre de usuario está en uso, intente con otro"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -129,9 +125,9 @@ def create():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 201)
 
 
 def destroy():
@@ -148,19 +144,21 @@ def destroy():
     success = User.delete(uid)
 
     op_response = dict()
-    responsecode = 200
+
+    activo = params["activo"]
 
     if success:
         # TODO: Email notificando bloqueo de la cuenta
-
-        op_response["msg"] = "Se ha bloqueado/activado al usuario exitosamente"
+        condicion = "bloqueado" if activo else "activado"
+        op_response["msg"] = "Se ha " + condicion + " al usuario exitosamente"
         op_response["type"] = "success"
     else:
-        op_response["msg"] = "El usuario a bloquear/activar no existe"
+        condicion = "bloquear" if activo else "activar"
+        op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
-        responsecode = 404
+        abort(jsonify(op_response), 422)
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 204)
 
 
 def update():
@@ -170,15 +168,9 @@ def update():
     ):
         abort(401)
 
-    Role.db = get_db()
-    roles = Role.all()
     form = UserUpdateForm()
-    form.rol_id.choices = [
-        (rol["id"], rol["nombre"]) for rol in roles
-    ]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
     op_response = dict()
-    responsecode = 201
 
     if form.validate_on_submit():
         params = request.form.to_dict()
@@ -246,7 +238,7 @@ def update():
         else:
             op_response["msg"] = "El nombre de usuario está en uso, intente con otro"
             op_response["type"] = "error"
-            abort(make_response(jsonify(op_response), 409))
+            abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
@@ -257,14 +249,17 @@ def update():
             op_response["msg"] = error_msg
             op_response["type"] = "error"
 
-        abort(make_response(jsonify(op_response), 500))
+        abort(make_response(jsonify(op_response), 400))
 
-    return make_response(jsonify(op_response), responsecode)
+    return make_response(jsonify(op_response), 200)
 
 
 def dashboard():
-    if not authenticated(session):
-        return render_template("auth/login.html")
+    s_config = siteconfig.get_config()
+    if not authenticated(session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
     else:
         Role.db = get_db()
         roles = Role.all()
@@ -273,7 +268,10 @@ def dashboard():
 
 
 def profile():
-    if not authenticated(session):
+    s_config = siteconfig.get_config()
+    if not authenticated(session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     username = session.get("user")
@@ -382,7 +380,10 @@ def user_data():
 
 
 def user_table():
-    if not has_permission("usuario_index", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -392,7 +393,10 @@ def user_table():
 
 
 def user_edit_form():
-    if not has_permission("usuario_update", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_update", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -402,7 +406,10 @@ def user_edit_form():
 
 
 def user_destroy_form():
-    if not has_permission("usuario_destroy", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_destroy", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()
@@ -412,7 +419,10 @@ def user_destroy_form():
 
 
 def user_new_form():
-    if not has_permission("usuario_new", session):
+    s_config = siteconfig.get_config()
+    if not has_permission("usuario_new", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
         abort(401)
 
     Role.db = get_db()

@@ -138,6 +138,7 @@
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataToModalUsuario.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.fixed-action-btn').floatingActionButton();
@@ -195,6 +196,7 @@
                     "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
+                    "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
                 },
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
@@ -209,6 +211,7 @@
 
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
+                customRedraw(table);
             }, 5000 );
         } );
     </script>
@@ -340,7 +343,8 @@
             // Delete a record
             $('#tablaUsuarios').on('click', 'a.deleteButton', function (e) {
                 var table = $('#tablaUsuarios').DataTable();
-                var rowData = table.row($(this).parents("tr")).data();
+                var tRow = $(this).parents("tr");
+                var rowData = table.row(tRow).data();
                 var uid = rowData.ID;
                 var username = rowData['Nombre de usuario'];
                 var confirmText;
@@ -353,17 +357,16 @@
                     $.ajax({
                         type: "POST",
                         url: "{{ url_for('user_destroy') }}",
-                        data: JSON.stringify({"id": uid}),
+                        data: JSON.stringify({"id": uid, "activo": rowData['Activo']}),
                         dataType: 'json',
                         contentType: 'application/json;charset=UTF-8',
-                        success: async function () {
+                        success: async function (response) {
                             table.ajax.reload( null, false );
                             $('#progress').delay(2000).fadeOut('slow');
                             await sleep(2000);
                             $('#actionSuccess').show();
                             $('#actionSuccess').delay(2000).fadeOut('slow');
-                            var toastText = 'El usuario "' + username + '" (ID: ' + uid + ') fue eliminado';
-                            M.toast({html: toastText, classes: 'green'});
+                            M.toast({html: response['msg'], classes: response['type']});
                         },
                         statusCode: {
                             404: async function (jqXHR) {

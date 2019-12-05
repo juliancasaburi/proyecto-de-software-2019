@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Listado de Docentes - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Listado de Núcleos - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
     <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
@@ -13,59 +13,53 @@
 
             <div class="row">
                 <div class="col s12 center">
-                    <h1>Listado de Docentes</h1>
+                    <h1>Listado de Núcleos</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="card material-table">
                     <div class="table-header">
-                        <span class="table-title">Docentes</span>
+                        <span class="table-title">Núcleos</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaDocente" data-position="top" data-tooltip="Crear Docente"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaNucleo" data-position="top" data-tooltip="Crear núcleo"><i class="fas fa-plus" style="margin-right: 2px"></i><i class="fas fa-school"></i></a>
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
                         </div>
                     </div>
                     <div hidden id="progress" class="row">
-                        <p class="teal-text center"><b>Operación en progreso ...</b></p>
+                        <p class="teal-text center"><b>Operación en progreso...</b></p>
                         <div class="progress">
                             <div class="indeterminate orange"></div>
                         </div>
                     </div>
                     <div hidden id="actionSuccess" class="row">
-                        <p class="teal-text center"><b>Operación exitosa!</b></p>
+                        <p class="teal-text center"><b>¡Operación exitosa!</b></p>
                         <div class="progress">
                             <div class="determinate green" style="width: 100%"></div>
                         </div>
                     </div>
                     <div hidden id="actionError" class="row">
-                        <p class="teal-text center"><b>Ha Ocurrido un error</b></p>
+                        <p class="teal-text center"><b>Ha ocurrido un error</b></p>
                         <div class="progress">
                             <div class="determinate red" style="width: 100%"></div>
                         </div>
                     </div>
-                    <table id="tablaDocentes" class="highlight nowrap" style="width:100%">
+                    <table id="tablaNucleos" class="highlight nowrap" style="width:100%">
                         <thead>
                         <tr class="orange">
                             <th>ID</th>
                             <th>Activo</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Localidad</th>
-                            <th>Domicilio</th>
-                            <th>Genero</th>
-                            <th>Tipo de Documento</th>
-                            <th>Numero de Documento</th>
-                            <th>Numero telefónico</th>
-                            <th>Creado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('docente_update', session) %}
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Latitud</th>
+                            <th>Longitud</th>
+                            {% if has_permission('nucleo_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('docente_destroy', session) %}
+                            {% if has_permission('nucleo_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -75,20 +69,14 @@
                             <th>ID</th>
                             <th>Activo</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Localidad</th>
-                            <th>Domicilio</th>
-                            <th>Genero</th>
-                            <th>Tipo de Documento</th>
-                            <th>Numero de Documento</th>
-                            <th>Numero telefónico</th>
-                            <th>Creado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('docente_update', session) %}
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Latitud</th>
+                            <th>Longitud</th>
+                            {% if has_permission('nucleo_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('docente_destroy', session) %}
+                            {% if has_permission('nucleo_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -96,14 +84,6 @@
                     </table>
                 </div>
             </div>
-
-            {% if has_permission('docente_new', session) %}
-                {% include 'partials/modals/modal_alta_docente.html' %}
-            {% endif %}
-
-            {% if has_permission('docente_update', session) %}
-                {% include 'partials/modals/modal_editar_docente.html' %}
-            {% endif %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -119,26 +99,14 @@
             <!-- Modal Structure -->
             <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
-                    <h3 class="header">Filtrar el listado de Docentes</h3>
+                    <h3 class="header">Filtrar el listado de Núcleos</h3>
                     <ul class="collection">
                         <li class="collection-item">
                             <div class="row valign-wrapper center-align">
                                 <div class="input-field col s10">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input id="filterNombreDocente" type="text">
-                                    <label for="filterNombreDocente">Filtrar por nombre</label>
-                                </div>
-                                <div class="col s2">
-                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="collection-item">
-                            <div class="row valign-wrapper center-align">
-                                <div class="input-field col s10">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input id="filterApellidoDocente" type="text">
-                                    <label for="filterApellidoDocente">Filtrar por apellido</label>
+                                    <input id="filterNombreNucleo" type="text">
+                                    <label for="filterNombreNucleo">Filtrar por nombre</label>
                                 </div>
                                 <div class="col s2">
                                     <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
@@ -149,7 +117,7 @@
                             <p>
                                 <label>
                                     <input id="filterActive" type="checkbox"/>
-                                    <span>Listar docentes bloqueados</span>
+                                    <span>Listar núcleos bloqueados</span>
                                 </label>
                             </p>
                         </li>
@@ -161,6 +129,12 @@
                 </div>
             </div>
 
+            {% if has_permission('nucleo_update', session) %}
+                {% include 'partials/modals/modal_editar_nucleo.html' %}
+            {% endif %}
+            {% if has_permission('nucleo_new', session) %}
+                {% include 'partials/modals/modal_alta_nucleo.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -169,7 +143,8 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalDocente.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalNucleo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
@@ -179,26 +154,22 @@
     </script>
     <script>
         $(document).ready(function() {
-            let table = $('#tablaDocentes').DataTable( {
-                bProcessing: true,
-                bServerSide: true,
-                sPaginationType: "full_numbers",
-                sAjaxSource:"{{ url_for('docente_serverside_table_content') }}",
+            let table = $('#tablaNucleos').DataTable( {
+                "ajax": {
+                    "url": "{{ url_for('nucleo_all') }}",
+                    "dataType": "json",
+                    "dataSrc": "",
+                    "contentType":"application/json"
+                },
                 "columns": [
-                    {"data": "ID"},
-                    {"data": "Activo"},
-                    {"data": "Nombre"},
-                    {"data": "Apellido"},
-                    {"data": "Fecha de Nacimiento"},
-                    {"data": "Localidad"},
-                    {"data": "Domicilio"},
-                    {"data": "Genero"},
-                    {"data": "Tipo de Documento"},
-                    {"data": "Numero de Documento"},
-                    {"data": "Numero telefónico"},
-                    {"data": "Creado"},
-                    {"data": "Actualizado"},
-                    {% if has_permission('docente_update', session) %}
+                    {"data": "id"},
+                    {"data": "activo"},
+                    {"data": "nombre"},
+                    {"data": "direccion"},
+                    {"data": "telefono"},
+                    {"data": "lat"},
+                    {"data": "lng"},
+                    {% if has_permission('nucleo_update', session) %}
                         {
                             data: null,
                             className: "center",
@@ -211,7 +182,7 @@
                             }
                         },
                     {% endif %}
-                    {% if has_permission('docente_destroy', session) %}
+                    {% if has_permission('nucleo_destroy', session) %}
                         {
                             data: null,
                             className: "center",
@@ -233,7 +204,7 @@
                         "previous":   "<i class=\"material-icons\">chevron_left</i>"
                     },
                     "info":           "Mostrando resultados <b>_START_</b> al <b>_END_</b> de un total de <b>_TOTAL_</b>",
-                    "infoFiltered": "<br>(<b>_MAX_ sin filtrar</b>)",
+                    "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
                     "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
@@ -243,82 +214,87 @@
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true,
-                "fnInitComplete": function() {
-                    table // Filtrar Bloqueados por default
-                        .column(1)
-                        .search(1)
-                        .draw();
-                }
+                "scrollX": true
             } );
-
-
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
                 customRedraw(table);
             }, 5000 );
         } );
     </script>
-    <script> // Filtros
-    $(document).ready(function(){
-        var table = $('#tablaDocentes').DataTable();
-        $("#filterNombreDocente").on("keyup change", function() {
-            table
-                .columns( 2 )
-                .search( this.value )
-                .draw();
+    <script>
+        $(document).ready(function(){
+            $('#modalAltaNucleo').modal();
+            $('#modalEditarNucleo').modal();
+            validar_filtro_activo();
+            $('select').formSelect();
         });
-        $("#filterApellidoDocente").on("keyup change", function() {
-            table
-                .columns( 3 )
-                .search( this.value )
-                .draw();
-        });
-    });
     </script>
     <script>
-        $(document).ready(function () {
-            $("#filterActive").on("change", function(){
-                var table = $('#tablaDocentes').DataTable();
-                if($("#filterActive").prop("checked") == true)
-                {
-                    table
-                        .column(1)
-                        .search('')
-                        .draw();
-                }
-                else
-                {
-                    table
-                        .column(1)
-                        .search(1)
-                        .draw();
-                }
-            });
-        });
-    </script>
-    <script> // Alta de Docente
-    $(document).ready(function(){
-        $('#modalAltaDocente').modal();
-        $('select').formSelect();
-        $('#modalEditarDocente').modal();
-    });
+        var filtro_activo = document.getElementById("filterActive");
+        var filtro_nombre = document.getElementById("filterNombreNucleo");
+
+        function validar_filtro_activo() {
+            var table = $('#tablaNucleos').DataTable();
+            if($("#filterActive").prop("checked") == true)
+            {
+                table
+                    .column(1)
+                    .search('')
+                    .draw();
+            }
+            else
+            {
+                table
+                    .column(1)
+                    .search(1)
+                    .draw();
+            }
+        }
+        function validar_nombre() {
+            var table = $('#tablaNucleos').DataTable();
+            table
+                .columns(2)
+                .search(filtro_nombre.value)
+                .draw();
+        }
+
+        filtro_activo.onchange = validar_filtro_activo;
+        filtro_nombre.onchange = validar_nombre;
+        filtro_nombre.onkeyup = validar_nombre;
     </script>
     <script>
-        // Editar docente
-        $('#tablaDocentes').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaDocentes').DataTable();
+        $('#modalFilters').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: .5, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: '4%', // Starting top style attribute
+                endingTop: '10%', // Ending top style attribute
+                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                    //  alert("Ready");
+                    console.log(modal, trigger);
+                },
+                complete: function() { //alert('Closed');
+                } // Callback for Modal close
+            }
+        );
+    </script>
+    <script>
+        // Editar núcleo
+        $('#tablaNucleos').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaNucleos').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var d_id = rowData['ID'];
+            var n_id = rowData['id'];
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('docente') }}",
+                url: "{{ url_for('nucleo') }}",
                 data: {
-                    id: d_id
+                    id: n_id
                 },
                 success: function (response) {
-                    dataToModalDocente(response);
-                    $('#modalEditarDocente').modal('open');
+                    dataToModalNucleo(response);
+                    $('#modalEditarNucleo').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -331,24 +307,24 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
-            // Editar docente
-            var frm = $('#editarDocente');
+            // Editar núcleo
+            var frm = $('#formEditarNucleo');
 
             frm.submit(function (e) {
                 e.preventDefault();
                 $('#progress').show();
-                $('#modalEditarDocente').modal('close');
+                $('#modalEditarNucleo').modal('close');
                 $.ajax({
                     type: frm.attr('method'),
                     url: frm.attr('action'),
                     data: frm.serialize(),
                     success: async function (response) {
                         $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "El docente fue editado con éxito";
+                        var toastText = "El núcleo fue editado con éxito";
                         await sleep(2000);
                         $('#actionSuccess').show();
                         $('#actionSuccess').delay(2000).fadeOut('slow');
-                        var table = $('#tablaDocentes').DataTable();
+                        var table = $('#tablaNucleos').DataTable();
                         table.ajax.reload( null, false );
                         M.toast({html: toastText, classes: 'green'});
                     },
@@ -363,25 +339,24 @@
                 });
             });
 
-            // Delete a record
-
-            $('#tablaDocentes').on('click', 'a.deleteButton', function (e) {
-                var table = $('#tablaDocentes').DataTable();
+            // Bloquear/activar núcleo
+            $('#tablaNucleos').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablaNucleos').DataTable();
                 var rowData = table.row($(this).parents("tr")).data();
-                var d_id = rowData['ID'];
-                var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
+                var nid = rowData['id'];
+                var nucleoname = rowData['nombre'];
                 var confirmText;
-                var estoyActivo = rowData['Activo'] == 1;
+                var estoyActivo = rowData['activo'] == 1;
                 if(estoyActivo)
                     confirmText = "bloquear";
                 else
                     confirmText = "activar";
-                if (confirm('¿Está seguro de ' + confirmText + ' al docente "' + docentename + '" (ID: ' + d_id + ')?') == true) {
+                if (confirm('¿Está seguro de ' + confirmText + ' al núcleo ' + nucleoname + ' (ID: ' + nid + ')?') == true) {
                     $('#progress').show();
                     $.ajax({
                         type: "POST",
-                        url: "{{ url_for('docente_destroy') }}",
-                        data: JSON.stringify({"id": d_id, "activo": estoyActivo}),
+                        url: "{{ url_for('nucleo_destroy') }}",
+                        data: JSON.stringify({"id": nid, "activo": estoyActivo}),
                         dataType: 'json',
                         contentType: 'application/json;charset=UTF-8',
                         success: async function (response) {
@@ -399,13 +374,6 @@
                                 $('#actionError').show();
                                 $('#actionError').delay(2000).fadeOut('slow');
                                 M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                            },
-                            500: async function (jqXHR) {
-                                $('#progress').delay(2000).fadeOut('slow');
-                                await sleep(2000);
-                                $('#actionError').show();
-                                $('#actionError').delay(2000).fadeOut('slow');
-                                M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                             }
                         }
                     });
@@ -413,5 +381,19 @@
             });
         });
     </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script>
+        // reiniciar input
+        $('a.eraseFilter').on('click', function(e) {
+            var input = $(this).parent().parent().find("input");
+            input.val('');
+            input.change();
+        });
+
+        // reiniciar inputs
+        $('a.resetFilters').on('click', function(e) {
+            inputs = $('#modalFilters').find('input:text');
+            inputs.val('');
+            inputs.change();
+        });
+    </script>
 {% endblock %}

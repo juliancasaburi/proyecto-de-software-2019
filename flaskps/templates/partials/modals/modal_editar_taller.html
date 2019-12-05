@@ -61,12 +61,15 @@
                     M.toast({html: toastText, classes: toastClass});
                 },
                 statusCode: {
-                    409: function (jqXHR) {
+                    422: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    400: function (jqXHR) {
                         M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
                     },
                     500: function (jqXHR) {
-                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                    }
+                        M.toast({html: "Ha ocurrido un error", classes: 'error'});
+                    },
                 }
             });
         });

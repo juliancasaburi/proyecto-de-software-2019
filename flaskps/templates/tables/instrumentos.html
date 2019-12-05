@@ -142,6 +142,7 @@
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataToModalInstrumento.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
@@ -149,7 +150,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#tablaInstrumentos').DataTable( {
+            let table = $('#tablaInstrumentos').DataTable( {
                 "ajax": {
                     "url": "{{ url_for('instrumento_all') }}",
                     "dataType": "json",
@@ -215,6 +216,7 @@
                     "infoFiltered": "<br><b>Hay datos filtrados (_MAX_ sin filtrar)</b>",
                     "sEmptyTable": "No hay datos para mostrar",
                     "sInfoEmpty": "No hay datos para mostrar",
+                    "sZeroRecords": "No hay datos para mostrar. Reinicie los filtros o cambie de página.",
                 },
                 "columnDefs": [
                     { "orderable": false, "targets": 'nosort' } // Disable sorting for column 9
@@ -224,8 +226,8 @@
                 "scrollX": true
             } );
             setInterval( function () {
-                var table = $('#tablaInstrumentos').DataTable();
                 table.ajax.reload( null, false ); // user paging is not reset on reload
+                customRedraw(table);
             }, 5000 );
         } );
     </script>

@@ -40,7 +40,7 @@ bcrypt = Bcrypt(app)
 # ---------------- .App Config -----------------
 
 # Resources
-from flaskps.resources import auth, ciclo_lectivo
+from flaskps.resources import auth, ciclo_lectivo, nucleo, administracion
 from flaskps.resources import user
 from flaskps.resources import role
 from flaskps.resources import docente
@@ -165,9 +165,7 @@ app.add_url_rule("/taller", "taller", taller.data)
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule("/tablatalleres", "taller_table", taller.taller_table)
 app.add_url_rule("/talleres", "taller_all", taller.get_talleres)
-app.add_url_rule(
-    "/taller/actualizar", "taller_update", taller.update, methods=["POST"]
-)
+app.add_url_rule("/taller/actualizar", "taller_update", taller.update, methods=["POST"])
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )
@@ -235,3 +233,21 @@ app.add_url_rule(
     instrumento.update,
     methods=["POST"],
 )
+
+# Módulo administrativo
+app.add_url_rule("/administracion", "administracion", administracion.administracion)
+
+# Nucleo
+app.add_url_rule("/nucleo/alta", "nucleo_new", nucleo.create, methods=["POST"])
+"""
+app.add_url_rule(
+    "/nucleo_informacion", "nucleo_info", nucleo.nucleo_info
+)
+"""
+app.add_url_rule("/nucleo", "nucleo", nucleo.nucleo_data)
+app.add_url_rule("/tablanucleos", "nucleo_table", nucleo.nucleo_table)
+app.add_url_rule("/nucleos", "nucleo_all", nucleo.get_nucleos)
+app.add_url_rule(
+    "/nucleo/actualizar", "nucleo_update", nucleo.update, methods=["POST"],
+)
+app.add_url_rule("/nucleo/baja", "nucleo_destroy", nucleo.destroy, methods=["POST"])

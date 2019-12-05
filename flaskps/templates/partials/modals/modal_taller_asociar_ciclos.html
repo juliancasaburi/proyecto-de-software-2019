@@ -1,0 +1,75 @@
+<div id="modalAsociarCiclos" class="modal">
+    <header class="modal-header">Asociar ciclos al taller</header>
+    <form id="tallerAsociarCiclos" method="post" action="{{ url_for('taller_set_ciclo') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <div class="row">
+                <input id="modal_id_taller" name="modal_id_taller" type="number" hidden>
+                <div class="col s12 input-field">
+                    <select id="modal_select_ciclos" multiple name="modal_select_ciclos">
+                        {% for ciclo in ciclos %}
+                            <option value="{{ciclo.id}}">[{{ciclo.fecha_ini}}] al [{{ciclo.fecha_fin}}]</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modal_select_ciclos">Ciclos</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn blue waves-effect waves-button-input">Aplicar</button>
+            <button id="cancelar" class="btn red waves-effect waves-light">Cancelar</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#cancelar").click(function(e){
+            e.preventDefault();
+            $('#modal_select_ciclos').val(null);
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('taller_ciclos') }}",
+                data: {
+                    id: $('#modal_id_taller').val()
+                },
+                success: function (response) {
+                    for (var key in response){
+                        $("#modal_select_ciclos option[value='" + response[key]['ciclo_lectivo_id'] + "']").prop("selected", true);
+                    }
+                    $('#modal_select_ciclos').formSelect();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+            $('select').formSelect();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var frm = $('#tallerAsociarCiclos');
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (response) {
+                    var toastText = response['msg'];
+                    var toastClass = response['type'];
+                    M.toast({html: toastText, classes: toastClass});
+                },
+                statusCode: {
+                    409: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    },
+                    500: function (jqXHR) {
+                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                    }
+                }
+            });
+        });
+    });
+</script>
