@@ -132,7 +132,7 @@ def get_talleres():
 def ciclo_table():
     s_config = siteconfig.get_config()
     if not has_permission("ciclolectivo_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

@@ -1,7 +1,5 @@
 from flask import request, session, abort, make_response, jsonify, render_template
 from flaskps.db import get_db
-from flaskps.forms.taller.form_taller_update import TallerUpdateForm
-from flaskps.helpers.permission import has_permission
 
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
@@ -9,7 +7,7 @@ from flaskps.models.docente import Docente
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.taller import Taller
 
-from flaskps.forms.taller.form_taller_create import TallerCreateForm
+from flaskps.forms.taller.forms_taller import TallerForm
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
@@ -22,7 +20,7 @@ def create():
     ):
         abort(401)
 
-    form = TallerCreateForm()
+    form = TallerForm()
 
     op_response = dict()
 
@@ -192,7 +190,7 @@ def set_estudiantes():
 def taller_new_form():
     s_config = siteconfig.get_config()
     if not has_permission("taller_new", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -202,7 +200,7 @@ def taller_new_form():
 def taller_set_docentes_form():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -224,7 +222,7 @@ def taller_set_docentes_form():
 def taller_set_estudiantes_form():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -248,7 +246,7 @@ def taller_set_estudiantes_form():
 def taller_set_ciclo_form():
     s_config = siteconfig.get_config()
     if not has_permission("taller_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -270,7 +268,7 @@ def taller_set_ciclo_form():
 def taller_table():
     s_config = siteconfig.get_config()
     if not has_permission("taller_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -319,7 +317,7 @@ def update():
     ):
         abort(401)
 
-    form = TallerUpdateForm()
+    form = TallerForm()
 
     op_response = dict()
 

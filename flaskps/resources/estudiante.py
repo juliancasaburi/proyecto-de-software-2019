@@ -12,7 +12,8 @@ from flask import (
 )
 from flaskps.db import get_db
 
-from flaskps.forms.estudiante.form_estudiante_create import EstudianteCreateForm
+from flaskps.forms.estudiante import forms_estudiante
+from flaskps.forms.estudiante.forms_estudiante import EstudianteForm
 
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.barrio import Barrio
@@ -71,44 +72,6 @@ def get_estudiantes():
     return make_response(estudiantes, 200)
 
 
-def pasarChoices(form):
-    db = get_db()
-    locs = localidades()
-    Barrio.db = db
-    barrios = Barrio.all()
-    Genero.db = db
-    generos = Genero.all()
-    tipos_doc = tipos_documento()
-    Escuela.db = db
-    escuelas = Escuela.all()
-    Nivel.db = db
-    niveles = Nivel.all()
-    Responsable_tipo.db = db
-    responsables_tipos = Responsable_tipo.all()
-
-    # choices de los selects
-    form.select_localidad.choices = [
-        (localidad["id"], localidad["nombre"]) for localidad in locs
-    ]
-    form.select_barrio.choices = [
-        (barrio["id"], barrio["nombre"]) for barrio in barrios
-    ]
-    form.select_genero.choices = [
-        (genero["id"], genero["nombre"]) for genero in generos
-    ]
-    form.select_tipo.choices = [(tipo["id"], tipo["nombre"]) for tipo in tipos_doc]
-    form.select_escuela.choices = [
-        (escuela["id"], escuela["nombre"]) for escuela in escuelas
-    ]
-    form.select_nivel.choices = [(nivel["id"], nivel["nombre"]) for nivel in niveles]
-    form.select_responsable_tipo.choices = [
-        (responsable_tipo["id"], responsable_tipo["nombre"])
-        for responsable_tipo in responsables_tipos
-    ]
-
-    return form
-
-
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_new", session) or (
@@ -116,8 +79,9 @@ def create():
     ):
         abort(401)
 
-    form = EstudianteCreateForm()
-    form = pasarChoices(form)
+    # Instanciar el form de WTForm para la validación
+    select_field_choices = forms_estudiante.crud_choices()
+    form = EstudianteForm(select_field_choices)
 
     op_response = dict()
 
@@ -159,8 +123,9 @@ def update():
     ):
         abort(401)
 
-    form = EstudianteCreateForm()  # uso este porq es igual
-    form = pasarChoices(form)
+    # Instanciar el form de WTForm para la validación
+    select_field_choices = forms_estudiante.crud_choices()
+    form = EstudianteForm(select_field_choices)
 
     op_response = dict()
 
@@ -256,7 +221,7 @@ def estudiante_data():
 def estudiante_table():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

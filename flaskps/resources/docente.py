@@ -5,8 +5,8 @@ from flaskps.db import get_db
 
 import json
 
-from flaskps.forms.docente.form_docente_create import DocenteCreateForm
-from flaskps.forms.docente.form_docente_update import DocenteUpdateForm
+from flaskps.forms.docente import forms_docente
+from flaskps.forms.docente.forms_docente import DocenteForm
 
 from flaskps.models.docente import Docente
 from flaskps.models.genero import Genero
@@ -48,7 +48,7 @@ def docentes():
 def get_docentes():
     s_config = siteconfig.get_config()
     if not has_permission("docente_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -66,7 +66,7 @@ def collect_data_serverside(req):
 def serverside_table_content():
     s_config = siteconfig.get_config()
     if not has_permission("docente_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -77,23 +77,13 @@ def serverside_table_content():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("docente_new", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
     # Validación - Fill choices
-    form = DocenteCreateForm()
-
-    Genero.db = get_db()
-    generos = Genero.all()
-
-    form.select_genero.choices = [(g["id"], g["nombre"]) for g in generos]
-
-    locs = localidades()
-    form.select_localidad.choices = [(l["id"], l["nombre"]) for l in locs]
-
-    tipos = tipos_documento()
-    form.select_tipo.choices = [(t["id"], t["nombre"]) for t in tipos]
+    choices = forms_docente.choices()
+    form = DocenteForm(choices)
 
     op_response = dict()
 
@@ -126,7 +116,7 @@ def create():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("docente_destroy", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -155,7 +145,7 @@ def destroy():
 def data():
     s_config = siteconfig.get_config()
     if not has_permission("docente_show", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -173,11 +163,13 @@ def data():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("docente_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
-    form = DocenteUpdateForm()
+    # Validación - Fill choices
+    choices = forms_docente.choices()
+    form = DocenteForm(choices)
 
     op_response = dict()
 
@@ -217,7 +209,7 @@ def update():
 def docente_table():
     s_config = siteconfig.get_config()
     if not has_permission("docente_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

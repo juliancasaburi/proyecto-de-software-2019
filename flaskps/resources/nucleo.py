@@ -22,7 +22,7 @@ from flaskps.helpers.role import has_role
 def get_nucleos():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -37,7 +37,7 @@ def get_nucleos():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_new", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -76,7 +76,7 @@ def create():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -116,7 +116,7 @@ def update():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_destroy", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -147,7 +147,7 @@ def destroy():
 def nucleo_data():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_show", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -169,7 +169,7 @@ def nucleo_data():
 def nucleo_table():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

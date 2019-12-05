@@ -15,8 +15,7 @@ from flaskps.models.user import User
 from flaskps.models.role import Role
 from flaskps.models import siteconfig
 
-from flaskps.forms.user.form_user_create import UserCreateForm
-from flaskps.forms.user.form_user_update import UserUpdateForm
+from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
 from flaskps.forms.user.form_email_update import EmailUpdateForm
 from flaskps.forms.user.form_password_update import PasswordUpdateForm
 
@@ -49,7 +48,7 @@ def users():
 def get_users():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -67,7 +66,7 @@ def collect_data_serverside(req):
 def serverside_table_content():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -78,16 +77,11 @@ def serverside_table_content():
 def create():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
-    Role.db = get_db()
-    roles = Role.all()
     form = UserCreateForm()
-    form.rol_id.choices = [
-        (rol["id"], rol["nombre"]) for rol in roles
-    ]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
     op_response = dict()
 
@@ -139,7 +133,7 @@ def create():
 def destroy():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_destroy", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -170,16 +164,11 @@ def destroy():
 def update():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
-    Role.db = get_db()
-    roles = Role.all()
     form = UserUpdateForm()
-    form.rol_id.choices = [
-        (rol["id"], rol["nombre"]) for rol in roles
-    ]  # lo de las choices no sé si funciona, pero el required funciona perfecto
 
     op_response = dict()
 
@@ -268,7 +257,7 @@ def update():
 def dashboard():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
     else:
@@ -281,7 +270,7 @@ def dashboard():
 def profile():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -306,7 +295,7 @@ def profile():
 def email_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -332,7 +321,7 @@ def email_update():
 def password_update():
     s_config = siteconfig.get_config()
     if not authenticated(session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -358,7 +347,7 @@ def password_update():
 def user_data():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -393,7 +382,7 @@ def user_data():
 def user_table():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -406,7 +395,7 @@ def user_table():
 def user_edit_form():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_update", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -419,7 +408,7 @@ def user_edit_form():
 def user_destroy_form():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_destroy", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -432,7 +421,7 @@ def user_destroy_form():
 def user_new_form():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 

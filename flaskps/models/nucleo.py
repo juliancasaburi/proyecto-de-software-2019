@@ -43,7 +43,7 @@ class Nucleo(object):
                         data.get("direccion"),
                         data.get("telefono"),
                         data.get("lat"),
-                        data.get("lng")
+                        data.get("lng"),
                     ),
                 )
                 cls.db.commit()
@@ -79,7 +79,7 @@ class Nucleo(object):
                         data.get("telefono"),
                         data.get("lat"),
                         data.get("lng"),
-                        data.get("id")
+                        data.get("id"),
                     ),
                 )
                 cls.db.commit()

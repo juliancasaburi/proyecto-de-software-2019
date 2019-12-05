@@ -7,7 +7,8 @@ from werkzeug.utils import secure_filename
 from flask import render_template, request, session, abort, make_response, jsonify
 from flaskps.db import get_db
 
-from flaskps.forms.instrumento.form_instrumento_create import InstrumentoCreateForm
+from flaskps.forms.instrumento import forms_instrumento
+from flaskps.forms.instrumento.forms_instrumento import InstrumentoCreateForm
 
 from flaskps.models import siteconfig
 from flaskps.models.instrumento import Instrumento
@@ -72,16 +73,9 @@ def create():
     ):
         abort(401)
 
-    form = InstrumentoCreateForm()
-
-    # Tipos de instrumentos para el select
-    TipoInstrumento.db = get_db()
-    tipos_instrumento = TipoInstrumento.all()
-
-    form.tipo_id.choices = [
-        (tipo_instrumento["id"], tipo_instrumento["nombre"])
-        for tipo_instrumento in tipos_instrumento
-    ]
+    # Instanciar el form de WTForm para la validación
+    choices = forms_instrumento.crud_choices()
+    form = InstrumentoCreateForm(choices)
 
     op_response = dict()
 
@@ -136,16 +130,9 @@ def update():
     ):
         abort(401)
 
-    form = InstrumentoCreateForm()
-
-    # Tipos de instrumentos para el select
-    TipoInstrumento.db = get_db()
-    tipos_instrumento = TipoInstrumento.all()
-
-    form.tipo_id.choices = [
-        (tipo_instrumento["id"], tipo_instrumento["nombre"])
-        for tipo_instrumento in tipos_instrumento
-    ]
+    # Instanciar el form de WTForm para la validación
+    choices = forms_instrumento.crud_choices()
+    form = InstrumentoCreateForm(choices)
 
     op_response = dict()
 
@@ -200,7 +187,7 @@ def update():
 def instrumento_table():
     s_config = siteconfig.get_config()
     if not has_permission("instrumento_index", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
@@ -214,7 +201,7 @@ def instrumento_table():
 def instrumento_info():
     s_config = siteconfig.get_config()
     if not has_permission("instrumento_show", session) or (
-            s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
