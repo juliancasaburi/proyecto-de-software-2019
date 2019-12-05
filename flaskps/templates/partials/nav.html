@@ -65,20 +65,14 @@
             </ul>
             <!-- dropdownTalleres Structure -->
             <ul id="dropdownTalleres" class="dropdown-content teal">
-                <li><a href="#">Ver listado (próximamente)</a></li>
-                {% if has_permission('taller_new', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_new_form') }}">Crear</a></li>
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_ciclo_form') }}">Asociar a ciclos lectivos</a></li>
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_docentes_form') }}">Asociar docentes</a></li>
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('taller_set_estudiantes_form') }}">Asociar estudiantes</a></li>
+                {% if has_permission('taller_index', session) %}
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('administracion') }}">Ver y administrar</a></li>
                 {% endif %}
-                <li><a class="waves-effect waves-ripple" href="#">Eliminar (próximamente)</a></li>
-                <li><a class="waves-effect waves-ripple" href="#">Editar (próximamente)</a></li>
             </ul>
             <!-- dropdownCiclosLectivos Structure -->
             <ul id="dropdownCiclosLectivos" class="dropdown-content teal">
                 {% if has_permission('ciclolectivo_index', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('ciclo_table') }}">Ver y administrar</a></li>
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('administracion') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownInstrumentos Structure -->
