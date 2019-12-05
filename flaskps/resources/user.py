@@ -28,7 +28,7 @@ from flaskps.resources.helpers.email_threading import send_async
 from flaskps import bcrypt
 
 
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)

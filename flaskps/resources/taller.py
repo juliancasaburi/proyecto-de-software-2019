@@ -13,7 +13,7 @@ from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 
 
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("taller_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)

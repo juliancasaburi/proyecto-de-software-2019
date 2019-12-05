@@ -72,7 +72,7 @@ def get_estudiantes():
     return make_response(estudiantes, 200)
 
 
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)

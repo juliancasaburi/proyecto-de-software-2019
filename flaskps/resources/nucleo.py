@@ -49,7 +49,7 @@ def get_nucleos_activos():
     return make_response(nucleos, 200)
 
 
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)

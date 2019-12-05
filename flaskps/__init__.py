@@ -141,7 +141,7 @@ app.add_url_rule(
     "user_serverside_table_content",
     flaskps.resources.helpers.serverside_dt.serverside_table_user.serverside_table_content,
 )
-app.add_url_rule("/usuario/alta", "user_new", user.create, methods=["POST"])
+app.add_url_rule("/usuario/alta", "user_new", user.new, methods=["POST"])
 app.add_url_rule("/usuario/bloquear", "user_destroy", user.destroy, methods=["POST"])
 app.add_url_rule("/usuario/actualizar", "user_update", user.update, methods=["POST"])
 
@@ -153,14 +153,14 @@ app.add_url_rule(
     "docente_serverside_table_content",
     flaskps.resources.helpers.serverside_dt.serverside_table_docente.serverside_table_content,
 )
-app.add_url_rule("/docentes/alta", "docente_new", docente.create, methods=["POST"])
+app.add_url_rule("/docentes/alta", "docente_new", docente.new, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
 app.add_url_rule(
     "/docente/actualizar", "docente_update", docente.update, methods=["POST"]
 )
 
 # Taller
-app.add_url_rule("/taller/alta", "taller_new", taller.create, methods=["POST"])
+app.add_url_rule("/taller/alta", "taller_new", taller.new, methods=["POST"])
 app.add_url_rule("/taller", "taller", taller.data)
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule("/tablatalleres", "taller_table", taller.taller_table)
@@ -191,9 +191,7 @@ app.add_url_rule(
 )
 
 # CicloLectivo
-app.add_url_rule(
-    "/ciclolectivo/alta", "ciclo_new", ciclo_lectivo.create, methods=["POST"]
-)
+app.add_url_rule("/ciclolectivo/alta", "ciclo_new", ciclo_lectivo.new, methods=["POST"])
 app.add_url_rule("/tabla_ciclos_lectivos", "ciclo_table", ciclo_lectivo.ciclo_table)
 app.add_url_rule("/ciclos", "ciclo_all", ciclo_lectivo.get_ciclos)
 app.add_url_rule("/ciclo/talleres", "ciclo_talleres", ciclo_lectivo.get_talleres)
@@ -206,7 +204,7 @@ app.add_url_rule("/estudiante", "estudiante", estudiante.estudiante_data)
 app.add_url_rule("/tablaestudiantes", "estudiante_table", estudiante.estudiante_table)
 app.add_url_rule("/estudiantes", "estudiante_all", estudiante.get_estudiantes)
 app.add_url_rule(
-    "/estudiantes/alta", "estudiante_new", estudiante.create, methods=["POST"]
+    "/estudiantes/alta", "estudiante_new", estudiante.new, methods=["POST"]
 )
 app.add_url_rule(
     "/estudiante/actualizar", "estudiante_update", estudiante.update, methods=["POST"]
@@ -217,7 +215,7 @@ app.add_url_rule(
 
 # Instrumento
 app.add_url_rule(
-    "/instrumento/alta", "instrumento_new", instrumento.create, methods=["POST"]
+    "/instrumento/alta", "instrumento_new", instrumento.new, methods=["POST"]
 )
 app.add_url_rule(
     "/instrumento_informacion", "instrumento_info", instrumento.instrumento_info
@@ -238,7 +236,7 @@ app.add_url_rule(
 app.add_url_rule("/administracion", "administracion", administracion.administracion)
 
 # Nucleo
-app.add_url_rule("/nucleo/alta", "nucleo_new", nucleo.create, methods=["POST"])
+app.add_url_rule("/nucleo/alta", "nucleo_new", nucleo.new, methods=["POST"])
 """
 app.add_url_rule(
     "/nucleo_informacion", "nucleo_info", nucleo.nucleo_info
