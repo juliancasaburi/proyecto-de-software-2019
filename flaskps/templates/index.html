@@ -87,7 +87,7 @@
     <div class="divider blue"></div>
 
     <div class="container">
-        <div class="section">
+        <div id="map-section" class="section">
             <div class="row">
                 <div class="col s12 center wow fadeInUp">
                     <h1 class="light-blue-text text-darken-2"><u>Sumate</u></h1>
@@ -117,54 +117,86 @@
     <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
     <script>
         $(document).ready(function(){
-            var lat = -34.92595;
-            var lon = -57.89335;
-            var zoom = 20;
+            // get nucleos
+            var nucleos;
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('nucleo_all') }}",
+                success: function (response) {
+                    nucleos = response;
 
-            var info = new ol.Feature({
-                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
-                name: 'Escuela 25'
-            });
-            var iconStyle = new ol.style.Style({
-                image: new ol.style.Icon({
-                    crossOrigin: 'anonymous',
-                    src: '{{ url_for('static', filename='img/escuela.png') }}'
-                })
+                    for (var i=0; i<nucleos.length; i++) {
+                        $('#map-section').append("<button id='"+ nucleos[i]['id'] + "'>Ir a " + nucleos[i]['nombre'] + "</button>")
+                    }
+
+                    var zoom = 15;
+
+                    var club_español = [-57.94613, -34.91545];
+                    var escuela_25 = [-57.89335, -34.92595];
+
+                    var info = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(escuela_25)),
+                        name: 'Escuela 25'
+                    });
+                    var iconStyle = new ol.style.Style({
+                        image: new ol.style.Icon({
+                            crossOrigin: 'anonymous',
+                            src: '{{ url_for('static', filename='img/escuela.png') }}'
+                        })
+                    });
+
+                    var vectorSource = new ol.source.Vector({
+                        features: [info]
+                    });
+
+                    var map = new ol.Map({
+                        target: 'map',
+                        layers: [
+                            new ol.layer.Tile({
+                                source: new ol.source.OSM()
+                            }),
+                            new ol.layer.Vector({
+                                source: vectorSource,
+                                updateWhileAnimating: true,
+                                updateWhileInteracting: true,
+                                style: function(feature, resolution) {
+                                    iconStyle.getImage().setScale(1/Math.pow(resolution, 1/6));
+                                    return iconStyle;
+                                }
+                            })
+                        ],
+                        view: new ol.View({
+                            center: ol.proj.fromLonLat(escuela_25),
+                            zoom: zoom
+                        }),
+                        controls: new ol.control.defaults().extend([
+                            new ol.control.Rotate(),
+                            new ol.control.MousePosition(),
+                            new ol.control.OverviewMap(),
+                            new ol.control.ZoomToExtent(),
+                            new ol.control.ScaleLine(),
+                            new ol.control.ZoomSlider()
+                        ])
+                    });
+
+                    // onclicks de cada nucleo
+                    $('#map-section').find($('button')).on('click', function() {
+                        var coords = [nucleos[parseInt($(this).attr('id'))-1]['lng'],nucleos[parseInt($(this).attr('id'))-1]['lat']];
+                        console.log("apretaste en " + nucleos[parseInt($(this).attr('id'))-1]['nombre']);
+                        map.getView().animate({
+                            center: ol.proj.fromLonLat(coords),
+                            duration: 2000,
+                            zoom: zoom
+                        })
+                    });
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
             });
 
-            var vectorSource = new ol.source.Vector({
-                features: [info]
-            });
 
-            var map = new ol.Map({
-                target: 'map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    }),
-                    new ol.layer.Vector({
-                        source: vectorSource,
-                        updateWhileAnimating: true,
-                        updateWhileInteracting: true,
-                        style: function(feature, resolution) {
-                            iconStyle.getImage().setScale(1/Math.pow(resolution, 1/6));
-                            return iconStyle;
-                        }
-                    })
-                ],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat([lon, lat]),
-                    zoom: zoom
-                }),
-                controls: new ol.control.defaults().extend([
-                    new ol.control.Rotate(),
-                    new ol.control.MousePosition(),
-                    new ol.control.OverviewMap(),
-                    new ol.control.ZoomToExtent(),
-                    new ol.control.ScaleLine(),
-                    new ol.control.ZoomSlider()
-                ])
-            });
         });
     </script>
 {% endblock %}
