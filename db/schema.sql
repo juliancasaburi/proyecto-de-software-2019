@@ -907,6 +907,29 @@ INSERT INTO `escuela` (`nombre`) VALUES ('UNLP');
 INSERT INTO `escuela` (`nombre`) VALUES ('UTN');
 INSERT INTO `escuela` (`nombre`) VALUES ('Universitas');
 
+-------------------------------------------------------
+
+-- Data for Nucleos
+
+-------------------------------------------------------
+
+INSERT INTO `nucleo` (`id`, `nombre`, `direccion`, `telefono`, `lat`, `lng`, `activo`) VALUES
+(1, 'Club Español', '6 e/ 53 y 54', '0221 421-9286', -34.9154549, -57.9461365, 1),
+(2, 'Escuela nro 6 "Gabriela Mistral"', '8 y 158', '0221 461-1260', -34.8761482, -57.8925438, 1),
+(3, 'Escuela nro 7', '9 e/ 150 y 151', '', -34.8844528, -57.8981628, 1),
+(4, 'Escuela nro 8', '63 y 125', '', -34.9065208, -57.9215775, 1),
+(5, 'Escuela nro 14', '96 y 126', '', -34.9302292, -57.8853531, 1),
+(6, 'Escuela nro 17', '164 y 26', '', -34.8809357, -57.8698082, 1),
+(7, 'Paraje "La Hermosura"', 'Ruta 11 km 13', '0221 565-6842', -34.9585190, -57.8165894, 1),
+(8, 'Escuela nro 22', '32 y 173', '', -34.8764763, -57.8559647, 1),
+(9, 'Jardín de Infantes 904 "D Amelio"', '164 e/ 30 y 31', '0221 464-5274', -34.8692894, -57.8905144, 1),
+(10, 'Escuela nro 25 "Crucero Gral. Belgrano"', '126 e/ 29 y 30', '0221 486-1226', -34.9259224, -57.8932076, 1),
+(11, 'Escuela nro 501', 'Pascual Ruperto e/ 168 y 169', '', -34.8812141, -57.8602486, 1),
+(12, 'CIC (centro Integración Complementaria)', '169 y 33', '', -34.8819504, -57.8577881, 1),
+(13, 'Parroquia San Miguen Arcángel', '63 y 124', '0221 482-4491', -34.9072876, -57.9220581, 1),
+(14, 'Centro Cultural y Polideportivo "Papa Francisco"', '44 y 126', '', -34.9338646, -57.8809547, 1),
+(15, 'Teatro Argentino', '53 9 y 10', '0221 429-1732', -34.9180412, -57.9513130, 1);
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
