@@ -119,16 +119,17 @@
     <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
     <script>
         $(document).ready(function(){
-            // get nucleos
+            // get nucleos activos
             var nucleos;
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('nucleo_all') }}",
+                url: "{{ url_for('nucleo_activos') }}",
                 success: function (response) {
                     nucleos = response;
 
                     for (var i=0; i<nucleos.length; i++) {
-                        $('#map-buttons').append("<a class='waves-effect waves-light btn col s4' id='"+ nucleos[i]['id'] + "'>Ir a " + nucleos[i]['nombre'] + "</button>")
+                        //$('#map-buttons').append("<a class='waves-effect waves-light btn col s4' id='"+ nucleos[i]['id'] + "'>Ir a " + nucleos[i]['nombre'] + "</button>")
+                        $('#map-buttons').append("<a class='waves-effect waves-light btn col s4' id='"+ i + "'>Ir a " + nucleos[i]['nombre'] + "</button>")
                     }
 
                     var zoom = 15;
@@ -181,8 +182,9 @@
 
                     // onclicks de cada nucleo
                     $('#map-buttons').find($('a')).on('click', function() {
-                        var coords = [nucleos[parseInt($(this).attr('id'))-1]['lng'],nucleos[parseInt($(this).attr('id'))-1]['lat']];
-                        console.log("apretaste en " + nucleos[parseInt($(this).attr('id'))-1]['nombre']);
+                        //var coords = [nucleos[parseInt($(this).attr('id'))-1]['lng'],nucleos[parseInt($(this).attr('id'))-1]['lat']];
+                        var coords = [nucleos[parseInt($(this).attr('id'))]['lng'], nucleos[parseInt($(this).attr('id'))]['lat'],]
+                        console.log("apretaste en " + nucleos[parseInt($(this).attr('id'))]['nombre']);
                         map.getView().animate({
                             center: ol.proj.fromLonLat(coords),
                             duration: 2000,

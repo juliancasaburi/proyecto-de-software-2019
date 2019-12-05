@@ -19,6 +19,20 @@ class Nucleo(object):
         return cursor.fetchall()
 
     @classmethod
+    def activos(cls):
+        sql = """
+                SELECT  *
+                FROM    nucleo
+                WHERE activo = 1
+            """
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql)
+        finally:
+            cls.db.cursor().close()
+        return cursor.fetchall()
+
+    @classmethod
     def create(cls, data):
         sql = """
             INSERT INTO nucleo 

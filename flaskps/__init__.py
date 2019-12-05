@@ -247,6 +247,7 @@ app.add_url_rule(
 app.add_url_rule("/nucleo", "nucleo", nucleo.nucleo_data)
 app.add_url_rule("/tablanucleos", "nucleo_table", nucleo.nucleo_table)
 app.add_url_rule("/nucleos", "nucleo_all", nucleo.get_nucleos)
+app.add_url_rule("/nucleos_activos", "nucleo_activos", nucleo.get_nucleos_activos)
 app.add_url_rule(
     "/nucleo/actualizar", "nucleo_update", nucleo.update, methods=["POST"],
 )
