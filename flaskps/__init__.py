@@ -40,7 +40,7 @@ bcrypt = Bcrypt(app)
 # ---------------- .App Config -----------------
 
 # Resources
-from flaskps.resources import auth, ciclo_lectivo, nucleo
+from flaskps.resources import auth, ciclo_lectivo, nucleo, administracion
 from flaskps.resources import user
 from flaskps.resources import role
 from flaskps.resources import docente
@@ -165,9 +165,7 @@ app.add_url_rule("/taller", "taller", taller.data)
 app.add_url_rule("/taller/ciclos", "taller_ciclos", taller.get_ciclos)
 app.add_url_rule("/tablatalleres", "taller_table", taller.taller_table)
 app.add_url_rule("/talleres", "taller_all", taller.get_talleres)
-app.add_url_rule(
-    "/taller/actualizar", "taller_update", taller.update, methods=["POST"]
-)
+app.add_url_rule("/taller/actualizar", "taller_update", taller.update, methods=["POST"])
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo", taller.set_ciclo, methods=["POST"]
 )
