@@ -26,5 +26,5 @@ def administracion():
         ciclos=ciclos,
         docentes=docentes,
         estudiantes=estudiantes
-        #username=user["username"],
+        # username=user["username"],
     )

@@ -12,13 +12,21 @@
         <div class="row">
             <div class="col s12">
                 <ul class="tabs">
-                    <li class="tab col s4"><a href="#tab_ciclos" class="active">Ciclos lectivos</a></li>
-                    <li class="tab col s4"><a href="#tab_talleres">Talleres</a></li>
+                    {% if has_permission('ciclolectivo_index', session) %}
+                        <li class="tab col s4"><a href="#tab_ciclos" class="active">Ciclos lectivos</a></li>
+                    {% endif %}
+                    {% if has_permission('taller_index', session) %}
+                        <li class="tab col s4"><a href="#tab_talleres">Talleres</a></li>
+                    {% endif %}
                     <li class="tab col s4"><a href="#tab_horarios">Horarios profesores</a></li>
                 </ul>
             </div>
-            {% include 'partials/tabs/moduloadministrativo/ciclos.html' %}
-            {% include 'partials/tabs/moduloadministrativo/talleres.html' %}
+            {% if has_permission('ciclolectivo_index', session) %}
+                {% include 'partials/tabs/moduloadministrativo/ciclos.html' %}
+            {% endif %}
+            {% if has_permission('taller_index', session) %}
+                {% include 'partials/tabs/moduloadministrativo/talleres.html' %}
+            {% endif %}
             <div id="tab_horarios" class="col s12">Horarios profesores</div>
         </div>
     </div>

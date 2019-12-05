@@ -235,11 +235,7 @@ class Taller(object):
             with cls.db.cursor() as cursor:
                 cursor.execute(
                     sql,
-                    (
-                        data.get("nombre"),
-                        data.get("nombre_corto"),
-                        data.get("id"),
-                    ),
+                    (data.get("nombre"), data.get("nombre_corto"), data.get("id"),),
                 )
                 cls.db.commit()
 
