@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Listado de Estudiantes - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Listado de Núcleos - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
     <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
@@ -13,16 +13,16 @@
 
             <div class="row">
                 <div class="col s12 center">
-                    <h1>Listado de Estudiantes</h1>
+                    <h1>Listado de Núcleos</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="card material-table">
                     <div class="table-header">
-                        <span class="table-title">Estudiantes</span>
+                        <span class="table-title">Núcleos</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaEstudiante" data-position="top" data-tooltip="Crear estudiante"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaNucleo" data-position="top" data-tooltip="Crear núcleo"><i class="material-icons">person_add</i></a>
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
@@ -46,30 +46,20 @@
                             <div class="determinate red" style="width: 100%"></div>
                         </div>
                     </div>
-                    <table id="tablaEstudiantes" class="highlight nowrap" style="width:100%">
+                    <table id="tablaNucleos" class="highlight nowrap" style="width:100%">
                         <thead>
                         <tr class="orange">
                             <th>ID</th>
                             <th>Activo</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Localidad</th>
-                            <th>Domicilio</th>
-                            <th>Barrio</th>
-                            <th>Género</th>
-                            <th>Tipo de Documento</th>
-                            <th>Numero de Documento</th>
-                            <th>Número telefónico</th>
-                            <th>Escuela</th>
-                            <th>Nivel</th>
-                            <th>Responsable a cargo</th>
-                            <th>Creado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('estudiante_update', session) %}
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Latitud</th>
+                            <th>Longitud</th>
+                            {% if has_permission('nucleo_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('estudiante_destroy', session) %}
+                            {% if has_permission('nucleo_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -79,24 +69,14 @@
                             <th>ID</th>
                             <th>Activo</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Localidad</th>
-                            <th>Domicilio</th>
-                            <th>Barrio</th>
-                            <th>Género</th>
-                            <th>Tipo de Documento</th>
-                            <th>Número de Documento</th>
-                            <th>Número telefónico</th>
-                            <th>Escuela</th>
-                            <th>Nivel</th>
-                            <th>Responsable a cargo</th>
-                            <th>Creado</th>
-                            <th>Actualizado</th>
-                            {% if has_permission('estudiante_update', session) %}
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Latitud</th>
+                            <th>Longitud</th>
+                            {% if has_permission('nucleo_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('estudiante_destroy', session) %}
+                            {% if has_permission('nucleo_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -104,14 +84,6 @@
                     </table>
                 </div>
             </div>
-
-            {% if has_permission('estudiante_new', session) %}
-                {% include 'partials/modals/modal_alta_estudiante.html' %}
-            {% endif %}
-
-            {% if has_permission('estudiante_update', session) %}
-                {% include 'partials/modals/modal_editar_estudiante.html' %}
-            {% endif %}
 
             <div class="col-md-12 center text-center">
                 <span class="left" id="total_reg"></span>
@@ -127,26 +99,14 @@
             <!-- Modal Structure -->
             <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
-                    <h3 class="header">Filtrar el listado de Estudiantes</h3>
+                    <h3 class="header">Filtrar el listado de Núcleos</h3>
                     <ul class="collection">
                         <li class="collection-item">
                             <div class="row valign-wrapper center-align">
                                 <div class="input-field col s10">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input class="filterEstudiante" id="filterNombreEstudiante" type="text">
-                                    <label for="filterNombreEstudiante">Filtrar por nombre</label>
-                                </div>
-                                <div class="col s2">
-                                    <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser"></i></a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="collection-item">
-                            <div class="row valign-wrapper center-align">
-                                <div class="input-field col s10">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input class="filterEstudiante" id="filterDocumentoEstudiante" type="text">
-                                    <label for="filterDocumentoEstudiante">Filtrar por número de documento</label>
+                                    <input id="filterNombreNucleo" type="text">
+                                    <label for="filterNombreNucleo">Filtrar por nombre</label>
                                 </div>
                                 <div class="col s2">
                                     <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
@@ -157,7 +117,7 @@
                             <p>
                                 <label>
                                     <input id="filterActive" type="checkbox"/>
-                                    <span>Listar estudiantes bloqueados</span>
+                                    <span>Listar núcleos bloqueados</span>
                                 </label>
                             </p>
                         </li>
@@ -169,6 +129,12 @@
                 </div>
             </div>
 
+            {% if has_permission('nucleo_update', session) %}
+                {% include 'partials/modals/modal_editar_nucleo.html' %}
+            {% endif %}
+            {% if has_permission('nucleo_new', session) %}
+                {% include 'partials/modals/modal_alta_nucleo.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -177,18 +143,20 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalEstudiante.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataToModalNucleo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
+            $('#modalFilters').modal();
             $('.tooltipped').tooltip();
         });
     </script>
     <script>
         $(document).ready(function() {
-            let table = $('#tablaEstudiantes').DataTable( {
+            let table = $('#tablaNucleos').DataTable( {
                 "ajax": {
-                    "url": "{{ url_for('estudiante_all') }}",
+                    "url": "{{ url_for('nucleo_all') }}",
                     "dataType": "json",
                     "dataSrc": "",
                     "contentType":"application/json"
@@ -197,21 +165,11 @@
                     {"data": "id"},
                     {"data": "activo"},
                     {"data": "nombre"},
-                    {"data": "apellido"},
-                    {"data": "fecha_nac"},
-                    {"data": "localidad"},
-                    {"data": "domicilio"},
-                    {"data": "barrio"},
-                    {"data": "género"},
-                    {"data": "tipo_doc"},
-                    {"data": "numero_doc"},
-                    {"data": "tel"},
-                    {"data": "escuela"},
-                    {"data": "nivel"},
-                    {"data": "responsable"},
-                    {"data": "created_at"},
-                    {"data": "updated_at"},
-                    {% if has_permission('estudiante_update', session) %}
+                    {"data": "direccion"},
+                    {"data": "telefono"},
+                    {"data": "lat"},
+                    {"data": "lng"},
+                    {% if has_permission('nucleo_update', session) %}
                         {
                             data: null,
                             className: "center",
@@ -224,7 +182,7 @@
                             }
                         },
                     {% endif %}
-                    {% if has_permission('estudiante_destroy', session) %}
+                    {% if has_permission('nucleo_destroy', session) %}
                         {
                             data: null,
                             className: "center",
@@ -266,19 +224,18 @@
     </script>
     <script>
         $(document).ready(function(){
-            $('#modalAltaEstudiante').modal();
-            $('#modalEditarEstudiante').modal();
+            $('#modalAltaNucleo').modal();
+            $('#modalEditarNucleo').modal();
             validar_filtro_activo();
             $('select').formSelect();
         });
     </script>
     <script>
         var filtro_activo = document.getElementById("filterActive");
-        var filtro_dni = document.getElementById("filterDocumentoEstudiante");
-        var filtro_nombre = document.getElementById("filterNombreEstudiante");
+        var filtro_nombre = document.getElementById("filterNombreNucleo");
 
         function validar_filtro_activo() {
-            var table = $('#tablaEstudiantes').DataTable();
+            var table = $('#tablaNucleos').DataTable();
             if($("#filterActive").prop("checked") == true)
             {
                 table
@@ -294,15 +251,8 @@
                     .draw();
             }
         }
-        function validar_dni() {
-            var table = $('#tablaEstudiantes').DataTable();
-            table
-                .columns( 10 )
-                .search(filtro_dni.value)
-                .draw();
-        }
         function validar_nombre() {
-            var table = $('#tablaEstudiantes').DataTable();
+            var table = $('#tablaNucleos').DataTable();
             table
                 .columns(2)
                 .search(filtro_nombre.value)
@@ -312,8 +262,6 @@
         filtro_activo.onchange = validar_filtro_activo;
         filtro_nombre.onchange = validar_nombre;
         filtro_nombre.onkeyup = validar_nombre;
-        filtro_dni.onchange = validar_dni;
-        filtro_dni.onkeyup = validar_dni;
     </script>
     <script>
         $('#modalFilters').modal({
@@ -333,20 +281,20 @@
         );
     </script>
     <script>
-        // Edit a record
-        $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaEstudiantes').DataTable();
+        // Editar núcleo
+        $('#tablaNucleos').on('click', 'a.editButton', function (e) {
+            var table = $('#tablaNucleos').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
-            var eid = rowData['id'];
+            var n_id = rowData['id'];
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('estudiante') }}",
+                url: "{{ url_for('nucleo') }}",
                 data: {
-                    id: eid
+                    id: n_id
                 },
                 success: function (response) {
-                    dataToModalEstudiante(response);
-                    $('#modalEditarEstudiante').modal('open');
+                    dataToModalNucleo(response);
+                    $('#modalEditarNucleo').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -359,24 +307,24 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
-            // Editar estudiante
-            var frm = $('#formEditarEstudiante');
+            // Editar núcleo
+            var frm = $('#formEditarNucleo');
 
             frm.submit(function (e) {
                 e.preventDefault();
                 $('#progress').show();
-                $('#modalEditarEstudiante').modal('close');
+                $('#modalEditarNucleo').modal('close');
                 $.ajax({
                     type: frm.attr('method'),
                     url: frm.attr('action'),
                     data: frm.serialize(),
                     success: async function (response) {
                         $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "El estudiante fue editado con éxito";
+                        var toastText = "El núcleo fue editado con éxito";
                         await sleep(2000);
                         $('#actionSuccess').show();
                         $('#actionSuccess').delay(2000).fadeOut('slow');
-                        var table = $('#tablaEstudiantes').DataTable();
+                        var table = $('#tablaNucleos').DataTable();
                         table.ajax.reload( null, false );
                         M.toast({html: toastText, classes: 'green'});
                     },
@@ -391,24 +339,24 @@
                 });
             });
 
-            // Bloquear/activar estudiante
-            $('#tablaEstudiantes').on('click', 'a.deleteButton', function (e) {
-                var table = $('#tablaEstudiantes').DataTable();
+            // Bloquear/activar núcleo
+            $('#tablaNucleos').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablaNucleos').DataTable();
                 var rowData = table.row($(this).parents("tr")).data();
-                var eid = rowData['id'];
-                var estudiantename = rowData['apellido'] + ", " + rowData['nombre'];
+                var nid = rowData['id'];
+                var nucleoname = rowData['nombre'];
                 var confirmText;
                 var estoyActivo = rowData['activo'] == 1;
                 if(estoyActivo)
                     confirmText = "bloquear";
                 else
                     confirmText = "activar";
-                if (confirm('¿Está seguro de ' + confirmText + ' al estudiante ' + estudiantename + ' (ID: ' + eid + ')?') == true) {
+                if (confirm('¿Está seguro de ' + confirmText + ' al núcleo ' + nucleoname + ' (ID: ' + nid + ')?') == true) {
                     $('#progress').show();
                     $.ajax({
                         type: "POST",
-                        url: "{{ url_for('estudiante_destroy') }}",
-                        data: JSON.stringify({"id": eid, "activo": estoyActivo}),
+                        url: "{{ url_for('nucleo_destroy') }}",
+                        data: JSON.stringify({"id": nid, "activo": estoyActivo}),
                         dataType: 'json',
                         contentType: 'application/json;charset=UTF-8',
                         success: async function (response) {

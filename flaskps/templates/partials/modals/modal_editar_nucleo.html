@@ -1,0 +1,57 @@
+<div id="modalEditarNucleo" class="modal">
+    <header class="modal-header">Editar Núcleo</header>
+    <form id="formEditarNucleo" method="post" action="{{ url_for('nucleo_update') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="modal-content">
+            <div class="row">
+                <input id="modal_editar_id" name="id" type="number" hidden>
+                <div class="col s12 m12 input-field">
+                    <label for="modal_editar_nombre">Nombre</label>
+                    <input id="modal_editar_nombre" name="nombre" class="validate active" type="text" required>
+                </div>
+                <div class="col s6 m6 input-field">
+                    <label for="modal_editar_direccion">Dirección</label>
+                    <input id="modal_editar_direccion" name="direccion" class="validate active" type="text" required>
+                </div>
+                <div class="col s6 m6 input-field">
+                    <label for="modal_editar_telefono">Nro de teléfono</label>
+                    <input id="modal_editar_telefono" name="telefono" class="validate active" type="text" required>
+                </div>
+                <div class="col s6 m6 input-field">
+                    <label for="modal_editar_lat">Latitud</label>
+                    <input id="modal_editar_lat" name="lat" class="validate active" type="number" step=".00001" required>
+                </div>
+                <div class="col s6 m6 input-field">
+                    <label for="modal_editar_lng">Longitud</label>
+                    <input id="modal_editar_lng" name="lng" class="validate active" type="number" step=".00001" required>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="editarNucleoSubmit" class="btn blue waves-effect waves-button-input">Guardar</button>
+            <button id="cancelarEditarNucleo" class="btn red waves-effect waves-light">Reiniciar</button>
+        </div>
+    </form>
+</div>
+<script>
+    // para resetear los campos a los originales
+    $(document).ready(function() {
+        $("#cancelarEditarNucleo").click(function(e){
+            e.preventDefault();
+            var nid = $('#modal_editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('nucleo') }}",
+                data: {
+                    id: nid
+                },
+                success: function (response) {
+                    dataToModalNucleo(response);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        })
+    })
+</script>
