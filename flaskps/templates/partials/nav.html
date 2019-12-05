@@ -87,6 +87,12 @@
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('instrumento_table') }}">Ver y Administrar</a></li>
                 {% endif %}
             </ul>
+            <!-- dropdownNúcleos Structure -->
+            <ul id="dropdownNucleos" class="dropdown-content teal">
+                {% if has_permission('nucleo_index', session) %}
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('nucleo_table') }}">Ver y Administrar</a></li>
+                {% endif %}
+            </ul>
 
             {% if is_authenticated(session) %}
                 <div class="section">
@@ -139,6 +145,14 @@
                         <li><a class="subheader">Instrumentos</a></li>
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownInstrumentos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
+                {% if has_permission('nucleo_index', session) or has_permission('nucleo_new', session) or has_permission('nucleo_destroy', session) or has_permission('nucleo_update', session) or has_permission('nucleo_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Núcleos</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownNucleos">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
                 {% if has_permission('config_update', session) %}
