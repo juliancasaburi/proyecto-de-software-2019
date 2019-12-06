@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Listado de Docentes - {{ siteconfig['titulo'] }}{% endblock %}
+{% block title %}Listado de preceptores - {{ siteconfig['titulo'] }}{% endblock %}
 {% block head %}
     {{ super() }}
     <meta id="items-per-page" data-ammount="{{ siteconfig['items_por_pagina'] }}">
@@ -13,16 +13,16 @@
 
             <div class="row">
                 <div class="col s12 center">
-                    <h1>Listado de Docentes</h1>
+                    <h1>Listado de preceptores</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="card material-table">
                     <div class="table-header">
-                        <span class="table-title">Docentes</span>
+                        <span class="table-title">preceptores</span>
                         <div class="actions">
-                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaDocente" data-position="top" data-tooltip="Crear Docente"><i class="material-icons">person_add</i></a>
+                            <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalAltaPreceptor" data-position="top" data-tooltip="Crear Preceptor"><i class="material-icons">person_add</i></a>
                             <a class="tooltipped modal-trigger btn-flat waves-effect waves-teal nopadding" href="#modalFilters" data-position="top" data-tooltip="Filtros">
                                 <i class="large material-icons">search</i>
                             </a>
@@ -46,7 +46,7 @@
                             <div class="determinate red" style="width: 100%"></div>
                         </div>
                     </div>
-                    <table id="tablaDocentes" class="highlight nowrap" style="width:100%">
+                    <table id="tablapreceptores" class="highlight nowrap" style="width:100%">
                         <thead>
                         <tr class="orange">
                             <th>ID</th>
@@ -63,10 +63,10 @@
                             <th>Numero telefónico</th>
                             <th>Creado</th>
                             <th>Actualizado</th>
-                            {% if has_permission('docente_update', session) %}
+                            {% if has_permission('preceptor_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('docente_destroy', session) %}
+                            {% if has_permission('preceptor_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -87,10 +87,10 @@
                             <th>Numero telefónico</th>
                             <th>Creado</th>
                             <th>Actualizado</th>
-                            {% if has_permission('docente_update', session) %}
+                            {% if has_permission('preceptor_update', session) %}
                                 <th class="nosort">Editar</th>
                             {% endif %}
-                            {% if has_permission('docente_destroy', session) %}
+                            {% if has_permission('preceptor_destroy', session) %}
                                 <th class="nosort">Bloquear/Activar</th>
                             {% endif %}
                         </tr>
@@ -99,12 +99,12 @@
                 </div>
             </div>
 
-            {% if has_permission('docente_new', session) %}
-                {% include 'partials/modals/modal_alta_docente.html' %}
+            {% if has_permission('preceptor_new', session) %}
+                {% include 'partials/modals/modal_alta_preceptor.html' %}
             {% endif %}
 
-            {% if has_permission('docente_update', session) %}
-                {% include 'partials/modals/modal_editar_docente.html' %}
+            {% if has_permission('preceptor_update', session) %}
+                {% include 'partials/modals/modal_editar_preceptor.html' %}
             {% endif %}
 
             <div class="col-md-12 center text-center">
@@ -121,14 +121,14 @@
             <!-- Modal Structure -->
             <div id="modalFilters" class="modal bottom-sheet modal-fixed-footer">
                 <div class="modal-content">
-                    <h3 class="header">Filtrar el listado de Docentes</h3>
+                    <h3 class="header">Filtrar el listado de preceptores</h3>
                     <ul class="collection">
                         <li class="collection-item">
                             <div class="row valign-wrapper center-align">
                                 <div class="input-field col s10">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input id="filterNombreDocente" type="text">
-                                    <label for="filterNombreDocente">Filtrar por nombre</label>
+                                    <input id="filterNombrePreceptor" type="text">
+                                    <label for="filterNombrePreceptor">Filtrar por nombre</label>
                                 </div>
                                 <div class="col s2">
                                     <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
@@ -139,8 +139,8 @@
                             <div class="row valign-wrapper center-align">
                                 <div class="input-field col s10">
                                     <i class="material-icons prefix">account_circle</i>
-                                    <input id="filterApellidoDocente" type="text">
-                                    <label for="filterApellidoDocente">Filtrar por apellido</label>
+                                    <input id="filterApellidoPreceptor" type="text">
+                                    <label for="filterApellidoPreceptor">Filtrar por apellido</label>
                                 </div>
                                 <div class="col s2">
                                     <a class="eraseFilter btn blue-grey waves-effect waves-light hoverable tooltipped" data-position="bottom" data-tooltip="Borrar filtro"><i class="fas fa-eraser" ></i></a>
@@ -151,7 +151,7 @@
                             <p>
                                 <label>
                                     <input id="filterActive" type="checkbox"/>
-                                    <span>Listar docentes bloqueados</span>
+                                    <span>Listar preceptores bloqueados</span>
                                 </label>
                             </p>
                         </li>
@@ -181,11 +181,11 @@
     </script>
     <script>
         $(document).ready(function() {
-            let table = $('#tablaDocentes').DataTable( {
+            let table = $('#tablapreceptores').DataTable( {
                 bProcessing: true,
                 bServerSide: true,
                 sPaginationType: "full_numbers",
-                sAjaxSource:"{{ url_for('docente_serverside_table_content') }}",
+                sAjaxSource:"{{ url_for('preceptor_serverside_table_content') }}",
                 "columns": [
                     {"data": "ID"},
                     {"data": "Activo"},
@@ -201,7 +201,7 @@
                     {"data": "Numero telefónico"},
                     {"data": "Creado"},
                     {"data": "Actualizado"},
-                    {% if has_permission('docente_update', session) %}
+                    {% if has_permission('preceptor_update', session) %}
                         {
                             data: null,
                             className: "center",
@@ -214,7 +214,7 @@
                             }
                         },
                     {% endif %}
-                    {% if has_permission('docente_destroy', session) %}
+                    {% if has_permission('preceptor_destroy', session) %}
                         {
                             data: null,
                             className: "center",
@@ -264,14 +264,14 @@
     </script>
     <script> // Filtros
     $(document).ready(function(){
-        var table = $('#tablaDocentes').DataTable();
-        $("#filterNombreDocente").on("keyup change", function() {
+        var table = $('#tablapreceptores').DataTable();
+        $("#filterNombrePreceptor").on("keyup change", function() {
             table
                 .columns( 2 )
                 .search( this.value )
                 .draw();
         });
-        $("#filterApellidoDocente").on("keyup change", function() {
+        $("#filterApellidoPreceptor").on("keyup change", function() {
             table
                 .columns( 3 )
                 .search( this.value )
@@ -282,7 +282,7 @@
     <script>
         $(document).ready(function () {
             $("#filterActive").on("change", function(){
-                var table = $('#tablaDocentes').DataTable();
+                var table = $('#tablapreceptores').DataTable();
                 if($("#filterActive").prop("checked") == true)
                 {
                     table
@@ -300,28 +300,28 @@
             });
         });
     </script>
-    <script> // Alta de Docente
+    <script> // Alta de Preceptor
     $(document).ready(function(){
-        $('#modalAltaDocente').modal();
+        $('#modalAltaPreceptor').modal();
         $('select').formSelect();
-        $('#modalEditarDocente').modal();
+        $('#modalEditarPreceptor').modal();
     });
     </script>
     <script>
-        // Editar docente
-        $('#tablaDocentes').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaDocentes').DataTable();
+        // Editar preceptor
+        $('#tablapreceptores').on('click', 'a.editButton', function (e) {
+            var table = $('#tablapreceptores').DataTable();
             var rowData = table.row($(this).parents("tr")).data();
             var d_id = rowData['ID'];
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('docente') }}",
+                url: "{{ url_for('preceptor') }}",
                 data: {
                     id: d_id
                 },
                 success: function (response) {
                     dataToModalDocente_Preceptor(response);
-                    $('#modalEditarDocente').modal('open');
+                    $('#modalEditarPreceptor').modal('open');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log("Error: ", errorMessage);
@@ -334,24 +334,24 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
-            // Editar docente
-            var frm = $('#editarDocente');
+            // Editar preceptor
+            var frm = $('#editarPreceptor');
 
             frm.submit(function (e) {
                 e.preventDefault();
                 $('#progress').show();
-                $('#modalEditarDocente').modal('close');
+                $('#modalEditarPreceptor').modal('close');
                 $.ajax({
                     type: frm.attr('method'),
                     url: frm.attr('action'),
                     data: frm.serialize(),
                     success: async function (response) {
                         $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "El docente fue editado con éxito";
+                        var toastText = "El preceptor fue editado con éxito";
                         await sleep(2000);
                         $('#actionSuccess').show();
                         $('#actionSuccess').delay(2000).fadeOut('slow');
-                        var table = $('#tablaDocentes').DataTable();
+                        var table = $('#tablapreceptores').DataTable();
                         table.ajax.reload( null, false );
                         M.toast({html: toastText, classes: 'green'});
                     },
@@ -368,22 +368,22 @@
 
             // Delete a record
 
-            $('#tablaDocentes').on('click', 'a.deleteButton', function (e) {
-                var table = $('#tablaDocentes').DataTable();
+            $('#tablapreceptores').on('click', 'a.deleteButton', function (e) {
+                var table = $('#tablapreceptores').DataTable();
                 var rowData = table.row($(this).parents("tr")).data();
                 var d_id = rowData['ID'];
-                var docentename = rowData['Nombre'] + ", " + rowData['Apellido'];
+                var preceptorname = rowData['Nombre'] + ", " + rowData['Apellido'];
                 var confirmText;
                 var estoyActivo = rowData['Activo'] == 1;
                 if(estoyActivo)
                     confirmText = "bloquear";
                 else
                     confirmText = "activar";
-                if (confirm('¿Está seguro de ' + confirmText + ' al docente "' + docentename + '" (ID: ' + d_id + ')?') == true) {
+                if (confirm('¿Está seguro de ' + confirmText + ' al preceptor "' + preceptorname + '" (ID: ' + d_id + ')?') == true) {
                     $('#progress').show();
                     $.ajax({
                         type: "POST",
-                        url: "{{ url_for('docente_destroy') }}",
+                        url: "{{ url_for('preceptor_destroy') }}",
                         data: JSON.stringify({"id": d_id, "activo": estoyActivo}),
                         dataType: 'json',
                         contentType: 'application/json;charset=UTF-8',

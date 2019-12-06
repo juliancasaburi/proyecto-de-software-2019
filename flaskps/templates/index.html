@@ -87,18 +87,34 @@
     <div class="divider blue"></div>
 
     <div class="container">
-        <div class="section">
-            <div class="row">
-                <div class="col s12 center wow fadeInUp">
-                    <h1 class="light-blue-text text-darken-2"><u>Sumate</u></h1>
-                    <p class="text-justify light">{{ siteconfig['descripcion'] }}</p>
-                </div>
-            </div>
-            <div id="map" class="col s12 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:200px"></div>
-            <div id="map-buttons" class="row" style="margin-top: 2rem">
+    <div class="section">
+        <div class="row">
+            <div class="col s12 center wow fadeInUp">
+                <h1 class="light-blue-text text-darken-2">¡Sumate!</h1>
+                <p class="text-justify light">{{ siteconfig['descripcion'] }}</p>
             </div>
         </div>
     </div>
+    <div class="divider"></div>
+    <div class="container">
+        <div class="row center">
+            <h1 class="header blue-text col s12">Núcleos en los que trabajamos</h1>
+            <h6 class="col s12">Esta es una lista de los núcleos donde actualmente estamos trabajando, puede verlos en el mapa</h6>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="map" class="col s12 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:300px"></div>
+    </div>
+    <div class="row" style="margin-top: 2rem">
+        <div class="input-field col s12">
+            <select id="map-select">
+                <option value="" disabled selected>Elija el núcleo</option>
+            </select>
+            <label>Quiero saber la ubicación de...</label>
+        </div>
+    </div>
+
 
 {% endblock %}
 
@@ -107,6 +123,7 @@
     <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            $('select').formSelect();
             new WOW().init();
             $('.parallax').parallax();
             $('.carousel.carousel-slider').carousel({
@@ -119,19 +136,46 @@
     <script src="{{ url_for('static', filename='js/ol.js') }}"></script>
     <script>
         $(document).ready(function(){
-            // get nucleos
+            // get nucleos activos
             var nucleos;
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('nucleo_all') }}",
+                url: "{{ url_for('nucleo_activos') }}",
                 success: function (response) {
                     nucleos = response;
-
+                    nucleos_markers = [];
                     for (var i=0; i<nucleos.length; i++) {
-                        $('#map-buttons').append("<a class='waves-effect waves-light btn col s4' id='"+ nucleos[i]['id'] + "'>Ir a " + nucleos[i]['nombre'] + "</button>")
+                        $('#map-select').append("<option value='"+ i + "'>" + nucleos[i]['nombre'] + "</option>");
+                        // markers
+                        nucleos_markers[i] = new ol.Feature({
+                            geometry: new ol.geom.Point(
+                                ol.proj.fromLonLat([nucleos[i]['lng'],nucleos[i]['lat']])
+                            )
+                        });
+                        var letters = '0123456789ABCDEF';
+                        var color_pin = '#';
+                        for (var j = 0; j < 6; j++) {
+                            color_pin += letters[Math.floor(Math.random() * 16)];
+                        }
+                        nucleos_markers[i].setStyle(
+                            new ol.style.Style({
+                                image: new ol.style.Icon({
+                                    anchor: [0.5, 0.0],
+                                    color: 'red',
+                                    crossOrigin: 'anonymous',
+                                    anchorOrigin: 'bottom-left',
+                                    scale: 0.5,
+                                    src: '{{ url_for('static', filename='img/location_on.png') }}'
+                                }),
+                            })
+                        );
                     }
 
+                    $('#map-select').val("");
+                    $('#map-select').formSelect();
+
                     var zoom = 15;
+
                     var escuela_25 = [-57.89335, -34.92595];
 
                     var info = new ol.Feature({
@@ -149,6 +193,10 @@
                         features: [info]
                     });
 
+                    var vectorSourceMarkers = new ol.source.Vector({
+                        features: nucleos_markers
+                    });
+
                     var map = new ol.Map({
                         target: 'map',
                         layers: [
@@ -163,6 +211,10 @@
                                     iconStyle.getImage().setScale(1/Math.pow(resolution, 1/6));
                                     return iconStyle;
                                 }
+                            }),
+                            // layer para markers
+                            new ol.layer.Vector({
+                                source: vectorSourceMarkers
                             })
                         ],
                         view: new ol.View({
@@ -171,7 +223,6 @@
                         }),
                         controls: new ol.control.defaults().extend([
                             new ol.control.Rotate(),
-                            new ol.control.MousePosition(),
                             new ol.control.OverviewMap(),
                             new ol.control.ZoomToExtent(),
                             new ol.control.ScaleLine(),
@@ -179,10 +230,9 @@
                         ])
                     });
 
-                    // onclicks de cada nucleo
-                    $('#map-buttons').find($('a')).on('click', function() {
-                        var coords = [nucleos[parseInt($(this).attr('id'))-1]['lng'],nucleos[parseInt($(this).attr('id'))-1]['lat']];
-                        console.log("apretaste en " + nucleos[parseInt($(this).attr('id'))-1]['nombre']);
+                    // mover posición al núcleo seleccinado en el select
+                    $('#map-select').on('change', function() {
+                        var coords = [nucleos[parseInt($(this).val())]['lng'], nucleos[parseInt($(this).val())]['lat']];
                         map.getView().animate({
                             center: ol.proj.fromLonLat(coords),
                             duration: 2000,

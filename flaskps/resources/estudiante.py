@@ -72,7 +72,7 @@ def get_estudiantes():
     return make_response(estudiantes, 200)
 
 
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("estudiante_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
@@ -199,11 +199,12 @@ def estudiante_data():
     ):
         abort(401)
 
-    if request.args.get("id"):
+    id = request.args.get("id")
+    if id:
         Estudiante.db = get_db()
-        eid = request.args.get("id")
-        estudiante = Estudiante.find_by_id(eid)
-        if estudiante != None:
+        estudiante = Estudiante.find_by_id(id)
+
+        if estudiante is not None:
             # lo tuve que pasar a string desde acá
             estudiante["fecha_nac"] = datetime.strftime(
                 estudiante["fecha_nac"], "%d/%m/%Y"
@@ -211,9 +212,7 @@ def estudiante_data():
             data = jsonify(estudiante)
             return make_response(data, 200)
         else:
-            flash("El estudiante con ID:" + eid + "no existe.", "error")
-            return abort(404)
-
+            abort(422)
     else:
         abort(400)
 

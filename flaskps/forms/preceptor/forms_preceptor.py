@@ -10,7 +10,7 @@ from wtforms import StringField, DateField, SelectField, IntegerField
 from wtforms.validators import InputRequired
 
 
-class DocenteForm(FlaskForm):
+class PreceptorForm(FlaskForm):
     username = StringField("username")
     nombre = StringField("nombre", [InputRequired(message="Complete el nombre")])
     apellido = StringField("nombre", [InputRequired(message="Complete el apellido")])
@@ -40,7 +40,7 @@ class DocenteForm(FlaskForm):
     )
 
     def __init__(self, choices, *args, **kwargs):
-        super(DocenteForm, self).__init__(*args, **kwargs)
+        super(PreceptorForm, self).__init__(*args, **kwargs)
         self.select_genero.choices = choices["select_genero"]
         self.select_localidad.choices = choices["select_localidad"]
         self.select_tipo.choices = choices["select_tipo"]

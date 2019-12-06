@@ -1,6 +1,6 @@
-<div id="modalEditarDocente" class="modal">
-    <header class="modal-header">Editar Docente</header>
-    <form id="editarDocente" method="post" action="{{ url_for('docente_update') }}">
+<div id="modalEditarPreceptor" class="modal">
+    <header class="modal-header">Editar Preceptor</header>
+    <form id="editarPreceptor" method="post" action="{{ url_for('preceptor_update') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="modal-content">
             <div class="row">
@@ -64,7 +64,7 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
-            <button id="cancelarEditarDocente" class="btn red waves-effect waves-light">Reiniciar</button>
+            <button id="cancelarEditarPreceptor" class="btn red waves-effect waves-light">Reiniciar</button>
         </div>
     </form>
 </div>
@@ -90,12 +90,12 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#cancelarEditarDocente").click(function(e){
+        $("#cancelarEditarPreceptor").click(function(e){
             e.preventDefault();
             var did = $('#editar_id').val();
             $.ajax({
                 type: "GET",
-                url: "{{ url_for('docente') }}",
+                url: "{{ url_for('preceptor') }}",
                 data: {
                     id: did
                 },
@@ -112,17 +112,17 @@
 <script>
     /*
     $(document).ready(function() {
-        var frm = $('#editarDocente');
+        var frm = $('#editarPreceptor');
 
         frm.submit(function (e) {
             e.preventDefault();
-            $('#modalEditarDocente').modal('close');
+            $('#modalEditarPreceptor').modal('close');
             $.ajax({
                 type: frm.attr('method'),
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (response) {
-                    $('#editarDocente').trigger("reset");
+                    $('#editarPreceptor').trigger("reset");
                     var toastText = response['msg'];
                     var toastClass = response['type'];
                     M.toast({html: toastText, classes: toastClass});

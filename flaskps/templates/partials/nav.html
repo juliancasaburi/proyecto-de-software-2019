@@ -41,20 +41,17 @@
                 {% if has_permission('usuario_index', session) %}
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('user_table') }}">Ver y administrar</a></li>
                 {% endif %}
-                {% if has_permission('usuario_new', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_new_form') }}">Crear</a></li>
-                {% endif %}
-                {% if has_permission('usuario_destroy', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
-                {% endif %}
-                {% if has_permission('usuario_update', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_edit_form') }}">Editar</a></li>
-                {% endif %}
             </ul>
             <!-- dropdownEstudiantes Structure -->
             <ul id="dropdownEstudiantes" class="dropdown-content teal">
                 {% if has_permission('estudiante_index', session) %}
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('estudiante_table') }}">Ver y administrar</a></li>
+                {% endif %}
+            </ul>
+            <!-- dropdownPreceptores Structure -->
+            <ul id="dropdownPreceptores" class="dropdown-content teal">
+                {% if has_permission('preceptor_index', session) %}
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('preceptor_table') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
             <!-- dropdownDocentes Structure -->
@@ -107,6 +104,14 @@
                         <li><a class="subheader">Estudiantes</a></li>
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownEstudiantes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
+                {% if has_permission('preceptor_index', session) or has_permission('preceptor_new', session) or has_permission('preceptor_destroy', session) or has_permission('preceptor_update', session) or has_permission('preceptor_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Preceptores</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
                 {% if has_permission('docente_index', session) or has_permission('docente_new', session) or has_permission('docente_destroy', session) or has_permission('docente_update', session) or has_permission('docente_show', session) %}

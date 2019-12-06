@@ -27,54 +27,8 @@ from flaskps.resources.helpers.email_threading import send_async
 
 from flaskps import bcrypt
 
-from flaskps.resources.helpers.serverside_dt.serverside_table_usuarios import (
-    UsuariosServerSideTable,
-)
-from flaskps.resources.helpers.serverside_dt import table_schemas
 
-
-def users():
-    User.db = get_db()
-    users = User.all()
-
-    for dict_item in users:
-        del dict_item["password"]
-        dict_item["created_at"] = dict_item["created_at"].strftime("%d-%m-%Y %H:%M:%S")
-        dict_item["updated_at"] = dict_item["updated_at"].strftime("%d-%m-%Y %H:%M:%S")
-
-    return users
-
-
-def get_users():
-    s_config = siteconfig.get_config()
-    if not has_permission("usuario_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    all_users = jsonify(users())
-
-    return make_response(all_users, 200)
-
-
-def collect_data_serverside(req):
-    columns = table_schemas.SERVERSIDE_USUARIOS_TABLE_COLUMNS
-
-    return UsuariosServerSideTable(req, users(), columns).output_result()
-
-
-def serverside_table_content():
-    s_config = siteconfig.get_config()
-    if not has_permission("usuario_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    data = collect_data_serverside(request)
-    return jsonify(data)
-
-
-def create():
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("usuario_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
@@ -351,30 +305,17 @@ def user_data():
     ):
         abort(401)
 
-    if request.args.get("id"):
+    # Por id
+    id = request.args.get("id")
+    if id:
         User.db = get_db()
-        uid = request.args.get("id")
-        user = User.find_by_id(uid)
-        if user != None:
+        user = User.find_by_id(id)
+        if user is not None:
             user["roles"] = User.user_roles(user["username"])
             data = jsonify(user)
             return make_response(data, 200)
         else:
-            flash("El usuario con ID:" + uid + "no existe.", "error")
-            return abort(404)
-
-    elif request.args.get("username"):
-        User.db = get_db()
-        username = request.args.get("username")
-        user = User.find_by_user(username)
-        if user != None:
-            user["roles"] = User.user_roles(user["username"])
-            data = jsonify(user)
-            return make_response(data, 200)
-        else:
-            flash("El usuario " + username + "no existe.", "error")
-            return abort(404)
-
+            abort(422)
     else:
         abort(400)
 
@@ -390,42 +331,3 @@ def user_table():
     roles = Role.all()
 
     return render_template("tables/usuarios.html", roles=roles)
-
-
-def user_edit_form():
-    s_config = siteconfig.get_config()
-    if not has_permission("usuario_update", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    Role.db = get_db()
-    roles = Role.all()
-
-    return render_template("user/actions/usuario_editar.html", roles=roles)
-
-
-def user_destroy_form():
-    s_config = siteconfig.get_config()
-    if not has_permission("usuario_destroy", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    Role.db = get_db()
-    roles = Role.all()
-
-    return render_template("user/actions/usuario_bloquear.html", roles=roles)
-
-
-def user_new_form():
-    s_config = siteconfig.get_config()
-    if not has_permission("usuario_new", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
-        abort(401)
-
-    Role.db = get_db()
-    roles = Role.all()
-
-    return render_template("user/actions/usuario_crear.html", roles=roles)

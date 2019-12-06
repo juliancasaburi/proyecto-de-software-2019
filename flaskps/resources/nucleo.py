@@ -34,7 +34,22 @@ def get_nucleos():
     return make_response(nucleos, 200)
 
 
-def create():
+def get_nucleos_activos():
+    s_config = siteconfig.get_config()
+    if not has_permission("nucleo_index", session) or (
+        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
+    ):
+        abort(401)
+
+    Nucleo.db = get_db()
+    nucleos = Nucleo.activos()
+
+    nucleos = jsonify(nucleos)
+
+    return make_response(nucleos, 200)
+
+
+def new():
     s_config = siteconfig.get_config()
     if not has_permission("nucleo_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
@@ -151,16 +166,15 @@ def nucleo_data():
     ):
         abort(401)
 
-    if request.args.get("id"):
+    id = request.args.get("id")
+    if id:
         Nucleo.db = get_db()
-        nid = request.args.get("id")
-        nucleo = Nucleo.find_by_id(nid)
-        if nucleo != None:
+        nucleo = Nucleo.find_by_id(id)
+        if nucleo is not None:
             data = jsonify(nucleo)
             return make_response(data, 200)
         else:
-            flash("El núcleo con ID:" + nid + "no existe.", "error")
-            return abort(404)
+            abort(422)
 
     else:
         abort(400)
