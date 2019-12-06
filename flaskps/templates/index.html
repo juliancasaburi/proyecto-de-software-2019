@@ -152,6 +152,23 @@
                                 ol.proj.fromLonLat([nucleos[i]['lng'],nucleos[i]['lat']])
                             )
                         });
+                        var letters = '0123456789ABCDEF';
+                        var color_pin = '#';
+                        for (var j = 0; j < 6; j++) {
+                            color_pin += letters[Math.floor(Math.random() * 16)];
+                        }
+                        nucleos_markers[i].setStyle(
+                            new ol.style.Style({
+                                image: new ol.style.Icon({
+                                    anchor: [0.5, 0.0],
+                                    color: 'red',
+                                    crossOrigin: 'anonymous',
+                                    anchorOrigin: 'bottom-left',
+                                    scale: 0.5,
+                                    src: '{{ url_for('static', filename='img/location_on.png') }}'
+                                }),
+                            })
+                        );
                     }
 
                     $('#map-select').val("");
@@ -197,7 +214,7 @@
                             }),
                             // layer para markers
                             new ol.layer.Vector({
-                                source: vectorSourceMarkers,
+                                source: vectorSourceMarkers
                             })
                         ],
                         view: new ol.View({
