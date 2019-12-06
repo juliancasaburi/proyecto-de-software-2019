@@ -2,8 +2,9 @@ import os
 from flask import Flask, render_template
 from flask_session import Session
 
-import flaskps.resources.helpers.serverside_dt.serverside_table_docente
 import flaskps.resources.helpers.serverside_dt.serverside_table_user
+import flaskps.resources.helpers.serverside_dt.serverside_table_docente
+import flaskps.resources.helpers.serverside_dt.serverside_table_preceptor
 from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
@@ -46,6 +47,7 @@ from flaskps.resources import auth, ciclo_lectivo, nucleo, administracion
 from flaskps.resources import user
 from flaskps.resources import role
 from flaskps.resources import docente
+from flaskps.resources import preceptor
 from flaskps.resources import taller
 from flaskps.resources import estudiante
 from flaskps.resources import instrumento
@@ -150,10 +152,26 @@ app.add_url_rule(
     "docente_serverside_table_content",
     flaskps.resources.helpers.serverside_dt.serverside_table_docente.serverside_table_content,
 )
-app.add_url_rule("/docentes/alta", "docente_new", docente.new, methods=["POST"])
+app.add_url_rule("/docente/alta", "docente_new", docente.new, methods=["POST"])
 app.add_url_rule("/docente/baja", "docente_destroy", docente.destroy, methods=["POST"])
 app.add_url_rule(
     "/docente/actualizar", "docente_update", docente.update, methods=["POST"]
+)
+
+# Preceptor
+app.add_url_rule("/preceptor", "preceptor", preceptor.data)
+app.add_url_rule("/tablapreceptores", "preceptor_table", preceptor.preceptor_table)
+app.add_url_rule(
+    "/preceptor_serverside_table",
+    "preceptor_serverside_table_content",
+    flaskps.resources.helpers.serverside_dt.serverside_table_preceptor.serverside_table_content,
+)
+app.add_url_rule("/preceptor/alta", "preceptor_new", preceptor.new, methods=["POST"])
+app.add_url_rule(
+    "/preceptor/baja", "preceptor_destroy", preceptor.destroy, methods=["POST"]
+)
+app.add_url_rule(
+    "/preceptor/actualizar", "preceptor_update", preceptor.update, methods=["POST"]
 )
 
 # Taller

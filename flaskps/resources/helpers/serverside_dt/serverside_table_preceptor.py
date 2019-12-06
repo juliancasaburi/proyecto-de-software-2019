@@ -7,13 +7,13 @@ from flaskps.db import get_db
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
-from flaskps.models.user import User
+from flaskps.models.preceptor import Preceptor
 from flaskps.resources.helpers.serverside_dt import table_schemas
 
 from flaskps.resources.helpers.serverside_dt.serverside_table import ServerSideTable
 
 
-class UsuariosServerSideTable(ServerSideTable, ABC):
+class preceptoreserverSideTable(ServerSideTable, ABC):
     """
     Retrieves the values specified by Datatables in the request and processes
     the data that will be displayed in the table (filtering, sorting and
@@ -35,14 +35,6 @@ class UsuariosServerSideTable(ServerSideTable, ABC):
             Filtered data.
         """
 
-        def check_row_username(row):
-            """ Checks whether a row should be displayed or not. """
-            value = row[self.columns[5]["column_name"]]
-            regex = "(?i)" + self.request_values["sSearch_6"]
-            if re.compile(regex).search(str(value)):
-                return True
-            return False
-
         def check_row_active(row):
             """ Checks whether a row should be displayed or not. """
             value = row[self.columns[1]["column_name"]]
@@ -51,22 +43,39 @@ class UsuariosServerSideTable(ServerSideTable, ABC):
                 return True
             return False
 
-        rows_f1 = [row for row in data if check_row_username(row)]
-        return [row for row in rows_f1 if check_row_active(row)]
+        def check_row_firstname(row):
+            """ Checks whether a row should be displayed or not. """
+            value = row[self.columns[2]["column_name"]]
+            regex = "(?i)" + self.request_values["sSearch_2"]
+            if re.compile(regex).search(str(value)):
+                return True
+            return False
+
+        def check_row_lastname(row):
+            """ Checks whether a row should be displayed or not. """
+            value = row[self.columns[3]["column_name"]]
+            regex = "(?i)" + self.request_values["sSearch_3"]
+            if re.compile(regex).search(str(value)):
+                return True
+            return False
+
+        rows_f1 = [row for row in data if check_row_active(row)]
+        rows_f2 = [row for row in rows_f1 if check_row_firstname(row)]
+        return [row for row in rows_f2 if check_row_lastname(row)]
 
 
 def collect_data_serverside(req):
-    columns = table_schemas.SERVERSIDE_USUARIO_TABLE_COLUMNS
+    Preceptor.db = get_db()
+    preceptores = Preceptor.all_table()
 
-    User.db = get_db()
-    users = User.all_table()
+    columns = table_schemas.SERVERSIDE_PRECEPTOR_TABLE_COLUMNS
 
-    return UsuariosServerSideTable(req, users, columns).output_result()
+    return preceptoreserverSideTable(req, preceptores, columns).output_result()
 
 
 def serverside_table_content():
     s_config = siteconfig.get_config()
-    if not has_permission("usuario_index", session) or (
+    if not has_permission("docente_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)

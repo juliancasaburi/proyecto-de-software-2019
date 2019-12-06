@@ -68,7 +68,7 @@ def collect_data_serverside(req):
     Docente.db = get_db()
     docentes = Docente.all_table()
 
-    columns = table_schemas.SERVERSIDE_DOCENTES_TABLE_COLUMNS
+    columns = table_schemas.SERVERSIDE_DOCENTE_TABLE_COLUMNS
 
     return DocentesServerSideTable(req, docentes, columns).output_result()
 

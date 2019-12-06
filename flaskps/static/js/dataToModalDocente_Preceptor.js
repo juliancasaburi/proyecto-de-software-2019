@@ -1,6 +1,16 @@
-dataToModalDocente = function(response) {
+dataToModalDocente_Preceptor = function(response) {
     $('#editar_id').val(response['id']);
     $('#editar_activo').prop('checked', response['activo']);
+    if ('username' in response)
+    {
+        $('#editar_username').val(response['username']);
+        $('#editar_username').attr("placeholder", response['username']);
+    }
+    else
+    {
+        $('#editar_username').val("");
+        $('#editar_username').attr("placeholder", "");
+    }
     $('#editar_nombre').attr("placeholder", response['nombre']);
     $('#editar_nombre').val(response['nombre']);
     $('#editar_apellido').attr("placeholder", response['apellido']);
@@ -31,4 +41,4 @@ dataToModalDocente = function(response) {
 
     $('select').formSelect();
     M.updateTextFields();
-}
+};

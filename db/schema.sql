@@ -67,10 +67,28 @@ DROP TABLE IF EXISTS `grupo2`.`preceptor` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`preceptor` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT(11) DEFAULT NULL,
+  `activo` TINYINT(1) NOT NULL DEFAULT '1',
   `apellido` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  `tel` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`id`))
+  `fecha_nac` DATE NOT NULL,
+  `localidad_id` INT(11) NOT NULL,
+  `domicilio` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
+  `genero_id` INT(11) NOT NULL,
+  `tipo_doc_id` INT(11) NOT NULL,
+  `numero` INT(11) NOT NULL,
+  `tel` VARCHAR(255) CHARACTER SET 'utf8',
+  `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `FK_genero_preceptor_id` (`genero_id` ASC),
+  CONSTRAINT `FK_genero_preceptor_id`
+    FOREIGN KEY (`genero_id`)
+    REFERENCES `grupo2`.`genero` (`id`),
+  INDEX `FK_usuario_idx` (`usuario_id` ASC),
+  CONSTRAINT `FK_usuario_idx`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `grupo2`.`usuario` (`id`) ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
@@ -284,6 +302,7 @@ DROP TABLE IF EXISTS `grupo2`.`docente` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`docente` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT(11) DEFAULT NULL,
   `activo` TINYINT(1) NOT NULL DEFAULT '1',
   `apellido` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
@@ -300,7 +319,11 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`docente` (
   INDEX `FK_genero_docente_id` (`genero_id` ASC),
   CONSTRAINT `FK_genero_docente_id`
     FOREIGN KEY (`genero_id`)
-    REFERENCES `grupo2`.`genero` (`id`))
+    REFERENCES `grupo2`.`genero` (`id`),
+  INDEX `FK_usuario_id` (`usuario_id` ASC),
+  CONSTRAINT `FK_usuario_id`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `grupo2`.`usuario` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
@@ -686,6 +709,11 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (1, 34),
 (1, 35),
 (1, 36),
+(1, 37),
+(1, 38),
+(1, 39),
+(1, 40),
+(1, 41),
 (2, 7),
 (2, 10),
 (2, 11),
@@ -907,11 +935,11 @@ INSERT INTO `escuela` (`nombre`) VALUES ('UNLP');
 INSERT INTO `escuela` (`nombre`) VALUES ('UTN');
 INSERT INTO `escuela` (`nombre`) VALUES ('Universitas');
 
--------------------------------------------------------
+-- --------------------------------------------------------
 
 -- Data for Nucleos
 
--------------------------------------------------------
+-- --------------------------------------------------------
 
 INSERT INTO `nucleo` (`id`, `nombre`, `direccion`, `telefono`, `lat`, `lng`, `activo`) VALUES
 (1, 'Club Español', '6 e/ 53 y 54', '0221 421-9286', -34.9154549, -57.9461365, 1),

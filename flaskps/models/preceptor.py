@@ -7,7 +7,7 @@ from flaskps.models.genero import Genero
 from flaskps.models.user import User
 
 
-class Docente(object):
+class Preceptor(object):
 
     db = None
 
@@ -15,7 +15,7 @@ class Docente(object):
     def all(cls):
         sql = """
             SELECT  *
-            FROM    docente
+            FROM    preceptor
         """
         try:
             with cls.db.cursor() as cursor:
@@ -28,7 +28,7 @@ class Docente(object):
     def find_by_id(cls, id):
         sql = """
             SELECT  *
-            FROM    docente
+            FROM    preceptor
             WHERE   id = %s
         """
 
@@ -43,7 +43,7 @@ class Docente(object):
     @classmethod
     def create(cls, data):
         sql = """
-                INSERT INTO docente 
+                INSERT INTO preceptor 
                             (usuario_id,
                              apellido, 
                              nombre, 
@@ -97,7 +97,7 @@ class Docente(object):
     @classmethod
     def delete(cls, d_id):
         sql = """
-            UPDATE  docente 
+            UPDATE  preceptor 
             SET     activo = NOT activo
             WHERE  id = %s 
         """
@@ -116,7 +116,7 @@ class Docente(object):
     def genero(cls, did):
         sql = """
                 SELECT  g.nombre
-                FROM    docente AS d
+                FROM    preceptor AS d
                         INNER JOIN genero g
                         ON d.genero_id = g.id
                 WHERE   d.id = %s
@@ -132,7 +132,7 @@ class Docente(object):
     def update(cls, data):
 
         sql = """
-                    UPDATE docente 
+                    UPDATE preceptor 
                     SET usuario_id = %s,
                         apellido = %s, 
                         nombre = %s, 
@@ -174,9 +174,9 @@ class Docente(object):
 
     @classmethod
     def all_table(cls):
-        docentes = cls.all()
+        preceptores = cls.all()
 
-        for dict_item in docentes:
+        for dict_item in preceptores:
             usuario_id = dict_item["usuario_id"]
             if usuario_id:
                 User.db = get_db()
@@ -200,4 +200,4 @@ class Docente(object):
                 "%d-%m-%Y %H:%M:%S"
             )
 
-        return docentes
+        return preceptores

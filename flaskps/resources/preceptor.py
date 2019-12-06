@@ -5,10 +5,10 @@ from flaskps.db import get_db
 
 import json
 
-from flaskps.forms.docente import forms_docente
-from flaskps.forms.docente.forms_docente import DocenteForm
+from flaskps.forms.preceptor import forms_preceptor
+from flaskps.forms.preceptor.forms_preceptor import PreceptorForm
 
-from flaskps.models.docente import Docente
+from flaskps.models.preceptor import Preceptor
 from flaskps.models.genero import Genero
 from flaskps.models import siteconfig
 
@@ -21,14 +21,14 @@ from flaskps.models.user import User
 
 def new():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_new", session) or (
+    if not has_permission("preceptor_new", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
     # Validación - Fill choices
-    choices = forms_docente.choices()
-    form = DocenteForm(choices)
+    choices = forms_preceptor.choices()
+    form = PreceptorForm(choices)
 
     op_response = dict()
 
@@ -44,14 +44,14 @@ def new():
             if user:
                 params["usuario_id"] = user["id"]
 
-        Docente.db = get_db()
-        created = Docente.create(params)
+        Preceptor.db = get_db()
+        created = Preceptor.create(params)
 
         if created:
-            op_response["msg"] = "Se ha agregado al docente exitosamente"
+            op_response["msg"] = "Se ha agregado al preceptor exitosamente"
             op_response["type"] = "success"
         else:
-            op_response["msg"] = "Ha ocurrido un error al crear al docente"
+            op_response["msg"] = "Ha ocurrido un error al crear al preceptor"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 422))
 
@@ -66,7 +66,7 @@ def new():
 
 def destroy():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_destroy", session) or (
+    if not has_permission("preceptor_destroy", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -75,18 +75,18 @@ def destroy():
     d_id = params["id"]
     activo = params["activo"]
 
-    Docente.db = get_db()
-    success = Docente.delete(d_id)
+    Preceptor.db = get_db()
+    success = Preceptor.delete(d_id)
 
     op_response = dict()
 
     if success:
         condicion = "bloqueado" if activo else "activado"
-        op_response["msg"] = "Se ha " + condicion + " al docente exitosamente"
+        op_response["msg"] = "Se ha " + condicion + " al preceptor exitosamente"
         op_response["type"] = "success"
     else:
         condicion = "bloquear" if activo else "activar"
-        op_response["msg"] = "El docente a " + condicion + " no existe"
+        op_response["msg"] = "El usuario a " + condicion + " no existe"
         op_response["type"] = "error"
         make_response(jsonify(op_response), 422)
 
@@ -95,24 +95,26 @@ def destroy():
 
 def data():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_show", session) or (
+    if not has_permission("preceptor_show", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
     id = request.args.get("id")
     if id:
-        Docente.db = get_db()
-        docente = Docente.find_by_id(id)
+        Preceptor.db = get_db()
+        preceptor = Preceptor.find_by_id(id)
 
-        if docente is not None:
-            docente["fecha_nac"] = datetime.strftime(docente["fecha_nac"], "%d/%m/%Y")
-            usuario_id = docente["usuario_id"]
+        if preceptor is not None:
+            preceptor["fecha_nac"] = datetime.strftime(
+                preceptor["fecha_nac"], "%d/%m/%Y"
+            )
+            usuario_id = preceptor["usuario_id"]
             if usuario_id:
                 User.db = get_db()
                 user = User.find_by_id(usuario_id)
-                docente["username"] = user["username"]
-            data = jsonify(docente)
+                preceptor["username"] = user["username"]
+            data = jsonify(preceptor)
             return make_response(data, 200)
         else:
             abort(422)
@@ -122,21 +124,21 @@ def data():
 
 def update():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_update", session) or (
+    if not has_permission("preceptor_update", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
 
     # Validación - Fill choices
-    choices = forms_docente.choices()
-    form = DocenteForm(choices)
+    choices = forms_preceptor.choices()
+    form = PreceptorForm(choices)
 
     op_response = dict()
 
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Docente.db = get_db()
+        Preceptor.db = get_db()
 
         if "username" in params:
             User.db = get_db()
@@ -148,19 +150,19 @@ def update():
             params["fecha_nacimiento"], "%d/%m/%Y"
         ).date()
 
-        updated = Docente.update(params)
+        updated = Preceptor.update(params)
 
         if updated:
-            op_response["msg"] = "Se ha modificado al docente con éxito"
+            op_response["msg"] = "Se ha modificado al preceptor con éxito"
             op_response["type"] = "success"
         else:
-            op_response["msg"] = "Ha ocurrido un error al editar al docente"
+            op_response["msg"] = "Ha ocurrido un error al editar al preceptor"
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 422))
 
     else:
         if len(form.errors) >= 2:
-            op_response["msg"] = "Complete todos los datos del docente a modificar"
+            op_response["msg"] = "Complete todos los datos del preceptor a modificar"
             op_response["type"] = "error"
         else:
             error_msg = "".join(list(form.errors.values())[0]).strip("'[]")
@@ -172,9 +174,9 @@ def update():
     return make_response(jsonify(op_response), 200)
 
 
-def docente_table():
+def preceptor_table():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_index", session) or (
+    if not has_permission("preceptor_index", session) or (
         s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -183,7 +185,7 @@ def docente_table():
     generos = Genero.all()
 
     return render_template(
-        "tables/docentes.html",
+        "tables/preceptores.html",
         localidades=localidades(),
         tipodoc=tipos_documento(),
         generos=generos,
