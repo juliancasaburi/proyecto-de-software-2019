@@ -88,18 +88,6 @@
                             {% endif %}
                         </div>
 
-                        <div class="card-action">
-                            {% if has_permission('usuario_new', session) %}
-                                <a href="{{ url_for('user_new_form') }}" class="modal-trigger">Crear</a>
-                            {% endif %}
-                            {% if has_permission('usuario_destroy', session) %}
-                                <a href="{{ url_for('user_destroy_form') }}">Eliminar</a>
-                            {% endif %}
-                            {% if has_permission('usuario_update', session) %}
-                                <a href="{{ url_for('user_edit_form') }}">Editar</a>
-                            {% endif %}
-                        </div>
-
                         <div class="card-reveal" style="display: none; transform: translateY(0%);">
                             <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
                             <p>Podrás ver el listado de usuarios completo con toda su información relacionada. Además podrás agregar, eliminar, modificar los datos y activar o deshabilitar usuarios.</p>

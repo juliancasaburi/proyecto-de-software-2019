@@ -115,9 +115,6 @@ app.add_url_rule("/roles", "roles", role.all_roles, methods=["GET"])
 
 # Forms
 app.add_url_rule("/login", "auth_login", auth.login)
-app.add_url_rule("/usuario/alta", "user_new_form", user.user_new_form)
-app.add_url_rule("/usuario/editar", "user_edit_form", user.user_edit_form)
-app.add_url_rule("/usuario/bloquear", "user_destroy_form", user.user_destroy_form)
 app.add_url_rule("/taller/alta", "taller_new_form", taller.taller_new_form)
 app.add_url_rule(
     "/taller/asociar/ciclo", "taller_set_ciclo_form", taller.taller_set_ciclo_form

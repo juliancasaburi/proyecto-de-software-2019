@@ -41,15 +41,6 @@
                 {% if has_permission('usuario_index', session) %}
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('user_table') }}">Ver y administrar</a></li>
                 {% endif %}
-                {% if has_permission('usuario_new', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_new_form') }}">Crear</a></li>
-                {% endif %}
-                {% if has_permission('usuario_destroy', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_destroy_form') }}">Activar/bloquear</a></li>
-                {% endif %}
-                {% if has_permission('usuario_update', session) %}
-                    <li><a class="waves-effect waves-ripple" href="{{ url_for('user_edit_form') }}">Editar</a></li>
-                {% endif %}
             </ul>
             <!-- dropdownEstudiantes Structure -->
             <ul id="dropdownEstudiantes" class="dropdown-content teal">
