@@ -143,9 +143,15 @@
                 url: "{{ url_for('nucleo_activos') }}",
                 success: function (response) {
                     nucleos = response;
-
+                    nucleos_markers = [];
                     for (var i=0; i<nucleos.length; i++) {
                         $('#map-select').append("<option value='"+ i + "'>" + nucleos[i]['nombre'] + "</option>");
+                        // markers
+                        nucleos_markers[i] = new ol.Feature({
+                            geometry: new ol.geom.Point(
+                                ol.proj.fromLonLat([nucleos[i]['lng'],nucleos[i]['lat']])
+                            )
+                        });
                     }
 
                     $('#map-select').val("");
@@ -170,6 +176,10 @@
                         features: [info]
                     });
 
+                    var vectorSourceMarkers = new ol.source.Vector({
+                        features: nucleos_markers
+                    });
+
                     var map = new ol.Map({
                         target: 'map',
                         layers: [
@@ -184,6 +194,10 @@
                                     iconStyle.getImage().setScale(1/Math.pow(resolution, 1/6));
                                     return iconStyle;
                                 }
+                            }),
+                            // layer para markers
+                            new ol.layer.Vector({
+                                source: vectorSourceMarkers,
                             })
                         ],
                         view: new ol.View({
@@ -199,7 +213,7 @@
                         ])
                     });
 
-                    // onclicks de cada nucleo
+                    // mover posición al núcleo seleccinado en el select
                     $('#map-select').on('change', function() {
                         var coords = [nucleos[parseInt($(this).val())]['lng'], nucleos[parseInt($(this).val())]['lat']];
                         map.getView().animate({
