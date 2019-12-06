@@ -87,31 +87,35 @@
     <div class="divider blue"></div>
 
     <div class="container">
-    <div class="section">
-        <div class="row">
-            <div class="col s12 center wow fadeInUp">
-                <h1 class="light-blue-text text-darken-2">¡Sumate!</h1>
-                <p class="text-justify light">{{ siteconfig['descripcion'] }}</p>
+        <div class="section">
+            <div class="row">
+                <div class="col s12 center wow fadeInUp">
+                    <h1 class="light-blue-text text-darken-2">¡Sumate!</h1>
+                    <p class="text-justify light">{{ siteconfig['descripcion'] }}</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="divider"></div>
-    <div class="container">
-        <div class="row center">
-            <h1 class="header blue-text col s12">Núcleos en los que trabajamos</h1>
-            <h6 class="col s12">Esta es una lista de los núcleos donde actualmente estamos trabajando, puede verlos en el mapa</h6>
-        </div>
-    </div>
 
-    <div class="row">
-        <div id="map" class="col s12 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:300px"></div>
-    </div>
-    <div class="row" style="margin-top: 2rem">
-        <div class="input-field col s12">
-            <select id="map-select">
-                <option value="" disabled selected>Elija el núcleo</option>
-            </select>
-            <label>Quiero saber la ubicación de...</label>
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="row center wow fadeInUp">
+                <h1 class="header blue-text col s12">Núcleos en los que trabajamos</h1>
+                <h6 class="col s12">Esta es una lista de los núcleos donde actualmente estamos trabajando, puede verlos en el mapa</h6>
+            </div>
+
+            <div class="row" style="margin-bottom: 2rem">
+                <div class="input-field col s12 wow fadeIn" data-wow-delay="1.25s">
+                    <select id="map-select">
+                        <option value="" disabled selected>Elija el núcleo</option>
+                    </select>
+                    <label for="map-select">Quiero saber la ubicación de...</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="map" class="col s10 offset-s1 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:300px"></div>
+            </div>
         </div>
     </div>
 
