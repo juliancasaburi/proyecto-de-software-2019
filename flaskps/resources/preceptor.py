@@ -39,12 +39,11 @@ def new():
         ).date()
 
         if "username" in params:
-            User.db = get_db()
+
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
 
-        Preceptor.db = get_db()
         created = Preceptor.create(params)
 
         if created:
@@ -75,7 +74,6 @@ def destroy():
     d_id = params["id"]
     activo = params["activo"]
 
-    Preceptor.db = get_db()
     success = Preceptor.delete(d_id)
 
     op_response = dict()
@@ -102,7 +100,7 @@ def data():
 
     id = request.args.get("id")
     if id:
-        Preceptor.db = get_db()
+
         preceptor = Preceptor.find_by_id(id)
 
         if preceptor is not None:
@@ -111,7 +109,7 @@ def data():
             )
             usuario_id = preceptor["usuario_id"]
             if usuario_id:
-                User.db = get_db()
+
                 user = User.find_by_id(usuario_id)
                 preceptor["username"] = user["username"]
             data = jsonify(preceptor)
@@ -138,10 +136,8 @@ def update():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Preceptor.db = get_db()
-
         if "username" in params:
-            User.db = get_db()
+
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
@@ -181,7 +177,6 @@ def preceptor_table():
     ):
         abort(401)
 
-    Genero.db = get_db()
     generos = Genero.all()
 
     return render_template(

@@ -31,7 +31,7 @@ def authenticate():
 
     if form.validate_on_submit():
         params = request.form
-        User.db = get_db()
+
         user = User.find_by_user(params["username"])
 
         if (
@@ -39,7 +39,7 @@ def authenticate():
             and user["activo"] == 1
             and bcrypt.check_password_hash(user["password"], params["password"])
         ):
-            SiteConfig.db = get_db()
+
             config = siteconfig.get_config()
             modo_mantenimiento = config["modo_mantenimiento"]
 

@@ -78,18 +78,12 @@ class EstudianteForm(FlaskForm):
 
 
 def crud_choices():
-    db = get_db()
     locs = localidades()
-    Barrio.db = db
     barrios = Barrio.all()
-    Genero.db = db
     generos = Genero.all()
     tipos_doc = tipos_documento()
-    Escuela.db = db
     escuelas = Escuela.all()
-    Nivel.db = db
     niveles = Nivel.all()
-    Responsable_tipo.db = db
     responsables_tipos = Responsable_tipo.all()
 
     choices = dict()

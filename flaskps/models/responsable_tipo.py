@@ -1,7 +1,7 @@
+from flaskps.db import get_db
+
+
 class Responsable_tipo(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -9,8 +9,9 @@ class Responsable_tipo(object):
             FROM responsable_tipo
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()

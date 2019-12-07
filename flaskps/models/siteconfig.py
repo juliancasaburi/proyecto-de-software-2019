@@ -3,9 +3,6 @@ from pymysql.err import IntegrityError
 
 
 class SiteConfig(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -13,10 +10,11 @@ class SiteConfig(object):
             FROM config
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchone()
 
     @classmethod
@@ -29,7 +27,8 @@ class SiteConfig(object):
                 items_por_pagina = %s
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -39,12 +38,12 @@ class SiteConfig(object):
                         data["items_por_pagina"],
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -54,23 +53,24 @@ class SiteConfig(object):
             SET modo_mantenimiento = %s
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, maintenance)
-                cls.db.commit()
+                dbconn.commit()
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
 
 def get_config():
-    SiteConfig.db = get_db()
+
     return SiteConfig.all()
 
 
 def update_config(data):
-    SiteConfig.db = get_db()
+
     return SiteConfig.update_config(data)
 
 
 def update_maintenance(maintenance):
-    SiteConfig.db = get_db()
+
     SiteConfig.update_maintenance(maintenance)

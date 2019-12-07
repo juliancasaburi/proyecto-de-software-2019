@@ -42,7 +42,6 @@ def new():
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 400))
 
-        CicloLectivo.db = get_db()
         created = CicloLectivo.create(params)
 
         if created:
@@ -74,7 +73,6 @@ def get_ciclos():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
     for dict_item in ciclos:
@@ -96,7 +94,6 @@ def destroy():
     params = request.form.to_dict()
     cid = params["id"]
 
-    CicloLectivo.db = get_db()
     success = CicloLectivo.destroy(cid)
 
     op_response = dict()
@@ -120,7 +117,7 @@ def get_talleres():
         abort(401)
 
     c_id = request.args.get("id")
-    CicloLectivo.db = get_db()
+
     talleres = CicloLectivo.talleres(c_id)
 
     if talleres is None:
@@ -136,7 +133,6 @@ def ciclo_table():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
     for ciclo in ciclos:

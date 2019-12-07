@@ -58,7 +58,6 @@ class UsuariosServerSideTable(ServerSideTable, ABC):
 def collect_data_serverside(req):
     columns = table_schemas.SERVERSIDE_USUARIO_TABLE_COLUMNS
 
-    User.db = get_db()
     users = User.all_table()
 
     return UsuariosServerSideTable(req, users, columns).output_result()

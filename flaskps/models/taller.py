@@ -1,10 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class Taller(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -12,10 +11,11 @@ class Taller(object):
             FROM    taller
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -27,10 +27,11 @@ class Taller(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -47,15 +48,16 @@ class Taller(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (data.get("nombre"), data.get("nombre_corto")))
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -76,20 +78,21 @@ class Taller(object):
                     """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql_delete_relation, data.get("taller_id"))
-                cls.db.commit()
+                dbconn.commit()
 
                 ciclos = data.get("ciclos")
                 for ciclo in ciclos:
                     cursor.execute(sql_insert_relation, (data.get("taller_id"), ciclo))
-                    cls.db.commit()
+                    dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -101,10 +104,11 @@ class Taller(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, t_id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchall()
 
@@ -117,10 +121,11 @@ class Taller(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (t_id, c_id))
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchall()
 
@@ -133,10 +138,11 @@ class Taller(object):
                 """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (t_id, c_id))
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchall()
 
@@ -160,12 +166,13 @@ class Taller(object):
                     """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql_delete_relation,
                     (data.get("taller_id"), data.get("ciclo_lectivo_id")),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
                 docentes = data.get("docentes")
                 for docente in docentes:
@@ -173,10 +180,10 @@ class Taller(object):
                         sql_insert_relation,
                         (docente, data.get("ciclo_lectivo_id"), data.get("taller_id")),
                     )
-                    cls.db.commit()
+                    dbconn.commit()
 
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -199,12 +206,13 @@ class Taller(object):
                         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql_delete_relation,
                     (data.get("taller_id"), data.get("ciclo_lectivo_id")),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
                 estudiantes = data.get("estudiantes")
                 for estudiante in estudiantes:
@@ -216,10 +224,10 @@ class Taller(object):
                             data.get("taller_id"),
                         ),
                     )
-                    cls.db.commit()
+                    dbconn.commit()
 
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -232,16 +240,17 @@ class Taller(object):
                         WHERE id = %s
                 """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (data.get("nombre"), data.get("nombre_corto"), data.get("id"),),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True

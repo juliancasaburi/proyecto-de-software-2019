@@ -42,6 +42,29 @@
         </div>
         <div class="modal-footer">
             <button type="submit" id="editarUsuarioSubmit" class="btn blue waves-effect waves-button-input">Guardar</button>
+            <button id="cancelarEditarUsuario" class="btn red waves-effect waves-light">Reiniciar</button>
         </div>
     </form>
 </div>
+
+<script>
+    // para resetear los campos a los originales
+    $(document).ready(function() {
+        $("#cancelarEditarUsuario").click(function(e){
+            e.preventDefault();
+            var eid = $('#modal_editar_id').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('user') }}",
+                data: {
+                    id: eid
+                },
+                success: function (response) {
+                    dataToModalUsuario(response);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        })})
+</script>

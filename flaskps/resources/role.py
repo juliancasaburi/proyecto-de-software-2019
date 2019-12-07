@@ -15,7 +15,6 @@ def all_roles():
     ):
         abort(401)
 
-    Role.db = get_db()
     roles = Role.all()
     data = jsonify(roles)
     return make_response(data, 200)

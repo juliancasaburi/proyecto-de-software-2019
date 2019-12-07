@@ -49,7 +49,6 @@ class DocenteForm(FlaskForm):
 def choices():
     choices_dict = dict()
 
-    Genero.db = get_db()
     generos = Genero.all()
     choices_dict["select_genero"] = [(g["id"], g["nombre"]) for g in generos]
 

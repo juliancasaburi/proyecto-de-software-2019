@@ -10,7 +10,6 @@ def maintenance_mode():
     if not has_permission("config_update", session):
         abort(401)
 
-    SiteConfig.db = get_db()
     config = siteconfig.get_config()
     modo_mantenimiento = config["modo_mantenimiento"]
 
@@ -31,8 +30,6 @@ def config_update():
         abort(401)
 
     params = request.form.to_dict()
-
-    SiteConfig.db = get_db()
 
     data = {"msg": "Configuración actualizada exitosamente"}
 
