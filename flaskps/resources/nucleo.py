@@ -36,9 +36,7 @@ def get_nucleos():
 
 def get_nucleos_activos():
     s_config = siteconfig.get_config()
-    if not has_permission("nucleo_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
+    if s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session):
         abort(401)
 
     Nucleo.db = get_db()
