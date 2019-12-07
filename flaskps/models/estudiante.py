@@ -1,10 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class Estudiante(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -27,10 +26,11 @@ class Estudiante(object):
                             ON r.id = e.responsable_tipo_id
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -66,7 +66,8 @@ class Estudiante(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -85,20 +86,21 @@ class Estudiante(object):
                         data.get("select_responsable_tipo"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
     def update(cls, data):
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
 
                 query = """
                         UPDATE estudiante
@@ -137,13 +139,13 @@ class Estudiante(object):
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -154,14 +156,15 @@ class Estudiante(object):
                 WHERE  id = %s 
             """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, eid)
-                cls.db.commit()
+                dbconn.commit()
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -173,9 +176,10 @@ class Estudiante(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()

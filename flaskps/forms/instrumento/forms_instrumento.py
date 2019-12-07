@@ -28,7 +28,7 @@ class InstrumentoCreateForm(FlaskForm):
 
 
 def crud_choices():
-    TipoInstrumento.db = get_db()
+    Tipo
     tipos_instrumento = TipoInstrumento.all()
 
     choices = dict()

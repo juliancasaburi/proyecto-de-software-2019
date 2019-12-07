@@ -65,7 +65,7 @@ class preceptoreserverSideTable(ServerSideTable, ABC):
 
 
 def collect_data_serverside(req):
-    Preceptor.db = get_db()
+
     preceptores = Preceptor.all_table()
 
     columns = table_schemas.SERVERSIDE_PRECEPTOR_TABLE_COLUMNS

@@ -1,6 +1,7 @@
-class TipoInstrumento(object):
-    db = None
+from flaskps.db import get_db
 
+
+class TipoInstrumento(object):
     @classmethod
     def all(cls):
         sql = """
@@ -8,10 +9,11 @@ class TipoInstrumento(object):
             FROM    tipo_instrumento
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -23,9 +25,10 @@ class TipoInstrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()

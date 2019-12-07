@@ -8,13 +8,10 @@ from flaskps.models.estudiante import Estudiante
 
 def administracion():
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
-    Docente.db = get_db()
     docentes = Docente.all()
 
-    Estudiante.db = get_db()
     estudiantes = Estudiante.all()
 
     for ciclo in ciclos:

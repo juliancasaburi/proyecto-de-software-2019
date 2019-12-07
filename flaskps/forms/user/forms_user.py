@@ -75,7 +75,7 @@ class UserUpdateForm(FlaskForm):
 
 
 def roles_from_db():
-    Role.db = get_db()
+
     roles = Role.all()
     roles = [(rol["id"], rol["nombre"]) for rol in roles]
     return roles

@@ -27,7 +27,6 @@ def new():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Taller.db = get_db()
         created = Taller.create(params)
 
         if created:
@@ -63,7 +62,6 @@ def set_ciclo():
     params["taller_id"] = params["modal_id_taller"]
     params["ciclos"] = request.form.getlist("modal_select_ciclos")
 
-    Taller.db = get_db()
     created = Taller.set_ciclos(params)
 
     op_response = dict()
@@ -87,7 +85,7 @@ def get_ciclos():
         abort(401)
 
     t_id = request.args.get("id")
-    Taller.db = get_db()
+
     ciclos = Taller.ciclos(t_id)
 
     for ciclo in ciclos:
@@ -110,7 +108,6 @@ def get_docentes_ciclo():
     t_id = request.args.get("t_id")
     c_id = request.args.get("c_id")
 
-    Taller.db = get_db()
     docentes = Taller.docentes_ciclo(t_id, c_id)
 
     if docentes is None:
@@ -130,7 +127,7 @@ def set_docentes():
     params["docentes"] = request.form.getlist("modal_select_docentes")
 
     # TODO:
-    Taller.db = get_db()
+
     created = Taller.set_docentes(params)
 
     op_response = dict()
@@ -156,7 +153,6 @@ def get_estudiantes_ciclo():
     t_id = request.args.get("t_id")
     c_id = request.args.get("c_id")
 
-    Taller.db = get_db()
     estudiantes = Taller.estudiantes_ciclo(t_id, c_id)
 
     if estudiantes is None:
@@ -176,7 +172,7 @@ def set_estudiantes():
     params["estudiantes"] = request.form.getlist("modal_select_estudiantes")
 
     # TODO:
-    Taller.db = get_db()
+
     created = Taller.set_estudiantes(params)
 
     op_response = dict()
@@ -209,10 +205,8 @@ def taller_set_docentes_form():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
-    Docente.db = get_db()
     docentes = Docente.all()
 
     for ciclo in ciclos:
@@ -231,10 +225,8 @@ def taller_set_estudiantes_form():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
-    Estudiante.db = get_db()
     estudiantes = Estudiante.all()
 
     for ciclo in ciclos:
@@ -255,10 +247,8 @@ def taller_set_ciclo_form():
     ):
         abort(401)
 
-    Taller.db = get_db()
     talleres = Taller.all()
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
     for ciclo in ciclos:
@@ -277,7 +267,6 @@ def taller_table():
     ):
         abort(401)
 
-    Taller.db = get_db()
     talleres = Taller.all()
 
     return render_template("partials/tabs/talleres.html", talleres=talleres)
@@ -290,7 +279,6 @@ def get_talleres():
     ):
         abort(401)
 
-    Taller.db = get_db()
     all_talleres = Taller.all()
 
     all_talleres = jsonify(all_talleres)
@@ -307,7 +295,7 @@ def data():
 
     id = request.args.get("id")
     if id:
-        Taller.db = get_db()
+
         taller = Taller.find_by_id(id)
         if taller is not None:
             data = jsonify(taller)
@@ -331,8 +319,6 @@ def update():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
-
-        Taller.db = get_db()
 
         updated = Taller.update(params)
 

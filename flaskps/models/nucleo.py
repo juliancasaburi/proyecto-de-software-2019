@@ -1,10 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class Nucleo(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -12,10 +11,11 @@ class Nucleo(object):
             FROM    nucleo
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -26,10 +26,11 @@ class Nucleo(object):
                 WHERE activo = 1
             """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -49,7 +50,8 @@ class Nucleo(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -60,20 +62,21 @@ class Nucleo(object):
                         data.get("lng"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
     def update(cls, data):
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
 
                 query = """
                         UPDATE nucleo
@@ -96,13 +99,13 @@ class Nucleo(object):
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -113,14 +116,15 @@ class Nucleo(object):
                 WHERE  id = %s 
             """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, nid)
-                cls.db.commit()
+                dbconn.commit()
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -132,9 +136,10 @@ class Nucleo(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()

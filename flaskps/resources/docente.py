@@ -39,12 +39,10 @@ def new():
         ).date()
 
         if "username" in params:
-            User.db = get_db()
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
 
-        Docente.db = get_db()
         created = Docente.create(params)
 
         if created:
@@ -75,7 +73,6 @@ def destroy():
     d_id = params["id"]
     activo = params["activo"]
 
-    Docente.db = get_db()
     success = Docente.delete(d_id)
 
     op_response = dict()
@@ -102,14 +99,14 @@ def data():
 
     id = request.args.get("id")
     if id:
-        Docente.db = get_db()
+
         docente = Docente.find_by_id(id)
 
         if docente is not None:
             docente["fecha_nac"] = datetime.strftime(docente["fecha_nac"], "%d/%m/%Y")
             usuario_id = docente["usuario_id"]
             if usuario_id:
-                User.db = get_db()
+
                 user = User.find_by_id(usuario_id)
                 docente["username"] = user["username"]
             data = jsonify(docente)
@@ -136,10 +133,8 @@ def update():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Docente.db = get_db()
-
         if "username" in params:
-            User.db = get_db()
+
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
@@ -179,7 +174,6 @@ def docente_table():
     ):
         abort(401)
 
-    Genero.db = get_db()
     generos = Genero.all()
 
     return render_template(

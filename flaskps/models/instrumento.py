@@ -1,9 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class Instrumento(object):
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -11,10 +11,11 @@ class Instrumento(object):
             FROM    instrumento
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -32,7 +33,8 @@ class Instrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -42,13 +44,13 @@ class Instrumento(object):
                         data.get("image_path"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -60,10 +62,11 @@ class Instrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -76,10 +79,11 @@ class Instrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -87,7 +91,8 @@ class Instrumento(object):
     def update(cls, data):
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
 
                 query = """
                             UPDATE instrumento
@@ -106,11 +111,11 @@ class Instrumento(object):
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True

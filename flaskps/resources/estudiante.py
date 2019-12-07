@@ -39,7 +39,6 @@ def get_estudiantes():
     ):
         abort(401)
 
-    Estudiante.db = get_db()
     estudiantes = Estudiante.all()
 
     for dict_item in estudiantes:
@@ -91,7 +90,6 @@ def new():
             params["fecha_nacimiento"], "%d/%m/%Y"
         ).date()
 
-        Estudiante.db = get_db()
         created = Estudiante.create(params)
 
         if created:
@@ -135,8 +133,6 @@ def update():
             params["fecha_nacimiento"], "%d/%m/%Y"
         ).date()
 
-        Estudiante.db = get_db()
-
         updated = Estudiante.update(params)
 
         if updated:
@@ -171,7 +167,6 @@ def destroy():
     params = json.loads(request.data)
     eid = params["id"]
 
-    Estudiante.db = get_db()
     success = Estudiante.delete(eid)
 
     op_response = dict()
@@ -201,7 +196,7 @@ def estudiante_data():
 
     id = request.args.get("id")
     if id:
-        Estudiante.db = get_db()
+
         estudiante = Estudiante.find_by_id(id)
 
         if estudiante is not None:
@@ -228,19 +223,14 @@ def estudiante_table():
 
     tipo_doc = tipos_documento()
 
-    Genero.db = get_db()
     generos = Genero.all()
 
-    Barrio.db = get_db()
     barrios = Barrio.all()
 
-    Nivel.db = get_db()
     niveles = Nivel.all()
 
-    Responsable_tipo.db = get_db()
     responsables_tipos = Responsable_tipo.all()
 
-    Escuela.db = get_db()
     escuelas = Escuela.all()
 
     return render_template(

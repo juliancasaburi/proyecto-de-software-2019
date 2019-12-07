@@ -25,7 +25,6 @@ def get_instrumentos():
     ):
         abort(401)
 
-    Instrumento.db = get_db()
     instrumentos = Instrumento.all()
 
     for dict_item in instrumentos:
@@ -54,7 +53,7 @@ def instrumento_data():
         abort(401)
 
     if request.args.get("id"):
-        Instrumento.db = get_db()
+
         eid = request.args.get("id")
         instrumento = Instrumento.find_by_id(eid)
         if instrumento is not None:
@@ -98,7 +97,6 @@ def new():
             f.save(imagepath)
             params["image_path"] = "uploads/" + filename
 
-        Instrumento.db = get_db()
         created = Instrumento.create(params)
 
         if created:
@@ -138,7 +136,6 @@ def update():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
-        Instrumento.db = get_db()
 
         # Si el usuario seleccionó una imagen
         if request.files["photo"].filename != "":
@@ -192,7 +189,6 @@ def instrumento_table():
         abort(401)
 
     # Tipos de instrumentos para el select
-    TipoInstrumento.db = get_db()
     tipos_instrumento = TipoInstrumento.all()
 
     return render_template("tables/instrumentos.html", tipos=tipos_instrumento)
@@ -206,12 +202,11 @@ def instrumento_info():
         abort(401)
 
     id_instrumento = request.args.get("id")
-    Instrumento.db = get_db()
+
     instrumento = Instrumento.find_by_id(id_instrumento)
 
     if instrumento:
         # Tipo del instrumento
-        TipoInstrumento.db = get_db()
         tipo = TipoInstrumento.find_by_id(instrumento["tipo_id"])
         instrumento["tipo"] = tipo["nombre"]
         instrumento["created_at"] = instrumento["created_at"].strftime(

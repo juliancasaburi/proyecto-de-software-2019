@@ -65,7 +65,7 @@ class DocentesServerSideTable(ServerSideTable, ABC):
 
 
 def collect_data_serverside(req):
-    Docente.db = get_db()
+
     docentes = Docente.all_table()
 
     columns = table_schemas.SERVERSIDE_DOCENTE_TABLE_COLUMNS
