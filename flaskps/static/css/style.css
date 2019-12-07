@@ -240,3 +240,31 @@ nav ul a {
 .error-page {
     margin: 5rem;
 }
+
+.feature-info {
+    background: white;
+    display: inline-block;
+    padding: 1rem;
+    font-size: smaller;
+    font-family: monospace;
+    border-radius: 10%
+}
+
+.divider-feature-info
+{
+	position: relative;
+	margin: 1em;
+	height: 1px;
+}
+
+.div-transparent:before
+{
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 5%;
+	right: 5%;
+	width: 90%;
+	height: 1px;
+	background-image: linear-gradient(to right, transparent, rgb(48,49,51), transparent);
+}

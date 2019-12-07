@@ -115,6 +115,7 @@
 
             <div class="row">
                 <div id="map" class="col s10 offset-s1 z-depth-4 wow zoomIn" data-wow-delay="0.5s" style="height:300px"></div>
+                <div id="feature-info" class="feature-info container z-depth-2"></div>
             </div>
         </div>
     </div>
@@ -128,7 +129,9 @@
     <script>
         $(document).ready(function() {
             $('select').formSelect();
-            new WOW().init();
+            new WOW({
+                live: true
+            }).init();
             $('.parallax').parallax();
             $('.carousel.carousel-slider').carousel({
                 fullWidth: true,
@@ -154,13 +157,10 @@
                         nucleos_markers[i] = new ol.Feature({
                             geometry: new ol.geom.Point(
                                 ol.proj.fromLonLat([nucleos[i]['lng'],nucleos[i]['lat']])
-                            )
+                            ),
+                            nucleo_pos: i
                         });
-                        var letters = '0123456789ABCDEF';
-                        var color_pin = '#';
-                        for (var j = 0; j < 6; j++) {
-                            color_pin += letters[Math.floor(Math.random() * 16)];
-                        }
+                        // add marker
                         nucleos_markers[i].setStyle(
                             new ol.style.Style({
                                 image: new ol.style.Icon({
@@ -168,8 +168,8 @@
                                     color: 'red',
                                     crossOrigin: 'anonymous',
                                     anchorOrigin: 'bottom-left',
-                                    scale: 0.5,
-                                    src: '{{ url_for('static', filename='img/location_on.png') }}'
+                                    scale: 0.4,
+                                    src: '{{ url_for('static', filename='img/location-on.png') }}'
                                 }),
                             })
                         );
@@ -232,6 +232,64 @@
                             new ol.control.ScaleLine(),
                             new ol.control.ZoomSlider()
                         ])
+                    });
+
+                    // marker onhover
+                    var feature_onPointerMove;
+                    var feature_info = document.getElementById('feature-info');
+                    var feature_info_jquery = $('#feature-info');
+                    var overlay = new ol.Overlay({
+                        element: feature_info,
+                        offset: [0, 0]
+                    });
+                    map.addOverlay(overlay);
+
+                    map.on('pointermove', function(evt) {
+                        feature_onPointerMove = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                            if (feature != info) return feature;
+                        });
+
+                        if (feature_onPointerMove) {
+                            overlay.setPosition(evt.coordinate);
+
+                            // texto dentro del feature
+                            feature_info_jquery.show();
+                            var nucleo = nucleos[feature_onPointerMove.getProperties()['nucleo_pos']];
+                            var tel = nucleo['telefono'];
+                            if (nucleo['telefono'] == '') tel = 'no registrado';
+                            feature_info.innerHTML =
+                                '<div style="margin-bottom: auto" class="row">' +
+                                    '<div class="col s12 center-align">' +
+                                        '<span><b>' + nucleo['nombre'] + '</b></span>' +
+                                    '</div>' +
+                                    '<div class="divider-feature-info div-transparent col s12"></div>' +
+                                    '</div class="col s12 center-align">' +
+                                        '<span><i style="font-size: small" class="material-icons">label</i> Teléfono: ' + tel + '</span>' +
+                                    '</div>' +
+                                '</div>';
+
+                            // ajustar posición del feature-info
+                            var coords = feature_onPointerMove.getGeometry().getCoordinates();
+                            var pixel = map.getPixelFromCoordinate(coords);
+                            var map_size = map.getSize();
+                            if ((pixel[0] < map_size[0]/2) && (pixel[1] < map_size[1]/2)) {
+                                overlay.setOffset([0, 0]);
+                                overlay.setPositioning('top-left');
+                            }
+                            else if ((pixel[0] < map_size[0]/2) && (pixel[1] > map_size[1]/2)) {
+                                overlay.setOffset([0, 0]);
+                                overlay.setPositioning('bottom-left');
+                            }
+                            else if ((pixel[0] > map_size[0]/2) && (pixel[1] < map_size[1]/2)) {
+                                overlay.setOffset([feature_info.offsetWidth/2, 0]);
+                                overlay.setPositioning('top-right');
+                            }
+                            else if ((pixel[0] > map_size[0]/2) && (pixel[1] > map_size[1]/2)) {
+                                overlay.setOffset([feature_info.offsetWidth/2, 0]);
+                                overlay.setPositioning('bottom-right');
+                            }
+                        }
+                        else feature_info_jquery.hide();
                     });
 
                     // mover posición al núcleo seleccinado en el select
