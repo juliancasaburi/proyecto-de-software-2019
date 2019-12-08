@@ -1,6 +1,6 @@
 import pymysql
-
 from flask import g
+
 from flaskps.config import Config
 
 

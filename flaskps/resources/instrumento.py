@@ -1,21 +1,17 @@
 import os
-
 from datetime import datetime
 
-from flaskps import app
-from werkzeug.utils import secure_filename
 from flask import render_template, request, session, abort, make_response, jsonify
-from flaskps.db import get_db
+from werkzeug.utils import secure_filename
 
+from flaskps import app
 from flaskps.forms.instrumento import forms_instrumento
 from flaskps.forms.instrumento.forms_instrumento import InstrumentoCreateForm
-
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
 from flaskps.models.instrumento import Instrumento
 from flaskps.models.tipo_instrumento import TipoInstrumento
-
-from flaskps.helpers.permission import has_permission
-from flaskps.helpers.role import has_role
 
 
 def get_instrumentos():
@@ -228,6 +224,8 @@ def instrumento_info():
         # Tipos de instrumentos para el select
         tipos_instrumento = TipoInstrumento.all()
 
-        return render_template("user/instrumento.html", instrumento=instrumento, tipos=tipos_instrumento)
+        return render_template(
+            "user/instrumento.html", instrumento=instrumento, tipos=tipos_instrumento
+        )
     else:
         abort(404)

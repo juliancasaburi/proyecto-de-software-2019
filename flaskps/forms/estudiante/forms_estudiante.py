@@ -1,17 +1,14 @@
-from flaskps.db import get_db
+from flask_wtf import FlaskForm
+from wtforms import StringField, DateField, SelectField, IntegerField
+from wtforms.validators import InputRequired
 
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
 from flaskps.models.responsable_tipo import Responsable_tipo
-
-from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
-
-from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SelectField, IntegerField
-from wtforms.validators import InputRequired
 
 
 class EstudianteForm(FlaskForm):

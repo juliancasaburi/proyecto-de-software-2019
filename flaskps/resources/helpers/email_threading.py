@@ -1,6 +1,8 @@
 import threading
+
 from flask import copy_current_request_context, current_app as app
 from flask_mail import Message
+
 from flaskps import mail
 
 

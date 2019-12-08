@@ -1,5 +1,6 @@
-from flaskps.db import get_db
 from pymysql.err import IntegrityError
+
+from flaskps.db import get_db
 
 
 class SiteConfig(object):

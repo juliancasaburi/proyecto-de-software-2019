@@ -1,15 +1,12 @@
 from datetime import datetime
 
 from flask import request, session, abort, make_response, jsonify, render_template
-from flaskps.db import get_db
 
 from flaskps.forms.ciclo.form_ciclo_create import CicloCreateForm
-
-from flaskps.models import siteconfig
-from flaskps.models.ciclo_lectivo import CicloLectivo
-
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.ciclo_lectivo import CicloLectivo
 
 
 def new():

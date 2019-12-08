@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectMultipleField
 from wtforms.validators import InputRequired, DataRequired, Email, EqualTo
 
-from flaskps.db import get_db
 from flaskps.models.role import Role
 
 

@@ -1,4 +1,3 @@
-from flaskps.db import get_db
 from flaskps.models.user import User
 
 
