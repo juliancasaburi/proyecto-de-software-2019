@@ -316,13 +316,12 @@
                     processData: false,
                     success: async function (response) {
                         $('#progress').delay(2000).fadeOut('slow');
-                        var toastText = "El instrumento fue editado con éxito";
                         await sleep(2000);
                         $('#actionSuccess').show();
                         $('#actionSuccess').delay(2000).fadeOut('slow');
                         var table = $('#tablaInstrumentos').DataTable();
                         table.ajax.reload( null, false );
-                        M.toast({html: toastText, classes: 'green'});
+                        M.toast({html: response['msg'], classes: response['type']});
                     },
                     error: async function (jqXHR, textStatus, errorMessage) {
                         $('#progress').delay(2000).fadeOut('slow');
