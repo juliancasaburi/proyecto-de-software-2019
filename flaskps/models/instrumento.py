@@ -25,7 +25,7 @@ class Instrumento(object):
                             (nombre, 
                              tipo_id, 
                              num_inventario,
-                             image_path) 
+                             image_name) 
                 VALUES      (%s, 
                              %s,
                              %s, 
@@ -41,7 +41,7 @@ class Instrumento(object):
                         data.get("nombre"),
                         data.get("tipo_id"),
                         data.get("num_inventario"),
-                        data.get("image_path"),
+                        data.get("image_name"),
                     ),
                 )
                 dbconn.commit()
@@ -71,9 +71,9 @@ class Instrumento(object):
         return cursor.fetchone()
 
     @classmethod
-    def image_path(cls, id):
+    def image_name(cls, id):
         sql = """
-                SELECT  image_path
+                SELECT  image_name
                 FROM    instrumento
                 WHERE   id = %s
             """
@@ -98,7 +98,8 @@ class Instrumento(object):
                             UPDATE instrumento
                             SET    nombre = %s, 
                                    tipo_id = %s, 
-                                   num_inventario = %s 
+                                   num_inventario = %s,
+                                   image_name = %s 
                             WHERE  id = %s 
                         """
 
@@ -108,6 +109,7 @@ class Instrumento(object):
                         data.get("nombre"),
                         data.get("tipo_id"),
                         data.get("num_inventario"),
+                        data.get("image_name"),
                         data.get("id"),
                     ),
                 )

@@ -95,7 +95,7 @@ def new():
             filename = secure_filename(filename)
             imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
             f.save(imagepath)
-            params["image_path"] = "uploads/" + filename
+            params["image_name"] = filename
 
         created = Instrumento.create(params)
 
@@ -139,6 +139,16 @@ def update():
 
         # Si el usuario seleccionó una imagen
         if request.files["photo"].filename != "":
+            if Instrumento.image_name(params["id"])["image_name"]:
+                # Eliminar la foto anterior
+                old_image_path = os.path.join(
+                    app.config["UPLOADED_IMAGES_DEST"],
+                    Instrumento.image_name(params["id"])["image_name"],
+                )
+                try:
+                    os.remove(old_image_path)
+                except FileNotFoundError:
+                    print(old_image_path + " no existe.")
             f = form.photo.data
             parts = f.filename.split(".")
             filename = (
@@ -151,11 +161,7 @@ def update():
             filename = secure_filename(filename)
             imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
             f.save(imagepath)
-            params["image_path"] = imagepath
-
-            # Eliminar la foto anterior
-            old_image_path = Instrumento.image_path(params["id"])["image_path"]
-            os.remove(old_image_path)
+            params["image_name"] = filename
 
         updated = Instrumento.update(params)
 
@@ -218,6 +224,10 @@ def instrumento_info():
             )
         else:
             instrumento["updated_at"] = "Nunca"
-        return render_template("user/instrumento.html", instrumento=instrumento)
+
+        # Tipos de instrumentos para el select
+        tipos_instrumento = TipoInstrumento.all()
+
+        return render_template("user/instrumento.html", instrumento=instrumento, tipos=tipos_instrumento)
     else:
         abort(404)

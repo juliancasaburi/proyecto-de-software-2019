@@ -14,8 +14,8 @@
             </div>
             <div class="card-panel z-depth-5">
                 <div class="row center">
-                    {% if instrumento['image_path'] %}
-                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="{{ url_for('static', filename=instrumento.image_path) }}">
+                    {% if instrumento['image_name'] %}
+                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="{{ url_for('static', filename="uploads/" + instrumento.image_name) }}">
                     {% else %}
                         <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="https://via.placeholder.com/350x150?text=Sin+Imagen">
                     {% endif %}
@@ -36,11 +36,69 @@
             </div>
         </div>
     </div>
+    {% if has_permission('instrumento_update', session) %}
+        {% include 'partials/modals/modal_editar_instrumento.html' %}
+    {% endif %}
 {% endblock %}
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/dataToModalInstrumento.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.materialboxed').materialbox();
+            $('#modalEditarInstrumento').modal();
+            $('select').formSelect();
+        });
+    </script>
+    <script>
+        // Edit a record
+        $('.editButton').on('click', function (e) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('instrumento') }}",
+                data: {
+                    id: id
+                },
+                success: function (response) {
+                    dataToModalInstrumento(response);
+                    $('#modalEditarInstrumento').modal('open');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log("Error: ", errorMessage);
+                }
+            });
+        });
+    </script>
+    <script async>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        $(document).ready(function(){
+            // Editar instrumento
+            var frm = $('#formEditarInstrumento');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $('#progress').show();
+                $('#modalEditarInstrumento').modal('close');
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: new FormData(frm[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: async function (response) {
+                        M.toast({html: response['msg'], classes: response['type']});
+                        await sleep(2000);
+                    },
+                    error: async function (jqXHR, textStatus, errorMessage) {
+                        var toastText = "Ha ocurrido un error (" + errorMessage + ")";
+                        M.toast({html: toastText, classes: 'error'});
+                    },
+                });
+            });
         });
     </script>
 {% endblock %}

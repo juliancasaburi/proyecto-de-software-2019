@@ -1,4 +1,3 @@
-from flaskps.db import get_db
 from flaskps.models.tipo_instrumento import TipoInstrumento
 
 from flask_wtf import FlaskForm
@@ -28,7 +27,6 @@ class InstrumentoCreateForm(FlaskForm):
 
 
 def crud_choices():
-    Tipo
     tipos_instrumento = TipoInstrumento.all()
 
     choices = dict()

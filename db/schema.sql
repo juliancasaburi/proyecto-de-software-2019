@@ -551,7 +551,7 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`instrumento` (
   `nombre` VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
   `tipo_id` int(11) NOT NULL,
   `num_inventario` varchar(32) COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-  `image_path` varchar(1024) COLLATE utf8_unicode_ci,
+  `image_name` varchar(1024) COLLATE utf8_unicode_ci,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),
