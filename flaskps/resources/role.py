@@ -1,11 +1,9 @@
 from flask import jsonify, make_response, session, abort
-from flaskps.db import get_db
-
-from flaskps.models.role import Role
-from flaskps.models import siteconfig
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.role import Role
 
 
 def all_roles():

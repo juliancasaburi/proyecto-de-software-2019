@@ -4,19 +4,15 @@ from flask import (
     abort,
     make_response,
     jsonify,
-    flash,
     json,
     render_template,
 )
-from flaskps.db import get_db
 
 from flaskps.forms.nucleo.form_nucleo_create import NucleoCreateForm
-
-from flaskps.models.nucleo import Nucleo
-from flaskps.models import siteconfig
-
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.nucleo import Nucleo
 
 
 def get_nucleos():

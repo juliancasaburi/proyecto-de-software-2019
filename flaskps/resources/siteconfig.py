@@ -1,9 +1,7 @@
 from flask import session, abort, make_response, jsonify, request
 
-from flaskps.db import get_db
 from flaskps.helpers.permission import has_permission
 from flaskps.models import siteconfig
-from flaskps.models.siteconfig import SiteConfig
 
 
 def maintenance_mode():

@@ -1,21 +1,17 @@
+import json
 from datetime import datetime
 
 from flask import request, session, abort, make_response, jsonify, render_template
-from flaskps.db import get_db
-
-import json
 
 from flaskps.forms.docente import forms_docente
 from flaskps.forms.docente.forms_docente import DocenteForm
-
-from flaskps.models.docente import Docente
-from flaskps.models.genero import Genero
-from flaskps.models import siteconfig
-
 from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.models import siteconfig
+from flaskps.models.docente import Docente
+from flaskps.models.genero import Genero
 from flaskps.models.user import User
 
 

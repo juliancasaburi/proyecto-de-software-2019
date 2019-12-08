@@ -1,6 +1,5 @@
 from flask import render_template
 
-from flaskps.db import get_db
 from flaskps.models.ciclo_lectivo import CicloLectivo
 from flaskps.models.docente import Docente
 from flaskps.models.estudiante import Estudiante

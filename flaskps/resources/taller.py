@@ -1,16 +1,13 @@
 from flask import request, session, abort, make_response, jsonify, render_template
-from flaskps.db import get_db
 
+from flaskps.forms.taller.forms_taller import TallerForm
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
 from flaskps.models.ciclo_lectivo import CicloLectivo
 from flaskps.models.docente import Docente
 from flaskps.models.estudiante import Estudiante
 from flaskps.models.taller import Taller
-
-from flaskps.forms.taller.forms_taller import TallerForm
-
-from flaskps.helpers.permission import has_permission
-from flaskps.helpers.role import has_role
 
 
 def new():

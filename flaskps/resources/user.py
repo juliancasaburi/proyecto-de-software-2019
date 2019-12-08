@@ -10,22 +10,18 @@ from flask import (
     jsonify,
     flash,
 )
-from flaskps.db import get_db
-from flaskps.models.user import User
-from flaskps.models.role import Role
-from flaskps.models import siteconfig
 
-from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
+from flaskps import bcrypt
 from flaskps.forms.user.form_email_update import EmailUpdateForm
 from flaskps.forms.user.form_password_update import PasswordUpdateForm
-
+from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
-
+from flaskps.models import siteconfig
+from flaskps.models.role import Role
+from flaskps.models.user import User
 from flaskps.resources.helpers.email_threading import send_async
-
-from flaskps import bcrypt
 
 
 def new():

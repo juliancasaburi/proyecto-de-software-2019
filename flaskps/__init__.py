@@ -1,19 +1,20 @@
 import os
-from flask import Flask, render_template
-from flask_session import Session
 
-import flaskps.resources.helpers.serverside_dt.serverside_table_user
+from flask import Flask, render_template
+from flask_bcrypt import Bcrypt
+from flask_mail import Mail
+from flask_session import Session
+from flask_uploads import UploadSet, IMAGES, configure_uploads
+from flask_wtf.csrf import CSRFProtect
+
 import flaskps.resources.helpers.serverside_dt.serverside_table_docente
 import flaskps.resources.helpers.serverside_dt.serverside_table_preceptor
+import flaskps.resources.helpers.serverside_dt.serverside_table_user
 from flaskps.config import Config
 from flaskps.helpers import auth as helper_auth, handler
 from flaskps.helpers import permission as helper_permission
 from flaskps.helpers import role as helper_role
 from flaskps.models import siteconfig as sc
-from flask_wtf.csrf import CSRFProtect
-from flask_bcrypt import Bcrypt
-from flask_mail import Mail
-from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 # ----------------- App Config -----------------
 app = Flask(__name__)
