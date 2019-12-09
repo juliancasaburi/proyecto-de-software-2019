@@ -1,11 +1,10 @@
-from flaskps.db import get_db
-from flaskps.models.tipo_instrumento import TipoInstrumento
-
+from flask_uploads import UploadSet, IMAGES
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SelectField
 from wtforms.validators import InputRequired
-from flask_uploads import UploadSet, IMAGES
-from flask_wtf.file import FileField, FileAllowed
+
+from flaskps.models.tipo_instrumento import TipoInstrumento
 
 images = UploadSet("images", IMAGES)
 
@@ -28,7 +27,6 @@ class InstrumentoCreateForm(FlaskForm):
 
 
 def crud_choices():
-    TipoInstrumento.db = get_db()
     tipos_instrumento = TipoInstrumento.all()
 
     choices = dict()

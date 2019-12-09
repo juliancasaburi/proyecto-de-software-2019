@@ -8,9 +8,6 @@ from flaskps.models.user import User
 
 
 class Preceptor(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -18,10 +15,11 @@ class Preceptor(object):
             FROM    preceptor
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -33,10 +31,11 @@ class Preceptor(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -69,7 +68,8 @@ class Preceptor(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -85,13 +85,13 @@ class Preceptor(object):
                         data.get("telefono_numero"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -102,14 +102,15 @@ class Preceptor(object):
             WHERE  id = %s 
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, d_id)
-                cls.db.commit()
+                dbconn.commit()
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -122,10 +123,11 @@ class Preceptor(object):
                 WHERE   d.id = %s
             """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, did)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -146,7 +148,8 @@ class Preceptor(object):
                     WHERE id = %s 
             """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -163,13 +166,13 @@ class Preceptor(object):
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -179,7 +182,7 @@ class Preceptor(object):
         for dict_item in preceptores:
             usuario_id = dict_item["usuario_id"]
             if usuario_id:
-                User.db = get_db()
+
                 user = User.find_by_id(usuario_id)
                 dict_item["username"] = user["username"]
             dict_item["fecha_nacimiento"] = dict_item["fecha_nac"].strftime("%d-%m-%Y")
@@ -187,7 +190,7 @@ class Preceptor(object):
             loc = localidad(dict_item["localidad_id"])
             dict_item["localidad"] = loc["nombre"]
             del dict_item["localidad_id"]
-            Genero.db = get_db()
+
             dict_item["genero"] = Genero.find_by_id(dict_item["genero_id"])[0]["nombre"]
             del dict_item["genero_id"]
             tipo_doc = tipo_documento(dict_item["tipo_doc_id"])

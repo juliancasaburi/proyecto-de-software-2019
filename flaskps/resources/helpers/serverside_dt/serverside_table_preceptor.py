@@ -3,13 +3,11 @@ from abc import ABC
 
 from flask import session, abort, request, jsonify
 
-from flaskps.db import get_db
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
 from flaskps.models.preceptor import Preceptor
 from flaskps.resources.helpers.serverside_dt import table_schemas
-
 from flaskps.resources.helpers.serverside_dt.serverside_table import ServerSideTable
 
 
@@ -65,7 +63,7 @@ class preceptoreserverSideTable(ServerSideTable, ABC):
 
 
 def collect_data_serverside(req):
-    Preceptor.db = get_db()
+
     preceptores = Preceptor.all_table()
 
     columns = table_schemas.SERVERSIDE_PRECEPTOR_TABLE_COLUMNS

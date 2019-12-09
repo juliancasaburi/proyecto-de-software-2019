@@ -1,13 +1,10 @@
-from flaskps.db import get_db
-
-from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
-
-from flaskps.models.genero import Genero
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectField, IntegerField
 from wtforms.validators import InputRequired
+
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.models.genero import Genero
 
 
 class PreceptorForm(FlaskForm):
@@ -49,7 +46,6 @@ class PreceptorForm(FlaskForm):
 def choices():
     choices_dict = dict()
 
-    Genero.db = get_db()
     generos = Genero.all()
     choices_dict["select_genero"] = [(g["id"], g["nombre"]) for g in generos]
 

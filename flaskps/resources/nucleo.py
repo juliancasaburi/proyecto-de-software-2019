@@ -4,19 +4,15 @@ from flask import (
     abort,
     make_response,
     jsonify,
-    flash,
     json,
     render_template,
 )
-from flaskps.db import get_db
 
 from flaskps.forms.nucleo.form_nucleo_create import NucleoCreateForm
-
-from flaskps.models.nucleo import Nucleo
-from flaskps.models import siteconfig
-
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.nucleo import Nucleo
 
 
 def get_nucleos():
@@ -26,7 +22,6 @@ def get_nucleos():
     ):
         abort(401)
 
-    Nucleo.db = get_db()
     nucleos = Nucleo.all()
 
     nucleos = jsonify(nucleos)
@@ -36,12 +31,9 @@ def get_nucleos():
 
 def get_nucleos_activos():
     s_config = siteconfig.get_config()
-    if not has_permission("nucleo_index", session) or (
-        s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
-    ):
+    if s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session):
         abort(401)
 
-    Nucleo.db = get_db()
     nucleos = Nucleo.activos()
 
     nucleos = jsonify(nucleos)
@@ -63,7 +55,6 @@ def new():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Nucleo.db = get_db()
         created = Nucleo.create(params)
 
         if created:
@@ -102,8 +93,6 @@ def update():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Nucleo.db = get_db()
-
         updated = Nucleo.update(params)
 
         if updated:
@@ -138,7 +127,6 @@ def destroy():
     params = json.loads(request.data)
     nid = params["id"]
 
-    Nucleo.db = get_db()
     success = Nucleo.delete(nid)
 
     op_response = dict()
@@ -168,7 +156,7 @@ def nucleo_data():
 
     id = request.args.get("id")
     if id:
-        Nucleo.db = get_db()
+
         nucleo = Nucleo.find_by_id(id)
         if nucleo is not None:
             data = jsonify(nucleo)

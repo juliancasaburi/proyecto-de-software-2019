@@ -10,22 +10,18 @@ from flask import (
     jsonify,
     flash,
 )
-from flaskps.db import get_db
-from flaskps.models.user import User
-from flaskps.models.role import Role
-from flaskps.models import siteconfig
 
-from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
+from flaskps import bcrypt
 from flaskps.forms.user.form_email_update import EmailUpdateForm
 from flaskps.forms.user.form_password_update import PasswordUpdateForm
-
+from flaskps.forms.user.forms_user import UserCreateForm, UserUpdateForm
 from flaskps.helpers.auth import authenticated
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
-
+from flaskps.models import siteconfig
+from flaskps.models.role import Role
+from flaskps.models.user import User
 from flaskps.resources.helpers.email_threading import send_async
-
-from flaskps import bcrypt
 
 
 def new():
@@ -47,7 +43,6 @@ def new():
 
         params["roles"] = request.form.getlist("rol_id")
 
-        User.db = get_db()
         created = User.create(params)
 
         if created:
@@ -94,7 +89,6 @@ def destroy():
     params = json.loads(request.data)
     uid = params["id"]
 
-    User.db = get_db()
     success = User.delete(uid)
 
     op_response = dict()
@@ -134,8 +128,6 @@ def update():
             params["activo"] = 1
         else:
             params["activo"] = 0
-
-        User.db = get_db()
 
         uid = params["id"]
         old_email = User.find_by_id(uid)["email"]
@@ -215,7 +207,7 @@ def dashboard():
     ):
         abort(401)
     else:
-        Role.db = get_db()
+
         roles = Role.all()
 
         return render_template("user/dashboard.html", roles=roles)
@@ -230,7 +222,6 @@ def profile():
 
     username = session.get("user")
 
-    User.db = get_db()
     user = User.find_by_user(username)
 
     roles = User.user_roles(username)
@@ -257,7 +248,7 @@ def email_update():
 
     if form.validate_on_submit():
         email = request.form.get("email")
-        User.db = get_db()
+
         updated = User.update_email(email, session.get("user"))
         if updated:
             # TODO: Email a la dirección de email anterior y a la nueva notificando actualización del email
@@ -283,7 +274,7 @@ def password_update():
     if form.validate_on_submit():
         password = request.form.get("password")
         bcrypt_password = bcrypt.generate_password_hash(password).decode("utf - 8")
-        User.db = get_db()
+
         updated = User.update_password(bcrypt_password, session.get("user"))
         if updated:
             # TODO: Email notificando la actualización de contraseña
@@ -308,7 +299,7 @@ def user_data():
     # Por id
     id = request.args.get("id")
     if id:
-        User.db = get_db()
+
         user = User.find_by_id(id)
         if user is not None:
             user["roles"] = User.user_roles(user["username"])
@@ -327,7 +318,6 @@ def user_table():
     ):
         abort(401)
 
-    Role.db = get_db()
     roles = Role.all()
 
     return render_template("tables/usuarios.html", roles=roles)

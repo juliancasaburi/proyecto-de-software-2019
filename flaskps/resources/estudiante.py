@@ -6,30 +6,25 @@ from flask import (
     abort,
     make_response,
     jsonify,
-    flash,
     json,
     render_template,
 )
-from flaskps.db import get_db
 
 from flaskps.forms.estudiante import forms_estudiante
 from flaskps.forms.estudiante.forms_estudiante import EstudianteForm
-
-from flaskps.models.estudiante import Estudiante
+from flaskps.helpers.localidades import localidad
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
+from flaskps.helpers.tipos_documento import tipo_documento
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.models import siteconfig
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
+from flaskps.models.estudiante import Estudiante
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
 from flaskps.models.responsable_tipo import Responsable_tipo
-from flaskps.models import siteconfig
-
-from flaskps.helpers.permission import has_permission
-from flaskps.helpers.role import has_role
-
-from flaskps.helpers.tipos_documento import tipo_documento
-from flaskps.helpers.localidades import localidad
-from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
 
 
 def get_estudiantes():
@@ -39,7 +34,6 @@ def get_estudiantes():
     ):
         abort(401)
 
-    Estudiante.db = get_db()
     estudiantes = Estudiante.all()
 
     for dict_item in estudiantes:
@@ -91,7 +85,6 @@ def new():
             params["fecha_nacimiento"], "%d/%m/%Y"
         ).date()
 
-        Estudiante.db = get_db()
         created = Estudiante.create(params)
 
         if created:
@@ -135,8 +128,6 @@ def update():
             params["fecha_nacimiento"], "%d/%m/%Y"
         ).date()
 
-        Estudiante.db = get_db()
-
         updated = Estudiante.update(params)
 
         if updated:
@@ -171,7 +162,6 @@ def destroy():
     params = json.loads(request.data)
     eid = params["id"]
 
-    Estudiante.db = get_db()
     success = Estudiante.delete(eid)
 
     op_response = dict()
@@ -201,7 +191,7 @@ def estudiante_data():
 
     id = request.args.get("id")
     if id:
-        Estudiante.db = get_db()
+
         estudiante = Estudiante.find_by_id(id)
 
         if estudiante is not None:
@@ -228,19 +218,14 @@ def estudiante_table():
 
     tipo_doc = tipos_documento()
 
-    Genero.db = get_db()
     generos = Genero.all()
 
-    Barrio.db = get_db()
     barrios = Barrio.all()
 
-    Nivel.db = get_db()
     niveles = Nivel.all()
 
-    Responsable_tipo.db = get_db()
     responsables_tipos = Responsable_tipo.all()
 
-    Escuela.db = get_db()
     escuelas = Escuela.all()
 
     return render_template(

@@ -1,21 +1,17 @@
+import json
 from datetime import datetime
 
 from flask import request, session, abort, make_response, jsonify, render_template
-from flaskps.db import get_db
-
-import json
 
 from flaskps.forms.preceptor import forms_preceptor
 from flaskps.forms.preceptor.forms_preceptor import PreceptorForm
-
-from flaskps.models.preceptor import Preceptor
-from flaskps.models.genero import Genero
-from flaskps.models import siteconfig
-
 from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.helpers.tipos_documento import tipos_documento
+from flaskps.models import siteconfig
+from flaskps.models.genero import Genero
+from flaskps.models.preceptor import Preceptor
 from flaskps.models.user import User
 
 
@@ -39,12 +35,11 @@ def new():
         ).date()
 
         if "username" in params:
-            User.db = get_db()
+
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
 
-        Preceptor.db = get_db()
         created = Preceptor.create(params)
 
         if created:
@@ -75,7 +70,6 @@ def destroy():
     d_id = params["id"]
     activo = params["activo"]
 
-    Preceptor.db = get_db()
     success = Preceptor.delete(d_id)
 
     op_response = dict()
@@ -102,7 +96,7 @@ def data():
 
     id = request.args.get("id")
     if id:
-        Preceptor.db = get_db()
+
         preceptor = Preceptor.find_by_id(id)
 
         if preceptor is not None:
@@ -111,7 +105,7 @@ def data():
             )
             usuario_id = preceptor["usuario_id"]
             if usuario_id:
-                User.db = get_db()
+
                 user = User.find_by_id(usuario_id)
                 preceptor["username"] = user["username"]
             data = jsonify(preceptor)
@@ -138,10 +132,8 @@ def update():
     if form.validate_on_submit():
         params = request.form.to_dict()
 
-        Preceptor.db = get_db()
-
         if "username" in params:
-            User.db = get_db()
+
             user = User.find_by_user(params["username"])
             if user:
                 params["usuario_id"] = user["id"]
@@ -181,7 +173,6 @@ def preceptor_table():
     ):
         abort(401)
 
-    Genero.db = get_db()
     generos = Genero.all()
 
     return render_template(

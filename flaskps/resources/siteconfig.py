@@ -1,16 +1,13 @@
 from flask import session, abort, make_response, jsonify, request
 
-from flaskps.db import get_db
 from flaskps.helpers.permission import has_permission
 from flaskps.models import siteconfig
-from flaskps.models.siteconfig import SiteConfig
 
 
 def maintenance_mode():
     if not has_permission("config_update", session):
         abort(401)
 
-    SiteConfig.db = get_db()
     config = siteconfig.get_config()
     modo_mantenimiento = config["modo_mantenimiento"]
 
@@ -31,8 +28,6 @@ def config_update():
         abort(401)
 
     params = request.form.to_dict()
-
-    SiteConfig.db = get_db()
 
     data = {"msg": "Configuración actualizada exitosamente"}
 

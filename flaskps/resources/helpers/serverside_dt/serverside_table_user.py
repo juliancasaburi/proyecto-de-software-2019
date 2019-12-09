@@ -3,13 +3,11 @@ from abc import ABC
 
 from flask import session, abort, request, jsonify
 
-from flaskps.db import get_db
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
 from flaskps.models.user import User
 from flaskps.resources.helpers.serverside_dt import table_schemas
-
 from flaskps.resources.helpers.serverside_dt.serverside_table import ServerSideTable
 
 
@@ -58,7 +56,6 @@ class UsuariosServerSideTable(ServerSideTable, ABC):
 def collect_data_serverside(req):
     columns = table_schemas.SERVERSIDE_USUARIO_TABLE_COLUMNS
 
-    User.db = get_db()
     users = User.all_table()
 
     return UsuariosServerSideTable(req, users, columns).output_result()

@@ -1,10 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class User(object):
-
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -26,10 +25,11 @@ class User(object):
             GROUP  BY u.id
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -65,7 +65,8 @@ class User(object):
         roles = data.get("roles")
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -76,18 +77,18 @@ class User(object):
                         data.get("password"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
                 cursor.execute(sql_user_id, data["username"])
                 user_id = cursor.fetchone()
                 for rol in roles:
                     cursor.execute(sql_user_rol, (user_id["id"], rol))
-                    cls.db.commit()
+                    dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -98,14 +99,15 @@ class User(object):
             WHERE  id = %s 
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, uid)
-                cls.db.commit()
+                dbconn.commit()
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -125,7 +127,8 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
 
                 query = """
                     UPDATE usuario 
@@ -148,22 +151,22 @@ class User(object):
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
                 cursor.execute(sql_delete_user_roles, data.get("id"))
-                cls.db.commit()
+                dbconn.commit()
 
                 roles = data.get("roles")
 
                 for rol in roles:
                     cursor.execute(sql_user_rol, (data.get("id"), rol))
-                    cls.db.commit()
+                    dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -176,10 +179,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (username, password))
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -192,10 +196,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, username)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -208,10 +213,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -232,10 +238,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, username)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchall()
 
@@ -257,10 +264,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (username, permission_name))
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -277,10 +285,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, username)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -298,10 +307,11 @@ class User(object):
         """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (username, role_name))
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -313,12 +323,13 @@ class User(object):
             WHERE  username = %s
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (email, username))
-                cls.db.commit()
+                dbconn.commit()
                 return True
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
     @classmethod
     def update_password(cls, password, username):
@@ -328,12 +339,13 @@ class User(object):
             WHERE  username = %s
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, (password, username))
-                cls.db.commit()
+                dbconn.commit()
                 return True
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
     @classmethod
     def user_roles(cls, username):
@@ -348,10 +360,11 @@ class User(object):
             WHERE  u.username = %s
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, username)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod

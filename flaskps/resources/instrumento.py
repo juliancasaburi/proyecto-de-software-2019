@@ -1,21 +1,17 @@
 import os
-
 from datetime import datetime
 
-from flaskps import app
-from werkzeug.utils import secure_filename
 from flask import render_template, request, session, abort, make_response, jsonify
-from flaskps.db import get_db
+from werkzeug.utils import secure_filename
 
+from flaskps import app
 from flaskps.forms.instrumento import forms_instrumento
 from flaskps.forms.instrumento.forms_instrumento import InstrumentoCreateForm
-
+from flaskps.helpers.permission import has_permission
+from flaskps.helpers.role import has_role
 from flaskps.models import siteconfig
 from flaskps.models.instrumento import Instrumento
 from flaskps.models.tipo_instrumento import TipoInstrumento
-
-from flaskps.helpers.permission import has_permission
-from flaskps.helpers.role import has_role
 
 
 def get_instrumentos():
@@ -25,7 +21,6 @@ def get_instrumentos():
     ):
         abort(401)
 
-    Instrumento.db = get_db()
     instrumentos = Instrumento.all()
 
     for dict_item in instrumentos:
@@ -54,7 +49,7 @@ def instrumento_data():
         abort(401)
 
     if request.args.get("id"):
-        Instrumento.db = get_db()
+
         eid = request.args.get("id")
         instrumento = Instrumento.find_by_id(eid)
         if instrumento is not None:
@@ -96,9 +91,8 @@ def new():
             filename = secure_filename(filename)
             imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
             f.save(imagepath)
-            params["image_path"] = "uploads/" + filename
+            params["image_name"] = filename
 
-        Instrumento.db = get_db()
         created = Instrumento.create(params)
 
         if created:
@@ -138,10 +132,19 @@ def update():
 
     if form.validate_on_submit():
         params = request.form.to_dict()
-        Instrumento.db = get_db()
 
         # Si el usuario seleccionó una imagen
         if request.files["photo"].filename != "":
+            if Instrumento.image_name(params["id"])["image_name"]:
+                # Eliminar la foto anterior
+                old_image_path = os.path.join(
+                    app.config["UPLOADED_IMAGES_DEST"],
+                    Instrumento.image_name(params["id"])["image_name"],
+                )
+                try:
+                    os.remove(old_image_path)
+                except FileNotFoundError:
+                    print(old_image_path + " no existe.")
             f = form.photo.data
             parts = f.filename.split(".")
             filename = (
@@ -154,11 +157,7 @@ def update():
             filename = secure_filename(filename)
             imagepath = os.path.join(app.config["UPLOADED_IMAGES_DEST"], filename)
             f.save(imagepath)
-            params["image_path"] = imagepath
-
-            # Eliminar la foto anterior
-            old_image_path = Instrumento.image_path(params["id"])["image_path"]
-            os.remove(old_image_path)
+            params["image_name"] = filename
 
         updated = Instrumento.update(params)
 
@@ -192,7 +191,6 @@ def instrumento_table():
         abort(401)
 
     # Tipos de instrumentos para el select
-    TipoInstrumento.db = get_db()
     tipos_instrumento = TipoInstrumento.all()
 
     return render_template("tables/instrumentos.html", tipos=tipos_instrumento)
@@ -206,12 +204,11 @@ def instrumento_info():
         abort(401)
 
     id_instrumento = request.args.get("id")
-    Instrumento.db = get_db()
+
     instrumento = Instrumento.find_by_id(id_instrumento)
 
     if instrumento:
         # Tipo del instrumento
-        TipoInstrumento.db = get_db()
         tipo = TipoInstrumento.find_by_id(instrumento["tipo_id"])
         instrumento["tipo"] = tipo["nombre"]
         instrumento["created_at"] = instrumento["created_at"].strftime(
@@ -223,6 +220,12 @@ def instrumento_info():
             )
         else:
             instrumento["updated_at"] = "Nunca"
-        return render_template("user/instrumento.html", instrumento=instrumento)
+
+        # Tipos de instrumentos para el select
+        tipos_instrumento = TipoInstrumento.all()
+
+        return render_template(
+            "user/instrumento.html", instrumento=instrumento, tipos=tipos_instrumento
+        )
     else:
         abort(404)

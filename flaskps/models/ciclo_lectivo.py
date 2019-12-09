@@ -1,9 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class CicloLectivo(object):
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -11,10 +11,11 @@ class CicloLectivo(object):
             FROM    ciclo_lectivo
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -30,7 +31,8 @@ class CicloLectivo(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
@@ -39,13 +41,13 @@ class CicloLectivo(object):
                         data.get("semestre"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -65,16 +67,17 @@ class CicloLectivo(object):
                                     """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql_eliminar, (id_ciclo, id_ciclo),
                 )
-                cls.db.commit()
+                dbconn.commit()
                 cursor.execute(
                     sql_comprobar_eliminacion, (id_ciclo),
                 )
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         row = cursor.fetchone()
         if row is None:
             return True
@@ -89,9 +92,10 @@ class CicloLectivo(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, c_id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchall()

@@ -1,15 +1,12 @@
 from datetime import datetime
 
 from flask import request, session, abort, make_response, jsonify, render_template
-from flaskps.db import get_db
 
 from flaskps.forms.ciclo.form_ciclo_create import CicloCreateForm
-
-from flaskps.models import siteconfig
-from flaskps.models.ciclo_lectivo import CicloLectivo
-
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
+from flaskps.models import siteconfig
+from flaskps.models.ciclo_lectivo import CicloLectivo
 
 
 def new():
@@ -42,7 +39,6 @@ def new():
             op_response["type"] = "error"
             abort(make_response(jsonify(op_response), 400))
 
-        CicloLectivo.db = get_db()
         created = CicloLectivo.create(params)
 
         if created:
@@ -74,7 +70,6 @@ def get_ciclos():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
     for dict_item in ciclos:
@@ -96,7 +91,6 @@ def destroy():
     params = request.form.to_dict()
     cid = params["id"]
 
-    CicloLectivo.db = get_db()
     success = CicloLectivo.destroy(cid)
 
     op_response = dict()
@@ -120,7 +114,7 @@ def get_talleres():
         abort(401)
 
     c_id = request.args.get("id")
-    CicloLectivo.db = get_db()
+
     talleres = CicloLectivo.talleres(c_id)
 
     if talleres is None:
@@ -136,7 +130,6 @@ def ciclo_table():
     ):
         abort(401)
 
-    CicloLectivo.db = get_db()
     ciclos = CicloLectivo.all()
 
     for ciclo in ciclos:

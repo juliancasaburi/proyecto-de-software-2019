@@ -1,17 +1,14 @@
-from flaskps.db import get_db
+from flask_wtf import FlaskForm
+from wtforms import StringField, DateField, SelectField, IntegerField
+from wtforms.validators import InputRequired
 
+from flaskps.helpers.localidades import localidades
+from flaskps.helpers.tipos_documento import tipos_documento
 from flaskps.models.barrio import Barrio
 from flaskps.models.escuela import Escuela
 from flaskps.models.genero import Genero
 from flaskps.models.nivel import Nivel
 from flaskps.models.responsable_tipo import Responsable_tipo
-
-from flaskps.helpers.localidades import localidades
-from flaskps.helpers.tipos_documento import tipos_documento
-
-from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SelectField, IntegerField
-from wtforms.validators import InputRequired
 
 
 class EstudianteForm(FlaskForm):
@@ -78,18 +75,12 @@ class EstudianteForm(FlaskForm):
 
 
 def crud_choices():
-    db = get_db()
     locs = localidades()
-    Barrio.db = db
     barrios = Barrio.all()
-    Genero.db = db
     generos = Genero.all()
     tipos_doc = tipos_documento()
-    Escuela.db = db
     escuelas = Escuela.all()
-    Nivel.db = db
     niveles = Nivel.all()
-    Responsable_tipo.db = db
     responsables_tipos = Responsable_tipo.all()
 
     choices = dict()

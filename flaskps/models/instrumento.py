@@ -1,9 +1,9 @@
 from pymysql.err import IntegrityError
 
+from flaskps.db import get_db
+
 
 class Instrumento(object):
-    db = None
-
     @classmethod
     def all(cls):
         sql = """
@@ -11,10 +11,11 @@ class Instrumento(object):
             FROM    instrumento
         """
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return cursor.fetchall()
 
     @classmethod
@@ -24,7 +25,7 @@ class Instrumento(object):
                             (nombre, 
                              tipo_id, 
                              num_inventario,
-                             image_path) 
+                             image_name) 
                 VALUES      (%s, 
                              %s,
                              %s, 
@@ -32,23 +33,24 @@ class Instrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(
                     sql,
                     (
                         data.get("nombre"),
                         data.get("tipo_id"),
                         data.get("num_inventario"),
-                        data.get("image_path"),
+                        data.get("image_name"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
 
     @classmethod
@@ -60,26 +62,28 @@ class Instrumento(object):
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
     @classmethod
-    def image_path(cls, id):
+    def image_name(cls, id):
         sql = """
-                SELECT  image_path
+                SELECT  image_name
                 FROM    instrumento
                 WHERE   id = %s
             """
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
                 cursor.execute(sql, id)
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
 
         return cursor.fetchone()
 
@@ -87,13 +91,15 @@ class Instrumento(object):
     def update(cls, data):
 
         try:
-            with cls.db.cursor() as cursor:
+            dbconn = get_db()
+            with dbconn.cursor() as cursor:
 
                 query = """
                             UPDATE instrumento
                             SET    nombre = %s, 
                                    tipo_id = %s, 
-                                   num_inventario = %s 
+                                   num_inventario = %s,
+                                   image_name = %s 
                             WHERE  id = %s 
                         """
 
@@ -103,14 +109,15 @@ class Instrumento(object):
                         data.get("nombre"),
                         data.get("tipo_id"),
                         data.get("num_inventario"),
+                        data.get("image_name"),
                         data.get("id"),
                     ),
                 )
-                cls.db.commit()
+                dbconn.commit()
 
         except IntegrityError:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
             return False
         finally:
-            cls.db.cursor().close()
+            dbconn.cursor().close()
         return True
