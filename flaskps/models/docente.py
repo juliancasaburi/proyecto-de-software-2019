@@ -201,3 +201,20 @@ class Docente(object):
             )
 
         return docentes
+
+
+    @classmethod
+    def talleres_by_id(cls, id):
+        sql = """
+            SELECT  t.id, t.nombre, t.nombre_corto
+            FROM    docente d INNER JOIN 
+            WHERE   id = %s
+        """
+
+        try:
+            with cls.db.cursor() as cursor:
+                cursor.execute(sql, id)
+        finally:
+            cls.db.cursor().close()
+
+        return cursor.fetchone()
