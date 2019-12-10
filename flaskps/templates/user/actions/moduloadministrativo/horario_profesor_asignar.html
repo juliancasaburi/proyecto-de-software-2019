@@ -1,0 +1,201 @@
+{% block main %}
+    <div class="container">
+        <div class="section center">
+            <div class="row">
+                <form id="asignarHorarioDocente" method="post" action="{{ url_for("docente_set_horario") }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="modal-content">
+                        <h1>Asignar horarios a Docentes</h1>
+                        <br>
+                        <div class="row">
+                            <div class="col s12 input-field">
+                                <select id="select_docente" name="docente_id" required>
+                                    <option value="" disabled selected>Elija el docente</option>
+                                    {% for docente in docentes %}
+                                        <option value="{{docente.id}}">{{docente.apellido}}, {{docente.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="select_docente">Docente</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_taller" name="taller_id" required>
+                                </select>
+                                <label for="select_taller">Taller</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_ciclo" name="ciclo_id" required>
+                                </select>
+                                <label for="select_ciclo">Ciclo lectivo</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select id="select_nucleo" name="nucleo_id" required>
+                                    <option value="" disabled selected>Elija el núcleo</option>
+                                    {% for nucleo in nucleos %}
+                                        <option value="{{nucleo.id}}">{{nucleo.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="select_nucleo">Núcleo</label>
+                            </div>
+                            <div class="col s12 input-field">
+                                <select multiple id="select_dias" name="dias_id" required>
+                                    <option value="" disabled selected>Elija el/los día/s de la semana</option>
+                                    {% for dia in dias %}
+                                        <option value="{{dia.id}}">{{dia.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="select_dias">Día de la semana</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
+                        <button id="cancelarAsignarHorarioDocente" class="btn red waves-effect waves-light">Reiniciar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            resetForm();
+            $("#cancelarAsignarHorarioDocente").click(function(e){
+                e.preventDefault();
+                resetForm();
+            });
+        });
+
+        resetForm = function() {
+            $('#select_docente').val("");
+            $('#select_taller').html("");
+            $('#select_ciclo').html("");
+            $('#select_dias option').attr('selected', false);
+            $('#select_nucleo').val("");
+            $('select').formSelect();
+        }
+    </script>
+    <script>
+        // Ir mostrando los selects correspondientes
+        $(document).ready(function() {
+
+            // muestra los talleres asociados al docente seleccionado
+            $('#select_docente').on('change', function (e) {
+                var d_id = $('#select_docente').val();
+                if (d_id != null) {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('administracion_docente_talleres') }}",
+                        data: {
+                            d_id: d_id
+                        },
+                        success: function (response) {
+                            $('#select_taller').html("");
+                            if (response.length == 0) msg = "El docente seleccionado no tiene talleres asignados";
+                            else msg = "Elija el taller"
+                            $('#select_taller').append("<option value=\"\" disabled selected>" + msg + "</option>");
+                            for (var key in response) {
+                                $('#select_taller').append("<option value='" + response[key]['id'] + "'>" + response[key]['nombre'] + " (" + response[key]['nombre_corto'] + ")" + "</option>");
+                            }
+                            $('#select_taller').val("");
+                            $('#select_taller').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    })
+                }
+            });
+
+            // muestra los ciclos asociados a ese docente y taller
+            $('#select_taller').on('change', function (e) {
+                var t_id = $('#select_taller').val();
+                var d_id = $('#select_docente').val();
+                if (t_id != null && d_id != null) {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('administracion_docente_taller_ciclos') }}",
+                        data: {
+                            t_id: t_id,
+                            d_id: d_id
+                        },
+                        success: function (response) {
+                            $('#select_ciclo').html("");
+                            $('#select_ciclo').append("<option value=\"\" disabled selected>Elija el ciclo lectivo</option>");
+                            for (var key in response) {
+                                $('#select_ciclo').append("<option value=\"" + response[key]['id'] + "\">[" + response[key]['fecha_ini'] + "] al [" + response[key]['fecha_fin'] + "]</option>");
+                            }
+                            $('#select_ciclo').val("");
+                            $('#select_ciclo').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                }
+            });
+
+            // muestra los días asociados a ese docente, taller, ciclo y núcleo
+            $('#select_nucleo').on('change', function(e) {
+                var t_id = $('#select_taller').val();
+                var d_id = $('#select_docente').val();
+                var c_id = $('#select_ciclo').val();
+                var n_id = $('#select_nucleo').val();
+                if (t_id != null && d_id != null && c_id != null && n_id != null) {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('administracion_docente_taller_ciclo_nucleo_dias') }}",
+                        data: {
+                            t_id: t_id,
+                            d_id: d_id,
+                            c_id: c_id,
+                            n_id: n_id
+                        },
+                        success: function (resp) {
+                            $('#select_dias option').attr('selected', false);
+                            for (var key in resp) {
+                                $("#select_dias option[value='" + resp[key]['id'] + "']").attr("selected", true);
+                            }
+                            $('#select_dias').formSelect();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) {
+                            console.log("Error: ", errorMessage);
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            var frm = $('#asignarHorarioDocente');
+
+            frm.submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: function (response) {
+                        resetForm();
+                        var toastText = response['msg'];
+                        var toastClass = response['type'];
+                        M.toast({html: toastText, classes: toastClass});
+                    },
+                    statusCode: {
+                        422: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        },
+                        400: function (jqXHR) {
+                            M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
+                        },
+                        500: function (jqXHR) {
+                            M.toast({html: "Ha ocurrido un error", classes: 'error'});
+                        },
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

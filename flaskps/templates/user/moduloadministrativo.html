@@ -18,7 +18,9 @@
                     {% if has_permission('taller_index', session) %}
                         <li class="tab col s4"><a href="#tab_talleres">Talleres</a></li>
                     {% endif %}
-                    <li class="tab col s4"><a href="#tab_horarios">Horarios profesores</a></li>
+                    {% if has_permission('taller_index', session) and has_permission('docente_index', session) %}
+                        <li class="tab col s4"><a href="#asignarHorarioDocente">Asignar horarios a docentes</a></li>
+                    {% endif %}
                 </ul>
             </div>
             {% if has_permission('ciclolectivo_index', session) %}
@@ -27,7 +29,9 @@
             {% if has_permission('taller_index', session) %}
                 {% include 'partials/tabs/moduloadministrativo/talleres.html' %}
             {% endif %}
-            <div id="tab_horarios" class="col s12">Horarios profesores</div>
+            {% if has_permission('taller_index', session) and has_permission('docente_index', session) %}
+                {% include 'user/actions/moduloadministrativo/horario_profesor_asignar.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
