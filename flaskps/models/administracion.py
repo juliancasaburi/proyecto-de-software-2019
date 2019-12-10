@@ -1,3 +1,6 @@
+from flask import flash
+from pymysql import IntegrityError
+
 from flaskps.db import get_db
 
 class Administracion(object):
@@ -24,11 +27,8 @@ class Administracion(object):
     def ciclos_taller_docente(cls, did, tid):
         sql = """
                     SELECT  c.id, c.fecha_ini, c.fecha_fin
-                    FROM    taller t INNER JOIN docente_responsable_taller r ON t.id = r.taller_id 
-                                     INNER JOIN docente d ON d.id = r.docente_id
-                                     INNER JOIN ciclo_lectivo_taller ct ON ct.taller_id = t.id
-                                     INNER JOIN ciclo_lectivo c ON c.id = ct.ciclo_lectivo_id
-                    WHERE   d.id = %s and t.id = %s
+                    FROM    ciclo_lectivo c INNER JOIN docente_responsable_taller r ON c.id = r.ciclo_lectivo_id
+                    WHERE   r.docente_id = %s and r.taller_id = %s
                 """
 
         try:
@@ -111,13 +111,14 @@ class Administracion(object):
                 dbconn.commit()
 
                 for dia in dias:
+
                     cursor.execute(
                         sql_insert_relation,
                         (rid, nid, dia)
                     )
                     dbconn.commit()
 
-        except Exception:
+        except IntegrityError:
             return False
 
         finally:

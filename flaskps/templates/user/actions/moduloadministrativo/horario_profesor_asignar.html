@@ -71,7 +71,7 @@
             $('#select_docente').val("");
             $('#select_taller').html("");
             $('#select_ciclo').html("");
-            $('#select_dias option').attr('selected', false);
+            $('#select_dias option:selected').prop('selected', false);
             $('#select_nucleo').val("");
             $('select').formSelect();
         }
@@ -153,9 +153,11 @@
                             n_id: n_id
                         },
                         success: function (resp) {
-                            $('#select_dias option').attr('selected', false);
+                            $('#select_dias option:selected').prop('selected', false);
+                            $('#select_dias').formSelect();
+                            console.log(resp);
                             for (var key in resp) {
-                                $("#select_dias option[value='" + resp[key]['id'] + "']").attr("selected", true);
+                                $("#select_dias option[value='" + resp[key]['id'] + "']").prop("selected", true);
                             }
                             $('#select_dias').formSelect();
                         },

@@ -131,7 +131,7 @@ def docente_set_horario():
 
         if docente_responsable_taller_id:
             n_id = params['nucleo_id']
-            dias_id = params['dias_id']
+            dias_id = request.form.getlist('dias_id')
             horario_set = Administracion.docente_set_horario(docente_responsable_taller_id['id'], n_id, dias_id)
 
             if horario_set:
