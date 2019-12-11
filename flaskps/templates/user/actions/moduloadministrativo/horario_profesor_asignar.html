@@ -1,65 +1,88 @@
 {% block main %}
-    <div class="container">
-        <div class="section center">
-            <div class="row">
-                <form id="asignarHorarioDocente" method="post" action="{{ url_for("docente_set_horario") }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <div class="modal-content">
-                        <h1>Asignar horarios a Docentes</h1>
-                        <br>
-                        <div class="row">
-                            <div class="col s12 input-field">
-                                <select id="select_docente" name="docente_id" required>
-                                    <option value="" disabled selected>Elija el docente</option>
-                                    {% for docente in docentes %}
-                                        <option value="{{docente.id}}">{{docente.apellido}}, {{docente.nombre}}</option>
-                                    {% endfor %}
-                                </select>
-                                <label for="select_docente">Docente</label>
-                            </div>
-                            <div class="col s12 input-field">
-                                <select id="select_taller" name="taller_id" required>
-                                </select>
-                                <label for="select_taller">Taller</label>
-                            </div>
-                            <div class="col s12 input-field">
-                                <select id="select_ciclo" name="ciclo_id" required>
-                                </select>
-                                <label for="select_ciclo">Ciclo lectivo</label>
-                            </div>
-                            <div class="col s12 input-field">
-                                <select id="select_nucleo" name="nucleo_id" required>
-                                    <option value="" disabled selected>Elija el núcleo</option>
-                                    {% for nucleo in nucleos %}
-                                        <option value="{{nucleo.id}}">{{nucleo.nombre}}</option>
-                                    {% endfor %}
-                                </select>
-                                <label for="select_nucleo">Núcleo</label>
-                            </div>
-                            <div class="col s12 input-field">
-                                <select multiple id="select_dias" name="dias_id" required>
-                                    <option value="" disabled selected>Elija el/los día/s de la semana</option>
-                                    {% for dia in dias %}
-                                        <option value="{{dia.id}}">{{dia.nombre}}</option>
-                                    {% endfor %}
-                                </select>
-                                <label for="select_dias">Día de la semana</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
-                        <button id="cancelarAsignarHorarioDocente" class="btn red waves-effect waves-light">Reiniciar</button>
-                    </div>
-                </form>
+
+    <div class="section center">
+        <div class="row">
+            <div class="col s12">
+                <h1>Asignar horarios a Docentes</h1>
+            </div>
+            <div class="col s12">
+                <h5>Para asignar los días que un docente va a dar clases en alguno de sus talleres, en un núcleo específico.</h5>
             </div>
         </div>
+        <form id="asignarHorarioDocente" method="post" action="{{ url_for("docente_set_horario") }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="modal-content">
+                <br>
+                <div class="row">
+                    <div class="col s6 input-field">
+                        <select id="select_docente" name="docente_id" required>
+                            <option value="" disabled selected>Elija el docente</option>
+                            {% for docente in docentes %}
+                                <option value="{{docente.id}}">{{docente.apellido}}, {{docente.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="select_docente">Docente</label>
+                    </div>
+                    <div class="col s6 input-field">
+                        <select id="select_taller" name="taller_id" required>
+                            <option value="" disabled selected>No hay ningún docente seleccionado</option>
+                        </select>
+                        <label for="select_taller">Taller</label>
+                    </div>
+                    <div class="col s6 input-field">
+                        <select id="select_ciclo" name="ciclo_id" required>
+                            <option value="" disabled selected>No hay ningún taller seleccionado</option>
+                        </select>
+                        <label for="select_ciclo">Ciclo lectivo</label>
+                    </div>
+                    <div class="col s6 input-field">
+                        <select id="select_nucleo" name="nucleo_id" required>
+                            <option value="" disabled selected>Elija el núcleo</option>
+                            {% for nucleo in nucleos %}
+                                <option value="{{nucleo.id}}">{{nucleo.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="select_nucleo">Núcleo</label>
+                    </div>
+                    <div class="col s12 input-field">
+                        <select multiple id="select_dias" name="dias_id" required>
+                            <option value="" disabled selected>Elija el/los día/s de la semana</option>
+                            {% for dia in dias %}
+                                <option value="{{dia.id}}">{{dia.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="select_dias">Día de la semana</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="submit" type="submit" class="btn blue waves-effect waves-button-input">Guardar</button>
+                <button id="cancelarAsignarHorarioDocente" class="btn red waves-effect waves-light">Reiniciar</button>
+            </div>
+        </form>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
     <script>
         $(document).ready(function() {
+
+            //check validity para mostrar msg de error
+            $('#submit').on('click', function() {
+                var selects = $('#asignarHorarioDocente').find($('select').get());
+                var vacio = false;
+
+                for (select in selects) {
+                    if (!selects[select].checkValidity()) {
+                        vacio = true;
+                        break;
+                    }
+                }
+                if (vacio) M.toast({html: 'Por favor complete todos los datos', classes: 'error'});
+            });
+
+            // form por defecto
             resetForm();
             $("#cancelarAsignarHorarioDocente").click(function(e){
                 e.preventDefault();
@@ -69,8 +92,10 @@
 
         resetForm = function() {
             $('#select_docente').val("");
-            $('#select_taller').html("");
-            $('#select_ciclo').html("");
+            //$('#select_taller').html("");
+            $('#select_taller').val("");
+            //$('#select_ciclo').html("");
+            $('#select_ciclo').val("");
             $('#select_dias option:selected').prop('selected', false);
             $('#select_nucleo').val("");
             $('select').formSelect();
@@ -155,7 +180,12 @@
                         success: function (resp) {
                             $('#select_dias option:selected').prop('selected', false);
                             $('#select_dias').formSelect();
-                            console.log(resp);
+                            /*
+                            if (resp.length == 0) {
+                                console.log($("#select_dias option[value='']").get().innerHTML);
+                                $("#select_dias option[value='']").get().innerHTML = 'No tiene días asociados, elija el/los día/s';
+                            }
+                            */
                             for (var key in resp) {
                                 $("#select_dias option[value='" + resp[key]['id'] + "']").prop("selected", true);
                             }
@@ -172,6 +202,10 @@
     <script>
         $(document).ready(function() {
             var frm = $('#asignarHorarioDocente');
+
+            $('#submit').on('click', function() {
+
+            });
 
             frm.submit(function (e) {
                 e.preventDefault();
