@@ -204,6 +204,3 @@ class Docente(object):
             )
 
         return docentes
-
-
-

@@ -2,7 +2,6 @@ from flaskps.db import get_db
 
 
 class Dia(object):
-
     @classmethod
     def all(cls):
         sql = """
