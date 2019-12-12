@@ -250,10 +250,27 @@ app.add_url_rule(
 
 # Módulo administrativo
 app.add_url_rule("/administracion", "administracion", administracion.administracion)
-app.add_url_rule("/administracion/docente/talleres", "administracion_docente_talleres", administracion.docente_talleres)
-app.add_url_rule("/administracion/docente/taller/ciclos", "administracion_docente_taller_ciclos", administracion.ciclos_taller_docente)
-app.add_url_rule("/administracion/docente/taller/ciclo/nucleo/dias", "administracion_docente_taller_ciclo_nucleo_dias", administracion.dias_nucleo_ciclo_taller_docente)
-app.add_url_rule("/docente/asociar_horario", "docente_set_horario", administracion.docente_set_horario, methods=["POST"])
+app.add_url_rule(
+    "/administracion/docente/talleres",
+    "administracion_docente_talleres",
+    administracion.docente_talleres,
+)
+app.add_url_rule(
+    "/administracion/docente/taller/ciclos",
+    "administracion_docente_taller_ciclos",
+    administracion.ciclos_taller_docente,
+)
+app.add_url_rule(
+    "/administracion/docente/taller/ciclo/nucleo/dias",
+    "administracion_docente_taller_ciclo_nucleo_dias",
+    administracion.dias_nucleo_ciclo_taller_docente,
+)
+app.add_url_rule(
+    "/docente/asociar_horario",
+    "docente_set_horario",
+    administracion.docente_set_horario,
+    methods=["POST"],
+)
 
 # Nucleo
 app.add_url_rule("/nucleo/alta", "nucleo_new", nucleo.new, methods=["POST"])
