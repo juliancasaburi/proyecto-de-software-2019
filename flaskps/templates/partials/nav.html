@@ -72,6 +72,12 @@
                     <li><a class="waves-effect waves-ripple" href="{{ url_for('administracion') }}">Ver y administrar</a></li>
                 {% endif %}
             </ul>
+            <!-- dropdownHorarioDocentes Structure -->
+            <ul id="dropdownHorarioDocentes" class="dropdown-content teal">
+                {% if has_permission('horariodocente_index', session) %}
+                    <li><a class="waves-effect waves-ripple" href="{{ url_for('administracion') }}">Ver y administrar</a></li>
+                {% endif %}
+            </ul>
             <!-- dropdownInstrumentos Structure -->
             <ul id="dropdownInstrumentos" class="dropdown-content teal">
                 {% if has_permission('instrumento_index', session) %}
@@ -136,6 +142,14 @@
                         <li><a class="subheader">Talleres</a></li>
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#" data-target="dropdownTalleres">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </div>
+                {% endif %}
+                {% if has_permission('horariodocente_index', session) or has_permission('horariodocente_new', session) or has_permission('horariodocente_destroy', session) or has_permission('horariodocente_update', session) or has_permission('horariodocente_show', session) %}
+                    <div class="divider"></div>
+                    <div class="section">
+                        <li><a class="subheader">Horarios de docentes</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#" data-target="dropdownHorarioDocentes">Acciones<i class="material-icons right">arrow_drop_down</i></a></li>
                     </div>
                 {% endif %}
                 {% if has_permission('instrumento_index', session) or has_permission('instrumento_new', session) or has_permission('instrumento_destroy', session) or has_permission('instrumento_update', session) or has_permission('instrumento_show', session) %}
