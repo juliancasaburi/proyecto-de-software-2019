@@ -230,6 +230,7 @@ class Taller(object):
             dbconn.cursor().close()
         return True
 
+
     @classmethod
     def update(cls, data):
 

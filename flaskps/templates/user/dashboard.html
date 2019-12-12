@@ -52,7 +52,7 @@
                     </div>
                 {% endif %}
 
-                {% if has_permission('ciclolectivo_index', session) or has_permission('taller_index', session) %}
+                {% if has_permission('ciclolectivo_index', session) or has_permission('taller_index', session) or has_permission('horariodocente_index') %}
                     <div class="col s12">
                         <div class="card" style="overflow: visible;">
                             <a>
@@ -66,8 +66,8 @@
                             </div>
 
                             <div class="card-reveal" style="display: none; transform: translateY(0%);">
-                                <span class="card-title grey-text text-darken-4">Usuarios<i class="material-icons right">close</i></span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                                <span class="card-title grey-text text-darken-4">Módulo de Administración<i class="material-icons right">close</i></span>
+                                <p>Podrás administrar los talleres, los ciclos lectivos, y los horarios de los docentes en sus distintos talleres y núcleos.</p>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
 
                             <div class="card-reveal" style="display: none; transform: translateY(0%);">
                                 <span class="card-title grey-text text-darken-4">Instrumentos<i class="material-icons right">close</i></span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                                <p>Podrás ver el listado de los intrumentos, además de poder crear nuevos o modificar o eliminar los ya existentes.</p>
                             </div>
                         </div>
                     </div>
@@ -197,7 +197,7 @@
 
                             <div class="card-reveal" style="display: none; transform: translateY(0%);">
                                 <span class="card-title grey-text text-darken-4">Núcleos<i class="material-icons right">close</i></span>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis fermentum rutrum. Cras sed cursus nibh, ut blandit erat. Duis id velit at sem lacinia tempus eu eu metus. Sed eleifend sed dolor ut ultricies. Curabitur venenatis lacus at nulla iaculis rutrum. Vivamus bibendum massa non blandit blandit. Sed id accumsan nibh. Pellentesque lacinia eleifend metus, at convallis nunc consequat dignissim.</p>
+                                <p>Podrás administrar los distintos núcleos/instituciones en los que trabajamos.</p>
                             </div>
                         </div>
                     </div>
