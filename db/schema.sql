@@ -368,12 +368,16 @@ COLLATE = utf8_unicode_ci;
 DROP TABLE IF EXISTS `grupo2`.`docente_responsable_taller` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`docente_responsable_taller` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `docente_id` INT(11) NOT NULL,
   `ciclo_lectivo_id` INT(11) NOT NULL,
   `taller_id` INT(11) NOT NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `docente_id_2` (`docente_id`,`ciclo_lectivo_id`,`taller_id`),
   INDEX `FK_docente_responsable_taller_ciclo_lectivo_id_idx` (`ciclo_lectivo_id` ASC),
   INDEX `FK_docente_responsable_taller_taller_id_idx` (`taller_id` ASC),
+  CONSTRAINT
   CONSTRAINT `FK_docente_responsable_taller_docente_id`
     FOREIGN KEY (`docente_id`)
     REFERENCES `grupo2`.`docente` (`id`)
@@ -388,6 +392,45 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`docente_responsable_taller` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `docente_horario`
+--
+DROP TABLE IF EXISTS `grupo2`.`docente_horario` ;
+
+CREATE TABLE `docente_horario` (
+  `docente_responsable_taller_id` int(11) NOT NULL,
+  `nucleo_id` int(11) NOT NULL,
+  `dia_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `docente_horario`
+--
+ALTER TABLE `docente_horario`
+  ADD PRIMARY KEY (`docente_responsable_taller_id`,`nucleo_id`,`dia_id`),
+  ADD KEY `FK_docente_responsable_taller_id` (`docente_responsable_taller_id`),
+  ADD KEY `FK_dia_id` (`dia_id`),
+  ADD KEY `FK_nucleo_idx` (`nucleo_id`);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `docente_horario`
+--
+ALTER TABLE `docente_horario`
+  ADD CONSTRAINT `FK_dia_id` FOREIGN KEY (`dia_id`) REFERENCES `dia_semana` (`id`),
+  ADD CONSTRAINT `FK_docente_responsable_taller_id` FOREIGN KEY (`docente_responsable_taller_id`) REFERENCES `docente_responsable_taller` (`id`),
+  ADD CONSTRAINT `FK_nucleo_idx` FOREIGN KEY (`nucleo_id`) REFERENCES `nucleo` (`id`);
+COMMIT;
 
 
 -- -----------------------------------------------------
@@ -591,6 +634,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `grupo2`.`config`
 -- -----------------------------------------------------
+
 DROP TABLE IF EXISTS `grupo2`.`config` ;
 
 CREATE TABLE IF NOT EXISTS `grupo2`.`config` (
@@ -603,6 +647,16 @@ CREATE TABLE IF NOT EXISTS `grupo2`.`config` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `grupo2`.`config`
+-- -----------------------------------------------------
+
+CREATE TABLE `dia_semana` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(11) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `config`
@@ -653,7 +707,12 @@ INSERT INTO `permiso` (`id`, `nombre`) VALUES
 (33, 'nucleo_show'),
 (34, 'nucleo_new'),
 (35, 'nucleo_update'),
-(36, 'nucleo_destroy');
+(36, 'nucleo_destroy'),
+(37, 'horariodocente_index'),
+(38, 'horariodocente_new'),
+(39, 'horariodocente_destroy'),
+(40, 'horariodocente_update'),
+(41, 'horariodocente_show');
 
 -- --------------------------------------------------------
 
@@ -727,7 +786,9 @@ INSERT INTO `rol_tiene_permiso` (`rol_id`, `permiso_id`) VALUES
 (3, 21),
 (3, 25),
 (3, 27),
-(3, 31);
+(3, 31),
+(3, 37),
+(3, 41);
 
 -- --------------------------------------------------------
 
@@ -957,6 +1018,21 @@ INSERT INTO `nucleo` (`id`, `nombre`, `direccion`, `telefono`, `lat`, `lng`, `ac
 (13, 'Parroquia San Miguen Arcángel', '63 y 124', '0221 482-4491', -34.9072876, -57.9220581, 1),
 (14, 'Centro Cultural y Polideportivo "Papa Francisco"', '44 y 126', '', -34.9338646, -57.8809547, 1),
 (15, 'Teatro Argentino', '53 9 y 10', '0221 429-1732', -34.9180412, -57.9513130, 1);
+
+-- --------------------------------------------------------
+
+-- Data for dia_semana
+
+-- --------------------------------------------------------
+
+INSERT INTO `dia_semana` (`id`, `nombre`) VALUES
+(1, 'Lunes'),
+(2, 'Martes'),
+(3, 'Miércoles'),
+(4, 'Jueves'),
+(5, 'Viernes'),
+(6, 'Sábado'),
+(7, 'Domingo');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -11,15 +11,15 @@
     <div class="container" style="margin-top:7rem; margin-bottom: 7rem">
         <div class="row">
             <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs z-depth-1-half">
                     {% if has_permission('ciclolectivo_index', session) %}
                         <li class="tab col s4"><a href="#tab_ciclos" class="active">Ciclos lectivos</a></li>
                     {% endif %}
                     {% if has_permission('taller_index', session) %}
                         <li class="tab col s4"><a href="#tab_talleres">Talleres</a></li>
                     {% endif %}
-                    {% if has_permission('taller_index', session) and has_permission('docente_index', session) %}
-                        <li class="tab col s4"><a href="#asignarHorarioDocente">Asignar horarios a docentes</a></li>
+                    {% if has_permission('horariodocente_index', session) and has_permission('horariodocente_show', session) %}
+                        <li class="tab col s4"><a href="#asignarHorarioDocenteSection">Asignar horarios a docentes</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -29,7 +29,7 @@
             {% if has_permission('taller_index', session) %}
                 {% include 'partials/tabs/moduloadministrativo/talleres.html' %}
             {% endif %}
-            {% if has_permission('taller_index', session) and has_permission('docente_index', session) %}
+            {% if has_permission('horariodocente_index', session) and has_permission('horariodocente_show', session) %}
                 {% include 'user/actions/moduloadministrativo/horario_profesor_asignar.html' %}
             {% endif %}
         </div>

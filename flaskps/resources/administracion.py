@@ -1,4 +1,4 @@
-from flask import request, session, abort, make_response, jsonify, render_template
+from flask import request, session, abort, make_response, jsonify, render_template, flash
 
 from flaskps.helpers.permission import has_permission
 from flaskps.helpers.role import has_role
@@ -40,7 +40,7 @@ def administracion():
 
 def docente_talleres():
     s_config = siteconfig.get_config()
-    if not has_permission("taller_index", session) or (
+    if not has_permission("horariodocente_index", session) or not has_permission("horariodocente_show", session) or (
             s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -61,7 +61,7 @@ def docente_talleres():
 
 def ciclos_taller_docente():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_index", session) or (
+    if not has_permission("horariodocente_index", session) or not has_permission("horariodocente_show", session) or (
             s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -87,7 +87,7 @@ def ciclos_taller_docente():
 
 def dias_nucleo_ciclo_taller_docente():
     s_config = siteconfig.get_config()
-    if not has_permission("ciclolectivo_index", session) or (
+    if not has_permission("horariodocente_index", session) or not has_permission("horariodocente_show", session) or (
             s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
         abort(401)
@@ -111,9 +111,10 @@ def dias_nucleo_ciclo_taller_docente():
 
 def docente_set_horario():
     s_config = siteconfig.get_config()
-    if not has_permission("docente_update", session) or (
+    if not has_permission("horariodocente_new", session) or not has_permission("horariodocente_new", session) or not has_permission("horariodocente_update", session) or not has_permission("horariodocente_destroy", session) or (
             s_config["modo_mantenimiento"] == 1 and not has_role("administrador", session)
     ):
+
         abort(401)
 
     # Validación - (queda pendiente)
@@ -135,7 +136,8 @@ def docente_set_horario():
             horario_set = Administracion.docente_set_horario(docente_responsable_taller_id['id'], n_id, dias_id)
 
             if horario_set:
-                op_response["msg"] = "Se ha asignado el horario del docente con éxito"
+                msg = 'asignado' if dias_id else 'desasignado'
+                op_response["msg"] = "Se ha " + msg + " el horario del docente con éxito"
                 op_response["type"] = "success"
             else:
                 op_response["msg"] = "Ha ocurrido un error al asignar el horario"
