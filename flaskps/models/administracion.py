@@ -1,10 +1,9 @@
-from flask import flash
 from pymysql import IntegrityError
 
 from flaskps.db import get_db
 
-class Administracion(object):
 
+class Administracion(object):
     @classmethod
     def talleres_docente(cls, did):
         sql = """
@@ -21,7 +20,6 @@ class Administracion(object):
             dbconn.cursor().close()
         return cursor.fetchall()
 
-
     @classmethod
     def ciclos_taller_docente(cls, did, tid):
         sql = """
@@ -37,7 +35,6 @@ class Administracion(object):
         finally:
             dbconn.cursor().close()
         return cursor.fetchall()
-
 
     @classmethod
     def dias_nucleo_ciclo_taller_docente(cls, did, tid, cid, nid):
@@ -61,7 +58,6 @@ class Administracion(object):
             dbconn.cursor().close()
         return cursor.fetchall()
 
-
     @classmethod
     def docente_responsable_taller_id(cls, did, cid, tid):
         sql = """
@@ -77,7 +73,6 @@ class Administracion(object):
         finally:
             dbconn.cursor().close()
         return cursor.fetchone()
-
 
     @classmethod
     def docente_set_horario(cls, rid, nid, dias):
@@ -103,18 +98,12 @@ class Administracion(object):
         try:
             dbconn = get_db()
             with dbconn.cursor() as cursor:
-                cursor.execute(
-                    sql_delete_relation,
-                    (rid, nid)
-                )
+                cursor.execute(sql_delete_relation, (rid, nid))
                 dbconn.commit()
 
                 for dia in dias:
 
-                    cursor.execute(
-                        sql_insert_relation,
-                        (rid, nid, dia)
-                    )
+                    cursor.execute(sql_insert_relation, (rid, nid, dia))
                     dbconn.commit()
 
         except IntegrityError:
