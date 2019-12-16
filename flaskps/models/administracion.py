@@ -7,10 +7,9 @@ class Administracion(object):
     @classmethod
     def talleres_docente(cls, did):
         sql = """
-            SELECT  t.id, t.nombre, t.nombre_corto
+            SELECT DISTINCT t.id, t.nombre, t.nombre_corto
             FROM    taller t INNER JOIN docente_responsable_taller r ON t.id = r.taller_id 
-                             INNER JOIN docente d ON d.id = r.docente_id
-            WHERE   d.id = %s
+            WHERE   r.docente_id = %s
         """
 
         try:
