@@ -1,4 +1,4 @@
-import '../css/ol.css';
+import '../../css/ol.css';
 import './ol';
 //import Map from 'ol/Map';
 //import View from 'ol/View';

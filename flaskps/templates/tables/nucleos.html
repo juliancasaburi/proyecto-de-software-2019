@@ -145,9 +145,10 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalNucleo.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataToModalNucleo.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#modalFilters').modal();
@@ -216,7 +217,10 @@
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true
+                "scrollX": true,
+                "fnInitComplete": function() {
+                    validar_filtro_activo();
+                }
             } );
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
@@ -224,17 +228,16 @@
             }, 5000 );
         } );
     </script>
-    <script>
-        $(document).ready(function(){
-            $('#modalAltaNucleo').modal();
-            $('#modalEditarNucleo').modal();
-            validar_filtro_activo();
-            $('select').formSelect();
-        });
+    <script> // Modales
+    $(document).ready(function(){
+        $('#modalAltaNucleo').modal();
+        $('#modalEditarNucleo').modal();
+        $('select').formSelect();
+    });
     </script>
     <script>
-        var filtro_activo = document.getElementById("filterActive");
-        var filtro_nombre = document.getElementById("filterNombreNucleo");
+        let filtro_activo = document.getElementById("filterActive");
+        let filtro_nombre = document.getElementById("filterNombreNucleo");
 
         function validar_filtro_activo() {
             var table = $('#tablaNucleos').DataTable();
@@ -381,21 +384,6 @@
                     });
                 }
             });
-        });
-    </script>
-    <script>
-        // reiniciar input
-        $('a.eraseFilter').on('click', function(e) {
-            var input = $(this).parent().parent().find("input");
-            input.val('');
-            input.change();
-        });
-
-        // reiniciar inputs
-        $('a.resetFilters').on('click', function(e) {
-            inputs = $('#modalFilters').find('input:text');
-            inputs.val('');
-            inputs.change();
         });
     </script>
 {% endblock %}

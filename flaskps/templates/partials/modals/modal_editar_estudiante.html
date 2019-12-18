@@ -140,37 +140,3 @@
             });
         })})
 </script>
-<!--
-<script>
-    $(document).ready(function() {
-        var frm = $('#editarEstudiante');
-
-        frm.submit(function (e) {
-            e.preventDefault();
-            $('#modalEditarEstudiante').modal('close');
-            $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
-                success: function (response) {
-                    $('#editarEstudiante').trigger("reset");
-                    var toastText = response['msg'];
-                    var toastClass = response['type'];
-                    M.toast({html: toastText, classes: toastClass});
-                },
-                statusCode: {
-                    422: function (jqXHR) {
-                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                    },
-                    400: function (jqXHR) {
-                        M.toast({html: jqXHR.responseJSON['msg'], classes: 'error'});
-                    },
-                    500: function (jqXHR) {
-                        M.toast({html: "Ha ocurrido un error", classes: 'error'});
-                    },
-                }
-            });
-        });
-    });
-</script>
--->

@@ -11,5 +11,7 @@ $(document).ready(function() {
         inputs = $('#modalFilters').find('input:text');
         inputs.val('');
         inputs.change();
+        $('#filterActive').prop('checked', false);
+        $('#filterActive').change();
     });
 });

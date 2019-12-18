@@ -139,10 +139,13 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalUsuario.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataToModalUsuario.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/passwordConfirm.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
     <script>
         $(document).ready(function(){
+            $('#modalFilters').modal();
             $('.fixed-action-btn').floatingActionButton();
             $('.tooltipped').tooltip();
         });
@@ -204,10 +207,7 @@
                 pageLength: $('#items-per-page').data("ammount"),
                 "scrollX": true,
                 "fnInitComplete": function() {
-                    table // Filtrar Bloqueados por default
-                        .column(1)
-                        .search(1)
-                        .draw();
+                    validar_filtro_activo();
                 }
             } );
 
@@ -217,48 +217,39 @@
             }, 5000 );
         } );
     </script>
-    <script>
-        $(document).ready(function(){
-            var table = $('#tablaUsuarios').DataTable();
-            $(".filterUsuario").on("keyup change", function() {
-                table
-                    .column(6)
-                    .search( this.value )
-                    .draw();
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("#filterActive").on("change", function(){
-                var table = $('#tablaUsuarios').DataTable();
-                if($("#filterActive").prop("checked") == true)
-                {
-                    table
-                        .column(1)
-                        .search('')
-                        .draw();
-                }
-                else
-                {
-                    table
-                        .column(1)
-                        .search(1)
-                        .draw();
-                }
-            });
-        });
-    </script>
-    <script>
-        $('#modalFilters').modal({
-                dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                opacity: .5, // Opacity of modal background
-                inDuration: 300, // Transition in duration
-                outDuration: 200, // Transition out duration
-                startingTop: '4%', // Starting top style attribute
-                endingTop: '10%', // Ending top style attribute
-            }
-        );
+    <script> // Filtros
+    let filtro_activo = document.getElementById("filterActive");
+    let filtro_nombreUsuario = document.getElementById("filterUsuario");
+
+    function validar_nombreUsuario() {
+        var table = $('#tablaUsuarios').DataTable();
+        table
+            .column(6)
+            .search( this.value )
+            .draw();
+    }
+
+    function validar_filtro_activo() {
+        var table = $('#tablaUsuarios').DataTable();
+        if($("#filterActive").prop("checked") == true)
+        {
+            table
+                .column(1)
+                .search('')
+                .draw();
+        }
+        else
+        {
+            table
+                .column(1)
+                .search(1)
+                .draw();
+        }
+    }
+
+    filtro_activo.onchange = validar_filtro_activo;
+    filtro_nombreUsuario.onchange = validar_nombreUsuario;
+    filtro_nombreUsuario.onkeyup = validar_nombreUsuario;
     </script>
     <script>
         $(document).ready(function(){
@@ -284,35 +275,34 @@
             $('select').formSelect();
         });
     </script>
-    <script>
-        // Edit a record
-        $('#tablaUsuarios').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaUsuarios').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
-            var uid = rowData.ID;
-            $.ajax({
-                type: "GET",
-                url: "{{ url_for('user') }}",
-                data: {
-                    id: uid
-                },
-                success: function (response) {
-                    dataToModalUsuario(response);
-                    $('#modalEditarUsuario').modal('open');
-                },
-                error: function (jqXhr, textStatus, errorMessage) {
-                    console.log("Error: ", errorMessage);
-                }
-            });
-        });
-    </script>
     <script async>
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
-            var frm = $('#formEditarUsuario');
+            // Editar Usuario
+            $('#tablaUsuarios').on('click', 'a.editButton', function (e) {
+                var table = $('#tablaUsuarios').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var uid = rowData.ID;
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('user') }}",
+                    data: {
+                        id: uid
+                    },
+                    success: function (response) {
+                        dataToModalUsuario(response);
+                        $('#modalEditarUsuario').modal('open');
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error: ", errorMessage);
+                    }
+                });
+            });
 
+            // Form Editar Usuario
+            var frm = $('#formEditarUsuario');
             frm.submit(function (e) {
                 e.preventDefault();
                 $('#progress').show();
@@ -384,28 +374,4 @@
             });
         });
     </script>
-    <script>
-        // limpiar inputs
-        $('a.eraseFilter').on('click', function(e) {
-            var input = $(this).parent().parent().find("input");
-            input.val('');
-            input.change();
-        });
-    </script>
-    <script>
-        var password = document.getElementById("password");
-        var confirm_password = document.getElementById("confirm_password");
-
-        function validatePassword(){
-            if(password.value != confirm_password.value) {
-                confirm_password.setCustomValidity("Los datos ingresados no coinciden");
-            } else {
-                confirm_password.setCustomValidity('');
-            }
-        }
-
-        password.onchange = validatePassword;
-        confirm_password.onkeyup = validatePassword;
-    </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
 {% endblock %}

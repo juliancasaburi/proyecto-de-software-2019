@@ -117,14 +117,10 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
             $('.modal').modal();
             $('select').formSelect();
         });
@@ -258,5 +254,5 @@
             }
         });
     </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
 {% endblock %}

@@ -173,8 +173,9 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalDocente_Preceptor.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataToModalDocente_Preceptor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#modalFilters').modal();
@@ -250,10 +251,7 @@
                 pageLength: $('#items-per-page').data("ammount"),
                 "scrollX": true,
                 "fnInitComplete": function() {
-                    table // Filtrar Bloqueados por default
-                        .column(1)
-                        .search(1)
-                        .draw();
+                    validar_filtro_activo();
                 }
             } );
 
@@ -265,70 +263,52 @@
         } );
     </script>
     <script> // Filtros
-    $(document).ready(function(){
+    let filtro_activo = document.getElementById("filterActive");
+    let filtro_nombre = document.getElementById("filterNombreDocente");
+    let filtro_apellido = document.getElementById("filterApellidoDocente");
+
+    function validar_nombre() {
         var table = $('#tablaDocentes').DataTable();
-        $("#filterNombreDocente").on("keyup change", function() {
+        table
+            .columns(2)
+            .search(this.value)
+            .draw();
+    }
+
+    function validar_apellido() {
+        var table = $('#tablaDocentes').DataTable();
+        table
+            .columns(3)
+            .search(this.value)
+            .draw();
+    }
+
+    function validar_filtro_activo() {
+        var table = $('#tablaDocentes').DataTable();
+        if ($("#filterActive").prop("checked") == true) {
             table
-                .columns( 2 )
-                .search( this.value )
+                .column(1)
+                .search('')
                 .draw();
-        });
-        $("#filterApellidoDocente").on("keyup change", function() {
+        } else {
             table
-                .columns( 3 )
-                .search( this.value )
+                .column(1)
+                .search(1)
                 .draw();
-        });
-    });
+        }
+    }
+
+    filtro_activo.onchange = validar_filtro_activo;
+    filtro_nombre.onchange = validar_nombre;
+    filtro_nombre.onkeyup = validar_nombre;
+    filtro_apellido.onchange = validar_apellido;
+    filtro_apellido.onkeyup = validar_apellido;
     </script>
-    <script>
-        $(document).ready(function () {
-            $("#filterActive").on("change", function(){
-                var table = $('#tablaDocentes').DataTable();
-                if($("#filterActive").prop("checked") == true)
-                {
-                    table
-                        .column(1)
-                        .search('')
-                        .draw();
-                }
-                else
-                {
-                    table
-                        .column(1)
-                        .search(1)
-                        .draw();
-                }
-            });
-        });
-    </script>
-    <script> // Alta de Docente
-    $(document).ready(function(){
-        $('#modalAltaDocente').modal();
-        $('select').formSelect();
-        $('#modalEditarDocente').modal();
-    });
-    </script>
-    <script>
-        // Editar docente
-        $('#tablaDocentes').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaDocentes').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
-            var d_id = rowData['ID'];
-            $.ajax({
-                type: "GET",
-                url: "{{ url_for('docente') }}",
-                data: {
-                    id: d_id
-                },
-                success: function (response) {
-                    dataToModalDocente_Preceptor(response);
-                    $('#modalEditarDocente').modal('open');
-                },
-                error: function (jqXhr, textStatus, errorMessage) {
-                    console.log("Error: ", errorMessage);
-                }
-            });
+    <script> // Modales
+        $(document).ready(function(){
+            $('#modalAltaDocente').modal();
+            $('select').formSelect();
+            $('#modalEditarDocente').modal();
         });
     </script>
     <script async>
@@ -337,6 +317,26 @@
         }
         $(document).ready(function(){
             // Editar docente
+            $('#tablaDocentes').on('click', 'a.editButton', function (e) {
+                var table = $('#tablaDocentes').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var d_id = rowData['ID'];
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('docente') }}",
+                    data: {
+                        id: d_id
+                    },
+                    success: function (response) {
+                        dataToModalDocente_Preceptor(response);
+                        $('#modalEditarDocente').modal('open');
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error: ", errorMessage);
+                    }
+                });
+            });
+            // Form Editar docente
             var frm = $('#editarDocente');
 
             frm.submit(function (e) {
@@ -418,5 +418,4 @@
             });
         });
     </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
 {% endblock %}
