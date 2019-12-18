@@ -179,11 +179,15 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalEstudiante.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataToModalEstudiante.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
+            $('#modalAltaEstudiante').modal();
+            $('#modalEditarEstudiante').modal();
+            $('select').formSelect();
         });
     </script>
     <script>
@@ -258,7 +262,10 @@
                 ],
                 sDom: 't,i,p', // Hide info
                 pageLength: $('#items-per-page').data("ammount"),
-                "scrollX": true
+                "scrollX": true,
+                "fnInitComplete": function() {
+                    validar_filtro_activo();
+                }
             } );
             setInterval( function () {
                 table.ajax.reload( null, false ); // user paging is not reset on reload
@@ -267,42 +274,33 @@
         } );
     </script>
     <script>
-        $(document).ready(function(){
-            $('#modalAltaEstudiante').modal();
-            $('#modalEditarEstudiante').modal();
-            validar_filtro_activo();
-            $('select').formSelect();
-        });
-    </script>
-    <script>
-        var filtro_activo = document.getElementById("filterActive");
-        var filtro_dni = document.getElementById("filterDocumentoEstudiante");
-        var filtro_nombre = document.getElementById("filterNombreEstudiante");
+        let filtro_activo = document.getElementById("filterActive");
+        let filtro_documento = document.getElementById("filterDocumentoEstudiante");
+        let filtro_nombre = document.getElementById("filterNombreEstudiante");
 
         function validar_filtro_activo() {
             var table = $('#tablaEstudiantes').DataTable();
-            if($("#filterActive").prop("checked") == true)
-            {
+            if ($("#filterActive").prop("checked") == true) {
                 table
                     .column(1)
                     .search('')
                     .draw();
-            }
-            else
-            {
+            } else {
                 table
                     .column(1)
                     .search(1)
                     .draw();
             }
         }
+
         function validar_dni() {
             var table = $('#tablaEstudiantes').DataTable();
             table
-                .columns( 10 )
-                .search(filtro_dni.value)
+                .columns(10)
+                .search(filtro_documento.value)
                 .draw();
         }
+
         function validar_nombre() {
             var table = $('#tablaEstudiantes').DataTable();
             table
@@ -314,46 +312,40 @@
         filtro_activo.onchange = validar_filtro_activo;
         filtro_nombre.onchange = validar_nombre;
         filtro_nombre.onkeyup = validar_nombre;
-        filtro_dni.onchange = validar_dni;
-        filtro_dni.onkeyup = validar_dni;
+        filtro_documento.onchange = validar_dni;
+        filtro_documento.onkeyup = validar_dni;
+
+        // reiniciar input
+        $('a.eraseFilter').on('click', function(e) {
+            var input = $(this).parent().parent().find("input");
+            input.val('');
+            input.change();
+        });
+
+        // reiniciar inputs
+        $('a.resetFilters').on('click', function(e) {
+            inputs = $('#modalFilters').find('input:text');
+            inputs.val('');
+            inputs.change();
+        });
     </script>
     <script>
-        $('#modalFilters').modal({
-                dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                opacity: .5, // Opacity of modal background
-                inDuration: 300, // Transition in duration
-                outDuration: 200, // Transition out duration
-                startingTop: '4%', // Starting top style attribute
-                endingTop: '10%', // Ending top style attribute
-                ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-                    //  alert("Ready");
-                    console.log(modal, trigger);
-                },
-                complete: function() { //alert('Closed');
-                } // Callback for Modal close
-            }
-        );
-    </script>
-    <script>
-        // Edit a record
-        $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaEstudiantes').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
-            var eid = rowData['id'];
-            $.ajax({
-                type: "GET",
-                url: "{{ url_for('estudiante') }}",
-                data: {
-                    id: eid
-                },
-                success: function (response) {
-                    dataToModalEstudiante(response);
-                    $('#modalEditarEstudiante').modal('open');
-                },
-                error: function (jqXhr, textStatus, errorMessage) {
-                    console.log("Error: ", errorMessage);
+        $(document).ready(function() {
+            $('#modalFilters').modal({
+                    dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                    opacity: .5, // Opacity of modal background
+                    inDuration: 300, // Transition in duration
+                    outDuration: 200, // Transition out duration
+                    startingTop: '4%', // Starting top style attribute
+                    endingTop: '10%', // Ending top style attribute
+                    ready: function (modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                        //  alert("Ready");
+                        console.log(modal, trigger);
+                    },
+                    complete: function () { //alert('Closed');
+                    } // Callback for Modal close
                 }
-            });
+            );
         });
     </script>
     <script async>
@@ -362,6 +354,27 @@
         }
         $(document).ready(function(){
             // Editar estudiante
+            $('#tablaEstudiantes').on('click', 'a.editButton', function (e) {
+                var table = $('#tablaEstudiantes').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var eid = rowData['id'];
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('estudiante') }}",
+                    data: {
+                        id: eid
+                    },
+                    success: function (response) {
+                        dataToModalEstudiante(response);
+                        $('#modalEditarEstudiante').modal('open');
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error: ", errorMessage);
+                    }
+                });
+            });
+
+            // Form Editar estudiante
             var frm = $('#formEditarEstudiante');
 
             frm.submit(function (e) {
@@ -433,21 +446,6 @@
                     });
                 }
             });
-        });
-    </script>
-    <script>
-        // reiniciar input
-        $('a.eraseFilter').on('click', function(e) {
-            var input = $(this).parent().parent().find("input");
-            input.val('');
-            input.change();
-        });
-
-        // reiniciar inputs
-        $('a.resetFilters').on('click', function(e) {
-            inputs = $('#modalFilters').find('input:text');
-            inputs.val('');
-            inputs.change();
         });
     </script>
 {% endblock %}

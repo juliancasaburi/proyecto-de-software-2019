@@ -128,7 +128,9 @@
                     </ul>
                 </div>
                 <div class="modal-footer">
-                    <a class="resetFilters btn red waves-effect waves-light hoverable tooltipped" data-position="left" data-tooltip="Reiniciar Filtros"><i class="material-icons">find_replace</i>Reiniciar Filtros</a>
+                    <div class="left">
+                        <a class="resetFilters btn red waves-effect waves-light hoverable"><i class="material-icons">find_replace</i>Borrar Filtros</a>
+                    </div>
                     <a class="modal-action modal-close waves-effect waves-teal btn-flat">Cerrar</a>
                 </div>
             </div>
@@ -141,8 +143,9 @@
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.material.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataToModalInstrumento.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataToModalInstrumento.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/dataTablesCustomRedraw.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom/filtersReset.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('.tooltipped').tooltip();
@@ -239,7 +242,7 @@
         });
     </script>
     <script>
-        var filtro_nombre = document.getElementById("filterNombreInstrumento");
+        let filtro_nombre = document.getElementById("filterNombreInstrumento");
 
         function validar_nombre() {
             var table = $('#tablaInstrumentos').DataTable();
@@ -269,34 +272,33 @@
             }
         );
     </script>
-    <script>
-        // Edit a record
-        $('#tablaInstrumentos').on('click', 'a.editButton', function (e) {
-            var table = $('#tablaInstrumentos').DataTable();
-            var rowData = table.row($(this).parents("tr")).data();
-            var eid = rowData['id'];
-            $.ajax({
-                type: "GET",
-                url: "{{ url_for('instrumento') }}",
-                data: {
-                    id: eid
-                },
-                success: function (response) {
-                    dataToModalInstrumento(response);
-                    $('#modalEditarInstrumento').modal('open');
-                },
-                error: function (jqXhr, textStatus, errorMessage) {
-                    console.log("Error: ", errorMessage);
-                }
-            });
-        });
-    </script>
     <script async>
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         $(document).ready(function(){
             // Editar instrumento
+            $('#tablaInstrumentos').on('click', 'a.editButton', function (e) {
+                var table = $('#tablaInstrumentos').DataTable();
+                var rowData = table.row($(this).parents("tr")).data();
+                var eid = rowData['id'];
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('instrumento') }}",
+                    data: {
+                        id: eid
+                    },
+                    success: function (response) {
+                        dataToModalInstrumento(response);
+                        $('#modalEditarInstrumento').modal('open');
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log("Error: ", errorMessage);
+                    }
+                });
+            });
+
+            // Form Editar instrumento
             var frm = $('#formEditarInstrumento');
 
             frm.submit(function (e) {
@@ -335,5 +337,4 @@
             });
         });
     </script>
-    <script src="{{ url_for('static', filename='js/filtersReset.js') }}"></script>
 {% endblock %}
