@@ -15,9 +15,9 @@
             <div class="card-panel z-depth-5">
                 <div class="row center">
                     {% if instrumento['image_name'] %}
-                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="{{ url_for('static', filename="uploads/" + instrumento.image_name) }}">
+                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="{{ url_for('static', filename="uploads/" + instrumento.image_name) }}" alt="Foto del instrumento">
                     {% else %}
-                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="https://via.placeholder.com/350x150?text=Sin+Imagen">
+                        <img class="materialboxed" data-caption="{{ instrumento.nombre }} - {{ instrumento.num_inventario }}" width="250" src="https://via.placeholder.com/350x150?text=Sin+Imagen" alt="Instrumento sin foto">
                     {% endif %}
                 </div>
                 <div class="row">
