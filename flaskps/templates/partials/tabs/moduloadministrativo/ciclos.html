@@ -174,8 +174,12 @@
                 "scrollX": true
             } );
             setInterval( function () {
-                table.ajax.reload( null, false ); // user paging is not reset on reload
-                customRedraw(table);
+                tabsEl = $('.tabs');
+                if(M.Tabs.getInstance(tabsEl).index == 0)
+                {
+                    table.ajax.reload( null, false ); // user paging is not reset on reload
+                    customRedraw(table);
+                }
             }, 5000 );
         } );
     </script>

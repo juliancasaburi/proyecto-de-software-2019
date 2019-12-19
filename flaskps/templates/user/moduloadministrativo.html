@@ -39,7 +39,8 @@
 {% block scripts %}
     <script>
         $(document).ready(function(){
-            $('.tabs').tabs();
+            tabsEl = $('.tabs');
+            M.Tabs.init(tabsEl);
         });
     </script>
 {% endblock %}
